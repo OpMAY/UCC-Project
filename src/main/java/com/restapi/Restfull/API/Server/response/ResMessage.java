@@ -11,4 +11,7 @@ public class ResMessage {
     public static final String TEST_FAILED = "The Test is failed";
     public static final String LOGIN_SUCCESS = "User Login is successful";
     public static final String WITHDRAW_SUCCESS = "User Deleted successfully";
+    public static final String USER_INFO_ACCESS = "Getting User Info";
+    public static final String ARTIST_REGISTER_SUCCESS = "Artist Registered Successfully";
+    public static final String ALREADY_REGISTERED_ARTIST = "Already registered Artist";
 }

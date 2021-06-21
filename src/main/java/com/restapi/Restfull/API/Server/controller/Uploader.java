@@ -35,7 +35,7 @@ import java.util.*;
 @RestController
 public class Uploader {
 
-    @Value("${deployPath}")
+    @Value("${uploadPath}")
     private String upload_path;
 
     @Value("${cdnPath}")

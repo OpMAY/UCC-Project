@@ -20,10 +20,12 @@ public class RequestChange {
     private String bank_owner;
     private String artist_email;
     private String artist_phone;
+    private String artist_profile_img;
     private String fan_main_img;
     private Date reg_date;
     private Date revise_date;
     private String fan_explain;
+    private String hashtag;
     private boolean agree;
     private boolean status;
 }

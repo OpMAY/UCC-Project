@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.RequestChangeMapper">
+    <select id="getAllRequests" resultType="RequestChange">
+        select * from requestchange
+    </select>
+    <select id="getRequestByUserNo" resultType="RequestChange">
+        select * from requestchange where user_no=#{user_no}
+    </select>
+    <insert id="insertRequest">
+        insert into requestchange(user_no, artist_name, bank_name, bank_account, bank_owner, artist_email, artist_phone, fan_main_img, reg_date, fan_explain, agree, status, hashtag, artist_profile_img)
+        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{artist_email}, #{artist_phone}, #{fan_main_img}, #{reg_date}, #{fan_explain}, #{agree}, #{status}, #{hashtag}, #{artist_profile_img})
+    </insert>
+</mapper>

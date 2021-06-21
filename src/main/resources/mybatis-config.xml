@@ -11,5 +11,7 @@
     <typeAliases>
         <typeAlias alias="Test" type="main.models.Test"/>
         <typeAlias alias="User" type="main.models.User"/>
+        <typeAlias alias="Artist" type="main.models.Artist"/>
+        <typeAlias alias="RequestChange" type="main.models.RequestChange"/>
     </typeAliases>
 </configuration>

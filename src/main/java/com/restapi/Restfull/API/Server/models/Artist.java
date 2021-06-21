@@ -21,10 +21,11 @@ public class Artist {
     private String email;
     private String artist_phone;
     private String fan_main_img;
+    private String artist_profile_img;
     private Date reg_date;
     private int fan_number;
     private int fan_visit_today;
-    private String explain;
+    private String fan_explain;
     private boolean artist_private;
     private String hashtag;
 }
