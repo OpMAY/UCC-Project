@@ -31,4 +31,17 @@ public class UserService {
         User user = userDao.loginUser(email, sns);
         return user;
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteUser(int user_no){
+        userDao.setSession(sqlSession);
+        userDao.deleteUser(user_no);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public User selectUserByUserNo(int user_no){
+        userDao.setSession(sqlSession);
+        User user = userDao.selectUserByUserNo(user_no);
+        return user;
+    }
 }

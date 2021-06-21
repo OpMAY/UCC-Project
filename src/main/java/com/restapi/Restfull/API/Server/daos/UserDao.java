@@ -24,4 +24,15 @@ public class UserDao {
         User user = userMapper.selectUserByEmail(email, sns);
         return user;
     }
+
+    public User selectUserByUserNo(int user_no){
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        User user = userMapper.selectUserByUserNo(user_no);
+        return user;
+    }
+
+    public void deleteUser(int user_no){
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        userMapper.deleteUser(user_no);
+    }
 }

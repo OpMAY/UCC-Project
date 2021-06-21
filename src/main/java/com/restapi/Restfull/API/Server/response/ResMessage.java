@@ -9,5 +9,6 @@ public class ResMessage {
     public static final String FILE_UPLOAD_SUCCESS = "File upload is success";
     public static final String MULTIPLE_FILE_UPLOAD_SUCCESS = "Multiple file upload is success";
     public static final String TEST_FAILED = "The Test is failed";
-    public static final String LOGIN_SUCCESS = "Login Success";
+    public static final String LOGIN_SUCCESS = "User Login is successful";
+    public static final String WITHDRAW_SUCCESS = "User Deleted successfully";
 }

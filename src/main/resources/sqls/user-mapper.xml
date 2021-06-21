@@ -10,4 +10,10 @@
     <select id="selectUserByEmail" resultType="User">
         select * from user where email=#{email} and sns=#{sns}
     </select>
+    <select id="selectUserByUserNo" resultType="User">
+        select * from user where user_no=#{user_no}
+    </select>
+    <delete id="deleteUser">
+        delete from user where user_no=#{user_no}
+    </delete>
 </mapper>
