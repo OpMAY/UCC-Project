@@ -16,7 +16,7 @@ public class Time {
      * "yyyy년 MM월dd일 HH시mm분ss초"
      * "yyyy_MM_dd_HH_mm_ss"
      */
-    public static String TimeFormatter(String format) {
+    public static String TimeFormatter() {
         Date now = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(now);

@@ -10,5 +10,6 @@
     </settings>
     <typeAliases>
         <typeAlias alias="Test" type="main.models.Test"/>
+        <typeAlias alias="User" type="main.models.User"/>
     </typeAliases>
 </configuration>

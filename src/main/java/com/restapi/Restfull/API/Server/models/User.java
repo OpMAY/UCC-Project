@@ -1,9 +1,6 @@
 package com.restapi.Restfull.API.Server.models;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
