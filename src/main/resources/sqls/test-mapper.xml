@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.TestMapper">
+    <update id="updateTest" parameterType="Test">
+        update test set testcol=#{testcol} where no=#{no};
+    </update>
+    <insert id="insertTest" parameterType="Test">
+        insert  into test(no,testcol) values (#{no},#{testcol});
+    </insert>
+</mapper>
