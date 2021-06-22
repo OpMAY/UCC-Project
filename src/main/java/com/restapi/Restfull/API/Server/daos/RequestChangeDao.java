@@ -30,4 +30,9 @@ public class RequestChangeDao {
         RequestChangeMapper requestChangeMapper = sqlSession.getMapper(RequestChangeMapper.class);
         requestChangeMapper.insertRequest(rc);
     }
+
+    public boolean artistNameCheck(String artist_name){
+        RequestChangeMapper requestChangeMapper = sqlSession.getMapper(RequestChangeMapper.class);
+        return requestChangeMapper.getRequestByArtistName(artist_name) != null;
+    }
 }

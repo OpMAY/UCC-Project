@@ -105,6 +105,8 @@ public class RequestChangeController {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
             } else if (requestChangeService.getRequestByUserNo(requestChange.getUser_no()) != null){
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.ALREADY_REGISTERED_ARTIST), HttpStatus.OK);
+            } else if(requestChangeService.artistNameCheck(requestChange.getArtist_name())){
+                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.ARTIST_NAME_IN_USE), HttpStatus.OK);
             } else{
                 /** File Upload Log Logic
                  *  Profile Img*/

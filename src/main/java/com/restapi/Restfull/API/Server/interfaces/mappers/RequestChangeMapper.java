@@ -8,4 +8,5 @@ public interface RequestChangeMapper {
     List<RequestChange> getAllRequests();
     RequestChange getRequestByUserNo(int user_no);
     void insertRequest(RequestChange rc);
+    RequestChange getRequestByArtistName(String artist_name);
 }

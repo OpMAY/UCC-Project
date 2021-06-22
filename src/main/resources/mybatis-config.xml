@@ -13,5 +13,25 @@
         <typeAlias alias="User" type="main.models.User"/>
         <typeAlias alias="Artist" type="main.models.Artist"/>
         <typeAlias alias="RequestChange" type="main.models.RequestChange"/>
+        <typeAlias alias="Board" type="main.models.Board"/>
+        <typeAlias alias="Portfolio" type="main.models.Portfolio"/>
+        <typeAlias alias="PortfolioComment" type="main.models.PortfolioComment"/>
+        <typeAlias alias="PortfolioLike" type="main.models.PortfolioLike"/>
+        <typeAlias alias="BoardComment" type="main.models.BoardComment"/>
+        <typeAlias alias="BoardLike" type="main.models.BoardLike"/>
+        <typeAlias alias="Admin" type="main.models.Admin"/>
+        <typeAlias alias="BannerAd" type="main.models.BannerAd"/>
+        <typeAlias alias="EntryComment" type="main.models.EntryComment"/>
+        <typeAlias alias="EntryVote" type="main.models.EntryVote"/>
+        <typeAlias alias="FAQ" type="main.models.FAQ"/>
+        <typeAlias alias="Inquiry" type="main.models.Inquiry"/>
+        <typeAlias alias="LoudSourcing" type="main.models.LoudSourcing"/>
+        <typeAlias alias="LoudSourcingApply" type="main.models.LoudSourcingApply"/>
+        <typeAlias alias="LoudSourcingEntry" type="main.models.LoudSourcingEntry"/>
+        <typeAlias alias="Notice" type="main.models.Notice"/>
+        <typeAlias alias="Notification" type="main.models.Notification"/>
+        <typeAlias alias="Search" type="main.models.Search"/>
+        <typeAlias alias="Spon" type="main.models.Spon"/>
+        <typeAlias alias="Subscribe" type="main.models.Subscribe"/>
     </typeAliases>
 </configuration>

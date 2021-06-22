@@ -15,10 +15,10 @@ import java.util.List;
 @Service
 public class ArtistService {
     @Autowired
-    SqlSession sqlSession;
+    private SqlSession sqlSession;
 
     @Autowired
-    ArtistDao artistDao;
+    private ArtistDao artistDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Artist> getAllArtists(){

@@ -14,4 +14,5 @@ public class ResMessage {
     public static final String USER_INFO_ACCESS = "Getting User Info";
     public static final String ARTIST_REGISTER_SUCCESS = "Artist Registered Successfully";
     public static final String ALREADY_REGISTERED_ARTIST = "Already registered Artist";
+    public static final String ARTIST_NAME_IN_USE = "Artist name is in use";
 }

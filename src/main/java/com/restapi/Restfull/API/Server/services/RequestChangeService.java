@@ -45,4 +45,10 @@ public class RequestChangeService {
         requestChangeDao.insertRequest(rc);
         artistDao.insertArtist(artist);
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean artistNameCheck(String artist_name){
+        requestChangeDao.setSession(sqlSession);
+        return requestChangeDao.artistNameCheck(artist_name);
+    }
 }
