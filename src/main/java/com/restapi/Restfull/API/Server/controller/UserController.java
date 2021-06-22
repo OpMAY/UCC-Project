@@ -8,6 +8,7 @@ import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.UserService;
+import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class UserController {
             if(user1 != null){ // 회원 정보 있으면 바로 로그인
                 userMessageMake(message, user1);
             }else{ // 없으면 회원 정보 등록 후 로그인
-                Date now = new Date();
+                Date now = Time.LongTimeStampCurrent();
                 User newUser = new User();
                 newUser.setName(name);
                 newUser.setEmail(email);

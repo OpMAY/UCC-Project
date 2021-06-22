@@ -3,5 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper">
-
+    <insert id="insertSpon">
+        insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_unique, receipt_id, purchase_data, purchase_status)
+        VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{unique}, #{receipt_id}, #{purchase_data}, #{purchase_status})
+    </insert>
+    <select id="getSponList" resultType="Spon">
+        select * from spon
+    </select>
+    <select id="getSponListByArtistNo" resultType="Spon">
+        select * from spon WHERE artist_no=#{artist_no}
+    </select>
+    <select id="getSponListByUserNo" resultType="Spon">
+        select * from spon WHERE user_no=#{user_no}
+    </select>
+    <select id="getSponListByBoardNo" resultType="Spon">
+        select * from spon WHERE board_no=#{board_no}
+    </select>
+    <select id="getSponAfterSpon" resultType="Spon">
+        select * from spon WHERE user_no=#{user_no}, artist_no=#{artist_no}, spon_date=#{spon_date}
+    </select>
 </mapper>

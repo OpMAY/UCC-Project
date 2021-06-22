@@ -20,4 +20,5 @@ public class BoardComment {
     private Date revise_date;
     private boolean comment_private;
     private int recomment;
+    private String type;
 }

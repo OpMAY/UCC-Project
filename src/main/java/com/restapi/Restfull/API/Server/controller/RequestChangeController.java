@@ -13,19 +13,25 @@ import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.RequestChangeService;
 import com.restapi.Restfull.API.Server.services.UserService;
 import com.restapi.Restfull.API.Server.utility.Format;
+import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
@@ -94,13 +100,23 @@ public class RequestChangeController {
                                               @RequestPart(value = "fan_main_img", required = false) MultipartFile fan_main_img_file) {
         try {
             /** File Check Logic **/
-            if (profile_img_file.isEmpty()) {
+            if (profile_img_file.isEmpty() || profile_img_file == null) {
+                log.info("profile img is empty or null");
                 File basic_profile_img = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/profile_img_basic.png");
-                profile_img_file = (MultipartFile) basic_profile_img;
+                FileItem fileItem = new DiskFileItem("profile_img_basic", Files.probeContentType(basic_profile_img.toPath()), false, basic_profile_img.getName(), (int) basic_profile_img.length(), basic_profile_img.getParentFile());
+                InputStream input = new FileInputStream(basic_profile_img);
+                OutputStream os = fileItem.getOutputStream();
+                IOUtils.copy(input, os);
+                profile_img_file = new CommonsMultipartFile(fileItem);
             }
-            if (fan_main_img_file.isEmpty()) {
+            if (fan_main_img_file.isEmpty() || fan_main_img_file == null) {
+                log.info("fan main img is empty or null");
                 File basic_fan_main_img = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/fan_main_img_basic.png");
-                fan_main_img_file = (MultipartFile) basic_fan_main_img;
+                FileItem fileItem = new DiskFileItem("fan_main_img_basic", Files.probeContentType(basic_fan_main_img.toPath()), false, basic_fan_main_img.getName(), (int) basic_fan_main_img.length(), basic_fan_main_img.getParentFile());
+                InputStream input = new FileInputStream(basic_fan_main_img);
+                OutputStream os = fileItem.getOutputStream();
+                IOUtils.copy(input, os);
+                fan_main_img_file = new CommonsMultipartFile(fileItem);
             }
             if (!Format.CheckFileType(profile_img_file.getOriginalFilename()) || !Format.CheckFileType(fan_main_img_file.getOriginalFilename())) {
                 // 파일 유형 체크 -> 어플단에서 처리하겠지만 데이터 누락 대비를 위해
@@ -129,7 +145,7 @@ public class RequestChangeController {
                 String fan_main_img_file_name = uploadFile(fan_main_img_file.getOriginalFilename(), fan_main_img_file.getBytes());
 
                 /** Date NOW **/
-                Date now = new Date();
+                Date now = Time.LongTimeStampCurrent();
 
                 /** RequestChange Set **/
                 requestChange.setArtist_profile_img(profile_img_file_name);

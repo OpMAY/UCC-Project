@@ -10,6 +10,7 @@ import com.restapi.Restfull.API.Server.services.ArtistService;
 import com.restapi.Restfull.API.Server.services.BoardService;
 import com.restapi.Restfull.API.Server.services.PortfolioService;
 import com.restapi.Restfull.API.Server.services.SubscribeService;
+import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -110,7 +111,7 @@ public class ArtistController {
             } else {
                 // 팬콕하지 않았을 경우 -> 팬콕
                 Subscribe subscribe = new Subscribe();
-                Date now = new Date();
+                Date now =  Time.LongTimeStampCurrent();
                 // Set Subscribe Info
                 subscribe.setUser_no(user_no);
                 subscribe.setArtist_no(artist_no);
