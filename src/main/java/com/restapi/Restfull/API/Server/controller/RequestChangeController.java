@@ -70,13 +70,13 @@ public class RequestChangeController {
     }
 
     @RequestMapping(value = "/api/change/{user_no}", method = RequestMethod.GET)
-    public ResponseEntity ChangeArtist(@PathVariable("user_no") int user_no){
+    public ResponseEntity ChangeArtist(@PathVariable("user_no") int user_no) {
         try {
             Message message = new Message();
             User user = userService.selectUserByUserNo(user_no);
             message.put("user_no", user.getUser_no());
             message.put("name", user.getName());
-            if(user.getEmail() != null)
+            if (user.getEmail() != null)
                 message.put("email", user.getEmail());
             else
                 message.put("email", "");
@@ -87,27 +87,31 @@ public class RequestChangeController {
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
         }
     }
+
     @RequestMapping(value = "/api/change/submit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity ChangeArtistRequest(@RequestPart(value = "request_change") RequestChange requestChange,
                                               @RequestPart(value = "profile_img", required = false) MultipartFile profile_img_file,
-                                              @RequestPart(value = "fan_main_img", required = false) MultipartFile fan_main_img_file){
+                                              @RequestPart(value = "fan_main_img", required = false) MultipartFile fan_main_img_file) {
         try {
             /** File Check Logic **/
-            if(profile_img_file.isEmpty()){
+            if (profile_img_file.isEmpty()) {
                 File basic_profile_img = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/profile_img_basic.png");
                 profile_img_file = (MultipartFile) basic_profile_img;
             }
-            if(fan_main_img_file.isEmpty()){
+            if (fan_main_img_file.isEmpty()) {
                 File basic_fan_main_img = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/fan_main_img_basic.png");
                 fan_main_img_file = (MultipartFile) basic_fan_main_img;
             }
-            if(!Format.CheckFileType(profile_img_file.getOriginalFilename()) || !Format.CheckFileType(fan_main_img_file.getOriginalFilename())){
+            if (!Format.CheckFileType(profile_img_file.getOriginalFilename()) || !Format.CheckFileType(fan_main_img_file.getOriginalFilename())) {
+                // 파일 유형 체크 -> 어플단에서 처리하겠지만 데이터 누락 대비를 위해
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
-            } else if (requestChangeService.getRequestByUserNo(requestChange.getUser_no()) != null){
+            } else if (requestChangeService.getRequestByUserNo(requestChange.getUser_no()) != null) {
+                // 이미 아티스트로 존재하는 유저가 아티스트를 신청했을 때 -> 어플단에서 처리하겠지만 데이터 누락 대비를 위해
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.ALREADY_REGISTERED_ARTIST), HttpStatus.OK);
-            } else if(requestChangeService.artistNameCheck(requestChange.getArtist_name())){
+            } else if (requestChangeService.artistNameCheck(requestChange.getArtist_name())) {
+                // 아티스트 명 중복 체크
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.ARTIST_NAME_IN_USE), HttpStatus.OK);
-            } else{
+            } else {
                 /** File Upload Log Logic
                  *  Profile Img*/
                 log.info("originalName:" + profile_img_file.getOriginalFilename());

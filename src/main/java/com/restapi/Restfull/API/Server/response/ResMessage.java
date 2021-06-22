@@ -15,4 +15,8 @@ public class ResMessage {
     public static final String ARTIST_REGISTER_SUCCESS = "Artist Registered Successfully";
     public static final String ALREADY_REGISTERED_ARTIST = "Already registered Artist";
     public static final String ARTIST_NAME_IN_USE = "Artist name is in use";
+    public static final String ARTIST_INFO_CALL_SUCCESS = "Artist Info Response success";
+    public static final String SUBSCRIBE_SUCCESS = "Subscribe is success";
+    public static final String UNDO_SUBSCRIBE_SUCCESS = "Subscribe delete success";
+    public static final String CANNOT_SUBSCRIBE_YOURSELF = "You can't subscribe yourself";
 }

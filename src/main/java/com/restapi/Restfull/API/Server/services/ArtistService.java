@@ -44,5 +44,5 @@ public class ArtistService {
         artistDao.insertArtist(artist);
     }
 
-    //TODO 아티스트 목록 정렬 방식에 따라 서버에서 그에 맞게 데이터를 뿌려줄지, 앱단에서 처리할지?
+    //TODO 아티스트 목록 정렬 방식에 따라 서버에서 그에 맞게 데이터를 뿌려줄지, 앱단에서 처리할지? -> 기획의 의도에 맞게 화면 별 기준에 맞춰 서버처리 or 어플 단 처리
 }

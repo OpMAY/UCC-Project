@@ -3,5 +3,32 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioMapper">
-
+    <select id="getPortfolioListByArtistNo" resultType="Portfolio">
+        select * from portfolio where artist_no=#{artist_no}
+    </select>
+    <select id="getPortfolioByPortfolioNo" resultType="Portfolio">
+        select * from portfolio where portfolio_no=#{portfolio_no}
+    </select>
+    <select id="getPortfolioListByTypeVOD" resultType="Portfolio">
+        select * from portfolio where type=#{type}
+    </select>
+    <insert id="insertPortfolio">
+        insert into portfolio(artist_no, title, type, file, content, reg_date, portfolio_private, agree, thumbnail)
+        VALUES (#{artist_no}, #{title}, #{type}, #{file}, #{content}, #{reg_date}, #{portfolio_private}, #{agree}, #{thumbnail})
+    </insert>
+    <delete id="deletePortfolio">
+        delete from portfolio where portfolio_no=#{portfolio_no}
+    </delete>
+    <update id="updatePortfolio">
+        update portfolio SET title=#{title}, file=#{file}, content=#{content}, revise_date=#{revise_date}, thumbnail=#{thumbnail}
+        WHERE portfolio_no=#{portfolio_no}
+    </update>
+    <update id="updatePortfolioByComment">
+        update portfolio SET comment_number = comment_number + #{number}
+        WHERE portfolio_no=#{porfolio_no}
+    </update>
+    <update id="updatePortfolioByLike">
+        update portfolio SET like_number = like_number + #{number}
+        WHERE portfolio_no=#{portfolio_no}
+    </update>
 </mapper>
