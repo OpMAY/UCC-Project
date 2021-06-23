@@ -21,4 +21,5 @@ public class ResMessage {
     public static final String CANNOT_SUBSCRIBE_YOURSELF = "You can't subscribe yourself";
     public static final String ARTIST_SPON_SUCCESS = "Artist Spon Success";
     public static final String BOARD_SPON_SUCCESS = "Board Spon Success";
+    public static final String GET_PORTFOLIO_SUCCESS = "Getting Portfolio";
 }

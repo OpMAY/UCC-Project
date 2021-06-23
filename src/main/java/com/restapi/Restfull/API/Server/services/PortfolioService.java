@@ -51,7 +51,7 @@ public class PortfolioService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleltePortfolio(int portfolio_no){
+    public void deletePortfolio(int portfolio_no){
         portfolioDao.setSession(sqlSession);
         portfolioDao.deletePortfolio(portfolio_no);
     }
