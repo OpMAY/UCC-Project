@@ -9,13 +9,13 @@ src/main/resources/application.properties
 ###Contents
 uploadPath=C:/Users/zlzld/OneDrive/Desktop/projects/server_test/Restfull-API-Server/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api
 deployPath=/www/phonething_gabia_io/www/api
-cdnPath=https://okiwi-ldy-vod.s3.ap-northeast-2.amazonaws.com/api/
+cdnPath=api/
 spring.datasource.hikari.jdbc-url=jdbc:mysql://211.47.74.38/dbphonething?serverTimezone=UTC&allowMultiQueries=true
 spring.datasource.hikari.username=phonething
 spring.datasource.hikari.password=12345qwert
 spring.datasource.hikari.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.hikari.pool-name=apipool
-api.access_key=AKIAJLBYKVWCC3IPIINQ;
+api.access_key=test;
 
 server.servlet.encoding.charset=utf-8
 spring.mvc.view.prefix=/WEB-INF/views/
