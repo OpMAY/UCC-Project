@@ -20,7 +20,7 @@
         delete from portfolio where portfolio_no=#{portfolio_no}
     </delete>
     <update id="updatePortfolio">
-        update portfolio SET title=#{title}, file=#{file}, content=#{content}, revise_date=#{revise_date}, thumbnail=#{thumbnail}
+        update portfolio SET title=#{title} content=#{content}, revise_date=#{revise_date}
         WHERE portfolio_no=#{portfolio_no}
     </update>
     <update id="updatePortfolioByComment">

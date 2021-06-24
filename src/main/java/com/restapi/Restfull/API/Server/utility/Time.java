@@ -43,6 +43,7 @@ public class Time {
         Date currentDatePlusOne = c.getTime();
         return currentDatePlusOne;
     }
+
     public static Date LongTimeStampCurrent() {
         Date currentDate = new Date();
         System.out.println(currentDate);

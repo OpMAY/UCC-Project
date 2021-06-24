@@ -48,48 +48,8 @@ public class SponController {
     }
 
     @RequestMapping(value = "/api/spon", method = RequestMethod.POST)
-    public ResponseEntity ArtistSpon(@ModelAttribute Spon spon){
-        try {
-            Message message = new Message();
-            Date now = Time.LongTimeStampCurrent();
-            // Spon Data Set
-            spon.setSpon_date(now);
-            spon.setStatus(SponStatus.NOT_CONFIRMED);
-            spon.setType(SponType.Artist_SPON);
-            // DB Set
-            sponService.insertSpon(spon);
-            // Message Set
-            message.put("Spon", spon);
-
-            // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        }
-    }
-
-    @RequestMapping(value = "/api/board/spon", method = RequestMethod.POST)
-    public ResponseEntity BoardSpon(@ModelAttribute Spon spon){
-        try {
-            Message message = new Message();
-            Date now = Time.LongTimeStampCurrent();
-            int board_no = spon.getBoard_no();
-            // Spon Data Set
-            spon.setSpon_date(now);
-            spon.setStatus(SponStatus.NOT_CONFIRMED);
-            spon.setType(SponType.BOARD_SPON);
-            // DB Set
-            sponService.insertSpon(spon);
-            // TODO Board Comment Set -> 게시판 로직 작성 후 이어서 작성 2021-06-22
-            // Message Set
-            message.put("Spon", spon);
-
-            // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_SPON_SUCCESS, message.getHashMap("BoardSpon()")), HttpStatus.OK);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        }
+    public ResponseEntity ArtistSpon(@ModelAttribute Spon spon) {
+        // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
+        return sponService.insertSpon(spon);
     }
 }

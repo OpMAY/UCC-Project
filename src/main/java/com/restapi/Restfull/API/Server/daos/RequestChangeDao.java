@@ -16,22 +16,22 @@ public class RequestChangeDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<RequestChange> getAllRequests(){
+    public List<RequestChange> getAllRequests() {
         RequestChangeMapper requestChangeMapper = sqlSession.getMapper(RequestChangeMapper.class);
         return requestChangeMapper.getAllRequests();
     }
 
-    public RequestChange getRequestByUserNo(int user_no){
+    public RequestChange getRequestByUserNo(int user_no) {
         RequestChangeMapper requestChangeMapper = sqlSession.getMapper(RequestChangeMapper.class);
         return requestChangeMapper.getRequestByUserNo(user_no);
     }
 
-    public void insertRequest(RequestChange rc){
+    public void insertRequest(RequestChange rc) {
         RequestChangeMapper requestChangeMapper = sqlSession.getMapper(RequestChangeMapper.class);
         requestChangeMapper.insertRequest(rc);
     }
 
-    public boolean artistNameCheck(String artist_name){
+    public boolean artistNameCheck(String artist_name) {
         RequestChangeMapper requestChangeMapper = sqlSession.getMapper(RequestChangeMapper.class);
         return requestChangeMapper.getRequestByArtistName(artist_name) != null;
     }

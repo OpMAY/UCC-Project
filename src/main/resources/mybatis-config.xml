@@ -33,5 +33,6 @@
         <typeAlias alias="Search" type="main.models.Search"/>
         <typeAlias alias="Spon" type="main.models.Spon"/>
         <typeAlias alias="Subscribe" type="main.models.Subscribe"/>
+        <typeAlias alias="ArtistVisit" type="main.models.ArtistVisit"/>
     </typeAliases>
 </configuration>

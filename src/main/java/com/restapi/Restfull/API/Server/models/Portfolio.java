@@ -16,6 +16,7 @@ public class Portfolio {
     private int artist_no;
     private String title;
     private String type;
+    private String file;
     private String content;
     private Date reg_date;
     private Date revise_date;

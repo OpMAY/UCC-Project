@@ -14,24 +14,23 @@ public class UserDao {
             this.sqlSession = sqlSession;
     }
 
-    public void registerUser(User user){
+    public void registerUser(User user) {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         userMapper.insertUser(user);
     }
 
-    public User loginUser(String email, String sns){
+    public User loginUser(User user) {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        User user = userMapper.selectUserByEmail(email, sns);
-        return user;
+        return userMapper.selectUserByEmail(user);
     }
 
-    public User selectUserByUserNo(int user_no){
+    public User selectUserByUserNo(int user_no) {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         User user = userMapper.selectUserByUserNo(user_no);
         return user;
     }
 
-    public void deleteUser(int user_no){
+    public void deleteUser(int user_no) {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         userMapper.deleteUser(user_no);
     }

@@ -21,49 +21,49 @@ public class BoardService {
     private BoardDao boardDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Board> getBoardListByArtistNo(int artist_no){
+    public List<Board> getBoardListByArtistNo(int artist_no) {
         boardDao.setSession(sqlSession);
         return boardDao.getBoardListByArtistNo(artist_no);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Board> getBoardList(){
+    public List<Board> getBoardList() {
         boardDao.setSession(sqlSession);
         return boardDao.getBoardList();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Board getBoardByBoardNo(int board_no){
+    public Board getBoardByBoardNo(int board_no) {
         boardDao.setSession(sqlSession);
         return boardDao.getBoardByBoardNo(board_no);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void insertBoard(Board board){
+    public void insertBoard(Board board) {
         boardDao.setSession(sqlSession);
         boardDao.insertBoard(board);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateBoard(Board board){
+    public void updateBoard(Board board) {
         boardDao.setSession(sqlSession);
         boardDao.updateBoard(board);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteBoard(int board_no){
+    public void deleteBoard(int board_no) {
         boardDao.setSession(sqlSession);
         boardDao.deleteBoard(board_no);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateBoardByComment(int board_no, int number){
+    public void updateBoardByComment(int board_no, int number) {
         boardDao.setSession(sqlSession);
         boardDao.updateBoardByComment(board_no, number);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateBoardByLike(int board_no, int number){
+    public void updateBoardByLike(int board_no, int number) {
         boardDao.setSession(sqlSession);
         boardDao.updateBoardByLike(board_no, number);
     }

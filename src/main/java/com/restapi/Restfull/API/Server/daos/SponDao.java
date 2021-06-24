@@ -17,32 +17,32 @@ public class SponDao {
             this.sqlSession = sqlSession;
     }
 
-    public void insertSpon(Spon spon){
+    public void insertSpon(Spon spon) {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         sponMapper.insertSpon(spon);
     }
 
-    public List<Spon> getSponList(){
+    public List<Spon> getSponList() {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponList();
     }
 
-    public List<Spon> getSponListByArtistNo(int artist_no){
+    public List<Spon> getSponListByArtistNo(int artist_no) {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponListByArtistNo(artist_no);
     }
 
-    public List<Spon> getSponListByUserNo(int user_no){
+    public List<Spon> getSponListByUserNo(int user_no) {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponListByUserNo(user_no);
     }
 
-    public List<Spon> getSponListByBoardNo(int board_no){
+    public List<Spon> getSponListByBoardNo(int board_no) {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponListByBoardNo(board_no);
     }
 
-    public Spon getSponAfterSpon(int user_no, int artist_no, Date spon_date){
+    public Spon getSponAfterSpon(int user_no, int artist_no, Date spon_date) {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponAfterSpon(user_no, artist_no, spon_date);
     }

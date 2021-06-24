@@ -16,4 +16,11 @@
     <select id="getArtistByArtistNo" resultType="Artist">
         select * from artist where artist_no=#{artist_no}
     </select>
+    <update id="updateArtist">
+        update artist SET artist_name=#{artist_name}, bank_name=#{bank_name}, bank_account=#{bank_account}, bank_owner=#{bank_owner}, email=#{email}, artist_phone=#{artist_phone}, fan_main_img=#{fan_main_img}, fan_explain=#{fan_explain}, artist_private=#{artist_private}, hash_tag=#{hashtag}, artist_profile_img=#{artist_profile_img}, fan_number=#{fan_number}, fan_visit_today=#{fan_visit_today}
+        WHERE artist_no=#{artist_no}
+    </update>
+    <delete id="deleteArtist">
+        delete from artist WHERE artist_no=#{artist_no}
+    </delete>
 </mapper>

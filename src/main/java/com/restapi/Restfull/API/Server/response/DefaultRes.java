@@ -19,11 +19,11 @@ public class DefaultRes<T> {
         this.data = null;
     }
 
-    public static<T> DefaultRes<T> res(final int status, final String message) {
+    public static <T> DefaultRes<T> res(final int status, final String message) {
         return res(status, message, null);
     }
 
-    public static<T> DefaultRes<T> res(final int status, final String message, final T object) {
+    public static <T> DefaultRes<T> res(final int status, final String message, final T object) {
         return DefaultRes.<T>builder()
                 .data(object)
                 .status(status)
