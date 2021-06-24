@@ -24,9 +24,9 @@ import java.util.Iterator;
 @Log4j2
 @Service
 public class CDNService {
-    private String accessKey = "AKIAJLBYKVWCC3IPIINQ";
-    private String secretKey = "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";
-    private String bucketName = "okiwi-ldy-vod";
+    private String accessKey = "test";
+    private String secretKey = "test";
+    private String bucketName = "test";
 
     private AmazonS3 s3Client;
 
