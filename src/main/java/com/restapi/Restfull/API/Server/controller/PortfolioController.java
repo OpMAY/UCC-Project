@@ -119,6 +119,8 @@ public class PortfolioController {
                     break;
                 case PortfolioType.IMAGE: { /** IMAGE PORTFOLIO **/
                     /**Test Parsing Logic*/
+                    if(img_files.length <= 0)
+                        return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
                     Map<String, MultipartFile> multipartFileMap = new HashMap<>();
                     for (int i = 0; i < img_files.length; i++) {
                         multipartFileMap.put("files-" + i, img_files[i]);
@@ -145,6 +147,8 @@ public class PortfolioController {
                 }
                 case PortfolioType.FILE: { /** FILE PORTFOLIO **/
                     /**Test Parsing Logic*/
+                    if(portfolio_files.length <= 0)
+                        return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
                     Map<String, MultipartFile> multipartFileMap = new HashMap<>();
                     for (int i = 0; i < portfolio_files.length; i++) {
                         multipartFileMap.put("files-" + i, portfolio_files[i]);
@@ -154,7 +158,7 @@ public class PortfolioController {
                         MultipartFile multipartFile = entry.getValue();
                         if (multipartFile.isEmpty()) {
                             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
-                        } else if (!Format.CheckIMGFile(multipartFile.getOriginalFilename())) {
+                        } else if (!Format.CheckFileType(multipartFile.getOriginalFilename())) {
                             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_MISMATCH, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
                         } else {
                             /** File Upload Log Logic*/
@@ -180,8 +184,6 @@ public class PortfolioController {
             } else {
                 filepath_msg.put("files", uploads);
             }
-            portfolio.setReg_date(Time.LongTimeStampCurrent());
-
             Artist artist = artistService.getArtistByArtistNo(portfolio.getArtist_no());
             portfolio.setArtist_name(artist.getArtist_name());
             portfolio.setArtist_profile_img(artist.getArtist_profile_img());
@@ -255,7 +257,7 @@ public class PortfolioController {
     }
 
     @RequestMapping(value = "/api/portfolio/VOD_List", method = RequestMethod.GET)
-    public ResponseEntity GetVODList(){
+    public ResponseEntity GetVODList() {
         return portfolioService.getPortfolioListByTypeVOD(PortfolioType.VOD);
     }
 

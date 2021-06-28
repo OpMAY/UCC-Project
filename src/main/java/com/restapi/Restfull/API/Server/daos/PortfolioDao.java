@@ -56,4 +56,9 @@ public class PortfolioDao {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         portfolioMapper.updatePortfolioByLike(portfolio_no, number);
     }
+
+    public void updatePortfolioByVisit(Portfolio portfolio){
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        portfolioMapper.updatePortfolioByVisit(portfolio);
+    }
 }

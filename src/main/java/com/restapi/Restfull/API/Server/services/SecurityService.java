@@ -86,7 +86,7 @@ public class SecurityService {
             String signature = jwt.getClaim("signature").asString();
 
             /** Signature & name Valid Checker*/
-            if (!signature.equals(encryptionSHA256(access_key)) || !name.equals("test")) {
+            if (!signature.equals(encryptionSHA256(access_key)) || !name.equals("okiwi")) {
                 return false;
             }
 

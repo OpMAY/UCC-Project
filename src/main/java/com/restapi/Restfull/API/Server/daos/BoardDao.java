@@ -56,4 +56,9 @@ public class BoardDao {
         boardMapper.updateBoardByLike(board_no, number);
     }
 
+    public void updateBoardByVisit(Board board){
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        boardMapper.updateBoardByVisit(board);
+    }
+
 }

@@ -31,4 +31,7 @@
         update portfolio SET like_number = like_number + #{number}
         WHERE portfolio_no=#{portfolio_no}
     </update>
+    <update id="updatePortfolioByVisit">
+        update portfolio SET visit_number=#{visit_number} WHERE portfolio_no=#{portfolio_no}
+    </update>
 </mapper>

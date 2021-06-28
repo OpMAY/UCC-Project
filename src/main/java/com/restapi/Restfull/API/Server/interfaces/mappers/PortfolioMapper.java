@@ -20,4 +20,6 @@ public interface PortfolioMapper {
     void updatePortfolioByComment(int portfolio_no, int number);
 
     void updatePortfolioByLike(int portfolio_no, int number);
+
+    void updatePortfolioByVisit(Portfolio portfolio);
 }

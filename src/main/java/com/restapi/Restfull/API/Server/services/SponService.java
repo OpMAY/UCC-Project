@@ -3,7 +3,7 @@ package com.restapi.Restfull.API.Server.services;
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper;
-import com.restapi.Restfull.API.Server.models.Spon;
+import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
@@ -44,8 +44,18 @@ public class SponService {
     public ResponseEntity insertSpon(Spon spon) {
         try {
             sponDao.setSession(sqlSession);
+            boardDao.setSession(sqlSession);
+            boardCommentDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
 
-            if(artistDao.getArtistByArtistNo(spon.getArtist_no()).getUser_no() == spon.getUser_no()){
+            int artist_no = spon.getArtist_no();
+
+            if(artist_no == 0){
+                artist_no = boardDao.getBoardByBoardNo(spon.getBoard_no()).getArtist_no();
+            }
+
+            if(artistDao.getArtistByArtistNo(artist_no).getUser_no() == spon.getUser_no()){
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.CANNOT_SPON_YOURSELF), HttpStatus.OK);
             }
             Message message = new Message();
@@ -57,10 +67,29 @@ public class SponService {
                 spon.setType(SponType.BOARD_SPON);
                 // DB Set
                 sponDao.insertSpon(spon);
-                // TODO BoardDao, BoardCommentDao SET
+                // BoardDao, BoardCommentDao SET
+                User user = userDao.selectUserByUserNo(spon.getUser_no());
+                Artist artist = artistDao.getArtistByUserNo(user.getUser_no());
+                BoardComment boardSponComment = new BoardComment();
+                boardSponComment.setBoard_no(spon.getBoard_no());
+                boardSponComment.setUser_no(spon.getUser_no());
+                if(artist != null){
+                    boardSponComment.setCommenter_name(artist.getArtist_name());
+                    boardSponComment.setProfile_img(artist.getArtist_profile_img());
+                }else {
+                    boardSponComment.setCommenter_name(user.getName());
+                    boardSponComment.setProfile_img(user.getProfile_img());
+                }
+                boardSponComment.setType(BoardCommentType.SPON_COMMENT);
+                boardSponComment.setContent(Integer.toString(spon.getPrice()));
+                boardSponComment.setComment_private(false);
+                boardCommentDao.insertComment(boardSponComment);
 
+                Board board = boardDao.getBoardByBoardNo(spon.getBoard_no());
+                board.setBoardCommentList(boardCommentDao.getCommentListByBoardNo(spon.getBoard_no()));
                 // Message Set
                 message.put("Spon", spon);
+                message.put("Board", board);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_SPON_SUCCESS, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
             } else {
                 spon.setType(SponType.Artist_SPON);
