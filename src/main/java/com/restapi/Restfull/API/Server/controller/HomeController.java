@@ -75,7 +75,7 @@ public class HomeController {
 
     @RequestMapping(value = "/api/auth", method = RequestMethod.GET)
     public ResponseEntity Auth() {
-        String name = "test";
+        String name = "okiwi";
         String key = "test";
         try {
             String api_access_key = securityService.createToken(new Auth(name, key));
