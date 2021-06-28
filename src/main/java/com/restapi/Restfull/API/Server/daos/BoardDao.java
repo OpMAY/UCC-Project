@@ -48,12 +48,16 @@ public class BoardDao {
 
     public void updateBoardByComment(int board_no, int number) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
-        boardMapper.updateBoardByComment(board_no, number);
+        Board board = boardMapper.getBoardByBoardNo(board_no);
+        board.setComment_number(board.getComment_number() + number);
+        boardMapper.updateBoardByComment(board);
     }
 
     public void updateBoardByLike(int board_no, int number) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
-        boardMapper.updateBoardByLike(board_no, number);
+        Board board = boardMapper.getBoardByBoardNo(board_no);
+        board.setLike_number(board.getLike_number() + number);
+        boardMapper.updateBoardByLike(board);
     }
 
     public void updateBoardByVisit(Board board){
@@ -61,4 +65,14 @@ public class BoardDao {
         boardMapper.updateBoardByVisit(board);
     }
 
+    public List<Board> getRecentBoardList() {
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        return boardMapper.getRecentBoardList();
+    }
+
+    public List<Board> SearchBoard(String query) {
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        String sqlSearch = "%" + query + "%";
+        return boardMapper.searchBoard(sqlSearch);
+    }
 }

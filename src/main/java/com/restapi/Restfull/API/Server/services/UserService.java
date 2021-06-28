@@ -5,6 +5,7 @@ import com.restapi.Restfull.API.Server.daos.UserDao;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.Auth;
+import com.restapi.Restfull.API.Server.models.Upload;
 import com.restapi.Restfull.API.Server.models.User;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
@@ -115,6 +116,51 @@ public class UserService {
             message.put("is_user_private", userCheck);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.CHECK_USER_PRIVATE_SUCCESS, message.getHashMap("CheckUserPrivate()")), HttpStatus.OK);
         } catch (JSONException e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity GetUserSpecificInfo(int user_no){
+        try{
+            Message message = new Message();
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+
+            if(artistDao.getArtistByUserNo(user_no) != null){
+                Artist artist = artistDao.getArtistByUserNo(user_no);
+                message.put("Artist", artist);
+            }
+            User user = userDao.selectUserByUserNo(user_no);
+
+            message.put("User", user);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_MY_PAGE_INFO, message.getHashMap("GetUserInfo()")), HttpStatus.OK);
+        }catch (JSONException e){
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity UpdateUserInfo(Artist artist, User user, List<Upload> uploads){
+        try{
+            Message message = new Message();
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+
+            if(artist != null) {
+                artistDao.updateArtist(artist);
+                Artist resArtist = artistDao.getArtistByArtistNo(artist.getArtist_no());
+                message.put("Artist", resArtist);
+            }
+            userDao.updateUser(user);
+            User resUser = userDao.selectUserByUserNo(user.getUser_no());
+            message.put("User", resUser);
+
+            if(uploads.size() > 0){
+                message.put("files", uploads);
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPDATE_MY_PAGE_INFO, message.getHashMap("GetUserInfo()")), HttpStatus.OK);
+        }catch (JSONException e){
             throw new BusinessException(e);
         }
     }

@@ -3,10 +3,7 @@ package com.restapi.Restfull.API.Server.services;
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
-import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.Message;
-import com.restapi.Restfull.API.Server.response.ResMessage;
-import com.restapi.Restfull.API.Server.response.StatusCode;
+import com.restapi.Restfull.API.Server.response.*;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -60,6 +57,10 @@ public class PortfolioService {
             portfolio.setVisit_number(portfolio.getVisit_number() + 1); // 조회수 증가
             List<PortfolioComment> commentList = portfolioCommentDao.getCommentListByPortfolioNo(portfolio_no);
             boolean portfolioLike = portfolioLikeDao.getPortfolioLike(portfolio_no, user_no) != null;
+
+            /*if(portfolio.getType().equals(PortfolioType.FILE)){
+
+            }*/
 
             // RESPONSE MESSAGE SET
             portfolio.setPortfolioCommentList(commentList);

@@ -17,9 +17,13 @@ public interface BoardMapper {
 
     void deleteBoard(int board_no);
 
-    void updateBoardByComment(int board_no, int number);
+    void updateBoardByComment(Board board);
 
-    void updateBoardByLike(int board_no, int number);
+    void updateBoardByLike(Board board);
 
     void updateBoardByVisit(Board board);
+
+    List<Board> getRecentBoardList();
+
+    List<Board> searchBoard(String query);
 }

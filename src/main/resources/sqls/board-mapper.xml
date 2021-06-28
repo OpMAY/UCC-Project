@@ -25,14 +25,20 @@
         delete from board where board_no=#{board_no}
     </delete>
     <update id="updateBoardByComment">
-        update board SET comment_number = comment_number + #{number}
+        update board SET comment_number = #{comment_number}
         WHERE board_no = #{board_no}
     </update>
     <update id="updateBoardByLike">
-        update board SET like_number = like_number + #{number}
+        update board SET like_number = #{like_number}
         WHERE board_no = #{board_no}
     </update>
     <update id="updateBoardByVisit">
         update board SET visit_number=#{visit_number} WHERE board_no=#{board_no}
     </update>
+    <select id="getRecentBoardList" resultType="Board">
+        select * from board order by reg_date DESC limit 20
+    </select>
+    <select id="searchBoard" resultType="Board">
+        select * from board WHERE title like #{query} or artist_name like #{query}
+    </select>
 </mapper>

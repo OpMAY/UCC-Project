@@ -23,4 +23,16 @@
     <delete id="deleteArtist">
         delete from artist WHERE artist_no=#{artist_no}
     </delete>
+    <select id="getArtistListByPopular" resultType="Artist">
+        select * from artist order by fan_number desc limit 10
+    </select>
+    <select id="getNewArtistList" resultType="Artist">
+        select * from artist order by reg_date desc limit 10
+    </select>
+    <select id="searchArtist" resultType="Artist">
+        select * from artist where artist_name like #{search} or hashtag like #{search}
+    </select>
+    <select id="searchArtistLimit" resultType="Artist">
+        select * from artist where artist_name like #{search} or hashtag like #{search} LIMIT 15
+    </select>
 </mapper>

@@ -17,9 +17,13 @@ public interface PortfolioMapper {
 
     void deletePortfolio(int portfolio_no);
 
-    void updatePortfolioByComment(int portfolio_no, int number);
+    void updatePortfolioByComment(Portfolio portfolio);
 
-    void updatePortfolioByLike(int portfolio_no, int number);
+    void updatePortfolioByLike(Portfolio portfolio);
 
     void updatePortfolioByVisit(Portfolio portfolio);
+
+    List<Portfolio> getPortfolioListByRandom();
+
+    List<Portfolio> SearchPortfolioLimit(String query);
 }

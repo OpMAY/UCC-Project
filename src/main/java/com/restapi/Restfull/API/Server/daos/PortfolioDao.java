@@ -49,16 +49,31 @@ public class PortfolioDao {
 
     public void updatePortfolioByComment(int portfolio_no, int number) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
-        portfolioMapper.updatePortfolioByComment(portfolio_no, number);
+        Portfolio portfolio = portfolioMapper.getPortfolioByPortfolioNo(portfolio_no);
+        portfolio.setComment_number(portfolio.getComment_number() + number);
+        portfolioMapper.updatePortfolioByComment(portfolio);
     }
 
     public void updatePortfolioByLike(int portfolio_no, int number) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
-        portfolioMapper.updatePortfolioByLike(portfolio_no, number);
+        Portfolio portfolio = portfolioMapper.getPortfolioByPortfolioNo(portfolio_no);
+        portfolio.setLike_number(portfolio.getLike_number() + number);
+        portfolioMapper.updatePortfolioByLike(portfolio);
     }
 
     public void updatePortfolioByVisit(Portfolio portfolio){
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         portfolioMapper.updatePortfolioByVisit(portfolio);
+    }
+
+    public List<Portfolio> getPortfolioListByRandom(){
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        return portfolioMapper.getPortfolioListByRandom();
+    }
+
+    public List<Portfolio> SearchPortfolioLimit(String query) {
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        String sqlSearch = "%" + query + "%";
+        return portfolioMapper.SearchPortfolioLimit(sqlSearch);
     }
 }

@@ -16,4 +16,12 @@ public interface ArtistMapper {
     void updateArtist(Artist artist);
 
     void deleteArtist(int artist_no);
+
+    List<Artist> getArtistListByPopular();
+
+    List<Artist> getNewArtistList();
+
+    List<Artist> searchArtist(String search);
+
+    List<Artist> searchArtistLimit(String search);
 }
