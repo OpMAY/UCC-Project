@@ -108,6 +108,7 @@ public class HomeController {
     @RequestMapping(value = "/api/product", method = RequestMethod.POST)
     public ResponseEntity Product(@ModelAttribute Product product) {
         log.info(product);
+        // 123213212
         try {
             Message message = new Message();
             message.put("product", product);
