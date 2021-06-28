@@ -9,15 +9,15 @@
     <select id="getCommentListByUserNo" resultType="PortfolioComment">
         select * from portfoliocomment WHERE user_no=#{user_no}
     </select>
-    <insert id="insertComment">
-        insert into portfoliocomment(user_no, portfolio_no, content, reg_date, comment_private, recomment)
-        VALUES (#{user_no}, #{portfolio_no}, #{content}, #{reg_date}, #{comment_private}, #{recomment})
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="comment_no">
+        insert into portfoliocomment(user_no, portfolio_no, content, reg_date, comment_private, commenter_name, profile_img)
+        VALUES (#{user_no}, #{portfolio_no}, #{content}, now(), #{comment_private}, #{commenter_name}, #{profile_img})
     </insert>
     <delete id="deleteComment">
         delete from portfoliocomment WHERE comment_no=#{comment_no}
     </delete>
     <update id="updateComment">
-        update portfoliocomment SET content=#{content}, revise_date=#{revise_date}, comment_private=#{comment_private}
+        update portfoliocomment SET content=#{content}, revise_date=now(), comment_private=#{comment_private}
         WHERE comment_no=#{comment_no}
     </update>
     <select id="getCommentByCommentNo" resultType="PortfolioComment">

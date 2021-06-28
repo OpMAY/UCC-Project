@@ -20,7 +20,7 @@ public class Spon {
     private String status;
     private String type;
     private int board_no;
-    private String unique;
+    private String purchase_unique;
     private String receipt_id;
     private String purchase_data;
     private String purchase_status;

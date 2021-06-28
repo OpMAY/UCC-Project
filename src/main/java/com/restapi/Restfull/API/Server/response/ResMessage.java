@@ -22,4 +22,18 @@ public class ResMessage {
     public static final String ARTIST_SPON_SUCCESS = "Artist Spon Success";
     public static final String BOARD_SPON_SUCCESS = "Board Spon Success";
     public static final String GET_PORTFOLIO_SUCCESS = "Getting Portfolio";
+    public static final String LIKE_PORTFOLIO_SUCCESS = "Portfolio Like Success";
+    public static final String UNDO_LIKE_PORTFOLIO_SUCCESS = "delete Portfolio Like Success";
+    public static final String PORTFOLIO_COMMENT_INSERT_SUCCESS = "Insert Portfolio Comment Success";
+    public static final String PORTFOLIO_COMMENT_DELETE_SUCCESS = "Delete Portfolio Comment Success";
+    public static final String EDIT_PORTFOLIO_SUCCESS = "Portfolio Edit Success";
+    public static final String UPLOAD_PORTFOLIO_SUCCESS = "Portfolio Upload Success";
+    public static final String DELETE_PORTFOLIO_SUCCESS = "Portfolio Delete Success";
+    public static final String FILE_TYPE_MISMATCH = "File type doesn't match with Portfolio Type";
+    public static final String PORTFOLIO_TYPE_ERROR = "Portfolio Type Error";
+    public static final String NO_USER_DETECTED = "No User in given user_no";
+    public static final String CANNOT_SPON_YOURSELF = "User and Artist are same";
+    public static final String CHECK_USER_PRIVATE_SUCCESS = "Checking User Private Success";
+    public static final String NOT_SUBSCRIBED_ARTIST = "not Subscribe Artist";
+    public static final String VOD_LIST_CALL_SUCCESS = "Getting VOD List";
 }

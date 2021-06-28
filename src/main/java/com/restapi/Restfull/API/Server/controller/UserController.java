@@ -47,57 +47,20 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
-    public ResponseEntity Login(@ModelAttribute User user){
-        String name = user.getName();
-        String email = user.getEmail();
-        String sns = user.getSns();
-        try {
-            Message message = new Message();
-            User user1 = userService.loginUser(email, sns);
-            if(user1 != null){ // 회원 정보 있으면 바로 로그인
-                userMessageMake(message, user1);
-            }else{ // 없으면 회원 정보 등록 후 로그인
-                Date now = Time.LongTimeStampCurrent();
-                User newUser = new User();
-                newUser.setName(name);
-                newUser.setEmail(email);
-                newUser.setSns(sns);
-                newUser.setReg_date(now);
-                newUser.set_artist(false);
-                //기본 이미지 링크 설정
-                newUser.setProfile_img("basic Img");
-                // 유저 별 fcm 토큰 설정
-                newUser.setToken("");
-                userService.registerUser(newUser);
-                User user2 = userService.loginUser(email, sns);
-                userMessageMake(message, user2);
-            }
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.LOGIN_SUCCESS, message.getHashMap("Login()")), HttpStatus.OK);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        }
+    public ResponseEntity Login(@ModelAttribute User user) {
+        /** 회원가입 + 로그인 **/
+        return userService.loginUser(user);
     }
-    // TODO 로그인 및 회원가입 - 토큰 정보 기입 로직 작성 필요, 기본 프로필 이미지 경로 설정 필요 2021-06-21
 
     @RequestMapping(value = "/api/withdraw/{user_no}", method = RequestMethod.POST)
-    public ResponseEntity WithdrawUser(@PathVariable("user_no") int user_no){
-        if(userService.selectUserByUserNo(user_no) != null) {
-            userService.deleteUser(user_no);
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.WITHDRAW_SUCCESS), HttpStatus.OK);
-        }else{
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        }
+    public ResponseEntity WithdrawUser(@PathVariable("user_no") int user_no) {
+        return userService.deleteUser(user_no);
     }
 
-    private void userMessageMake(Message message, User user1) {
-        message.put("no", user1.getUser_no());
-        message.put("name", user1.getName());
-        message.put("email", user1.getEmail());
-        message.put("sns", user1.getSns());
-        message.put("reg_date", user1.getReg_date());
-        message.put("is_artist", user1.is_artist());
-        message.put("profile_img", user1.getProfile_img());
-        message.put("token", user1.getToken());
+
+    @RequestMapping(value = "/api/user/valid/{user_no}", method = RequestMethod.GET)
+    public ResponseEntity CheckUserPrivate(@PathVariable("user_no") int user_no){
+        log.info(user_no);
+        return userService.checkUserPrivate(user_no);
     }
 }

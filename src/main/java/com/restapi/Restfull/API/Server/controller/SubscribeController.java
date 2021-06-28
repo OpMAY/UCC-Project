@@ -1,45 +1,26 @@
 package com.restapi.Restfull.API.Server.controller;
 
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
-import com.restapi.Restfull.API.Server.services.*;
-import com.restapi.Restfull.API.Server.utility.Time;
-import lombok.AllArgsConstructor;
+import com.restapi.Restfull.API.Server.services.SubscribeService;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
 
 @Log4j2
 @RestController
-public class ArtistController {
+public class SubscribeController {
     @Autowired
-    private ArtistService artistService;
-
-    @Autowired
-    private BoardService boardService;
-
-    @Autowired
-    private PortfolioService portfolioService;
-
-    @Autowired
-    private SubscribeService subscribeService;
-
-    @Autowired
-    private ArtistVisitService artistVisitService;
+    SubscribeService subscribeService;
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity BusinessException(Exception e) {
@@ -70,14 +51,13 @@ public class ArtistController {
         private int artist_no;
     }
 
-    @RequestMapping(value = "/api/artist", method = RequestMethod.POST)
-    public ResponseEntity GetArtist(@ModelAttribute ArtistRequest artistRequest) {
-        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no());
+    @RequestMapping(value = "/api/fankok/delete", method = RequestMethod.POST)
+    public ResponseEntity DeleteFankok(@ModelAttribute ArtistRequest artistRequest){
+        /** 구독 정보 확인 - 있으면 팬콕 취소, 없으면 BAD REQUEST ERROR**/
+        if(subscribeService.getSubscribeInfoByUserNoANDArtistNo(artistRequest.getUser_no(), artistRequest.getArtist_no()) != null) {
+            return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no());
+        }else{
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.NOT_SUBSCRIBED_ARTIST), HttpStatus.OK);
+        }
     }
-
-    @RequestMapping(value = "/api/fankok", method = RequestMethod.POST)
-    public ResponseEntity Subscribe(@ModelAttribute ArtistRequest artistRequest) {
-        return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no());
-    }
-
 }

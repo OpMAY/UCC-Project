@@ -19,6 +19,7 @@ public class EntryComment {
     private Date reg_date;
     private Date revise_date;
     private boolean comment_private;
-    private int recomment;
     private String content;
+    private String commenter_name;
+    private String profile_img;
 }

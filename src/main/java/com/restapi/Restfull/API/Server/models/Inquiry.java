@@ -25,4 +25,6 @@ public class Inquiry {
     private Date reg_date;
     private Date answer_date;
     private String file;
+    private String report_content_type;
+    private int reported_content_type;
 }

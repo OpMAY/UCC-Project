@@ -16,23 +16,34 @@ public class ArtistDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<Artist> getAllArtists(){
+    public List<Artist> getAllArtists() {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getAllArtists();
     }
 
-    public Artist getArtistByUserNo(int user_no){
+    public Artist getArtistByUserNo(int user_no) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getArtistByUserNo(user_no);
     }
 
-    public Artist getArtistByArtistNo(int artist_no){
+    public Artist getArtistByArtistNo(int artist_no) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getArtistByArtistNo(artist_no);
     }
 
-    public void insertArtist(Artist artist){
+    public void insertArtist(Artist artist) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         artistMapper.insertArtist(artist);
     }
+
+    public void updateArtist(Artist artist) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        artistMapper.updateArtist(artist);
+    }
+
+    public void deleteArtist(int artist_no) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        artistMapper.deleteArtist(artist_no);
+    }
+
 }

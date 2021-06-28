@@ -22,6 +22,12 @@ public class Time {
         return dateFormat.format(now);
     }
 
+    public static String TimeFormatDay(){
+        Date now = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(now);
+    }
+
     /**
      * @return 현재 시간 + 1day를 늘려서 Stamp로 리턴
      * 현재 Stamp에서 하루를 늘린 Stamp
@@ -43,6 +49,7 @@ public class Time {
         Date currentDatePlusOne = c.getTime();
         return currentDatePlusOne;
     }
+
     public static Date LongTimeStampCurrent() {
         Date currentDate = new Date();
         System.out.println(currentDate);

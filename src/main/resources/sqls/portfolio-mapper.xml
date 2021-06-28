@@ -12,20 +12,20 @@
     <select id="getPortfolioListByTypeVOD" resultType="Portfolio">
         select * from portfolio where type=#{type}
     </select>
-    <insert id="insertPortfolio">
-        insert into portfolio(artist_no, title, type, file, content, reg_date, portfolio_private, agree, thumbnail)
-        VALUES (#{artist_no}, #{title}, #{type}, #{file}, #{content}, #{reg_date}, #{portfolio_private}, #{agree}, #{thumbnail})
+    <insert id="insertPortfolio" useGeneratedKeys="true" keyProperty="portfolio_no">
+        insert into portfolio(artist_no, title, type, file, content, reg_date, agree, thumbnail, artist_name, artist_profile_img)
+        VALUES (#{artist_no}, #{title}, #{type}, #{file}, #{content}, now(), #{agree}, #{thumbnail}, #{artist_name}, #{artist_profile_img})
     </insert>
     <delete id="deletePortfolio">
         delete from portfolio where portfolio_no=#{portfolio_no}
     </delete>
     <update id="updatePortfolio">
-        update portfolio SET title=#{title}, file=#{file}, content=#{content}, revise_date=#{revise_date}, thumbnail=#{thumbnail}
+        update portfolio SET title=#{title}, content=#{content}, revise_date=now()
         WHERE portfolio_no=#{portfolio_no}
     </update>
     <update id="updatePortfolioByComment">
         update portfolio SET comment_number = comment_number + #{number}
-        WHERE portfolio_no=#{porfolio_no}
+        WHERE portfolio_no=#{portfolio_no}
     </update>
     <update id="updatePortfolioByLike">
         update portfolio SET like_number = like_number + #{number}

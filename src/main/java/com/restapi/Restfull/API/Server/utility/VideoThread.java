@@ -16,7 +16,7 @@ public class VideoThread extends Thread {
     private String path;
     private File source;
 
-    public VideoThread(File source, int threadSize, int threadNo, double plusSize,String path) {
+    public VideoThread(File source, int threadSize, int threadNo, double plusSize, String path) {
         this.source = source;
         this.threadSize = threadSize;
         this.threadNo = threadNo;
@@ -30,7 +30,7 @@ public class VideoThread extends Thread {
         try {
             grab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(source));
 
-            for (int m = 0; m < 2; m++) {
+            for (int m = 0; m < 1; m++) {
                 if (m % threadSize == threadNo) {
                     double startSec = m * plusSize;
                     System.out.println(threadNo + " " + startSec);
@@ -44,7 +44,7 @@ public class VideoThread extends Thread {
                         //for JDK (jcodec-javase)
                         BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture);
                         ImageIO.write(bufferedImage, "png",
-                                new File(path + "/" + m + ".png"));
+                                new File(path + "/" + source.getName() + "_thumb.png"));
                     }
                 }
             }

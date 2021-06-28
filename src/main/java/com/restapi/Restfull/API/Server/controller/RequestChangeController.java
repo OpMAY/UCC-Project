@@ -33,8 +33,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Log4j2
 @RestController
@@ -77,24 +76,11 @@ public class RequestChangeController {
 
     @RequestMapping(value = "/api/change/{user_no}", method = RequestMethod.GET)
     public ResponseEntity ChangeArtist(@PathVariable("user_no") int user_no) {
-        try {
-            Message message = new Message();
-            User user = userService.selectUserByUserNo(user_no);
-            message.put("user_no", user.getUser_no());
-            message.put("name", user.getName());
-            if (user.getEmail() != null)
-                message.put("email", user.getEmail());
-            else
-                message.put("email", "");
-            message.put("profile_img", user.getProfile_img());
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.USER_INFO_ACCESS, message.getHashMap("ChangeArtist()")), HttpStatus.OK);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        }
+        /** 아티스트 전환 페이지에 필요한 자동입력 데이터 조회 **/
+        return userService.selectUserByUserNo(user_no);
     }
 
-    @RequestMapping(value = "/api/change/submit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/api/change/submit", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity ChangeArtistRequest(@RequestPart(value = "request_change") RequestChange requestChange,
                                               @RequestPart(value = "profile_img", required = false) MultipartFile profile_img_file,
                                               @RequestPart(value = "fan_main_img", required = false) MultipartFile fan_main_img_file) {
@@ -118,14 +104,14 @@ public class RequestChangeController {
                 IOUtils.copy(input, os);
                 fan_main_img_file = new CommonsMultipartFile(fileItem);
             }
+            /** 파일 유형 체크 -> 어플단에서 처리하겠지만 데이터 누락 대비를 위해 **/
             if (!Format.CheckFileType(profile_img_file.getOriginalFilename()) || !Format.CheckFileType(fan_main_img_file.getOriginalFilename())) {
-                // 파일 유형 체크 -> 어플단에서 처리하겠지만 데이터 누락 대비를 위해
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
-            } else if (requestChangeService.getRequestByUserNo(requestChange.getUser_no()) != null) {
-                // 이미 아티스트로 존재하는 유저가 아티스트를 신청했을 때 -> 어플단에서 처리하겠지만 데이터 누락 대비를 위해
+            } /** 이미 아티스트로 존재하는 유저가 아티스트를 신청했을 때 -> 어플단에서 처리하겠지만 데이터 누락 대비를 위해 **/
+            else if (requestChangeService.getRequestByUserNo(requestChange.getUser_no()) != null) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.ALREADY_REGISTERED_ARTIST), HttpStatus.OK);
-            } else if (requestChangeService.artistNameCheck(requestChange.getArtist_name())) {
-                // 아티스트 명 중복 체크
+            } /** 아티스트 명 중복 체크 **/
+            else if (requestChangeService.artistNameCheck(requestChange.getArtist_name())) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.ARTIST_NAME_IN_USE), HttpStatus.OK);
             } else {
                 /** File Upload Log Logic
@@ -144,81 +130,35 @@ public class RequestChangeController {
                 String profile_img_file_name = uploadFile(profile_img_file.getOriginalFilename(), profile_img_file.getBytes());
                 String fan_main_img_file_name = uploadFile(fan_main_img_file.getOriginalFilename(), fan_main_img_file.getBytes());
 
-                /** Date NOW **/
-                Date now = Time.LongTimeStampCurrent();
-
                 /** RequestChange Set **/
-                requestChange.setArtist_profile_img(profile_img_file_name);
-                requestChange.setFan_main_img(fan_main_img_file_name);
-                requestChange.setReg_date(now);
+                requestChange.setArtist_profile_img(upload_path + profile_img_file_name);
+                requestChange.setFan_main_img(upload_path + fan_main_img_file_name);
+                requestChange.setReg_date(Time.LongTimeStampCurrent());
                 requestChange.setAgree(true);
                 requestChange.setStatus(true);
 
-                /** Artist Set **/
-                Artist artist = new Artist();
-                artist.setUser_no(requestChange.getUser_no());
-                artist.setArtist_name(requestChange.getArtist_name());
-                artist.setBank_name(requestChange.getBank_name());
-                artist.setBank_account(requestChange.getBank_account());
-                artist.setBank_owner(requestChange.getBank_owner());
-                artist.setEmail(requestChange.getArtist_email());
-                artist.setArtist_phone(requestChange.getArtist_phone());
-                artist.setFan_main_img(requestChange.getFan_main_img());
-                artist.setReg_date(now);
-                artist.setFan_explain(requestChange.getFan_explain());
-                artist.setArtist_private(false);
-                artist.setHashtag(requestChange.getHashtag());
-                artist.setArtist_profile_img(requestChange.getArtist_profile_img());
-
                 /** DB SET **/
-                requestChangeService.insertRequest(requestChange, artist);
+                requestChangeService.insertRequest(requestChange);
 
                 /** DB Check **/
-                RequestChange rc = requestChangeService.getRequestByUserNo(requestChange.getUser_no());
-                Artist rArtist = artistService.getArtistByUserNo(requestChange.getUser_no());
+                Artist artist = artistService.getArtistByUserNo(requestChange.getUser_no());
 
                 /** Response JSON SETTING **/
                 Message message = new Message();
-                Message rc_message = new Message();
-                Message artist_message = new Message();
+                message.put("Artist", artist);
 
-                /** RequestChange Message **/
-                /*rc_message.put("change_no", rc.getChange_no());
-                rc_message.put("user_no", rc.getUser_no());
-                rc_message.put("artist_name", rc.getArtist_name());
-                rc_message.put("bank_name", rc.getBank_name());
-                rc_message.put("bank_account", rc.getBank_account());
-                rc_message.put("bank_owner", rc.getBank_owner());
-                rc_message.put("artist_email", rc.getArtist_email());
-                rc_message.put("artist_phone", rc.getArtist_phone());
-                rc_message.put("fan_main_img", rc.getFan_main_img());
-                rc_message.put("reg_date", rc.getReg_date());
-                rc_message.put("fan_explain", rc.getFan_explain());
-                rc_message.put("agree", rc.isAgree());
-                rc_message.put("status", rc.isStatus());
-                //rc_message.put("hashtag", rc.getHashtag());*/
+                /** File JSON Setting **/
+                Message file1_message = new Message();
+                Message file2_message = new Message();
+                List<Map<String, Object>> messages = new ArrayList<Map<String, Object>>();
+                file1_message.put("name", fan_main_img_file_name);
+                file1_message.put("url", upload_path + fan_main_img_file_name);
+                messages.add(file1_message.getMap());
+                file2_message.put("name", profile_img_file_name);
+                file2_message.put("url", upload_path + profile_img_file_name);
+                messages.add(file2_message.getMap());
+                message.put("files", messages);
 
-                /** Artist Message **/
-                /*artist_message.put("artist_no", rArtist.getArtist_no());
-                artist_message.put("user_no", rArtist.getUser_no());
-                artist_message.put("artist_name", rArtist.getArtist_name());
-                artist_message.put("bank_name", rArtist.getBank_name());
-                artist_message.put("bank_account", rArtist.getBank_account());
-                artist_message.put("bank_owner", rArtist.getBank_owner());
-                artist_message.put("email", rArtist.getEmail());
-                artist_message.put("artist_phone", rArtist.getArtist_phone());
-                artist_message.put("fan_main_img", rArtist.getFan_main_img());
-                artist_message.put("reg_date", rArtist.getReg_date());
-                artist_message.put("fan_visit_today", rArtist.getFan_visit_today());
-                artist_message.put("fan_number", rArtist.getFan_number());
-                artist_message.put("fan_explain", rArtist.getFan_explain());
-                artist_message.put("artist_private", rArtist.isArtist_private());
-                //artist_message.put("hashtag", rArtist.getHashtag());
-                artist_message.put("artist_profile_img", rArtist.getArtist_profile_img());*/
-
-                /** Json Merge **/
-                message.put("RequestChange", rc);
-                message.put("Artist", rArtist);
 
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_REGISTER_SUCCESS, message.getHashMap("ChangeArtistRequest()")), HttpStatus.OK);
             }
@@ -236,7 +176,7 @@ public class RequestChangeController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        cdnService.upload("api/" + savedName, target);
+        //cdnService.upload("api/" + savedName, target);
         return savedName;
     }
 }
