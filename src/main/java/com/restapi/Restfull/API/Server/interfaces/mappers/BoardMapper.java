@@ -20,4 +20,6 @@ public interface BoardMapper {
     void updateBoardByComment(int board_no, int number);
 
     void updateBoardByLike(int board_no, int number);
+
+    void updateBoardByVisit(Board board);
 }

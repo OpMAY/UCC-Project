@@ -1,14 +1,8 @@
 package com.restapi.Restfull.API.Server.services;
 
-import com.restapi.Restfull.API.Server.daos.PortfolioCommentDao;
-import com.restapi.Restfull.API.Server.daos.PortfolioDao;
-import com.restapi.Restfull.API.Server.daos.PortfolioLikeDao;
-import com.restapi.Restfull.API.Server.daos.UserDao;
+import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.Portfolio;
-import com.restapi.Restfull.API.Server.models.PortfolioComment;
-import com.restapi.Restfull.API.Server.models.PortfolioLike;
-import com.restapi.Restfull.API.Server.models.User;
+import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
@@ -44,6 +38,9 @@ public class PortfolioService {
     @Autowired
     private UserDao userdao;
 
+    @Autowired
+    private ArtistDao artistDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity GetPortfolio(int user_no, int portfolio_no) {
         try {
@@ -68,7 +65,7 @@ public class PortfolioService {
             portfolio.setPortfolioCommentList(commentList);
             message.put("Portfolio", portfolio);
             message.put("PortfolioLike", portfolioLike);
-            portfolioDao.updatePortfolio(portfolio);
+            portfolioDao.updatePortfolioByVisit(portfolio);
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_PORTFOLIO_SUCCESS, message.getHashMap("GetPortfolio()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -149,13 +146,20 @@ public class PortfolioService {
             portfolioCommentDao.setSession(sqlSession);
             portfolioDao.setSession(sqlSession);
             userdao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
             Message message = new Message();
             if (method.equals("UPDATE")) {
                 // DB SET
                 portfolioComment.setComment_private(false);
                 User user = userdao.selectUserByUserNo(portfolioComment.getUser_no());
-                portfolioComment.setCommenter_name(user.getName());
-                portfolioComment.setProfile_img(user.getProfile_img());
+                Artist artist = artistDao.getArtistByUserNo(portfolioComment.getUser_no());
+                if(artist != null){
+                    portfolioComment.setCommenter_name(artist.getArtist_name());
+                    portfolioComment.setProfile_img(artist.getArtist_profile_img());
+                }else{
+                    portfolioComment.setCommenter_name(user.getName());
+                    portfolioComment.setProfile_img(user.getProfile_img());
+                }
                 portfolioCommentDao.insertComment(portfolioComment);
 
                 // Portfolio SET
