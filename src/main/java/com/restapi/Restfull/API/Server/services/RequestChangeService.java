@@ -2,8 +2,10 @@ package com.restapi.Restfull.API.Server.services;
 
 import com.restapi.Restfull.API.Server.daos.ArtistDao;
 import com.restapi.Restfull.API.Server.daos.RequestChangeDao;
+import com.restapi.Restfull.API.Server.daos.UserDao;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.RequestChange;
+import com.restapi.Restfull.API.Server.models.User;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -26,6 +28,9 @@ public class RequestChangeService {
     @Autowired
     private ArtistDao artistDao;
 
+    @Autowired
+    private UserDao userDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public List<RequestChange> getAllRequests() {
         requestChangeDao.setSession(sqlSession);
@@ -44,6 +49,12 @@ public class RequestChangeService {
         /** Set Session **/
         requestChangeDao.setSession(sqlSession);
         artistDao.setSession(sqlSession);
+        userDao.setSession(sqlSession);
+
+        /** User Set**/
+        User user = userDao.selectUserByUserNo(rc.getUser_no());
+        user.set_artist(true);
+        userDao.updateUser(user);
 
         /** Artist Set **/
         Artist artist = new Artist();
