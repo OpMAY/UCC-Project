@@ -14,7 +14,7 @@ public class TestDao {
             this.sqlSession = sqlSession;
     }
 
-    public void insertTest(){
+    public void insertTest() {
         TestMapper testMapper = sqlSession.getMapper(TestMapper.class);
         Test test = new Test();
         test.setNo(1);
@@ -23,7 +23,7 @@ public class TestDao {
     }
 
     public void updateTest(Test test) {
-        TestMapper testMapper =sqlSession.getMapper(TestMapper.class);
+        TestMapper testMapper = sqlSession.getMapper(TestMapper.class);
         testMapper.updateTest(test);
     }
 }

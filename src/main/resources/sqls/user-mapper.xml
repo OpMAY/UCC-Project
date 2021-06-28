@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.UserMapper">
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="user_no">
+        insert into user(name, email, sns, reg_date, is_artist, profile_img, is_user_private)
+        VALUES(#{name}, #{email}, #{sns}, now(), #{is_artist}, #{profile_img}, #{is_user_private})
+    </insert>
+    <select id="selectUserByEmail" resultType="User">
+        select * from user where email=#{email} and sns=#{sns}
+    </select>
+    <select id="selectUserByUserNo" resultType="User">
+        select * from user where user_no=#{user_no}
+    </select>
+    <delete id="deleteUser">
+        delete from user where user_no=#{user_no}
+    </delete>
+    <update id="updateUser">
+        update user SET name=#{name}, email=#{email}, is_artist=#{is_artist}, profile_img=#{profile_img}, is_user_private=#{is_user_private}
+        WHERE user_no=#{user_no}
+    </update>
+</mapper>

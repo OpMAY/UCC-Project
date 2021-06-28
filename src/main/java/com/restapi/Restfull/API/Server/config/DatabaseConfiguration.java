@@ -26,7 +26,7 @@ public class DatabaseConfiguration {
     private ApplicationContext applicationContext;
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    @ConfigurationProperties(prefix = "spring.datasource.local")
     public HikariConfig hikariConfig() {
         return new HikariConfig();
     }

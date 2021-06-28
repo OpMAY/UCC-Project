@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioCommentMapper">
+    <select id="getCommentListByPortfolioNo" resultType="PortfolioComment">
+        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no}
+    </select>
+    <select id="getCommentListByUserNo" resultType="PortfolioComment">
+        select * from portfoliocomment WHERE user_no=#{user_no}
+    </select>
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="comment_no">
+        insert into portfoliocomment(user_no, portfolio_no, content, reg_date, comment_private, commenter_name, profile_img)
+        VALUES (#{user_no}, #{portfolio_no}, #{content}, now(), #{comment_private}, #{commenter_name}, #{profile_img})
+    </insert>
+    <delete id="deleteComment">
+        delete from portfoliocomment WHERE comment_no=#{comment_no}
+    </delete>
+    <update id="updateComment">
+        update portfoliocomment SET content=#{content}, revise_date=now(), comment_private=#{comment_private}
+        WHERE comment_no=#{comment_no}
+    </update>
+    <select id="getCommentByCommentNo" resultType="PortfolioComment">
+        select * from portfoliocomment WHERE comment_no=#{comment_no}
+    </select>
+</mapper>

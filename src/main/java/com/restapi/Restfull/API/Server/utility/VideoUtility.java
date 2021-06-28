@@ -3,7 +3,10 @@ package com.restapi.Restfull.API.Server.utility;
 import java.io.File;
 import java.io.IOException;
 
+import com.restapi.Restfull.API.Server.services.PortfolioService;
+import com.restapi.Restfull.API.Server.services.UserService;
 import org.jcodec.api.JCodecException;
+
 
 public class VideoUtility {
     /**
@@ -22,7 +25,7 @@ public class VideoUtility {
         VideoThread[] videoThread = new VideoThread[threadSize];
 
         for (int i = 0; i < videoThread.length; i++) {
-            videoThread[i] = new VideoThread(source, threadSize, i, plusSize, "C:/Users/zlzld/OneDrive/Desktop/projects/server_test/Restfull-API-Server/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api");
+            videoThread[i] = new VideoThread(source, threadSize, i, plusSize, "E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api");
             videoThread[i].start();
         }
 

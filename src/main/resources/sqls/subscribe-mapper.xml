@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SubscribeMapper">
+    <insert id="insertSubscribe" useGeneratedKeys="true" keyProperty="subscribe_no">
+        insert into subscribe(user_no, artist_no, subscribe_date)
+        VALUES (#{user_no}, #{artist_no}, now())
+    </insert>
+    <delete id="deleteSubscribe">
+        delete from subscribe WHERE user_no=#{user_no} AND artist_no=#{artist_no}
+    </delete>
+    <select id="getSubscribeInfoByUserNoANDArtistNo" resultType="Subscribe">
+        select * from subscribe WHERE user_no=#{user_no} AND artist_no=#{artist_no}
+    </select>
+    <select id="getSubscribeListByArtistNo" resultType="Subscribe">
+        select * from subscribe WHERE artist_no=#{artist_no}
+    </select>
+    <select id="getSubscribeListByUserNo" resultType="Subscribe">
+        select * from subscribe WHERE user_no=#{user_no}
+    </select>
+</mapper>

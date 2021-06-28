@@ -9,6 +9,7 @@ import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.SecurityService;
 import com.restapi.Restfull.API.Server.services.TestService;
+import com.restapi.Restfull.API.Server.services.UserService;
 import com.restapi.Restfull.API.Server.utility.VideoUtility;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -47,6 +48,9 @@ public class HomeController {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private UserService userService;
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity BusinessException(Exception e) {
@@ -202,7 +206,7 @@ public class HomeController {
              * DivX/Xvid
              */
             VideoUtility videoUtility = new VideoUtility();
-            File file = new File("C:/Users/zlzld/OneDrive/Desktop/projects/server_test/Restfull-API-Server/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/test_android.mp4");
+            File file = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/test_android.mp4");
             long s_time = System.currentTimeMillis();
             videoUtility.getThumbnail(file);
             long e_time = System.currentTimeMillis();
