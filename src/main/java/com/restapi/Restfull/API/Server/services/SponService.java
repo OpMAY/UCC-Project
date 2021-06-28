@@ -1,8 +1,6 @@
 package com.restapi.Restfull.API.Server.services;
 
-import com.restapi.Restfull.API.Server.daos.BoardCommentDao;
-import com.restapi.Restfull.API.Server.daos.BoardDao;
-import com.restapi.Restfull.API.Server.daos.SponDao;
+import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper;
 import com.restapi.Restfull.API.Server.models.Spon;
@@ -31,6 +29,12 @@ public class SponService {
     private SponDao sponDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private ArtistDao artistDao;
+
+    @Autowired
     private BoardDao boardDao;
 
     @Autowired
@@ -40,6 +44,10 @@ public class SponService {
     public ResponseEntity insertSpon(Spon spon) {
         try {
             sponDao.setSession(sqlSession);
+
+            if(artistDao.getArtistByArtistNo(spon.getArtist_no()).getUser_no() == spon.getUser_no()){
+                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.CANNOT_SPON_YOURSELF), HttpStatus.OK);
+            }
             Message message = new Message();
             Date now = Time.LongTimeStampCurrent();
             // Spon Data Set
@@ -53,7 +61,7 @@ public class SponService {
 
                 // Message Set
                 message.put("Spon", spon);
-                return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
+                return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_SPON_SUCCESS, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
             } else {
                 spon.setType(SponType.Artist_SPON);
 
@@ -62,7 +70,7 @@ public class SponService {
 
                 // Message Set
                 message.put("Spon", spon);
-                return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_SPON_SUCCESS, message.getHashMap("BoardSpon()")), HttpStatus.OK);
+                return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("BoardSpon()")), HttpStatus.OK);
             }
         } catch (JSONException e) {
             throw new BusinessException(e);

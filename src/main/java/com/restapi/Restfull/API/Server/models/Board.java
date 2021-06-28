@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Getter
@@ -20,8 +21,11 @@ public class Board {
     private Date revise_date;
     private int visit_number;
     private boolean board_private;
-    private String file;
     private String thumbnail;
     private int comment_number;
     private int like_number;
+    private String artist_name;
+    private String artist_profile_img;
+    private List<BoardComment> boardCommentList;
+    private List<BoardLike> boardLikeList;
 }

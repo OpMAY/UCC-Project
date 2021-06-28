@@ -32,4 +32,8 @@ public class ResMessage {
     public static final String FILE_TYPE_MISMATCH = "File type doesn't match with Portfolio Type";
     public static final String PORTFOLIO_TYPE_ERROR = "Portfolio Type Error";
     public static final String NO_USER_DETECTED = "No User in given user_no";
+    public static final String CANNOT_SPON_YOURSELF = "User and Artist are same";
+    public static final String CHECK_USER_PRIVATE_SUCCESS = "Checking User Private Success";
+    public static final String NOT_SUBSCRIBED_ARTIST = "not Subscribe Artist";
+    public static final String VOD_LIST_CALL_SUCCESS = "Getting VOD List";
 }

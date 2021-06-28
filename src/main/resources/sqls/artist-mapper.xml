@@ -6,9 +6,9 @@
     <select id="getAllArtists" resultType="Artist">
         select * from artist
     </select>
-    <insert id="insertArtist">
+    <insert id="insertArtist" useGeneratedKeys="true" keyProperty="artist_no">
         insert into artist(user_no, artist_name, bank_name, bank_account, bank_owner, email, artist_phone, fan_main_img, reg_date, fan_explain, artist_private, hashtag, artist_profile_img)
-        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{email}, #{artist_phone}, #{fan_main_img}, #{reg_date}, #{fan_explain}, #{artist_private}, #{hashtag}, #{artist_profile_img})
+        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{email}, #{artist_phone}, #{fan_main_img}, now(), #{fan_explain}, #{artist_private}, #{hashtag}, #{artist_profile_img})
     </insert>
     <select id="getArtistByUserNo" resultType="Artist">
         select * from artist where user_no=#{user_no}
@@ -17,7 +17,7 @@
         select * from artist where artist_no=#{artist_no}
     </select>
     <update id="updateArtist">
-        update artist SET artist_name=#{artist_name}, bank_name=#{bank_name}, bank_account=#{bank_account}, bank_owner=#{bank_owner}, email=#{email}, artist_phone=#{artist_phone}, fan_main_img=#{fan_main_img}, fan_explain=#{fan_explain}, artist_private=#{artist_private}, hash_tag=#{hashtag}, artist_profile_img=#{artist_profile_img}, fan_number=#{fan_number}, fan_visit_today=#{fan_visit_today}
+        update artist SET artist_name=#{artist_name}, bank_name=#{bank_name}, bank_account=#{bank_account}, bank_owner=#{bank_owner}, email=#{email}, artist_phone=#{artist_phone}, fan_main_img=#{fan_main_img}, fan_explain=#{fan_explain}, artist_private=#{artist_private}, hashtag=#{hashtag}, artist_profile_img=#{artist_profile_img}, fan_number=#{fan_number}, fan_visit_today=#{fan_visit_today}
         WHERE artist_no=#{artist_no}
     </update>
     <delete id="deleteArtist">

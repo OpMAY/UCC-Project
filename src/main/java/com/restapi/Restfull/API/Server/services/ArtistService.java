@@ -45,37 +45,37 @@ public class ArtistService {
     private ArtistVisitDao artistVisitDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Artist> getAllArtists() {
+    public List<Artist> getAllArtists(){
         artistDao.setSession(sqlSession);
         return artistDao.getAllArtists();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Artist getArtistByUserNo(int user_no) {
+    public Artist getArtistByUserNo(int user_no){
         artistDao.setSession(sqlSession);
         return artistDao.getArtistByUserNo(user_no);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Artist getArtistByArtistNo(int artist_no) {
+    public Artist getArtistByArtistNo(int artist_no){
         artistDao.setSession(sqlSession);
         return artistDao.getArtistByArtistNo(artist_no);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void insertArtist(Artist artist) {
+    public void insertArtist(Artist artist){
         artistDao.setSession(sqlSession);
         artistDao.insertArtist(artist);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateArtist(Artist artist) {
+    public void updateArtist(Artist artist){
         artistDao.setSession(sqlSession);
         artistDao.updateArtist(artist);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity ArtistMain(int user_no, int artist_no) {
+    public ResponseEntity ArtistMain(int user_no, int artist_no){
         try {
             Message message = new Message();
             /** required Data
@@ -84,17 +84,21 @@ public class ArtistService {
              * 3. Board - Done
              * 4. Subscribe - Done
              * **/
-            Date now = Time.LongTimeStampCurrent();
+            String now = Time.TimeFormatDay();
+            artistDao.setSession(sqlSession);
+            artistVisitDao.setSession(sqlSession);
+            portfolioDao.setSession(sqlSession);
+            boardDao.setSession(sqlSession);
+            subscribeDao.setSession(sqlSession);
 
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            if (artistVisitDao.getArtistVisit(artist_no, user_no, now) == null) {
+            if(artistVisitDao.getArtistVisit(artist_no, user_no, now) == null){
                 // 당일 방문하지 않았을 경우 - 방문자 정보 추가 후 금일 방문자 수 수정
-                if (artist.getUser_no() != user_no) { // 본인 페이지 입장은 방문자 수 변동 X
+                if(artist.getUser_no() != user_no){ // 본인 페이지 입장은 방문자 수 변동 X
                     // 방문 정보 SET
                     ArtistVisit artistVisit = new ArtistVisit();
                     artistVisit.setArtist_no(artist_no);
                     artistVisit.setUser_no(user_no);
-                    artistVisit.setVisit_date(now);
                     artistVisitDao.insertVisit(artistVisit);
 
                     // 방문 정보로 아티스트의 방문 숫자 변동
@@ -106,10 +110,12 @@ public class ArtistService {
             List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist_no);
             List<Board> boardList = boardDao.getBoardListByArtistNo(artist_no);
             boolean subscribe = subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null;
+
             message.put("Artist", artist);
             message.put("Portfolios", portfolioList);
             message.put("Boards", boardList);
             message.put("subscribe", subscribe);
+
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_INFO_CALL_SUCCESS, message.getHashMap("GetArtist()")), HttpStatus.OK);
         } catch (JSONException e) {

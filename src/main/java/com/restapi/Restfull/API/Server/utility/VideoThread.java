@@ -44,7 +44,7 @@ public class VideoThread extends Thread {
                         //for JDK (jcodec-javase)
                         BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture);
                         ImageIO.write(bufferedImage, "png",
-                                new File(path + "/" + source.getName() + ".png"));
+                                new File(path + "/" + source.getName() + "_thumb.png"));
                     }
                 }
             }

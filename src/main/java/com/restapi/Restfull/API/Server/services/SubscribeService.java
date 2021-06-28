@@ -39,6 +39,9 @@ public class SubscribeService {
     public ResponseEntity Fankok(int user_no, int artist_no) {
         try {
             Message message = new Message();
+            artistDao.setSession(sqlSession);
+            subscribeDao.setSession(sqlSession);
+
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
             if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null) {
                 // 팬콕 했을 경우 -> 팬콕 취소
@@ -49,6 +52,7 @@ public class SubscribeService {
                 artistDao.updateArtist(artist);
 
                 message.put("Artist", artistDao.getArtistByArtistNo(artist_no));
+                message.put("Subscribe", false);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UNDO_SUBSCRIBE_SUCCESS, message.getHashMap("Subscribe()")), HttpStatus.OK);
             } else if (artistDao.getArtistByArtistNo(artist_no).getUser_no() == user_no) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.CANNOT_SUBSCRIBE_YOURSELF), HttpStatus.OK);
@@ -66,8 +70,8 @@ public class SubscribeService {
                 // 아티스트의 팬 수 변동
                 artist.setFan_number(subscribeDao.getSubscribeListByArtistNo(artist_no).size());
                 artistDao.updateArtist(artist);
-                message.put("Artist", artistDao.getArtistByArtistNo(artist_no));
-                message.put("Subscribe", subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no));
+                message.put("Artist", artist);
+                message.put("Subscribe", subscribe);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SUBSCRIBE_SUCCESS, message.getHashMap("Subscribe()")), HttpStatus.OK);
             }
         } catch (JSONException e) {

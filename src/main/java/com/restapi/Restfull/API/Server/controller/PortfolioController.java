@@ -33,6 +33,9 @@ public class PortfolioController {
     @Autowired
     private PortfolioService portfolioService;
 
+    @Autowired
+    private ArtistService artistService;
+
     @Value("${uploadPath}")
     private String upload_path;
 
@@ -79,9 +82,8 @@ public class PortfolioController {
                                           @RequestPart(value = "vod", required = false) MultipartFile vod_file,
                                           @RequestPart(value = "images", required = false) MultipartFile[] img_files) throws Exception {
         try {
-            log.info(portfolio_files.length);
             Message message = new Message();
-            Message filepathmsg = new Message();
+            Message filepath_msg = new Message();
 
             ArrayList<Upload> uploads = new ArrayList<>();
 
@@ -103,7 +105,7 @@ public class PortfolioController {
                         FileConverter fileConverter = new FileConverter();
                         File convFile = fileConverter.convert(vod_file);
                         videoUtility.getThumbnail(convFile);
-                        File thumbnail = new File(path + "/" + convFile.getName() + ".png");
+                        File thumbnail = new File(path + "/" + convFile.getName() + "_thumb.png");
 
                         /** File Upload Logic */
                         String file_name = uploadFile(vod_file.getOriginalFilename(), vod_file.getBytes());
@@ -111,6 +113,8 @@ public class PortfolioController {
                         String thumbnail_name = uploadFile(thumbnail.getName(), thumbnail_byte);
                         uploads.add(new Upload(file_name, cdn_path + file_name));
                         uploads.add(new Upload(thumbnail_name, cdn_path + thumbnail_name));
+                        portfolio.setFile(cdn_path + file_name);
+                        portfolio.setThumbnail(cdn_path + thumbnail_name);
                     }
                     break;
                 case PortfolioType.IMAGE: { /** IMAGE PORTFOLIO **/
@@ -171,18 +175,21 @@ public class PortfolioController {
                     return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.PORTFOLIO_TYPE_ERROR, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
             }
             // CHECK FILE SAVE COMPLETE
-            if (uploads.isEmpty()) {
+            if (uploads.isEmpty() && !portfolio.getType().equals(PortfolioType.TEXT)) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
             } else {
-                filepathmsg.put("files", uploads);
-                portfolio.setFile(filepathmsg.toString());
+                filepath_msg.put("files", uploads);
             }
             portfolio.setReg_date(Time.LongTimeStampCurrent());
-            portfolio.setPortfolio_private(false);
+
+            Artist artist = artistService.getArtistByArtistNo(portfolio.getArtist_no());
+            portfolio.setArtist_name(artist.getArtist_name());
+            portfolio.setArtist_profile_img(artist.getArtist_profile_img());
             portfolioService.insertPortfolio(portfolio);
 
-            List<Portfolio> portfolioList = portfolioService.getPortfolioListByArtistNo(portfolio.getArtist_no());
-            message.put("Portfolios", portfolioList);
+            Portfolio portfolio1 = portfolioService.getPortfolioByPortfolioNo(portfolio.getPortfolio_no());
+            message.put("Portfolio", portfolio1);
+            message.put("files", filepath_msg.getMap());
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPLOAD_PORTFOLIO_SUCCESS, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -247,6 +254,11 @@ public class PortfolioController {
         }
     }
 
+    @RequestMapping(value = "/api/portfolio/VOD_List", method = RequestMethod.GET)
+    public ResponseEntity GetVODList(){
+        return portfolioService.getPortfolioListByTypeVOD(PortfolioType.VOD);
+    }
+
 
     private String uploadFile(String originalName, byte[] fileDate) throws IOException {
         UUID uid = UUID.randomUUID();
@@ -256,7 +268,7 @@ public class PortfolioController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        cdnService.upload("api/" + savedName, target);
+        //cdnService.upload("api/" + savedName, target);
         return savedName;
     }
 }

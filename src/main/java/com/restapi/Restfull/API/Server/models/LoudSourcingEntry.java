@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Getter
@@ -22,8 +23,11 @@ public class LoudSourcingEntry {
     private Date revise_date;
     private int visit;
     private boolean agree;
-    private boolean entry_private;
     private String thumbnail;
     private int comment_number;
     private int vote_number;
+    private String artist_name;
+    private String artist_profile_img;
+    private List<EntryComment> entryCommentList;
+    private List<EntryVote> entryVoteList;
 }

@@ -16,5 +16,5 @@ public class User {
     private Date reg_date;
     private boolean is_artist;
     private String profile_img;
-    private String token;
+    private boolean is_user_private;
 }

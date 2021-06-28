@@ -10,4 +10,6 @@ public interface UserMapper {
     void deleteUser(int user_no);
 
     User selectUserByUserNo(int user_no);
+
+    void updateUser(User user);
 }

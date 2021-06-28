@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SubscribeMapper">
-    <insert id="insertSubscribe">
+    <insert id="insertSubscribe" useGeneratedKeys="true" keyProperty="subscribe_no">
         insert into subscribe(user_no, artist_no, subscribe_date)
-        VALUES (#{user_no}, #{artist_no}, #{subscribe_date})
+        VALUES (#{user_no}, #{artist_no}, now())
     </insert>
     <delete id="deleteSubscribe">
         delete from subscribe WHERE user_no=#{user_no} AND artist_no=#{artist_no}

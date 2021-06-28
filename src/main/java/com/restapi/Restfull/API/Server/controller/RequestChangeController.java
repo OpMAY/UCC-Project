@@ -33,8 +33,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Log4j2
 @RestController
@@ -77,10 +76,11 @@ public class RequestChangeController {
 
     @RequestMapping(value = "/api/change/{user_no}", method = RequestMethod.GET)
     public ResponseEntity ChangeArtist(@PathVariable("user_no") int user_no) {
+        /** 아티스트 전환 페이지에 필요한 자동입력 데이터 조회 **/
         return userService.selectUserByUserNo(user_no);
     }
 
-    @RequestMapping(value = "/api/change/submit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/api/change/submit", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity ChangeArtistRequest(@RequestPart(value = "request_change") RequestChange requestChange,
                                               @RequestPart(value = "profile_img", required = false) MultipartFile profile_img_file,
                                               @RequestPart(value = "fan_main_img", required = false) MultipartFile fan_main_img_file) {
@@ -131,8 +131,8 @@ public class RequestChangeController {
                 String fan_main_img_file_name = uploadFile(fan_main_img_file.getOriginalFilename(), fan_main_img_file.getBytes());
 
                 /** RequestChange Set **/
-                requestChange.setArtist_profile_img(profile_img_file_name);
-                requestChange.setFan_main_img(fan_main_img_file_name);
+                requestChange.setArtist_profile_img(upload_path + profile_img_file_name);
+                requestChange.setFan_main_img(upload_path + fan_main_img_file_name);
                 requestChange.setReg_date(Time.LongTimeStampCurrent());
                 requestChange.setAgree(true);
                 requestChange.setStatus(true);
@@ -146,6 +146,19 @@ public class RequestChangeController {
                 /** Response JSON SETTING **/
                 Message message = new Message();
                 message.put("Artist", artist);
+
+                /** File JSON Setting **/
+                Message file1_message = new Message();
+                Message file2_message = new Message();
+                List<Map<String, Object>> messages = new ArrayList<Map<String, Object>>();
+                file1_message.put("name", fan_main_img_file_name);
+                file1_message.put("url", upload_path + fan_main_img_file_name);
+                messages.add(file1_message.getMap());
+                file2_message.put("name", profile_img_file_name);
+                file2_message.put("url", upload_path + profile_img_file_name);
+                messages.add(file2_message.getMap());
+                message.put("files", messages);
+
 
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_REGISTER_SUCCESS, message.getHashMap("ChangeArtistRequest()")), HttpStatus.OK);
             }
@@ -163,7 +176,7 @@ public class RequestChangeController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        cdnService.upload("api/" + savedName, target);
+        //cdnService.upload("api/" + savedName, target);
         return savedName;
     }
 }

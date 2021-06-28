@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.ArtistVisitMapper">
-    <insert id="insertVisit">
+    <insert id="insertVisit" useGeneratedKeys="true" keyProperty="artist_visit_no">
         insert into artistvisit(user_no, artist_no, visit_date)
-        VALUES (#{user_no}, #{artist_no}, #{visit_date})
+        VALUES (#{user_no}, #{artist_no}, now())
     </insert>
     <select id="getArtistVisitByArtistNo" resultType="ArtistVisit">
         select * from artistvisit WHERE artist_no=#{artist_no} AND visit_date=#{visit_date}

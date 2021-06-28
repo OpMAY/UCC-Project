@@ -22,12 +22,12 @@ public class ArtistVisitDao {
         artistVisitMapper.insertVisit(artistVisit);
     }
 
-    public List<ArtistVisit> getArtistVisitByArtistNo(int artist_no, Date visit_date) {
+    public List<ArtistVisit> getArtistVisitByArtistNo(int artist_no, String visit_date) {
         ArtistVisitMapper artistVisitMapper = sqlSession.getMapper(ArtistVisitMapper.class);
         return artistVisitMapper.getArtistVisitByArtistNo(artist_no, visit_date);
     }
 
-    public ArtistVisit getArtistVisit(int artist_no, int user_no, Date visit_date) {
+    public ArtistVisit getArtistVisit(int artist_no, int user_no, String visit_date) {
         ArtistVisitMapper artistVisitMapper = sqlSession.getMapper(ArtistVisitMapper.class);
         return artistVisitMapper.getArtistVisit(artist_no, user_no, visit_date);
     }

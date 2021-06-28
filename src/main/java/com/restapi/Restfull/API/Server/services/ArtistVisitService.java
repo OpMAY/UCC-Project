@@ -28,13 +28,13 @@ public class ArtistVisitService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<ArtistVisit> getArtistVisitByArtistNo(int artist_no, Date visit_date) {
+    public List<ArtistVisit> getArtistVisitByArtistNo(int artist_no, String visit_date) {
         artistVisitDao.setSession(sqlSession);
         return artistVisitDao.getArtistVisitByArtistNo(artist_no, visit_date);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ArtistVisit getArtistVisit(int artist_no, int user_no, Date visit_date) {
+    public ArtistVisit getArtistVisit(int artist_no, int user_no, String visit_date) {
         artistVisitDao.setSession(sqlSession);
         return artistVisitDao.getArtistVisit(artist_no, user_no, visit_date);
     }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface ArtistVisitMapper {
     void insertVisit(ArtistVisit artistVisit);
 
-    List<ArtistVisit> getArtistVisitByArtistNo(int artist_no, Date visit_date);
+    List<ArtistVisit> getArtistVisitByArtistNo(int artist_no, String visit_date);
 
-    ArtistVisit getArtistVisit(int artist_no, int user_no, Date visit_date);
+    ArtistVisit getArtistVisit(int artist_no, int user_no, String visit_date);
 }
