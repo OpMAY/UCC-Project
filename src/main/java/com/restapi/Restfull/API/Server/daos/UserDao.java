@@ -26,8 +26,7 @@ public class UserDao {
 
     public User selectUserByUserNo(int user_no) {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        User user = userMapper.selectUserByUserNo(user_no);
-        return user;
+        return userMapper.selectUserByUserNo(user_no);
     }
 
     public void deleteUser(int user_no) {

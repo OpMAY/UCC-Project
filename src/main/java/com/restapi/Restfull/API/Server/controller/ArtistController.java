@@ -80,4 +80,13 @@ public class ArtistController {
         return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no());
     }
 
+    @RequestMapping(value = "/api/artists", method = RequestMethod.GET)
+    public ResponseEntity GetArtistList(){
+        return artistService.getAllArtists();
+    }
+
+    @RequestMapping(value = "/api/artists/search", method = RequestMethod.GET)
+    public ResponseEntity SearchArtist(@RequestParam("query") String query){
+        return artistService.SearchArtist(query);
+    }
 }

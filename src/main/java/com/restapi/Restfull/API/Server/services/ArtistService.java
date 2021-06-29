@@ -1,6 +1,7 @@
 package com.restapi.Restfull.API.Server.services;
 
 import com.restapi.Restfull.API.Server.daos.*;
+import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.ArtistVisit;
 import com.restapi.Restfull.API.Server.models.Board;
@@ -45,9 +46,20 @@ public class ArtistService {
     private ArtistVisitDao artistVisitDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Artist> getAllArtists(){
-        artistDao.setSession(sqlSession);
-        return artistDao.getAllArtists();
+    public ResponseEntity getAllArtists(){
+        try {
+            Message message = new Message();
+            artistDao.setSession(sqlSession);
+            List<Artist> newArtistList = artistDao.getNewArtistList();
+
+            List<Artist> allArtistList = artistDao.getAllArtists();
+
+            message.put("New Artists", newArtistList);
+            message.put("Artists", allArtistList);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_LIST_LOADED, message.getHashMap("GetArtistList()")), HttpStatus.OK);
+        } catch (JSONException e) {
+            throw new BusinessException(e);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -124,4 +136,16 @@ public class ArtistService {
         }
     }
     //TODO 아티스트 목록 정렬 방식에 따라 서버에서 그에 맞게 데이터를 뿌려줄지, 앱단에서 처리할지? -> 기획의 의도에 맞게 화면 별 기준에 맞춰 서버처리 or 어플 단 처리
+
+    public ResponseEntity SearchArtist(String search){
+        try {
+            Message message = new Message();
+            artistDao.setSession(sqlSession);
+            List<Artist> artistList = artistDao.SearchArtist(search);
+            message.put("Artists", artistList);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SEARCH_ARTIST_RESULT_LOADED, message.getHashMap("SearchArtist()")), HttpStatus.OK);
+        } catch (JSONException e) {
+            throw new BusinessException(e);
+        }
+    }
 }

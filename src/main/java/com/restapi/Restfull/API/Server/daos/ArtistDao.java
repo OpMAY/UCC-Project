@@ -46,4 +46,26 @@ public class ArtistDao {
         artistMapper.deleteArtist(artist_no);
     }
 
+    public List<Artist> getArtistListByPopular() {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getArtistListByPopular();
+    }
+
+    public List<Artist> getNewArtistList(){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getNewArtistList();
+    }
+
+    public List<Artist> SearchArtist(String search){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        String sqlSearch = "%" + search + "%";
+        return artistMapper.searchArtist(sqlSearch);
+    }
+
+    public List<Artist> SearchArtistLimit(String search){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        String sqlSearch = "%" + search + "%";
+        return artistMapper.searchArtistLimit(sqlSearch);
+    }
+
 }

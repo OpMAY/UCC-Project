@@ -158,7 +158,7 @@ public class PortfolioController {
                         MultipartFile multipartFile = entry.getValue();
                         if (multipartFile.isEmpty()) {
                             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
-                        } else if (!Format.CheckFileType(multipartFile.getOriginalFilename())) {
+                        } else if (!Format.CheckFile(multipartFile.getOriginalFilename())) {
                             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_MISMATCH, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
                         } else {
                             /** File Upload Log Logic*/
@@ -169,6 +169,7 @@ public class PortfolioController {
                             /** File Upload Logic */
                             String file_name = uploadFile(multipartFile.getOriginalFilename(), multipartFile.getBytes());
                             uploads.add(new Upload(file_name, cdn_path + file_name));
+
                         }
                     }
                     break;
@@ -181,8 +182,23 @@ public class PortfolioController {
             // CHECK FILE SAVE COMPLETE
             if (uploads.isEmpty() && !portfolio.getType().equals(PortfolioType.TEXT)) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
-            } else {
-                filepath_msg.put("files", uploads);
+            } else if(portfolio.getType().equals(PortfolioType.IMAGE)) {
+                portfolio.setThumbnail(uploads.get(0).getUrl());
+                List<String> uploadUrl = new ArrayList<String>();
+                for(Upload upload : uploads){
+                    String url = upload.getUrl();
+                    uploadUrl.add(url);
+                }
+                portfolio.setFile(uploadUrl.toString());
+                message.put("files", uploads);
+            } else if(portfolio.getType().equals(PortfolioType.FILE)){
+                List<String> uploadUrl = new ArrayList<String>();
+                for (Upload upload : uploads) {
+                    String url = upload.getUrl();
+                    uploadUrl.add(url);
+                }
+                portfolio.setFile(uploadUrl.toString());
+                message.put("files", uploads);
             }
             Artist artist = artistService.getArtistByArtistNo(portfolio.getArtist_no());
             portfolio.setArtist_name(artist.getArtist_name());
@@ -191,7 +207,6 @@ public class PortfolioController {
 
             Portfolio portfolio1 = portfolioService.getPortfolioByPortfolioNo(portfolio.getPortfolio_no());
             message.put("Portfolio", portfolio1);
-            message.put("files", filepath_msg.getMap());
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPLOAD_PORTFOLIO_SUCCESS, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();

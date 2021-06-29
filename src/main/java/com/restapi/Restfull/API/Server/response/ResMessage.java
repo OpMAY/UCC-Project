@@ -45,4 +45,13 @@ public class ResMessage {
     public static final String CHECK_USER_PRIVATE_SUCCESS = "Checking User Private Success";
     public static final String NOT_SUBSCRIBED_ARTIST = "not Subscribe Artist";
     public static final String VOD_LIST_CALL_SUCCESS = "Getting VOD List";
+    public static final String MAIN_PAGE_LOADED = "Main Page Loaded";
+    public static final String ARTIST_LIST_LOADED = "Artist List Loaded";
+    public static final String SEARCH_ARTIST_RESULT_LOADED = "Searched Artist List Loaded";
+    public static final String GET_USER_FANKOK_LIST = "Getting user fankok List";
+    public static final String GET_USER_FANKOK_ARTIST_LIST = "Getting user fankok Artist List";
+    public static final String GET_MY_PAGE_INFO = "Getting my page Info Success";
+    public static final String UPDATE_MY_PAGE_INFO = "My Page Info Updated";
+    public static final String GET_SEARCH_KEYWORDS = "Getting Search Keywords";
+    public static final String SEARCH_SUCCESS = "Search Success";
 }
