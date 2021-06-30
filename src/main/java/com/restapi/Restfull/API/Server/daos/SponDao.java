@@ -42,9 +42,9 @@ public class SponDao {
         return sponMapper.getSponListByBoardNo(board_no);
     }
 
-    public Spon getSponAfterSpon(int user_no, int artist_no, Date spon_date) {
+    public List<Spon> getSponByArtistNoANDUserNo(int user_no, int artist_no) {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
-        return sponMapper.getSponAfterSpon(user_no, artist_no, spon_date);
+        return sponMapper.getSponAfterSpon(user_no, artist_no);
     }
 
 

@@ -15,5 +15,5 @@ public class BoardLike {
     private int like_no;
     private int board_no;
     private int user_no;
-    private Date reg_date;
+    private String reg_date;
 }

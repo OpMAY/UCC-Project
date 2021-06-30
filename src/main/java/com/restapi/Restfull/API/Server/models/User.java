@@ -13,8 +13,10 @@ public class User {
     private String name;
     private String email;
     private String sns;
-    private Date reg_date;
+    private String reg_date;
     private boolean is_artist;
     private String profile_img;
     private boolean is_user_private;
+
+    private boolean is_register;
 }

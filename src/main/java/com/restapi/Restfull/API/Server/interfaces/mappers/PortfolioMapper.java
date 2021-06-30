@@ -9,7 +9,11 @@ public interface PortfolioMapper {
 
     Portfolio getPortfolioByPortfolioNo(int portfolio_no);
 
-    List<Portfolio> getPortfolioListByTypeVOD(String type);
+    List<Portfolio> getPortfolioListByTypeVODSortRecent(String type, int start_index, int end_index);
+
+    List<Portfolio> getPortfolioListByTypeVODSortTitle(String type, int start_index, int end_index);
+
+    List<Portfolio> getPortfolioListByTypeVODSortFanNumber(String type, int start_index, int end_index);
 
     void insertPortfolio(Portfolio portfolio);
 
@@ -23,7 +27,11 @@ public interface PortfolioMapper {
 
     void updatePortfolioByVisit(Portfolio portfolio);
 
+    void updatePortfolioByFankok(Portfolio portfolio);
+
     List<Portfolio> getPortfolioListByRandom();
 
     List<Portfolio> SearchPortfolioLimit(String query);
+
+    List<Portfolio> getPortfolioListByArtistNoLimit(int artist_no);
 }

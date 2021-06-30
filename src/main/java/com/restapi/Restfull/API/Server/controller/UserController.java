@@ -2,22 +2,15 @@ package com.restapi.Restfull.API.Server.controller;
 
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
-import com.restapi.Restfull.API.Server.models.Auth;
 import com.restapi.Restfull.API.Server.models.Upload;
 import com.restapi.Restfull.API.Server.models.User;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.UserService;
 import com.restapi.Restfull.API.Server.utility.Format;
-import com.restapi.Restfull.API.Server.utility.Time;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -30,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 @Log4j2
@@ -66,34 +58,34 @@ public class UserController {
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/login", method = RequestMethod.POST) // CHECK
     public ResponseEntity Login(@ModelAttribute User user) {
         /** 회원가입 + 로그인 **/
         return userService.loginUser(user);
     }
 
-    @RequestMapping(value = "/api/withdraw/{user_no}", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/withdraw/{user_no}", method = RequestMethod.POST) // CHECK
     public ResponseEntity WithdrawUser(@PathVariable("user_no") int user_no) {
         return userService.deleteUser(user_no);
     }
 
 
-    @RequestMapping(value = "/api/user/valid/{user_no}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user/valid/{user_no}", method = RequestMethod.GET) // CHECK
     public ResponseEntity CheckUserPrivate(@PathVariable("user_no") int user_no){
         log.info(user_no);
         return userService.checkUserPrivate(user_no);
     }
 
-    @RequestMapping(value = "/api/user/mypage/{user_no}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user/mypage/{user_no}", method = RequestMethod.GET) // CHECK
     public ResponseEntity GetUserInfo(@PathVariable("user_no") int user_no){
         return userService.GetUserSpecificInfo(user_no);
     }
 
-    @RequestMapping(value = "/api/user/mypage", method = RequestMethod.POST)
-    public ResponseEntity UpdateUserInfo(@RequestPart("User") User user,
-                                         @RequestPart(value = "Artist", required = false) Artist artist,
-                                         @RequestPart(value = "Profile_img", required = false)MultipartFile profile_img,
-                                         @RequestPart(value = "Fan_main_img", required = false) MultipartFile fan_main_img){
+    @RequestMapping(value = "/api/user/mypage", method = RequestMethod.POST) //CHECK
+    public ResponseEntity UpdateUserInfo(@RequestPart("user") User user,
+                                         @RequestPart(value = "artist", required = false) Artist artist,
+                                         @RequestPart(value = "profile_img", required = false)MultipartFile profile_img,
+                                         @RequestPart(value = "main_img", required = false) MultipartFile fan_main_img){
         log.info("test");
         log.info(artist);
         try{
@@ -130,7 +122,7 @@ public class UserController {
                 /** File Upload Logic */
                 String file_name = uploadFile(fan_main_img.getOriginalFilename(), fan_main_img.getBytes());
 
-                artist.setFan_main_img(cdn_path + file_name);
+                artist.setMain_img(cdn_path + file_name);
                 uploads.add(new Upload(file_name, cdn_path + file_name));
             }
 

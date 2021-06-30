@@ -55,10 +55,10 @@ public class MainService {
              * 3. Random Portfolio List
              * 4. Recent Board List
              * **/
-            // New Artist List - total 10
+            // New Artist List - total 15
             List<Artist> newArtistList = artistDao.getNewArtistList();
 
-            // Popular Artist - total 10
+            // Popular Artist - total 15
             List<Artist> popularArtistList = artistDao.getArtistListByPopular();
 
             // Random Portfolio List
@@ -67,10 +67,10 @@ public class MainService {
             // Recent Board List
             List<Board> recentBoardList = boardDao.getRecentBoardList();
 
-            message.put("New Artists", newArtistList);
-            message.put("Popular Artists", popularArtistList);
-            message.put("Random Portfolios", randomPortfolioList);
-            message.put("Recent Boards", recentBoardList);
+            message.put("new_artists", newArtistList);
+            message.put("popular_artists", popularArtistList);
+            message.put("random_portfolios", randomPortfolioList);
+            message.put("recent_boards", recentBoardList);
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.MAIN_PAGE_LOADED, message.getHashMap("GetMain()")), HttpStatus.OK);
         } catch (JSONException e) {

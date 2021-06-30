@@ -16,5 +16,5 @@ public class EntryVote {
     private int loudsourcing_no;
     private int entry_no;
     private int user_no;
-    private Date reg_date;
+    private String reg_date;
 }

@@ -10,8 +10,8 @@
         select * from requestchange where user_no=#{user_no}
     </select>
     <insert id="insertRequest" useGeneratedKeys="true" keyProperty="change_no">
-        insert into requestchange(user_no, artist_name, bank_name, bank_account, bank_owner, artist_email, artist_phone, fan_main_img, reg_date, fan_explain, agree, status, hashtag, artist_profile_img)
-        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{artist_email}, #{artist_phone}, #{fan_main_img}, now(), #{fan_explain}, #{agree}, #{status}, #{hashtag}, #{artist_profile_img})
+        insert into requestchange(user_no, artist_name, bank_name, bank_account, bank_owner, artist_email, artist_phone, main_img, reg_date, `explain`, agree, status, hashtag, artist_profile_img)
+        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{artist_email}, #{artist_phone}, #{main_img}, #{reg_date}, #{explain}, #{agree}, #{status}, #{hashtag}, #{artist_profile_img})
     </insert>
     <select id="getRequestByArtistName" resultType="RequestChange">
         select * from requestchange where artist_name=#{artist_name}

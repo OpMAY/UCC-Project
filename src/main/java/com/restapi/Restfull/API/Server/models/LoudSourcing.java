@@ -15,16 +15,18 @@ public class LoudSourcing {
     private int loudsourcing_no;
     private String name;
     private String status;
-    private String total_date;
-    private String recruitment_date;
-    private String process_date;
     private String host;
     private String type;
     private String reward;
     private String warning;
-    private Date reg_date;
-    private Date revise_date;
+    private String reg_date;
+    private String revise_date;
     private String files;
     private String img;
     private String content;
+    private String start_date;
+    private String recruitment_end_date;
+    private String process_start_date;
+    private String process_end_date;
+    private String end_date;
 }

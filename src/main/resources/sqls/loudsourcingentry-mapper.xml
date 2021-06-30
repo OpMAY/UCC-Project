@@ -3,5 +3,45 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingEntryMapper">
-
+    <select id="getEntryListByLoudSourcingNoSortTitle" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY title LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getEntryListByLoudSourcingNoSortFankok" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY fan_number DESC LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getEntryListByLoudSourcingNoSortRecent" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY reg_date DESC LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getEntryListByArtistNo" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE artist_no=#{artist_no}
+    </select>
+    <select id="getEntryByEntryNo" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE entry_no=#{entry_no}
+    </select>
+    <select id="getEntryByArtistNOAndLoudSourcingNo" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE artist_no=#{artist_no} AND loudsourcing_no=#{loudsourcing_no}
+    </select>
+    <insert id="insertEntry" useGeneratedKeys="true" keyProperty="entry_no">
+        insert into loudsourcingentry(loudsourcing_no, artist_no, title, file, content, reg_date, revise_date, agree, thumbnail, artist_name, artist_profile_img, fan_number)
+        VALUES (#{loudsourcing_no}, #{artist_no}, #{title}, #{file}, #{content}, #{reg_date}, #{revise_date}, #{agree}, #{thumbnail}, #{artist_name}, #{artist_profile_img}, #{fan_number})
+    </insert>
+    <update id="updateEntry">
+        update loudsourcingentry SET title=#{title}, content=#{content}, revise_date=#{revise_date}, artist_name=#{artist_name}, artist_profile_img=#{artist_profile_img}
+        WHERE entry_no=#{entry_no}
+    </update>
+    <update id="updateEntryByVote">
+        update loudsourcingentry SET vote_number=#{vote_number} WHERE entry_no=#{entry_no}
+    </update>
+    <update id="updateEntryByVisit">
+        update loudsourcingentry SET visit=#{visit} WHERE entry_no=#{entry_no}
+    </update>
+    <update id="updateEntryByFankok">
+        update loudsourcingentry SET fan_number=#{fan_number} WHERE entry_no=#{entry_no}
+    </update>
+    <update id="updateEntryByComment">
+        update loudsourcingentry SET comment_number=#{comment_number} WHERE entry_no=#{entry_no}
+    </update>
+    <delete id="deleteEntry">
+        delete from loudsourcingentry WHERE entry_no=#{entry_no}
+    </delete>
 </mapper>

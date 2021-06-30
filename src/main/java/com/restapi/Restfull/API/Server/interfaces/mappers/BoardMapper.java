@@ -7,7 +7,7 @@ import java.util.List;
 public interface BoardMapper {
     List<Board> getBoardListByArtistNo(int artist_no);
 
-    List<Board> getBoardList();
+    List<Board> getBoardListByArtistNoForRefresh(int artist_no, int start_index, int end_index);
 
     Board getBoardByBoardNo(int board_no);
 
@@ -23,7 +23,17 @@ public interface BoardMapper {
 
     void updateBoardByVisit(Board board);
 
+    void updateBoardByFankok(Board board);
+
     List<Board> getRecentBoardList();
 
-    List<Board> searchBoard(String query);
+    List<Board> searchBoard(String query, int start_index, int end_index);
+
+    List<Board> getBoardListSortByRegDate(int start_index, int end_index);
+
+    List<Board> getBoardListSortByFanNumber(int start_index, int end_index);
+
+    List<Board> getBoardListSortByTitle(int start_index, int end_index);
+
+
 }

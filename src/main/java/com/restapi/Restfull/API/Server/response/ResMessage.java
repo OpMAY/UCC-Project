@@ -22,7 +22,9 @@ public class ResMessage {
     public static final String ARTIST_SPON_SUCCESS = "Artist Spon Success";
     public static final String BOARD_SPON_SUCCESS = "Board Spon Success";
     public static final String GET_PORTFOLIO_SUCCESS = "Getting Portfolio";
+    public static final String GET_PORTFOLIO_COMMENT_SUCCESS = "Getting Portfolio Comment";
     public static final String GET_BOARD_SUCCESS = "Getting Board";
+    public static final String GET_BOARD_COMMENT_SUCCESS = "Getting Board Comment";
     public static final String GET_BOARD_LIST_SUCCESS = "Getting Board List";
     public static final String LIKE_PORTFOLIO_SUCCESS = "Portfolio Like Success";
     public static final String UNDO_LIKE_PORTFOLIO_SUCCESS = "delete Portfolio Like Success";
@@ -54,4 +56,18 @@ public class ResMessage {
     public static final String UPDATE_MY_PAGE_INFO = "My Page Info Updated";
     public static final String GET_SEARCH_KEYWORDS = "Getting Search Keywords";
     public static final String SEARCH_SUCCESS = "Search Success";
+    public static final String DELETE_ENTRY_SUCCESS = "Entry Delete Success";
+    public static final String ENTRY_COMMENT_DELETE_SUCCESS = "Entry Comment Delete Success";
+    public static final String ENTRY_COMMENT_INSERT_SUCCESS = "Entry Comment Insert Success";
+    public static final String VOTE_SUCCESS = "Vote Entry Success";
+    public static final String UNVOTE_SUCCESS = "Unvote Entry Success";
+    public static final String GET_ENTRY_COMMENTS_SUCCESS = "Getting Entry Comments Success";
+    public static final String GET_ENTRY_SUCCESS = "Getting Entry Success";
+    public static final String LOUDSOURCING_CANCEL_SUCCESS = "Loudsourcing Apply Canceled";
+    public static final String LOUDSOURCING_APPLICATION_SUCCESS = "Loudsourcing Applied Successfully";
+    public static final String GET_ENTRY_LIST = "Getting Entry List";
+    public static final String LOUDSOURCING_ENTRY_UPLOADED = "Entry Uploaded Successfully";
+    public static final String GET_LOUDSOURCING_DETAIL = "Getting Loudsourcing Detail";
+    public static final String GET_LOUDSOURCING_LIST = "Getting Loudsourcing List";
+    public static final String GET_BANNER_LIST = "Getting Banner List";
 }

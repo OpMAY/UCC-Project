@@ -16,5 +16,5 @@ public interface SponMapper {
 
     List<Spon> getSponListByBoardNo(int board_no);
 
-    Spon getSponAfterSpon(int user_no, int artist_no, Date spon_date);
+    List<Spon> getSponAfterSpon(int user_no, int artist_no);
 }

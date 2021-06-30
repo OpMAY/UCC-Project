@@ -3,5 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.EntryVoteMapper">
-
+    <insert id="insertVote">
+        insert into entryvote(loudsourcing_no, entry_no, user_no, reg_date)
+        VALUES (#{loudsourcing_no}, #{entry_no}, #{user_no}, #{reg_date})
+    </insert>
+    <delete id="deleteVote">
+        delete from entryvote WHERE entry_no=#{entry_no} AND user_no=#{user_no}
+    </delete>
+    <select id="getEntryVoteByEntryNo" resultType="EntryVote">
+        select * from entryvote WHERE entry_no=#{entry_no}
+    </select>
+    <select id="getEntryVoteByUserNo" resultType="EntryVote">
+        select * from entryvote WHERE user_no=#{user_no}
+    </select>
+    <select id="getEntryVote" resultType="EntryVote">
+        select * from entryvote WHERE user_no=#{user_no} AND entry_no=#{entry_no}
+    </select>
 </mapper>

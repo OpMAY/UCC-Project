@@ -45,8 +45,13 @@ public class SearchController {
         return searchService.getKeywords();
     }
 
-    @RequestMapping(value = "/api/search", method = RequestMethod.GET)
-    public ResponseEntity Search(@RequestParam("query") String query, @RequestParam("start_index") int start_index){
+    @RequestMapping(value = "/api/search/dynamic", method = RequestMethod.GET)
+    public ResponseEntity SearchDynamic(@RequestParam("query") String query, @RequestParam("start_index") int start_index){
         return searchService.Search(query, start_index);
+    }
+
+    @RequestMapping(value = "/api/search/static", method = RequestMethod.GET)
+    public ResponseEntity SearchStatic(@RequestParam("query") String query){
+        return searchService.Search(query, -1);
     }
 }

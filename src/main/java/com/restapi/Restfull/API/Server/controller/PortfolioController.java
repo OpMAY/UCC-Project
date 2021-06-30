@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -71,12 +73,17 @@ public class PortfolioController {
         private int portfolio_no;
     }
 
-    @RequestMapping(value = "/api/portfolio", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/portfolio", method = RequestMethod.POST) //CHECK
     public ResponseEntity GetPortfolio(@ModelAttribute PortfolioRequest portfolioRequest) {
-        return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no());
+        return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no(), -1);
     }
 
-    @RequestMapping(value = "/api/portfolio/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/portfolio/comments/{start_index}", method = RequestMethod.POST) //CHECK
+    public ResponseEntity GetPortfolioComment(@ModelAttribute PortfolioRequest portfolioRequest, @PathVariable("start_index") int start_index) {
+        return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no(), start_index);
+    }
+
+    @RequestMapping(value = "/api/portfolio/upload", method = RequestMethod.POST) //CHECK
     public ResponseEntity UploadPortfolio(@RequestPart(value = "portfolio") Portfolio portfolio,
                                           @RequestPart(value = "files", required = false) MultipartFile[] portfolio_files,
                                           @RequestPart(value = "vod", required = false) MultipartFile vod_file,
@@ -192,21 +199,31 @@ public class PortfolioController {
                 portfolio.setFile(uploadUrl.toString());
                 message.put("files", uploads);
             } else if(portfolio.getType().equals(PortfolioType.FILE)){
-                List<String> uploadUrl = new ArrayList<String>();
-                for (Upload upload : uploads) {
+                List<String> file_msgList = new ArrayList<>();
+                for(Upload upload : uploads){
+                    Gson gson = new Gson();
+                    FileJson fileJson = new FileJson();
+                    String name = upload.getName();
                     String url = upload.getUrl();
-                    uploadUrl.add(url);
+                    fileJson.setName(name);
+                    fileJson.setUrl(url);
+                    String jsonString = gson.toJson(fileJson);
+                    file_msgList.add(jsonString);
                 }
-                portfolio.setFile(uploadUrl.toString());
                 message.put("files", uploads);
+                portfolio.setFile(file_msgList.toString());
             }
             Artist artist = artistService.getArtistByArtistNo(portfolio.getArtist_no());
             portfolio.setArtist_name(artist.getArtist_name());
             portfolio.setArtist_profile_img(artist.getArtist_profile_img());
+            String d = Time.TimeFormatHMS();
+            portfolio.setReg_date(d);
+            portfolio.setRevise_date(d);
             portfolioService.insertPortfolio(portfolio);
 
             Portfolio portfolio1 = portfolioService.getPortfolioByPortfolioNo(portfolio.getPortfolio_no());
-            message.put("Portfolio", portfolio1);
+            portfolio1.setUser_no(artist.getUser_no());
+            message.put("portfolio", portfolio1);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPLOAD_PORTFOLIO_SUCCESS, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -217,24 +234,24 @@ public class PortfolioController {
         }
     }
 
-    @RequestMapping(value = "/api/portfolio/edit", method = RequestMethod.POST)
-    public ResponseEntity EditPortfolio(@RequestPart Portfolio portfolio) {
+    @RequestMapping(value = "/api/portfolio/edit", method = RequestMethod.POST) //CHECK
+    public ResponseEntity EditPortfolio(@ModelAttribute Portfolio portfolio) {
         return portfolioService.updatePortfolio(portfolio);
     }
 
-    @RequestMapping(value = "/api/portfolio/delete/{portfolio_no}", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/portfolio/delete/{portfolio_no}", method = RequestMethod.POST) //CHECK
     public ResponseEntity DeletePortfolio(@PathVariable("portfolio_no") int portfolio_no) {
         return portfolioService.deletePortfolio(portfolio_no);
     }
 
-    @RequestMapping(value = "/api/portfolio/like", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/portfolio/like", method = RequestMethod.POST) //CHECK
     public ResponseEntity PressPortfolioLike(@ModelAttribute PortfolioRequest portfolioRequest) {
         int user_no = portfolioRequest.getUser_no();
         int portfolio_no = portfolioRequest.getPortfolio_no();
         return portfolioService.updatePortfolioByLike(portfolio_no, user_no);
     }
 
-    @RequestMapping(value = "/api/portfolio/comment", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/portfolio/comment", method = RequestMethod.POST) //CHECK
     public ResponseEntity InsertPortfolioComment(@ModelAttribute PortfolioComment portfolioComment) {
         return portfolioService.updatePortfolioByComment(portfolioComment, "UPDATE");
     }
@@ -247,7 +264,7 @@ public class PortfolioController {
         private int portfolio_no;
     }
 
-    @RequestMapping(value = "/api/portfolio/comment/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/portfolio/comment/delete", method = RequestMethod.POST) //CHECK
     public ResponseEntity DeletePortfolioComment(@ModelAttribute CommentDeleteRequest commentDeleteRequest) {
         PortfolioComment portfolioComment = new PortfolioComment();
         portfolioComment.setComment_no(commentDeleteRequest.getComment_no());
@@ -255,7 +272,7 @@ public class PortfolioController {
         return portfolioService.updatePortfolioByComment(portfolioComment, "DELETE");
     }
 
-    @RequestMapping(value = "/api/portfolio/edit_source/{portfolio_no}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/portfolio/edit_source/{portfolio_no}", method = RequestMethod.GET) // CHECK
     public ResponseEntity GetPortfolioForEdit(@PathVariable("portfolio_no") int portfolio_no) {
         try {
             Message message = new Message();
@@ -263,7 +280,7 @@ public class PortfolioController {
             Portfolio portfolio = portfolioService.getPortfolioByPortfolioNo(portfolio_no);
 
             // Response Message SET
-            message.put("Portfolio", portfolio);
+            message.put("portfolio", portfolio);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_PORTFOLIO_SUCCESS, message.getHashMap("GetPortfolioForEdit()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -271,9 +288,9 @@ public class PortfolioController {
         }
     }
 
-    @RequestMapping(value = "/api/portfolio/VOD_List", method = RequestMethod.GET)
-    public ResponseEntity GetVODList() {
-        return portfolioService.getPortfolioListByTypeVOD(PortfolioType.VOD);
+    @RequestMapping(value = "/api/portfolio/VOD_List/{sort}/{start_index}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetVODList(@PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
+        return portfolioService.getPortfolioListByTypeVOD(PortfolioType.VOD, sort, start_index);
     }
 
 

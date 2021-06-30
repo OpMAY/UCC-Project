@@ -3,5 +3,45 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingMapper">
-
+    <select id="getLoudSourcingListSortAll" resultType="LoudSourcing">
+        select * from loudsourcing ORDER BY revise_date LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getLoudSourcingByLoudsourcingNo" resultType="LoudSourcing">
+        select * from loudsourcing WHERE loudsourcing_no=#{loudsourcing_no}
+    </select>
+    <insert id="insertLoudSourcing" useGeneratedKeys="true" keyProperty="loudsourcing_no">
+        insert into loudsourcing(name, status, host, type, reward, warning, reg_date, files, img, content, host_profile_img, hashtag, start_date, recruitment_end_date, process_start_date, process_end_date, end_date)
+        VALUES (#{name}, #{status}, #{host}, #{type}, #{reward}, #{warning}, #{reg_date}, #{files}, #{img}, #{content}, #{host_profile_img}, #{hashtag}, #{start_date}, #{recruitment_end_date}, #{process_end_date}, #{process_start_date}, #{end_date})
+    </insert>
+    <delete id="deleteLoudSourcing">
+        delete from loudsourcing WHERE loudsourcing_no=#{loudsourcing_no}
+    </delete>
+    <select id="searchLoudSourcing" resultType="LoudSourcing">
+        select * from loudsourcing WHERE name=#{query} OR host=#{query} OR hashtag=#{hashtag}
+    </select>
+    <select id="getLoudSourcingListByStatusProcess" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} ORDER BY process_start_date LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getLoudSourcingListByStatusRecruitment" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} ORDER BY start_date LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getLoudSourcingListByStatusEnd" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} ORDER BY end_date DESC LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="searchLoudSourcingByStatusProcess" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
+        ORDER BY process_start_date DESC LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="searchLoudSourcingByStatusEnd" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
+        ORDER BY end_date DESC LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="searchLoudSourcingByStatusRecruitment" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
+        ORDER BY start_date DESC LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="searchLoudSourcingAll" resultType="LoudSourcing">
+        select * from loudsourcing WHERE name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query}
+        ORDER BY revise_date DESC LIMIT #{start_index}, #{end_index}
+    </select>
 </mapper>

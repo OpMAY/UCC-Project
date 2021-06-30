@@ -47,13 +47,13 @@ public class SponController {
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/spon", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/spon", method = RequestMethod.POST) //CHECK
     public ResponseEntity ArtistSpon(@ModelAttribute Spon spon) {
         // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
         return sponService.insertSpon(spon);
     }
 
-    @RequestMapping(value = "/api/board/spon", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/spon", method = RequestMethod.POST) //CHECK
     public ResponseEntity Spon(@ModelAttribute Spon spon){
         // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
         return sponService.insertSpon(spon);

@@ -3,5 +3,21 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.EntryCommentMapper">
-
+    <select id="getCommentListByEntryNo" resultType="EntryComment">
+        select * from entrycomment WHERE entry_no=#{entry_no} ORDER BY reg_date DESC
+        LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getCommentListByUserNo" resultType="EntryComment">
+        select * from entrycomment WHERE user_no=#{user_no}
+    </select>
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="entry_comment_no">
+        insert into entrycomment(user_no, entry_no, loudsourcing_no, reg_date, content, commenter_name, profile_img, comment_private)
+        VALUES (#{user_no}, #{entry_no}, #{loudsourcing_no}, #{reg_date}, #{content}, #{commenter_name}, #{profile_img}, #{comment_private})
+    </insert>
+    <delete id="deleteComment">
+        delete from entrycomment WHERE entry_comment_no=#{entry_comment_no}
+    </delete>
+    <select id="getEntryCommentByCommentNo" resultType="EntryComment">
+        select * from entrycomment WHERE entry_comment_no=#{entry_comment_no}
+    </select>
 </mapper>

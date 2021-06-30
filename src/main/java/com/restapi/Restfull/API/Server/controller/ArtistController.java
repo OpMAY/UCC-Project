@@ -70,22 +70,33 @@ public class ArtistController {
         private int artist_no;
     }
 
-    @RequestMapping(value = "/api/artist", method = RequestMethod.POST)
-    public ResponseEntity GetArtist(@ModelAttribute ArtistRequest artistRequest) {
-        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no());
+    @RequestMapping(value = "/api/artist", method = RequestMethod.POST) //CHECK
+    public ResponseEntity GetArtistWithoutBoard(@ModelAttribute ArtistRequest artistRequest) {
+        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), -1);
     }
 
-    @RequestMapping(value = "/api/fankok", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/artist/{start_index}", method = RequestMethod.POST) // CHECK
+    public ResponseEntity GetArtistBoard(@ModelAttribute ArtistRequest artistRequest, @PathVariable("start_index") int start_index) {
+        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), start_index);
+    }
+
+    @RequestMapping(value = "/api/fankok", method = RequestMethod.POST) //CHECK
     public ResponseEntity Subscribe(@ModelAttribute ArtistRequest artistRequest) {
-        return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no());
+        return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no(), "");
     }
 
-    @RequestMapping(value = "/api/artists", method = RequestMethod.GET)
-    public ResponseEntity GetArtistList(){
-        return artistService.getAllArtists();
+    @RequestMapping(value = "/api/artists/new", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetNewArtistList(){
+        return artistService.getNewArtists();
     }
 
-    @RequestMapping(value = "/api/artists/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/artists/all/{sort}/{start_index}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetAllArtistList(@PathVariable("sort") String sort,
+                                           @PathVariable("start_index") int start_index){
+        return artistService.getAllArtists(start_index, sort);
+    }
+
+    @RequestMapping(value = "/api/artists/search", method = RequestMethod.GET) //CHECK
     public ResponseEntity SearchArtist(@RequestParam("query") String query){
         return artistService.SearchArtist(query);
     }

@@ -16,9 +16,9 @@ public class BoardCommentDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<BoardComment> getCommentListByBoardNo(int board_no){
+    public List<BoardComment> getCommentListByBoardNo(int board_no, int start_index){
         BoardCommentMapper boardCommentMapper = sqlSession.getMapper(BoardCommentMapper.class);
-        return boardCommentMapper.getCommentListByBoardNo(board_no);
+        return boardCommentMapper.getCommentListByBoardNo(board_no, start_index, start_index + 10);
     }
 
     public List<BoardComment> getCommentListByUserNo(int user_no){

@@ -4,21 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.BoardMapper">
     <select id="getBoardListByArtistNo" resultType="Board">
-        select * from board WHERE artist_no=#{artist_no} order by reg_date DESC
-
-    </select>
-    <select id="getBoardList" resultType="Board">
-        select * from board order by reg_date DESC
+        select * from board WHERE artist_no=#{artist_no} order by reg_date DESC LIMIT 1000
     </select>
     <select id="getBoardByBoardNo" resultType="Board">
         select * from board where board_no=#{board_no}
     </select>
     <insert id="insertBoard" useGeneratedKeys="true" keyProperty="board_no">
-        insert into board(artist_no, title, content, reg_date, board_private, thumbnail, artist_name, artist_profile_img)
-        VALUES (#{artist_no}, #{title}, #{content}, now(), #{board_private}, #{thumbnail}, #{artist_name}, #{artist_profile_img})
+        insert into board(artist_no, title, content, reg_date, revise_date, board_private, thumbnail, artist_name, artist_profile_img, fan_number)
+        VALUES (#{artist_no}, #{title}, #{content}, #{reg_date}, #{revise_date}, #{board_private}, #{thumbnail}, #{artist_name}, #{artist_profile_img}, #{fan_number})
     </insert>
     <update id="updateBoard">
-        update board SET title=#{title}, content=#{content}, revise_date=now(), thumbnail=#{thumbnail}
+        update board SET title=#{title}, content=#{content}, revise_date=#{revise_date}, thumbnail=#{thumbnail}, artist_name=#{artist_name}, artist_profile_img=#{artist_profile_img}
         WHERE board_no=#{board_no}
     </update>
     <delete id="deleteBoard">
@@ -35,10 +31,30 @@
     <update id="updateBoardByVisit">
         update board SET visit_number=#{visit_number} WHERE board_no=#{board_no}
     </update>
+    <update id="updateBoardByFankok">
+        update board SET fan_number=#{fan_number} WHERE board_no=#{board_no}
+    </update>
     <select id="getRecentBoardList" resultType="Board">
-        select * from board order by reg_date DESC limit 20
+        select * from board order by reg_date DESC limit 15
     </select>
     <select id="searchBoard" resultType="Board">
         select * from board WHERE title like #{query} or artist_name like #{query}
+        LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getBoardListSortByRegDate" resultType="Board">
+        select * from board order by reg_date DESC
+        LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getBoardListSortByFanNumber" resultType="Board">
+        select * from board order by fan_number DESC
+        LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getBoardListSortByTitle" resultType="Board">
+        select * from board order by title
+        LIMIT #{start_index}, #{end_index}
+    </select>
+    <select id="getBoardListByArtistNoForRefresh" resultType="Board">
+        select * from board WHERE artist_no=#{artist_no} order by reg_date DESC
+        LIMIT #{start_index}, #{end_index}
     </select>
 </mapper>

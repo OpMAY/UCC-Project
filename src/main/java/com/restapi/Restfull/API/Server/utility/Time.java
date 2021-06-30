@@ -1,6 +1,7 @@
 package com.restapi.Restfull.API.Server.utility;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,16 +17,26 @@ public class Time {
      * "yyyy년 MM월dd일 HH시mm분ss초"
      * "yyyy_MM_dd_HH_mm_ss"
      */
-    public static String TimeFormatter() {
+    public static String TimeFormatHMS() {
         Date now = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(now);
+    }
+
+    public static String TimeFormatter(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
     }
 
     public static String TimeFormatDay(){
         Date now = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(now);
+    }
+
+    public static Date StringToDateFormat(String dateString) throws ParseException {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return transFormat.parse(dateString);
     }
 
     /**

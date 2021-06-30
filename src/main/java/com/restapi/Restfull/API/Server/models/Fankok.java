@@ -14,6 +14,6 @@ import java.util.Date;
 public class Fankok {
     private Portfolio portfolio;
     private Board board;
-    private Date reg_date;
+    private String reg_date;
     private String type;
 }

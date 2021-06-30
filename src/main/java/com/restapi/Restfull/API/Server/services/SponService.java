@@ -2,7 +2,6 @@ package com.restapi.Restfull.API.Server.services;
 
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
 import com.restapi.Restfull.API.Server.utility.Time;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -53,15 +52,17 @@ public class SponService {
 
             if(artist_no == 0){
                 artist_no = boardDao.getBoardByBoardNo(spon.getBoard_no()).getArtist_no();
+                spon.setArtist_no(artist_no);
             }
 
             if(artistDao.getArtistByArtistNo(artist_no).getUser_no() == spon.getUser_no()){
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.CANNOT_SPON_YOURSELF), HttpStatus.OK);
             }
             Message message = new Message();
-            Date now = Time.LongTimeStampCurrent();
+            String d = Time.TimeFormatHMS();
             // Spon Data Set
-            spon.setSpon_date(now);
+
+            spon.setSpon_date(d);
             spon.setStatus(SponStatus.NOT_CONFIRMED);
             if (spon.getBoard_no() != 0) {
                 spon.setType(SponType.BOARD_SPON);
@@ -83,22 +84,35 @@ public class SponService {
                 boardSponComment.setType(BoardCommentType.SPON_COMMENT);
                 boardSponComment.setContent(Integer.toString(spon.getPrice()));
                 boardSponComment.setComment_private(false);
+                String date = Time.TimeFormatHMS();
+                boardSponComment.setReg_date(date);
                 boardCommentDao.insertComment(boardSponComment);
 
+                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByBoardNo(spon.getBoard_no(), 0);
                 Board board = boardDao.getBoardByBoardNo(spon.getBoard_no());
-                board.setBoardCommentList(boardCommentDao.getCommentListByBoardNo(spon.getBoard_no()));
+
+                ArrayList<BoardComment> resCommentList = new ArrayList<>();
+                for(BoardComment boardComment1 : boardCommentList){
+                    int commentWriter = boardComment1.getUser_no();
+                    if(!sponDao.getSponByArtistNoANDUserNo(commentWriter, board.getArtist_no()).isEmpty())
+                        boardComment1.set_sponned(true);
+                    else
+                        boardComment1.set_sponned(false);
+                    resCommentList.add(boardComment1);
+                }
+
                 // Message Set
-                message.put("Spon", spon);
-                message.put("Board", board);
+                message.put("spon", spon);
+                message.put("comment_number", board.getComment_number());
+                message.put("board_comment", resCommentList);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_SPON_SUCCESS, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
             } else {
                 spon.setType(SponType.Artist_SPON);
-
                 // DB Set
                 sponDao.insertSpon(spon);
 
                 // Message Set
-                message.put("Spon", spon);
+                message.put("spon", spon);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("BoardSpon()")), HttpStatus.OK);
             }
         } catch (JSONException e) {
@@ -131,8 +145,8 @@ public class SponService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Spon getSponAfterSpon(int user_no, int artist_no, Date spon_date) {
+    public List<Spon> getSponAfterSpon(int user_no, int artist_no) {
         sponDao.setSession(sqlSession);
-        return sponDao.getSponAfterSpon(user_no, artist_no, spon_date);
+        return sponDao.getSponByArtistNoANDUserNo(user_no, artist_no);
     }
 }

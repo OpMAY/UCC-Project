@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.List;
 
 @Log4j2
@@ -65,14 +66,17 @@ public class RequestChangeService {
         artist.setBank_owner(rc.getBank_owner());
         artist.setEmail(rc.getArtist_email());
         artist.setArtist_phone(rc.getArtist_phone());
-        artist.setFan_main_img(rc.getFan_main_img());
-        artist.setReg_date(Time.LongTimeStampCurrent());
-        artist.setFan_explain(rc.getFan_explain());
+        artist.setMain_img(rc.getMain_img());
+        String d = Time.TimeFormatHMS();
+        artist.setReg_date(d);
+        artist.setRecent_act_date(d);
+        artist.setExplain(rc.getExplain());
         artist.setArtist_private(false);
         artist.setHashtag(rc.getHashtag());
         artist.setArtist_profile_img(rc.getArtist_profile_img());
 
         /** DB INSERT **/
+        rc.setReg_date(d);
         requestChangeDao.insertRequest(rc);
         artistDao.insertArtist(artist);
     }

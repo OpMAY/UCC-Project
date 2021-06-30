@@ -5,7 +5,7 @@ import com.restapi.Restfull.API.Server.models.PortfolioComment;
 import java.util.List;
 
 public interface PortfolioCommentMapper {
-    List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no);
+    List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no, int start_index, int end_index);
 
     List<PortfolioComment> getCommentListByUserNo(int user_no);
 
