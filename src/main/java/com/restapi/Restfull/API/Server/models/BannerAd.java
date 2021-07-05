@@ -14,7 +14,7 @@ import java.util.Date;
 public class BannerAd {
     private int banner_ad_no;
     private String img;
-    private Date reg_date;
-    private Date revise_date;
+    private String reg_date;
+    private String revise_date;
     private String status;
 }

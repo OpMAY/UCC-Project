@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.daos;
 
 import com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioMapper;
 import com.restapi.Restfull.API.Server.models.Portfolio;
+import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -22,9 +23,19 @@ public class PortfolioDao {
         return portfolioMapper.getPortfolioListByArtistNo(artist_no);
     }
 
-    public List<Portfolio> getPortfolioListByTypeVOD(String type) {
+    public List<Portfolio> getPortfolioListByArtistNoLimit(int artist_no) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
-        return portfolioMapper.getPortfolioListByTypeVOD(type);
+        return portfolioMapper.getPortfolioListByArtistNoLimit(artist_no);
+    }
+
+    public List<Portfolio> getPortfolioListByTypeVODSort(String type, String sort, int start_index) {
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        if(sort.equals(DataListSortType.SORT_BY_RECENT))
+            return portfolioMapper.getPortfolioListByTypeVODSortRecent(type, start_index, start_index + 10);
+        else if(sort.equals(DataListSortType.SORT_BY_WORD))
+            return portfolioMapper.getPortfolioListByTypeVODSortTitle(type, start_index, start_index + 10);
+        else
+            return portfolioMapper.getPortfolioListByTypeVODSortFanNumber(type, start_index, start_index + 10);
     }
 
     public Portfolio getPortfolioByPortfolioNo(int portfolio_no) {
@@ -75,5 +86,10 @@ public class PortfolioDao {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         String sqlSearch = "%" + query + "%";
         return portfolioMapper.SearchPortfolioLimit(sqlSearch);
+    }
+
+    public void updatePortfolioByFankok(Portfolio portfolio){
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        portfolioMapper.updatePortfolioByFankok(portfolio);
     }
 }

@@ -4,7 +4,6 @@ import com.restapi.Restfull.API.Server.daos.ArtistDao;
 import com.restapi.Restfull.API.Server.daos.UserDao;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
-import com.restapi.Restfull.API.Server.models.Auth;
 import com.restapi.Restfull.API.Server.models.Upload;
 import com.restapi.Restfull.API.Server.models.User;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
@@ -23,11 +22,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 @Log4j2
 @Service
@@ -56,17 +52,21 @@ public class UserService {
                 user.set_artist(false);
                 user.setProfile_img(basic_profile_img.getAbsolutePath());
                 user.set_user_private(false);
+                user.setReg_date(Time.TimeFormatDay());
                 userDao.registerUser(user);
-                message.put("User", user);
+
+                user.set_register(true);
+                message.put("user", user);
             }else { /** 회원 있으면 로그인 **/
                 User login_user = userDao.loginUser(user);
-                message.put("User", login_user);
+                login_user.set_register(false);
+                message.put("user", login_user);
                 /** 아티스트의 경우 아티스트 정보 반환 **/
                 int user_no = login_user.getUser_no();
 
                 if(artistDao.getArtistByUserNo(user_no) != null){
                     Artist artist = artistDao.getArtistByUserNo(user_no);
-                    message.put("Artist", artist);
+                    message.put("artist", artist);
                 }
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.LOGIN_SUCCESS, message.getHashMap("Login()")), HttpStatus.OK);
@@ -82,7 +82,7 @@ public class UserService {
             userDao.deleteUser(user_no);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.WITHDRAW_SUCCESS), HttpStatus.OK);
         } else {
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.NO_USER_DETECTED), HttpStatus.OK);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.NO_USER_DETECTED), HttpStatus.OK);
         }
     }
 
@@ -129,11 +129,11 @@ public class UserService {
 
             if(artistDao.getArtistByUserNo(user_no) != null){
                 Artist artist = artistDao.getArtistByUserNo(user_no);
-                message.put("Artist", artist);
+                message.put("artist", artist);
             }
             User user = userDao.selectUserByUserNo(user_no);
 
-            message.put("User", user);
+            message.put("user", user);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_MY_PAGE_INFO, message.getHashMap("GetUserInfo()")), HttpStatus.OK);
         }catch (JSONException e){
             throw new BusinessException(e);
@@ -148,18 +148,20 @@ public class UserService {
             artistDao.setSession(sqlSession);
 
             if(artist != null) {
+                String d = Time.TimeFormatHMS();
+                artist.setRecent_act_date(d);
                 artistDao.updateArtist(artist);
                 Artist resArtist = artistDao.getArtistByArtistNo(artist.getArtist_no());
-                message.put("Artist", resArtist);
+                message.put("artist", resArtist);
             }
             userDao.updateUser(user);
             User resUser = userDao.selectUserByUserNo(user.getUser_no());
-            message.put("User", resUser);
+            message.put("user", resUser);
 
             if(uploads.size() > 0){
                 message.put("files", uploads);
             }
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPDATE_MY_PAGE_INFO, message.getHashMap("GetUserInfo()")), HttpStatus.OK);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPDATE_MY_PAGE_INFO, message.getHashMap("UpdateUserInfo()")), HttpStatus.OK);
         }catch (JSONException e){
             throw new BusinessException(e);
         }

@@ -16,9 +16,9 @@ public class PortfolioCommentDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no) {
+    public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no, int start_index) {
         PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
-        return portfolioCommentMapper.getCommentListByPortfolioNo(portfolio_no);
+        return portfolioCommentMapper.getCommentListByPortfolioNo(portfolio_no, start_index, start_index + 10);
     }
 
     public List<PortfolioComment> getCommentListByUserNo(int user_no) {

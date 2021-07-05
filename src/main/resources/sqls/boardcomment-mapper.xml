@@ -4,14 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.BoardCommentMapper">
     <select id="getCommentListByBoardNo" resultType="BoardComment">
-        select * from boardcomment where board_no=#{board_no}
+        select * from boardcomment where board_no=#{board_no} order by reg_date DESC
+        LIMIT #{start_index}, #{end_index}
     </select>
     <select id="getCommentListByUserNo" resultType="BoardComment">
         select * from boardcomment where user_no=#{user_no}
     </select>
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="comment_no">
         insert into boardcomment(user_no, board_no, content, reg_date, type, commenter_name, profile_img, comment_private)
-        VALUES (#{user_no}, #{board_no}, #{content}, now(), #{type}, #{commenter_name}, #{profile_img}, #{comment_private})
+        VALUES (#{user_no}, #{board_no}, #{content}, #{reg_date}, #{type}, #{commenter_name}, #{profile_img}, #{comment_private})
     </insert>
     <delete id="deleteComment">
         delete from boardcomment where comment_no=#{comment_no}

@@ -15,5 +15,5 @@ public class PortfolioLike {
     private int like_no;
     private int portfolio_no;
     private int user_no;
-    private Date reg_date;
+    private String reg_date;
 }

@@ -24,7 +24,7 @@ public class PortfolioCommentService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no) {
         portfolioCommentDao.setSession(sqlSession);
-        return portfolioCommentDao.getCommentListByPortfolioNo(portfolio_no);
+        return portfolioCommentDao.getCommentListByPortfolioNo(portfolio_no, 0);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

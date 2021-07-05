@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper">
     <insert id="insertSpon" useGeneratedKeys="true" keyProperty="spon_no">
         insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_unique, receipt_id, purchase_data, purchase_status)
-        VALUES (#{user_no}, #{artist_no}, now(), #{price}, #{status}, #{type}, #{board_no}, #{purchase_unique}, #{receipt_id}, #{purchase_data}, #{purchase_status})
+        VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{purchase_unique}, #{receipt_id}, #{purchase_data}, #{purchase_status})
     </insert>
     <select id="getSponList" resultType="Spon">
         select * from spon
@@ -20,6 +20,6 @@
         select * from spon WHERE board_no=#{board_no}
     </select>
     <select id="getSponAfterSpon" resultType="Spon">
-        select * from spon WHERE user_no=#{user_no}, artist_no=#{artist_no}, spon_date=#{spon_date}
+        select * from spon WHERE user_no=#{user_no} AND artist_no=#{artist_no}
     </select>
 </mapper>

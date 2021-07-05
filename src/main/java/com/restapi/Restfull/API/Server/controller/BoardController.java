@@ -2,14 +2,12 @@ package com.restapi.Restfull.API.Server.controller;
 
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
-import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.Message;
-import com.restapi.Restfull.API.Server.response.ResMessage;
-import com.restapi.Restfull.API.Server.response.StatusCode;
+import com.restapi.Restfull.API.Server.response.*;
 import com.restapi.Restfull.API.Server.services.ArtistService;
 import com.restapi.Restfull.API.Server.services.BoardService;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.utility.Format;
+import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Log4j2
 @RestController
@@ -75,13 +72,17 @@ public class BoardController {
     }
 
 
-
-    @RequestMapping(value = "/api/board", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board", method = RequestMethod.POST) // CHECK
     public ResponseEntity GetBoard(@ModelAttribute BoardRequest boardRequest){
-        return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no());
+        return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), -1);
     }
 
-    @RequestMapping(value = "/api/board/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/comments/{start_index}", method = RequestMethod.POST) //CHECK
+    public ResponseEntity GetBoardComments(@ModelAttribute BoardRequest boardRequest, @PathVariable("start_index") int start_index){
+        return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), start_index);
+    }
+
+    @RequestMapping(value = "/api/board/upload", method = RequestMethod.POST) //CHECK
     public ResponseEntity UploadBoard(@RequestPart(value = "board")Board board,
                                       @RequestPart(value = "thumbnail", required = false)MultipartFile thumbnail){
         try{
@@ -102,15 +103,19 @@ public class BoardController {
                 board.setThumbnail(cdn_path + file_name);
 
                 /** Response Json Logic*/
-                message.put("upload", new Upload(file_name, cdn_path + file_name));
+                message.put("files", new Upload(file_name, cdn_path + file_name));
             }
             Artist artist = artistService.getArtistByArtistNo(board.getArtist_no());
             board.setArtist_name(artist.getArtist_name());
             board.setArtist_profile_img(artist.getArtist_profile_img());
+            String d = Time.TimeFormatHMS();
+            board.setReg_date(d);
+            board.setRevise_date(d);
             boardService.insertBoard(board);
 
             Board board1 = boardService.getBoardByBoardNo(board.getBoard_no());
-            message.put("Board", board1);
+            board1.setUser_no(artist.getUser_no());
+            message.put("board", board1);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPLOAD_BOARD_SUCCESS, message.getHashMap("UploadBoard()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -121,24 +126,45 @@ public class BoardController {
         }
     }
 
-    @RequestMapping(value = "/api/board/edit", method = RequestMethod.POST)
-    public ResponseEntity EditBoard(@ModelAttribute Board board){
-        return boardService.updateBoard(board);
+    @RequestMapping(value = "/api/board/edit", method = RequestMethod.POST) //CHECK
+    public ResponseEntity EditBoard(@RequestPart("board") Board board,
+                                    @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
+        Message message = new Message();
+        if(!thumbnail.isEmpty()){
+            if(!Format.CheckIMGFile(thumbnail.getOriginalFilename())){
+                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+            }
+            /** File Upload Log Logic*/
+            log.info("originalName:" + thumbnail.getOriginalFilename());
+            log.info("size:" + thumbnail.getSize());
+            log.info("ContentType:" + thumbnail.getContentType());
+
+            /** File Upload Logic */
+            String file_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail.getBytes());
+
+            /** Board Set **/
+            board.setThumbnail(cdn_path + file_name);
+
+            /** Response Json Logic*/
+            message.put("name", file_name);
+            message.put("url", cdn_path + file_name);
+        }
+        return boardService.updateBoard(board, message);
     }
 
-    @RequestMapping(value = "/api/board/delete/{board_no}", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/delete/{board_no}", method = RequestMethod.POST) //CHECK
     public ResponseEntity DeleteBoard(@PathVariable("board_no") int board_no){
         return boardService.deleteBoard(board_no);
     }
 
-    @RequestMapping(value = "/api/board/like", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/like", method = RequestMethod.POST) //CHECK
     public ResponseEntity PressPortfolioLike(@ModelAttribute BoardRequest boardRequest){
         int user_no = boardRequest.getUser_no();
         int board_no = boardRequest.getBoard_no();
         return boardService.updateBoardByLike(board_no, user_no);
     }
 
-    @RequestMapping(value = "/api/board/comment", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/comment", method = RequestMethod.POST) // CHECK
     public ResponseEntity InsertBoardComment(@ModelAttribute BoardComment boardComment){
         return boardService.updateBoardByComment(boardComment, "UPDATE");
     }
@@ -151,7 +177,7 @@ public class BoardController {
         private int board_no;
     }
 
-    @RequestMapping(value = "/api/board/comment/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/comment/delete", method = RequestMethod.POST) //CHECK
     public ResponseEntity DeleteBoardComment(@ModelAttribute CommentDeleteRequest commentDeleteRequest){
         BoardComment boardComment = new BoardComment();
         boardComment.setComment_no(commentDeleteRequest.getComment_no());
@@ -159,14 +185,14 @@ public class BoardController {
         return boardService.updateBoardByComment(boardComment, "DELETE");
     }
 
-    @RequestMapping(value = "/api/board/edit_source/{board_no}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/board/edit_source/{board_no}", method = RequestMethod.GET) //CHECK
     public ResponseEntity GetBoardForEdit(@PathVariable("board_no") int board_no){
         try {
             Message message = new Message();
-            // Portfolio SET
+            // Board SET
             Board board = boardService.getBoardByBoardNo(board_no);
             // Response Message SET
-            message.put("Board", board);
+            message.put("board", board);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_BOARD_SUCCESS, message.getHashMap("GetBoardForEdit()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -174,32 +200,20 @@ public class BoardController {
         }
     }
 
-    @RequestMapping(value = "/api/boardList/{start_index}", method = RequestMethod.GET)
-    public ResponseEntity GetBoardList(@PathVariable("start_index") int start_index){
+    @RequestMapping(value = "/api/boardList/{sort}/{start_index}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetBoardList(@PathVariable("start_index") int start_index, @PathVariable("sort") String sort){
         try {
             Message message = new Message();
-            // Portfolio SET
-            List<Board> boardList = boardService.getBoardList();
-            List<Board> responseBoardList = new ArrayList<Board>();
-            // Response Message SET
-            for(int i = start_index; i < start_index + 20; i++){
-                responseBoardList.add(boardList.get(i));
-                if(boardList.size() == i + 1)
-                    break;
-            }
 
-            message.put("Boards", responseBoardList);
+            List<Board> boardList = boardService.getBoardList(sort, start_index);
+
+            message.put("boards", boardList);
+            message.put("sort", sort);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_BOARD_LIST_SUCCESS, message.getHashMap("GetBoardList()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
         }
-    }
-
-    @RequestMapping(value = "/api/artist/{artist_no}/boardList/{start_index}", method = RequestMethod.GET)
-    public ResponseEntity GetArtistBoardList(@PathVariable("artist_no") int artist_no,
-                                             @PathVariable("start_index") int start_index){
-        return boardService.GetBoardListByArtistNo(artist_no, start_index);
     }
 
     /*업로드된 파일을 저장하는 함수*/
@@ -214,4 +228,6 @@ public class BoardController {
         //cdnService.upload("api/" + savedName, target);
         return savedName;
     }
+
+    /** ALL CHECKED **/
 }

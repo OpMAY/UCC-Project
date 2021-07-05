@@ -24,4 +24,10 @@ public interface ArtistMapper {
     List<Artist> searchArtist(String search);
 
     List<Artist> searchArtistLimit(String search);
+
+    List<Artist> getAllArtistListSortByRecentRefresh(int start_index, int end_index);
+
+    List<Artist> getAllArtistListSortByNameRefresh(int start_index, int end_index);
+
+    List<Artist> getAllArtistListSortByFanNumRefresh(int start_index, int end_index);
 }

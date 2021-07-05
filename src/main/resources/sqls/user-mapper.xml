@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.UserMapper">
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="user_no">
         insert into user(name, email, sns, reg_date, is_artist, profile_img, is_user_private)
-        VALUES(#{name}, #{email}, #{sns}, now(), #{is_artist}, #{profile_img}, #{is_user_private})
+        VALUES(#{name}, #{email}, #{sns}, #{reg_date}, #{is_artist}, #{profile_img}, #{is_user_private})
     </insert>
     <select id="selectUserByEmail" resultType="User">
         select * from user where email=#{email} and sns=#{sns}

@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.daos;
 
 import com.restapi.Restfull.API.Server.interfaces.mappers.BoardMapper;
 import com.restapi.Restfull.API.Server.models.Board;
+import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -21,9 +22,19 @@ public class BoardDao {
         return boardMapper.getBoardListByArtistNo(artist_no);
     }
 
-    public List<Board> getBoardList() {
+    public List<Board> getBoardListByArtistNoForRefresh(int artist_no, int start_index, int end_index){
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
-        return boardMapper.getBoardList();
+        return boardMapper.getBoardListByArtistNoForRefresh(artist_no, start_index, end_index);
+    }
+
+    public List<Board> getBoardList(String sort, int start_index) {
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        if(sort.equals(DataListSortType.SORT_BY_RECENT))
+            return boardMapper.getBoardListSortByRegDate(start_index, start_index + 10);
+        else if(sort.equals(DataListSortType.SORT_BY_FANKOK))
+            return boardMapper.getBoardListSortByFanNumber(start_index, start_index + 10);
+        else
+            return boardMapper.getBoardListSortByTitle(start_index, start_index + 10);
     }
 
     public Board getBoardByBoardNo(int board_no) {
@@ -65,14 +76,19 @@ public class BoardDao {
         boardMapper.updateBoardByVisit(board);
     }
 
+    public void updateBoardByFankok(Board board){
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        boardMapper.updateBoardByFankok(board);
+    }
+
     public List<Board> getRecentBoardList() {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         return boardMapper.getRecentBoardList();
     }
 
-    public List<Board> SearchBoard(String query) {
+    public List<Board> SearchBoard(String query, int start_index) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         String sqlSearch = "%" + query + "%";
-        return boardMapper.searchBoard(sqlSearch);
+        return boardMapper.searchBoard(sqlSearch, start_index, start_index + 10);
     }
 }

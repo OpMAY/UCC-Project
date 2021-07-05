@@ -19,8 +19,8 @@ public class LoudSourcingEntry {
     private String title;
     private String file;
     private String content;
-    private Date reg_date;
-    private Date revise_date;
+    private String reg_date;
+    private String revise_date;
     private int visit;
     private boolean agree;
     private String thumbnail;
@@ -28,6 +28,7 @@ public class LoudSourcingEntry {
     private int vote_number;
     private String artist_name;
     private String artist_profile_img;
-    private List<EntryComment> entryCommentList;
-    private List<EntryVote> entryVoteList;
+    private int fan_number;
+
+    private int user_no;
 }

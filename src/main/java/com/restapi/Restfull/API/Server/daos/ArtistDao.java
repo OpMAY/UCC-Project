@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.daos;
 
 import com.restapi.Restfull.API.Server.interfaces.mappers.ArtistMapper;
 import com.restapi.Restfull.API.Server.models.Artist;
+import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -66,6 +67,16 @@ public class ArtistDao {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         String sqlSearch = "%" + search + "%";
         return artistMapper.searchArtistLimit(sqlSearch);
+    }
+
+    public List<Artist> getAllArtistRefresh(int start_index, String sort){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        if(sort.equals(DataListSortType.SORT_BY_RECENT))
+            return artistMapper.getAllArtistListSortByRecentRefresh(start_index, start_index + 10);
+        else if (sort.equals(DataListSortType.SORT_BY_WORD))
+            return artistMapper.getAllArtistListSortByNameRefresh(start_index, start_index + 10);
+        else
+            return artistMapper.getAllArtistListSortByFanNumRefresh(start_index, start_index + 10);
     }
 
 }

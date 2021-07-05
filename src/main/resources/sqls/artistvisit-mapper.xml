@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.ArtistVisitMapper">
     <insert id="insertVisit" useGeneratedKeys="true" keyProperty="artist_visit_no">
         insert into artistvisit(user_no, artist_no, visit_date)
-        VALUES (#{user_no}, #{artist_no}, now())
+        VALUES (#{user_no}, #{artist_no}, #{visit_date})
     </insert>
     <select id="getArtistVisitByArtistNo" resultType="ArtistVisit">
         select * from artistvisit WHERE artist_no=#{artist_no} AND visit_date=#{visit_date}

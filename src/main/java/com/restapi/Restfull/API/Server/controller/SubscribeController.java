@@ -51,23 +51,26 @@ public class SubscribeController {
         private int artist_no;
     }
 
-    @RequestMapping(value = "/api/fankok/delete", method = RequestMethod.POST)
-    public ResponseEntity DeleteFankok(@ModelAttribute ArtistRequest artistRequest){
+    @RequestMapping(value = "/api/fankok/delete/{sort}", method = RequestMethod.POST) // CHECK
+    public ResponseEntity DeleteFankok(@ModelAttribute ArtistRequest artistRequest, @PathVariable String sort) {
         /** 구독 정보 확인 - 있으면 팬콕 취소, 없으면 BAD REQUEST ERROR**/
-        if(subscribeService.getSubscribeInfoByUserNoANDArtistNo(artistRequest.getUser_no(), artistRequest.getArtist_no()) != null) {
-            return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no());
-        }else{
+        if (subscribeService.getSubscribeInfoByUserNoANDArtistNo(artistRequest.getUser_no(), artistRequest.getArtist_no()) != null) {
+            return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no(), sort);
+        } else {
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.NOT_SUBSCRIBED_ARTIST), HttpStatus.OK);
         }
     }
 
-    @RequestMapping(value = "/api/fankok/user/{user_no}/start_index/{start_index}", method = RequestMethod.GET)
-    public ResponseEntity GetUserFankok(@PathVariable("user_no") int user_no, @PathVariable int start_index){
+    @RequestMapping(value = "/api/fankok/user/{user_no}/start_index/{start_index}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetUserFankok(@PathVariable("user_no") int user_no,
+                                        @PathVariable("start_index") int start_index) {
         return subscribeService.getSubscribeListByUserNo(user_no, start_index);
     }
 
-    @RequestMapping(value = "/api/fankok/user/{user_no}/artists", method = RequestMethod.GET)
-    public ResponseEntity GetUserFankokArtist(@PathVariable("user_no") int user_no){
-        return subscribeService.getSubscribeArtistList(user_no);
+    @RequestMapping(value = "/api/fankok/user/{user_no}/artists/{sort}/{start_index}", method = RequestMethod.GET) // CHECK
+    public ResponseEntity GetUserFankokArtist(@PathVariable("user_no") int user_no,
+                                              @PathVariable("sort") String sort,
+                                              @PathVariable("start_index") int start_index) {
+        return subscribeService.getSubscribeArtistList(user_no, start_index, sort);
     }
 }

@@ -55,7 +55,7 @@ public class SearchService {
                 String keyword = search.getWord();
                 keywordList.add(keyword);
             }
-            message.put("Keywords", keywordList);
+            message.put("keywords", keywordList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_SEARCH_KEYWORDS, message.getHashMap("GetKeywords()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);
@@ -70,18 +70,19 @@ public class SearchService {
             boardDao.setSession(sqlSession);
             portfolioDao.setSession(sqlSession);
 
+            //LIMIT 15
             List<Artist> artistList = artistDao.SearchArtistLimit(query);
-            List<Board> boardList = boardDao.SearchBoard(query);
+
+            //LIMIT 15
             List<Portfolio> portfolioList = portfolioDao.SearchPortfolioLimit(query);
-            List<Board> resBoardList = new ArrayList<>();
-            for(int i = start_index; i < start_index + 10; i++){
-                if(boardList.size() <= i)
-                    break;
-                resBoardList.add(boardList.get(i));
+            if(start_index > -1) {
+                //LIMIT start_index + 10
+                List<Board> boardList = boardDao.SearchBoard(query, start_index);
+                message.put("boards", boardList);
+            }else{
+                message.put("artists", artistList);
+                message.put("portfolios", portfolioList);
             }
-            message.put("Artists", artistList);
-            message.put("Boards", resBoardList);
-            message.put("Portfolios", portfolioList);
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SEARCH_SUCCESS, message.getHashMap("Search()")), HttpStatus.OK);
         } catch (JSONException e) {

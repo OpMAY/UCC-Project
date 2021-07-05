@@ -3,7 +3,6 @@ package com.restapi.Restfull.API.Server.controller;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.RequestChange;
-import com.restapi.Restfull.API.Server.models.User;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,16 +72,16 @@ public class RequestChangeController {
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/change/{user_no}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/change/{user_no}", method = RequestMethod.GET) // CHECK
     public ResponseEntity ChangeArtist(@PathVariable("user_no") int user_no) {
         /** 아티스트 전환 페이지에 필요한 자동입력 데이터 조회 **/
         return userService.selectUserByUserNo(user_no);
     }
 
-    @RequestMapping(value = "/api/change/submit", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @RequestMapping(value = "/api/change/submit", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}) // CHECK
     public ResponseEntity ChangeArtistRequest(@RequestPart(value = "request_change") RequestChange requestChange,
                                               @RequestPart(value = "profile_img", required = false) MultipartFile profile_img_file,
-                                              @RequestPart(value = "fan_main_img", required = false) MultipartFile fan_main_img_file) {
+                                              @RequestPart(value = "main_img", required = false) MultipartFile fan_main_img_file) {
         try {
             /** File Check Logic **/
             if (profile_img_file.isEmpty() || profile_img_file == null) {
@@ -132,8 +130,7 @@ public class RequestChangeController {
 
                 /** RequestChange Set **/
                 requestChange.setArtist_profile_img(upload_path + profile_img_file_name);
-                requestChange.setFan_main_img(upload_path + fan_main_img_file_name);
-                requestChange.setReg_date(Time.LongTimeStampCurrent());
+                requestChange.setMain_img(upload_path + fan_main_img_file_name);
                 requestChange.setAgree(true);
                 requestChange.setStatus(true);
 
@@ -145,7 +142,7 @@ public class RequestChangeController {
 
                 /** Response JSON SETTING **/
                 Message message = new Message();
-                message.put("Artist", artist);
+                message.put("artist", artist);
 
                 /** File JSON Setting **/
                 Message file1_message = new Message();
@@ -179,4 +176,6 @@ public class RequestChangeController {
         //cdnService.upload("api/" + savedName, target);
         return savedName;
     }
+
+    /** ALL CHECKED **/
 }

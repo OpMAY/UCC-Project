@@ -15,7 +15,7 @@ public class Spon {
     private int spon_no;
     private int user_no;
     private int artist_no;
-    private Date spon_date;
+    private String spon_date;
     private int price;
     private String status;
     private String type;
