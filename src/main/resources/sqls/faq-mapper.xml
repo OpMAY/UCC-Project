@@ -3,5 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.FAQMapper">
-
+    <select id="getFAQ" resultType="FAQ">
+        select * from faq order by reg_date DESC LIMIT #{start_index}, #{end_index}
+    </select>
+    <insert id="insertFAQ" useGeneratedKeys="true" keyProperty="faq_no">
+        insert into faq(question, answer, img, reg_date) VALUES (#{question}, #{answer}, #{img}, #{reg_date})
+    </insert>
+    <delete id="deleteFAQ">
+        delete from faq WHERE faq_no=#{faq_no}
+    </delete>
+    <update id="updateFAQ">
+        update faq SET question=#{question}, answer=#{answer}, img=#{img}
+        WHERE faq_no=#{faq_no}
+    </update>
 </mapper>

@@ -72,4 +72,8 @@ public class ResMessage {
     public static final String GET_BANNER_LIST = "Getting Banner List";
     public static final String USER_INQUIRY_LIST = "Getting user inquiry List";
     public static final String INQUIRY_UPLOAD_SUCCESS = "Inquiry Upload Success";
+    public static final String GET_NOTICE_LIST = "Getting Notice List";
+    public static final String GET_FAQ_LIST = "Getting FAQ List";
+    public static final String GET_MY_LOUDSOURCING_LIST = "Getting my applied loudsourcing list";
+    public static final String GET_NOTIFICATION_LIST = "Getting Notification List";
 }

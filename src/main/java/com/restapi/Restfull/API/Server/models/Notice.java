@@ -16,7 +16,7 @@ public class Notice {
     private int admin_no;
     private String title;
     private String content;
-    private Date reg_date;
-    private Date revise_date;
+    private String reg_date;
+    private String revise_date;
     private String img;
 }

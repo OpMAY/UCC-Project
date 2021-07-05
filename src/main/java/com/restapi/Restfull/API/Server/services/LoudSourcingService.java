@@ -5,6 +5,9 @@ import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
 import com.restapi.Restfull.API.Server.utility.Time;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONException;
@@ -15,7 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Log4j2
@@ -400,5 +406,68 @@ public class LoudSourcingService {
         }catch (JSONException e){
             throw new BusinessException(e);
         }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity getMyLoudsourcingList(int user_no, int start_index) {
+        try{
+            Message message = new Message();
+            artistDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
+
+            if(artistDao.getArtistByUserNo(user_no) != null){
+                Artist artist = artistDao.getArtistByUserNo(user_no);
+                List<LoudSourcingApply> myApplyList = loudSourcingApplyDao.getLoudSourcingApplyListByArtistNo(artist.getArtist_no());
+                List<MyLoudSourcingResponse> myLoudsourcingList = new ArrayList<>();
+                for(LoudSourcingApply loudSourcingApply : myApplyList){
+                    int loudsourcing_no = loudSourcingApply.getLoudsourcing_no();
+                    String apply_date = loudSourcingApply.getReg_date();
+                    LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+                    MyLoudSourcingResponse myLoudSourcingResponse = new MyLoudSourcingResponse();
+                    myLoudSourcingResponse.setLoudSourcing(loudSourcing);
+                    myLoudSourcingResponse.setApply_date(apply_date);
+                    myLoudsourcingList.add(myLoudSourcingResponse);
+                }
+
+                myLoudsourcingList.sort((o1, o2) -> {
+                    String ds1 = o1.getApply_date();
+                    String ds2 = o2.getApply_date();
+                    Date d1 = new Date();
+                    Date d2 = new Date();
+                    try {
+                        d1 = Time.StringToDateFormat(ds1);
+                        d2 = Time.StringToDateFormat(ds2);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (d1.after(d2))
+                        return -1;
+                    if (d1.before(d2))
+                        return 1;
+                    else
+                        return 0;
+                });
+
+                List<MyLoudSourcingResponse> indexList = new ArrayList<>();
+                for(int i = start_index; i < start_index + 10; i++){
+                    if(myLoudsourcingList.size() <= i)
+                        break;
+                    indexList.add(myLoudsourcingList.get(i));
+                }
+                message.put("loudsourcing_list", indexList);
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_MY_LOUDSOURCING_LIST, message.getHashMap("GetMyLoudsourcingList()")), HttpStatus.OK);
+        }catch (JSONException e){
+            throw new BusinessException(e);
+        }
+    }
+
+    @Getter
+    @Setter
+    @Data
+    class MyLoudSourcingResponse{
+        private LoudSourcing loudSourcing;
+        private String apply_date;
     }
 }
