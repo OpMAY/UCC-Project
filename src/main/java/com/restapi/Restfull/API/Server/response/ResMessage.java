@@ -70,4 +70,6 @@ public class ResMessage {
     public static final String GET_LOUDSOURCING_DETAIL = "Getting Loudsourcing Detail";
     public static final String GET_LOUDSOURCING_LIST = "Getting Loudsourcing List";
     public static final String GET_BANNER_LIST = "Getting Banner List";
+    public static final String USER_INQUIRY_LIST = "Getting user inquiry List";
+    public static final String INQUIRY_UPLOAD_SUCCESS = "Inquiry Upload Success";
 }
