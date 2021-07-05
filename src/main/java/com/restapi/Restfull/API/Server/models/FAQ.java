@@ -16,5 +16,5 @@ public class FAQ {
     private String question;
     private String answer;
     private String img;
-    private Date reg_date;
+    private String reg_date;
 }
