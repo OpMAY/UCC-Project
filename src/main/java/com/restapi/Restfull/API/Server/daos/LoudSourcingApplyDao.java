@@ -45,4 +45,9 @@ public class LoudSourcingApplyDao {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         loudSourcingApplyMapper.updateApply(loudSourcingApply);
     }
+
+    public List<LoudSourcingApply> getEntryNum(int loudsourcing_no){
+        LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
+        return loudSourcingApplyMapper.getEntryNum(loudsourcing_no);
+    }
 }

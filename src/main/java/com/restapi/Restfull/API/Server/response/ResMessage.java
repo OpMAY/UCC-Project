@@ -76,4 +76,5 @@ public class ResMessage {
     public static final String GET_FAQ_LIST = "Getting FAQ List";
     public static final String GET_MY_LOUDSOURCING_LIST = "Getting my applied loudsourcing list";
     public static final String GET_NOTIFICATION_LIST = "Getting Notification List";
+    public static final String UNAUTHORIZED = "Unauthorized token";
 }

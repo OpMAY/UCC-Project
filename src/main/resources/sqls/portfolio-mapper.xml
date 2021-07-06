@@ -47,7 +47,7 @@
         update portfolio SET fan_number=#{fan_number} WHERE portfolio_no=#{portfolio_no}
     </update>
     <select id="getPortfolioListByRandom" resultType="Portfolio">
-        select * from portfolio order by RAND() limit 5
+        select * from portfolio WHERE type=#{type} order by RAND() limit 5
     </select>
     <select id="SearchPortfolioLimit" resultType="Portfolio">
         select * from portfolio WHERE title like #{query} or artist_name like #{query} LIMIT 15

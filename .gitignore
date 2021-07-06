@@ -34,3 +34,5 @@ build/
 .vscode/
 
 out/
+
+src/main/java/com/restapi/Restfull/API/Server/services/CDNService.java

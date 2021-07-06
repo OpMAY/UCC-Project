@@ -23,4 +23,7 @@
         update loudsourcingapply SET entry=#{entry}
         WHERE apply_no=#{apply_no}
     </update>
+    <select id="getEntryNum" resultType="LoudSourcingApply">
+        select * from loudsourcingapply WHERE loudsourcing_no=#{loudsourcing_no} AND entry=true
+    </select>
 </mapper>

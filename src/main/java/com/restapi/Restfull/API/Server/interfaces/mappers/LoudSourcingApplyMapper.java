@@ -16,4 +16,6 @@ public interface LoudSourcingApplyMapper {
     void deleteLoudSourcingApply(int artist_no, int loudsourcing_no);
 
     void updateApply(LoudSourcingApply loudSourcingApply);
+
+    List<LoudSourcingApply> getEntryNum(int loudsourcing_no);
 }

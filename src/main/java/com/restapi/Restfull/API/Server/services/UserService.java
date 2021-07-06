@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
@@ -41,30 +43,40 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity loginUser(User user) {
         try {
-            File basic_profile_img = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/profile_img_basic.png");
+            File basic_profile_img = new File("/www/mvsolutions_co_kr/www/api/profile_img_basic.png");
             Message message = new Message();
-            Message file_message = new Message();
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             /** 회원 없을 때 회원가입 **/
             if (userDao.loginUser(user) == null) {
                 /** SET User **/
+
                 user.set_artist(false);
                 user.setProfile_img(basic_profile_img.getAbsolutePath());
                 user.set_user_private(false);
                 user.setReg_date(Time.TimeFormatDay());
                 userDao.registerUser(user);
 
+                if (user.getName() == null) {
+                    String basicName = "유저";
+                    user.setName(basicName + user.getUser_no());
+                }
+
                 user.set_register(true);
                 message.put("user", user);
-            }else { /** 회원 있으면 로그인 **/
+            } else { /** 회원 있으면 로그인 **/
                 User login_user = userDao.loginUser(user);
+                // FCM TOKEN UPDATE
+                login_user.setFcm_token(user.getFcm_token());
+                userDao.updateUser(login_user);
+
+                // USER SET MESSAGE
                 login_user.set_register(false);
                 message.put("user", login_user);
                 /** 아티스트의 경우 아티스트 정보 반환 **/
                 int user_no = login_user.getUser_no();
 
-                if(artistDao.getArtistByUserNo(user_no) != null){
+                if (artistDao.getArtistByUserNo(user_no) != null) {
                     Artist artist = artistDao.getArtistByUserNo(user_no);
                     message.put("artist", artist);
                 }
@@ -106,7 +118,7 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity checkUserPrivate(int user_no){
+    public ResponseEntity checkUserPrivate(int user_no) {
         try {
             Message message = new Message();
             userDao.setSession(sqlSession);
@@ -121,33 +133,48 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity GetUserSpecificInfo(int user_no){
-        try{
+    public ResponseEntity GetUserSpecificInfo(int user_no) {
+        try {
             Message message = new Message();
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
 
-            if(artistDao.getArtistByUserNo(user_no) != null){
+            if (artistDao.getArtistByUserNo(user_no) != null) {
                 Artist artist = artistDao.getArtistByUserNo(user_no);
+                if (artist.getHashtag() != null) {
+                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                    artist.setHashtag_list(hashtagList);
+                    log.info(hashtagList);
+                }
                 message.put("artist", artist);
             }
             User user = userDao.selectUserByUserNo(user_no);
 
             message.put("user", user);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_MY_PAGE_INFO, message.getHashMap("GetUserInfo()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity UpdateUserInfo(Artist artist, User user, List<Upload> uploads){
-        try{
+    public ResponseEntity UpdateUserInfo(Artist artist, User user, List<Upload> uploads) {
+        try {
             Message message = new Message();
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
 
-            if(artist != null) {
+            if (uploads.size() <= 0) {
+                if (artist != null) {
+                    Artist origin_artist = artistDao.getArtistByArtistNo(artist.getArtist_no());
+                    artist.setArtist_profile_img(origin_artist.getArtist_profile_img());
+                    artist.setMain_img(origin_artist.getMain_img());
+                } else {
+                    User origin_user = userDao.selectUserByUserNo(user.getUser_no());
+                    user.setProfile_img(origin_user.getProfile_img());
+                }
+            }
+            if (artist != null) {
                 String d = Time.TimeFormatHMS();
                 artist.setRecent_act_date(d);
                 artistDao.updateArtist(artist);
@@ -158,11 +185,11 @@ public class UserService {
             User resUser = userDao.selectUserByUserNo(user.getUser_no());
             message.put("user", resUser);
 
-            if(uploads.size() > 0){
+            if (uploads.size() > 0) {
                 message.put("files", uploads);
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPDATE_MY_PAGE_INFO, message.getHashMap("UpdateUserInfo()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }

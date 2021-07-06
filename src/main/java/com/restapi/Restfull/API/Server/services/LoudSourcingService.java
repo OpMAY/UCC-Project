@@ -86,6 +86,11 @@ public class LoudSourcingService {
                 message.put("apply", false);
             }
 
+            int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no).size();
+            int entry_num = loudSourcingApplyDao.getEntryNum(loudsourcing_no).size();
+            message.put("applied_num", applied_num);
+            message.put("entry_num", entry_num);
+
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_LOUDSOURCING_DETAIL, message.getHashMap("GetLoudSourcingList()")), HttpStatus.OK);
         } catch (JSONException e) {
 

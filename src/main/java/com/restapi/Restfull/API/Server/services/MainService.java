@@ -13,6 +13,7 @@ import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
+import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+@Log4j2
 @Service
 public class MainService {
     @Autowired
@@ -58,8 +62,18 @@ public class MainService {
             // New Artist List - total 15
             List<Artist> newArtistList = artistDao.getNewArtistList();
 
+
             // Popular Artist - total 15
             List<Artist> popularArtistList = artistDao.getArtistListByPopular();
+            for(Artist artist : popularArtistList){
+                String hashtag = artist.getHashtag();
+                log.info(hashtag);
+                if(hashtag != null) {
+                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(hashtag.split(", ")));
+                    artist.setHashtag_list(hashtagList);
+                    log.info(hashtagList);
+                }
+            }
 
             // Random Portfolio List
             List<Portfolio> randomPortfolioList = portfolioDao.getPortfolioListByRandom();

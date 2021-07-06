@@ -29,4 +29,5 @@ public class Portfolio {
     private String artist_name;
     private String artist_profile_img;
     private int fan_number;
+    private String video_length;
 }

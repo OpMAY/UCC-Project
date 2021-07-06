@@ -19,4 +19,7 @@ public class User {
     private boolean is_user_private;
 
     private boolean is_register;
+
+    private String access_token;
+    private String fcm_token;
 }

@@ -24,7 +24,7 @@
 <body>
 	<div class="main-wrapper">
 
-		<!-- partial:../../partials/_sidebar.html -->
+		<!-- partial:../../partials/_sidebar.jsp -->
 		<nav class="sidebar">
       <div class="sidebar-header">
         <a href="#" class="sidebar-brand">
@@ -372,7 +372,7 @@
 	
 		<div class="page-wrapper">
 				
-			<!-- partial:../../partials/_navbar.html -->
+			<!-- partial:../../partials/_navbar.jsp -->
 			<nav class="navbar">
 				<a href="#" class="sidebar-toggler">
 					<i data-feather="menu"></i>

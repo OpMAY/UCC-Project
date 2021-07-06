@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.config;
 
+import com.restapi.Restfull.API.Server.interceptor.AdminLoginInterceptor;
 import com.restapi.Restfull.API.Server.interceptor.AuthInterceptor;
 import com.restapi.Restfull.API.Server.interceptor.DirectoryInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
     @Autowired
     DirectoryInterceptor directoryInterceptor;
 
+    @Autowired
+    AdminLoginInterceptor adminLoginInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> auth_excludeList = new ArrayList<String>();
@@ -32,8 +36,13 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         auth_excludeList.add("/api/login");
 
         List<String> directory_excludeList = new ArrayList<String>();
+        List<String> admin_excludeList = new ArrayList<>();
+
+        admin_excludeList.add("/admin/login.do");
+        admin_excludeList.add("/admin/login");
         /**Auth Directory excluded /auth/* */
         registry.addInterceptor(authInterceptor).addPathPatterns("/api/**").excludePathPatterns(auth_excludeList);
         registry.addInterceptor(directoryInterceptor).addPathPatterns("/**").excludePathPatterns(directory_excludeList);
+        registry.addInterceptor(adminLoginInterceptor).addPathPatterns("/admin/**").excludePathPatterns(admin_excludeList);
     }
 }

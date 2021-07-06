@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
@@ -91,7 +92,8 @@ public class LoudSourcingController {
     }
 
     @RequestMapping(value = "/api/loudsourcing/detail", method = RequestMethod.POST) // CHECK
-    public ResponseEntity GetLoudSourcingDetail(@ModelAttribute DetailRequest detailRequest){
+    public ResponseEntity GetLoudSourcingDetail(@RequestBody String body){
+        DetailRequest detailRequest = new Gson().fromJson(body, DetailRequest.class);
         return loudSourcingService.getLoudSourcingDetail(detailRequest.getUser_no(), detailRequest.getLoudsourcing_no());
     }
 
@@ -144,12 +146,14 @@ public class LoudSourcingController {
     }
 
     @RequestMapping(value = "/api/loudsourcing/apply", method = RequestMethod.POST) //CHECK
-    public ResponseEntity ApplyLoudSourcing(@ModelAttribute LoudSourcingApply loudSourcingApply){
+    public ResponseEntity ApplyLoudSourcing(@RequestBody String body){
+        LoudSourcingApply loudSourcingApply = new Gson().fromJson(body, LoudSourcingApply.class);
         return loudSourcingService.applyLoudSourcing(loudSourcingApply);
     }
 
     @RequestMapping(value = "/api/loudsourcing/cancel", method = RequestMethod.POST) //CHECK
-    public ResponseEntity CancelLoudSourcing(@ModelAttribute LoudSourcingApply loudSourcingApply){
+    public ResponseEntity CancelLoudSourcing(@RequestBody String body){
+        LoudSourcingApply loudSourcingApply = new Gson().fromJson(body, LoudSourcingApply.class);
         return loudSourcingService.cancelLoudSourcing(loudSourcingApply);
     }
 
@@ -167,7 +171,8 @@ public class LoudSourcingController {
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry", method = RequestMethod.POST)
-    public ResponseEntity GetEntry(@ModelAttribute EntryRequest entryRequest){
+    public ResponseEntity GetEntry(@RequestBody String body){
+        EntryRequest entryRequest = new Gson().fromJson(body, EntryRequest.class);
         return loudSourcingService.getEntry(entryRequest.getUser_no(), entryRequest.getEntry_no());
     }
 
@@ -177,12 +182,14 @@ public class LoudSourcingController {
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/vote", method = RequestMethod.POST)
-    public ResponseEntity VoteEntry(@ModelAttribute EntryRequest entryRequest){
+    public ResponseEntity VoteEntry(@RequestBody String body){
+        EntryRequest entryRequest = new Gson().fromJson(body, EntryRequest.class);
         return loudSourcingService.voteEntry(entryRequest.getUser_no(), entryRequest.getEntry_no());
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/comment", method = RequestMethod.POST)
-    public ResponseEntity InsertComment(@ModelAttribute EntryComment entryComment){
+    public ResponseEntity InsertComment(@RequestBody String body){
+        EntryComment entryComment = new Gson().fromJson(body, EntryComment.class);
         return loudSourcingService.insertComment(entryComment);
     }
 
@@ -195,7 +202,8 @@ public class LoudSourcingController {
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/comment/delete", method = RequestMethod.POST)
-    public ResponseEntity DeleteComment(@ModelAttribute CommentDeleteRequest commentDeleteRequest){
+    public ResponseEntity DeleteComment(@RequestBody String body){
+        CommentDeleteRequest commentDeleteRequest = new Gson().fromJson(body, CommentDeleteRequest.class);
         return loudSourcingService.deleteComment(commentDeleteRequest.getEntry_no(), commentDeleteRequest.getComment_no());
     }
 
@@ -212,7 +220,15 @@ public class LoudSourcingController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        //cdnService.upload("api/" + savedName, target);
+        if(Format.CheckIMGFile(originalName)) {
+            cdnService.upload("api/images/" + savedName, target);
+        }else if(Format.CheckFile(originalName)){
+            cdnService.upload("api/files/" + savedName, target);
+        }else if(Format.CheckVODFile(originalName)){
+            cdnService.upload("api/videos/" + savedName, target);
+        }else{
+            throw new BusinessException(new Exception());
+        }
         return savedName;
     }
 }

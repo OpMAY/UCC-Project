@@ -115,7 +115,15 @@ public class InquiryController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        //cdnService.upload("api/" + savedName, target);
+        if(Format.CheckIMGFile(originalName)) {
+            cdnService.upload("api/images/" + savedName, target);
+        }else if(Format.CheckFile(originalName)){
+            cdnService.upload("api/files/" + savedName, target);
+        }else if(Format.CheckVODFile(originalName)){
+            cdnService.upload("api/videos/" + savedName, target);
+        }else{
+            throw new BusinessException(new Exception());
+        }
         return savedName;
     }
 }

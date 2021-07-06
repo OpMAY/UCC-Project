@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Data
@@ -19,4 +20,5 @@ public class Notice {
     private String reg_date;
     private String revise_date;
     private String img;
+    private ArrayList<String> imgList;
 }

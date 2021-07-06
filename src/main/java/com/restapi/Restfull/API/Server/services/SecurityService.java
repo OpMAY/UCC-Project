@@ -7,15 +7,22 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.restapi.Restfull.API.Server.exceptions.AuthException;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Auth;
+import com.restapi.Restfull.API.Server.response.DefaultRes;
+import com.restapi.Restfull.API.Server.response.ResMessage;
+import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -27,6 +34,13 @@ import java.util.Date;
 public class SecurityService {
     @Value("${api.access_key}")
     private String access_key;
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity BusinessException(Exception e) {
+        log.info("Business Exception Handler");
+        e.printStackTrace();
+        return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
+    }
 
     public String encryptionJWT(Auth auth) {
         Algorithm algorithm = Algorithm.HMAC256("secret");
@@ -99,13 +113,13 @@ public class SecurityService {
         } catch (NullPointerException e) {
             throw new NullPointerException();
         } catch (JWTDecodeException e) {
-            throw new BusinessException(e);
+            throw new AuthException(e);
         } catch (JWTVerificationException e) {
-            throw new BusinessException(e);
+            throw new AuthException(e);
         } catch (JWTCreationException e) {
-            throw new BusinessException(e);
+            throw new AuthException(e);
         } catch (Exception e) {
-            throw new BusinessException(e);
+            throw new AuthException(e);
         }
     }
 }

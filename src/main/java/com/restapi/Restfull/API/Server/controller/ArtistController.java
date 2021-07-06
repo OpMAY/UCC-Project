@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
@@ -71,17 +72,22 @@ public class ArtistController {
     }
 
     @RequestMapping(value = "/api/artist", method = RequestMethod.POST) //CHECK
-    public ResponseEntity GetArtistWithoutBoard(@ModelAttribute ArtistRequest artistRequest) {
+    public ResponseEntity GetArtistWithoutBoard(@RequestBody String body) {
+        ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
         return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), -1);
     }
 
     @RequestMapping(value = "/api/artist/{start_index}", method = RequestMethod.POST) // CHECK
-    public ResponseEntity GetArtistBoard(@ModelAttribute ArtistRequest artistRequest, @PathVariable("start_index") int start_index) {
+    public ResponseEntity GetArtistBoard(@RequestBody String body, @PathVariable("start_index") int start_index) {
+        ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
         return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), start_index);
     }
 
     @RequestMapping(value = "/api/fankok", method = RequestMethod.POST) //CHECK
-    public ResponseEntity Subscribe(@ModelAttribute ArtistRequest artistRequest) {
+    public ResponseEntity Subscribe(@RequestBody String body) {
+        ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
+        log.info(body);
+        log.info("fankok");
         return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no(), "");
     }
 

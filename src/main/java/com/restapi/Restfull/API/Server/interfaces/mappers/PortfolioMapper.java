@@ -29,7 +29,7 @@ public interface PortfolioMapper {
 
     void updatePortfolioByFankok(Portfolio portfolio);
 
-    List<Portfolio> getPortfolioListByRandom();
+    List<Portfolio> getPortfolioListByRandom(String type);
 
     List<Portfolio> SearchPortfolioLimit(String query);
 

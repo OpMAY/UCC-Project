@@ -29,6 +29,9 @@ public class SubscribeService {
     private SubscribeDao subscribeDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
     private ArtistDao artistDao;
 
     @Autowired
@@ -48,6 +51,7 @@ public class SubscribeService {
             subscribeDao.setSession(sqlSession);
             portfolioDao.setSession(sqlSession);
             boardDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
 
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
             if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null) {
@@ -207,6 +211,11 @@ public class SubscribeService {
                 /** Artist Info **/
                 int artist_no = subscribe.getArtist_no();
                 Artist artist = artistDao.getArtistByArtistNo(artist_no);
+                if(artist.getHashtag() != null){
+                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                    artist.setHashtag_list(hashtagList);
+                    log.info(hashtagList);
+                }
                 artistList.add(artist);
                 /** Portfolio Info **/
                 List<Portfolio> individualPortfolioList = portfolioDao.getPortfolioListByArtistNo(artist_no);
@@ -303,6 +312,11 @@ public class SubscribeService {
             for (Subscribe subscribe : subscribeList) {
                 int artist_no = subscribe.getArtist_no();
                 Artist artist = artistDao.getArtistByArtistNo(artist_no);
+                if(artist.getHashtag() != null){
+                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                    artist.setHashtag_list(hashtagList);
+                    log.info(hashtagList);
+                }
                 artistList.add(artist);
             }
             /** Arrange List by Sort **/
@@ -350,6 +364,43 @@ public class SubscribeService {
             message.put("sort", sort);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_ARTIST_LIST, message.getHashMap("GetUserFankokArtist()")), HttpStatus.OK);
         } catch (JSONException e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity getSubscribedArtists(int user_no) {
+        try{
+            subscribeDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            Message message = new Message();
+
+            List<Subscribe> subscribeList = subscribeDao.getSubscribeListByUserNo(user_no);
+            List<Integer> subscribedArtistNo = new ArrayList<>();
+            for(Subscribe subscribe : subscribeList){
+                int artist_no = subscribe.getArtist_no();
+                subscribedArtistNo.add(artist_no);
+            }
+            if(user_no != 0) {
+                User login_user = userDao.selectUserByUserNo(user_no);
+                // FCM TOKEN UPDATE
+
+                if(login_user != null) {
+                    // USER SET MESSAGE
+                    login_user.set_register(false);
+                    message.put("user", login_user);
+                    /** 아티스트의 경우 아티스트 정보 반환 **/
+
+                    if (artistDao.getArtistByUserNo(user_no) != null) {
+                        Artist artist = artistDao.getArtistByUserNo(user_no);
+                        message.put("artist", artist);
+                    }
+                    message.put("artist_no_list", subscribedArtistNo);
+                }
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_ARTIST_LIST, message.getHashMap("GetSubscribedArtists()")), HttpStatus.OK);
+        }catch (JSONException e){
             throw new BusinessException(e);
         }
     }
