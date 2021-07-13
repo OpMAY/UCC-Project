@@ -86,7 +86,7 @@ public class RequestChangeController {
             /** File Check Logic **/
             if (profile_img_file.isEmpty() || profile_img_file == null) {
                 log.info("profile img is empty or null");
-                File basic_profile_img = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/profile_img_basic.png");
+                File basic_profile_img = new File("/www/mvsolutions_co_kr/www/api/profile_img_basic.png");
                 FileItem fileItem = new DiskFileItem("profile_img_basic", Files.probeContentType(basic_profile_img.toPath()), false, basic_profile_img.getName(), (int) basic_profile_img.length(), basic_profile_img.getParentFile());
                 InputStream input = new FileInputStream(basic_profile_img);
                 OutputStream os = fileItem.getOutputStream();
@@ -95,7 +95,7 @@ public class RequestChangeController {
             }
             if (fan_main_img_file.isEmpty() || fan_main_img_file == null) {
                 log.info("fan main img is empty or null");
-                File basic_fan_main_img = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/fan_main_img_basic.png");
+                File basic_fan_main_img = new File("/www/mvsolutions_co_kr/www/api/fan_main_img_basic.png");
                 FileItem fileItem = new DiskFileItem("fan_main_img_basic", Files.probeContentType(basic_fan_main_img.toPath()), false, basic_fan_main_img.getName(), (int) basic_fan_main_img.length(), basic_fan_main_img.getParentFile());
                 InputStream input = new FileInputStream(basic_fan_main_img);
                 OutputStream os = fileItem.getOutputStream();
@@ -173,7 +173,15 @@ public class RequestChangeController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        //cdnService.upload("api/" + savedName, target);
+        if(Format.CheckIMGFile(originalName)) {
+            cdnService.upload("api/images/" + savedName, target);
+        }else if(Format.CheckFile(originalName)){
+            cdnService.upload("api/files/" + savedName, target);
+        }else if(Format.CheckVODFile(originalName)){
+            cdnService.upload("api/videos/" + savedName, target);
+        }else{
+            throw new BusinessException(new Exception());
+        }
         return savedName;
     }
 

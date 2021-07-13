@@ -79,7 +79,7 @@ public class PortfolioDao {
 
     public List<Portfolio> getPortfolioListByRandom(){
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
-        return portfolioMapper.getPortfolioListByRandom();
+        return portfolioMapper.getPortfolioListByRandom("vod");
     }
 
     public List<Portfolio> SearchPortfolioLimit(String query) {

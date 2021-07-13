@@ -74,7 +74,8 @@ public class PortfolioController {
     }
 
     @RequestMapping(value = "/api/portfolio", method = RequestMethod.POST) //CHECK
-    public ResponseEntity GetPortfolio(@ModelAttribute PortfolioRequest portfolioRequest) {
+    public ResponseEntity GetPortfolio(@RequestBody String body) {
+        PortfolioRequest portfolioRequest = new Gson().fromJson(body, PortfolioRequest.class);
         return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no(), -1);
     }
 
@@ -235,7 +236,8 @@ public class PortfolioController {
     }
 
     @RequestMapping(value = "/api/portfolio/edit", method = RequestMethod.POST) //CHECK
-    public ResponseEntity EditPortfolio(@ModelAttribute Portfolio portfolio) {
+    public ResponseEntity EditPortfolio(@RequestBody String body) {
+        Portfolio portfolio = new Gson().fromJson(body, Portfolio.class);
         return portfolioService.updatePortfolio(portfolio);
     }
 
@@ -245,14 +247,16 @@ public class PortfolioController {
     }
 
     @RequestMapping(value = "/api/portfolio/like", method = RequestMethod.POST) //CHECK
-    public ResponseEntity PressPortfolioLike(@ModelAttribute PortfolioRequest portfolioRequest) {
+    public ResponseEntity PressPortfolioLike(@RequestBody String body) {
+        PortfolioRequest portfolioRequest = new Gson().fromJson(body, PortfolioRequest.class);
         int user_no = portfolioRequest.getUser_no();
         int portfolio_no = portfolioRequest.getPortfolio_no();
         return portfolioService.updatePortfolioByLike(portfolio_no, user_no);
     }
 
     @RequestMapping(value = "/api/portfolio/comment", method = RequestMethod.POST) //CHECK
-    public ResponseEntity InsertPortfolioComment(@ModelAttribute PortfolioComment portfolioComment) {
+    public ResponseEntity InsertPortfolioComment(@RequestBody String body) {
+        PortfolioComment portfolioComment = new Gson().fromJson(body, PortfolioComment.class);
         return portfolioService.updatePortfolioByComment(portfolioComment, "UPDATE");
     }
 
@@ -265,7 +269,8 @@ public class PortfolioController {
     }
 
     @RequestMapping(value = "/api/portfolio/comment/delete", method = RequestMethod.POST) //CHECK
-    public ResponseEntity DeletePortfolioComment(@ModelAttribute CommentDeleteRequest commentDeleteRequest) {
+    public ResponseEntity DeletePortfolioComment(@RequestBody String body) {
+        CommentDeleteRequest commentDeleteRequest = new Gson().fromJson(body, CommentDeleteRequest.class);
         PortfolioComment portfolioComment = new PortfolioComment();
         portfolioComment.setComment_no(commentDeleteRequest.getComment_no());
         portfolioComment.setPortfolio_no(commentDeleteRequest.getPortfolio_no());
@@ -302,7 +307,15 @@ public class PortfolioController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        //cdnService.upload("api/" + savedName, target);
+        if(Format.CheckIMGFile(originalName)) {
+            cdnService.upload("api/images/" + savedName, target);
+        }else if(Format.CheckFile(originalName)){
+            cdnService.upload("api/files/" + savedName, target);
+        }else if(Format.CheckVODFile(originalName)){
+            cdnService.upload("api/videos/" + savedName, target);
+        }else{
+            throw new BusinessException(new Exception());
+        }
         return savedName;
     }
 }

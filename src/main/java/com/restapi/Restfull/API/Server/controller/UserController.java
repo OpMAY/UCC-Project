@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.Upload;
@@ -59,7 +60,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST) // CHECK
-    public ResponseEntity Login(@ModelAttribute User user) {
+    public ResponseEntity Login(@RequestBody String body) {
+        User user = new Gson().fromJson(body, User.class);
         /** 회원가입 + 로그인 **/
         return userService.loginUser(user);
     }
@@ -100,14 +102,19 @@ public class UserController {
                 log.info("ContentType:" + profile_img.getContentType());
 
                 /** File Upload Logic */
-                String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img.getBytes());
 
-                if(artist != null)
-                    artist.setArtist_profile_img(cdn_path + file_name);
-                else{
-                    user.setProfile_img(cdn_path + file_name);
+
+                if(artist != null) {
+                    String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img.getBytes(),  "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
+                    artist.setArtist_profile_img(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name);
+                    uploads.add(new Upload(file_name, cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
                 }
-                uploads.add(new Upload(file_name, cdn_path + file_name));
+                else{
+                    String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img.getBytes(), "api/images/user/" + user.getUser_no() + "/");
+                    user.setProfile_img(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name);
+                    uploads.add(new Upload(file_name, cdn_path + "images/user/" + user.getUser_no() + "/" + file_name));
+                }
+
 
             }
             if(!fan_main_img.isEmpty() && artist != null){
@@ -120,10 +127,10 @@ public class UserController {
                 log.info("ContentType:" + fan_main_img.getContentType());
 
                 /** File Upload Logic */
-                String file_name = uploadFile(fan_main_img.getOriginalFilename(), fan_main_img.getBytes());
+                String file_name = uploadFile(fan_main_img.getOriginalFilename(), fan_main_img.getBytes(), "api/images/user/"+ user.getUser_no() + "/artist/" + artist.getArtist_no()  + "/");
 
-                artist.setMain_img(cdn_path + file_name);
-                uploads.add(new Upload(file_name, cdn_path + file_name));
+                artist.setMain_img(cdn_path + "images/user/"+ user.getUser_no() + "/artist/" + artist.getArtist_no()  + "/" + file_name);
+                uploads.add(new Upload(file_name, cdn_path + "images/user/"+ user.getUser_no() + "/artist/" + artist.getArtist_no()  + "/" + file_name));
             }
 
 
@@ -134,15 +141,16 @@ public class UserController {
         }
     }
 
-    private String uploadFile(String originalName, byte[] fileDate) throws IOException {
+    private String uploadFile(String originalName, byte[] fileDate, String file_path) throws IOException {
         UUID uid = UUID.randomUUID();
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
-        File target = new File(upload_path, savedName);
+        File target = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/", savedName);
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
+        log.info(file_path);
         CDNService cdnService = new CDNService();
-        //cdnService.upload("api/" + savedName, target);
+        cdnService.upload(file_path + savedName, target);
         return savedName;
     }
 

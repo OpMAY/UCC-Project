@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.services;
 
 import com.restapi.Restfull.API.Server.daos.NoticeDao;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
+import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.Notice;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
@@ -34,6 +37,15 @@ public class NoticeService {
             noticeDao.setSession(sqlSession);
             Message message = new Message();
             List<Notice> noticeList = noticeDao.getNotice(start_index);
+            for(Notice notice : noticeList){
+                String img = notice.getImg();
+                log.info(img);
+                if(img != null) {
+                    ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
+                    notice.setImgList(imgList);
+                    log.info(imgList);
+                }
+            }
 
             message.put("notice", noticeList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_NOTICE_LIST, message.getHashMap("GetNotice()")), HttpStatus.OK);

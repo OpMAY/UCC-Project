@@ -17,7 +17,7 @@ public class DashboardController implements ControllerInitialize {
         log.info(method);
     }
 
-    @RequestMapping(value = "/admin.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/main.do", method = RequestMethod.GET)
     public ModelAndView Dashboard() {
         modelAndView = new ModelAndView("index");
         init("Get Dashboard");

@@ -77,7 +77,7 @@ public class HomeController {
     public ResponseEntity Auth() {
         String name = "okiwi";
         String key = "test";
-        try {
+            try {
             String api_access_key = securityService.createToken(new Auth(name, key));
             Message message = new Message();
             message.put("access_token", api_access_key);

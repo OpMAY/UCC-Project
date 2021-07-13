@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Spon;
 import com.restapi.Restfull.API.Server.models.User;
@@ -48,13 +49,15 @@ public class SponController {
     }
 
     @RequestMapping(value = "/api/spon", method = RequestMethod.POST) //CHECK
-    public ResponseEntity ArtistSpon(@ModelAttribute Spon spon) {
+    public ResponseEntity ArtistSpon(@RequestBody String body) {
+        Spon spon = new Gson().fromJson(body, Spon.class);
         // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
         return sponService.insertSpon(spon);
     }
 
     @RequestMapping(value = "/api/board/spon", method = RequestMethod.POST) //CHECK
-    public ResponseEntity Spon(@ModelAttribute Spon spon){
+    public ResponseEntity Spon(@RequestBody String body){
+        Spon spon = new Gson().fromJson(body, Spon.class);
         // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
         return sponService.insertSpon(spon);
     }

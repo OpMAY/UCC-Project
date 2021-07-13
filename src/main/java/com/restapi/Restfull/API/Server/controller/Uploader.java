@@ -42,7 +42,8 @@ public class Uploader {
     private String cdn_path;
 
     @PostMapping(value = "/api/upload/file", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity singleUpload(@RequestParam("file") MultipartFile multipartFile) {
+    public ResponseEntity singleUpload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("string") String string) {
+        log.info(string);
         try {
             if (multipartFile.isEmpty()) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY), HttpStatus.OK);
@@ -56,6 +57,8 @@ public class Uploader {
 
                 /** File Upload Logic */
                 String file_name = uploadFile(multipartFile.getOriginalFilename(), multipartFile.getBytes());
+
+                log.info(string);
 
                 /** Response Json Logic*/
                 Message message = new Message();
@@ -133,7 +136,7 @@ public class Uploader {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        cdnService.upload("api/" + savedName, target);
+        cdnService.upload("api/test/" + savedName, target);
         return savedName;
     }
 }

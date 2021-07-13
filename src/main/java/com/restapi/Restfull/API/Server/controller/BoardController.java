@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
@@ -73,12 +74,14 @@ public class BoardController {
 
 
     @RequestMapping(value = "/api/board", method = RequestMethod.POST) // CHECK
-    public ResponseEntity GetBoard(@ModelAttribute BoardRequest boardRequest){
+    public ResponseEntity GetBoard(@RequestBody String body){
+        BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
         return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), -1);
     }
 
     @RequestMapping(value = "/api/board/comments/{start_index}", method = RequestMethod.POST) //CHECK
-    public ResponseEntity GetBoardComments(@ModelAttribute BoardRequest boardRequest, @PathVariable("start_index") int start_index){
+    public ResponseEntity GetBoardComments(@RequestBody String body, @PathVariable("start_index") int start_index){
+        BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
         return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), start_index);
     }
 
@@ -158,14 +161,16 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/api/board/like", method = RequestMethod.POST) //CHECK
-    public ResponseEntity PressPortfolioLike(@ModelAttribute BoardRequest boardRequest){
+    public ResponseEntity PressPortfolioLike(@RequestBody String body){
+        BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
         int user_no = boardRequest.getUser_no();
         int board_no = boardRequest.getBoard_no();
         return boardService.updateBoardByLike(board_no, user_no);
     }
 
     @RequestMapping(value = "/api/board/comment", method = RequestMethod.POST) // CHECK
-    public ResponseEntity InsertBoardComment(@ModelAttribute BoardComment boardComment){
+    public ResponseEntity InsertBoardComment(@RequestBody String body){
+        BoardComment boardComment = new Gson().fromJson(body, BoardComment.class);
         return boardService.updateBoardByComment(boardComment, "UPDATE");
     }
 
@@ -178,7 +183,8 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/api/board/comment/delete", method = RequestMethod.POST) //CHECK
-    public ResponseEntity DeleteBoardComment(@ModelAttribute CommentDeleteRequest commentDeleteRequest){
+    public ResponseEntity DeleteBoardComment(@RequestBody String body){
+        CommentDeleteRequest commentDeleteRequest = new Gson().fromJson(body, CommentDeleteRequest.class);
         BoardComment boardComment = new BoardComment();
         boardComment.setComment_no(commentDeleteRequest.getComment_no());
         boardComment.setBoard_no(commentDeleteRequest.getBoard_no());
@@ -225,7 +231,15 @@ public class BoardController {
         //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
         FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        //cdnService.upload("api/" + savedName, target);
+        if(Format.CheckIMGFile(originalName)) {
+            cdnService.upload("api/images/" + savedName, target);
+        }else if(Format.CheckFile(originalName)){
+            cdnService.upload("api/files/" + savedName, target);
+        }else if(Format.CheckVODFile(originalName)){
+            cdnService.upload("api/videos/" + savedName, target);
+        }else{
+            throw new BusinessException(new Exception());
+        }
         return savedName;
     }
 

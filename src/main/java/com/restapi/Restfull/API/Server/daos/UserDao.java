@@ -21,7 +21,7 @@ public class UserDao {
 
     public User loginUser(User user) {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        return userMapper.selectUserByEmail(user);
+        return userMapper.selectUserByAccessToken(user);
     }
 
     public User selectUserByUserNo(int user_no) {

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -71,8 +72,11 @@ public class ArtistService {
 
             List<Artist> resArtistList = artistDao.getAllArtistRefresh(start_index, sort);
 
+            int artist_size = artistDao.getAllArtists().size();
+
             message.put("artists", resArtistList);
             message.put("sort", sort);
+            message.put("artist_size", artist_size);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_LIST_LOADED, message.getHashMap("GetArtistList()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);
@@ -122,6 +126,11 @@ public class ArtistService {
             subscribeDao.setSession(sqlSession);
 
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            if(artist.getHashtag() != null){
+                ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                artist.setHashtag_list(hashtagList);
+                log.info(hashtagList);
+            }
             List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNoLimit(artist_no);
             List<Portfolio> resPortfolioList = new ArrayList<>();
             for(Portfolio portfolio : portfolioList){

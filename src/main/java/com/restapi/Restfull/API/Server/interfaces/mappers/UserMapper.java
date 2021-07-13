@@ -5,7 +5,7 @@ import com.restapi.Restfull.API.Server.models.User;
 public interface UserMapper {
     void insertUser(User user);
 
-    User selectUserByEmail(User user);
+    User selectUserByAccessToken(User user);
 
     void deleteUser(int user_no);
 

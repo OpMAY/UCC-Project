@@ -26,7 +26,7 @@ import java.io.File;
 @Component
 public class DirectoryInterceptor implements HandlerInterceptor {
 
-    @Value("${deployPath}")
+    @Value("${uploadPath}")
     private String uploadPath;
 
     @ExceptionHandler(BusinessException.class)
