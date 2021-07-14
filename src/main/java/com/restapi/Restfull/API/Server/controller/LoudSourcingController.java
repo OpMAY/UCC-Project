@@ -2,7 +2,9 @@ package com.restapi.Restfull.API.Server.controller;
 
 import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.*;
+import com.restapi.Restfull.API.Server.models.EntryComment;
+import com.restapi.Restfull.API.Server.models.LoudSourcingApply;
+import com.restapi.Restfull.API.Server.models.LoudSourcingEntry;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
@@ -12,26 +14,26 @@ import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.LoudSourcingService;
 import com.restapi.Restfull.API.Server.utility.FileConverter;
 import com.restapi.Restfull.API.Server.utility.Format;
+import com.restapi.Restfull.API.Server.utility.URLConverter;
 import com.restapi.Restfull.API.Server.utility.VideoUtility;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.json.JSONException;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.xml.soap.Detail;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Log4j2
@@ -74,12 +76,13 @@ public class LoudSourcingController {
     @Getter
     @Setter
     @Data
-    private class DetailRequest{
+    private class DetailRequest {
         private int loudsourcing_no;
         private int user_no;
     }
+
     @RequestMapping(value = "/api/loudsourcing/{sort}/start_index/{start_index}", method = RequestMethod.GET) // CHECK
-    public ResponseEntity GetLoudSourcingList(@PathVariable("sort") String sort, @PathVariable("start_index") int start_index){
+    public ResponseEntity GetLoudSourcingList(@PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
         /**
          * 1. LoudSourcingList
          * **/
@@ -87,108 +90,114 @@ public class LoudSourcingController {
     }
 
     @RequestMapping(value = "/api/banner", method = RequestMethod.GET) // CHECK
-    public ResponseEntity GetBanner(){
+    public ResponseEntity GetBanner() {
         return bannerAdService.getBanners();
     }
 
     @RequestMapping(value = "/api/loudsourcing/detail", method = RequestMethod.POST) // CHECK
-    public ResponseEntity GetLoudSourcingDetail(@RequestBody String body){
+    public ResponseEntity GetLoudSourcingDetail(@RequestBody String body) {
         DetailRequest detailRequest = new Gson().fromJson(body, DetailRequest.class);
         return loudSourcingService.getLoudSourcingDetail(detailRequest.getUser_no(), detailRequest.getLoudsourcing_no());
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/upload", method = RequestMethod.POST) // CHECK
-    public ResponseEntity UploadLoudSourcingEntry(@RequestPart("entry") LoudSourcingEntry loudSourcingEntry,
-                                                  @RequestPart("vod") MultipartFile vod
-                                                  ){
+    public ResponseEntity UploadLoudSourcingEntry(@RequestParam("entry") String body,
+                                                  @RequestParam("vod") MultipartFile vod,
+                                                  @RequestParam("thumbnail") MultipartFile thumbnail
+    ) {
         try {
+            LoudSourcingEntry loudSourcingEntry = new Gson().fromJson(body, LoudSourcingEntry.class);
             Message message = new Message();
-            Message filepath_msg = new Message();
 
-            ArrayList<Upload> uploads = new ArrayList<>();
+            String entry_info = loudSourcingEntry.getLoudsourcing_no() + "/" + loudSourcingEntry.getArtist_no() + "/";
 
-            if (vod.isEmpty()) {
+            if (vod == null || vod.isEmpty() || thumbnail == null || thumbnail.isEmpty()) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadLoudSourcingEntry()")), HttpStatus.OK);
-            } else if (!Format.CheckVODFile(vod.getOriginalFilename())) {
+            } else if (!Format.CheckVODFile(vod.getOriginalFilename()) || !Format.CheckIMGFile(thumbnail.getOriginalFilename())) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_MISMATCH, message.getHashMap("UploadLoudSourcingEntry()")), HttpStatus.OK);
             } else {
-                String path = "E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api";
                 /** File Upload Log Logic*/
                 log.info("originalName:" + vod.getOriginalFilename());
                 log.info("size:" + vod.getSize());
                 log.info("ContentType:" + vod.getContentType());
 
+                log.info("originalName:" + thumbnail.getOriginalFilename());
+                log.info("size:" + thumbnail.getSize());
+                log.info("ContentType:" + thumbnail.getContentType());
+
                 /** VOD THUMBNAIL LOGIC **/
                 VideoUtility videoUtility = new VideoUtility();
                 FileConverter fileConverter = new FileConverter();
-                File convFile = fileConverter.convert(vod);
-                videoUtility.getThumbnail(convFile);
-                File thumbnail = new File(path + "/" + convFile.getName() + "_thumb.png");
+                File file = fileConverter.convert(vod);
+                String video_length = videoUtility.getDuration(file);
+
+                URLConverter urlConverter = new URLConverter();
 
                 /** File Upload Logic */
-                String file_name = uploadFile(vod.getOriginalFilename(), vod.getBytes());
-                byte[] thumbnail_byte = Files.readAllBytes(thumbnail.toPath());
-                String thumbnail_name = uploadFile(thumbnail.getName(), thumbnail_byte);
+                String file_name = uploadFile(vod.getOriginalFilename(), vod, entry_info);
+                String thumbnail_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail, entry_info);
 
-                loudSourcingEntry.setFile(cdn_path + file_name);
-                loudSourcingEntry.setThumbnail(cdn_path + thumbnail_name);
+                loudSourcingEntry.setFile(urlConverter.convertSpecialLetter(cdn_path + "videos/loudsourcing/" + entry_info + file_name));
+                loudSourcingEntry.setThumbnail(urlConverter.convertSpecialLetter(cdn_path + "images/loudsourcing/" + entry_info + thumbnail_name));
+                loudSourcingEntry.setVideo_length(video_length);
             }
             return loudSourcingService.uploadEntry(loudSourcingEntry);
 
-        } catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new BusinessException(e);
         }
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/list/{sort}/start_index/{start_index}", method = RequestMethod.POST)
-    public ResponseEntity GetEntryList(@ModelAttribute DetailRequest detailRequest, @PathVariable("sort") String sort, @PathVariable("start_index") int start_index){
+    public ResponseEntity GetEntryList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
+        DetailRequest detailRequest = new Gson().fromJson(body, DetailRequest.class);
+        log.info(body);
+        log.info(sort);
+        log.info(start_index);
         return loudSourcingService.getEntryList(detailRequest.getUser_no(), detailRequest.getLoudsourcing_no(), sort, start_index);
     }
 
     @RequestMapping(value = "/api/loudsourcing/apply", method = RequestMethod.POST) //CHECK
-    public ResponseEntity ApplyLoudSourcing(@RequestBody String body){
+    public ResponseEntity ApplyLoudSourcing(@RequestBody String body) {
         LoudSourcingApply loudSourcingApply = new Gson().fromJson(body, LoudSourcingApply.class);
         return loudSourcingService.applyLoudSourcing(loudSourcingApply);
     }
 
-    @RequestMapping(value = "/api/loudsourcing/cancel", method = RequestMethod.POST) //CHECK
-    public ResponseEntity CancelLoudSourcing(@RequestBody String body){
-        LoudSourcingApply loudSourcingApply = new Gson().fromJson(body, LoudSourcingApply.class);
-        return loudSourcingService.cancelLoudSourcing(loudSourcingApply);
-    }
-
-    @RequestMapping(value = "/api/loudsourcing/{sort}/start_index/{start_index}/search", method = RequestMethod.GET) // CHECK
-    public ResponseEntity SearchLoudSourcing(@RequestParam("query") String query, @PathVariable("sort") String sort, @PathVariable("start_index") int start_index){
+    @RequestMapping(value = "/api/loudsourcing/{sort}/start_index/{start_index}/search", method = RequestMethod.GET)
+    // CHECK
+    public ResponseEntity SearchLoudSourcing(@RequestParam("query") String query, @PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
         return loudSourcingService.searchLoudSourcing(sort, query, start_index);
     }
 
     @Getter
     @Setter
     @Data
-    class EntryRequest{
+    class EntryRequest {
         private int user_no;
         private int entry_no;
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry", method = RequestMethod.POST)
-    public ResponseEntity GetEntry(@RequestBody String body){
+    public ResponseEntity GetEntry(@RequestBody String body) {
         EntryRequest entryRequest = new Gson().fromJson(body, EntryRequest.class);
         return loudSourcingService.getEntry(entryRequest.getUser_no(), entryRequest.getEntry_no());
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/comments/{start_index}", method = RequestMethod.POST)
-    public ResponseEntity GetEntryComment(@ModelAttribute EntryRequest entryRequest, @PathVariable("start_index") int start_index){
+    public ResponseEntity GetEntryComment(@RequestBody String body, @PathVariable("start_index") int start_index) {
+        EntryRequest entryRequest = new Gson().fromJson(body, EntryRequest.class);
         return loudSourcingService.getEntryComment(entryRequest.getEntry_no(), start_index);
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/vote", method = RequestMethod.POST)
-    public ResponseEntity VoteEntry(@RequestBody String body){
+    public ResponseEntity VoteEntry(@RequestBody String body) {
         EntryRequest entryRequest = new Gson().fromJson(body, EntryRequest.class);
         return loudSourcingService.voteEntry(entryRequest.getUser_no(), entryRequest.getEntry_no());
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/comment", method = RequestMethod.POST)
-    public ResponseEntity InsertComment(@RequestBody String body){
+    public ResponseEntity InsertComment(@RequestBody String body) {
         EntryComment entryComment = new Gson().fromJson(body, EntryComment.class);
         return loudSourcingService.insertComment(entryComment);
     }
@@ -196,37 +205,39 @@ public class LoudSourcingController {
     @Getter
     @Setter
     @Data
-    class CommentDeleteRequest{
+    class CommentDeleteRequest {
         private int entry_no;
         private int comment_no;
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/comment/delete", method = RequestMethod.POST)
-    public ResponseEntity DeleteComment(@RequestBody String body){
+    public ResponseEntity DeleteComment(@RequestBody String body) {
+        log.info(body);
         CommentDeleteRequest commentDeleteRequest = new Gson().fromJson(body, CommentDeleteRequest.class);
         return loudSourcingService.deleteComment(commentDeleteRequest.getEntry_no(), commentDeleteRequest.getComment_no());
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/delete/{entry_no}", method = RequestMethod.POST) // CHECK
-    public ResponseEntity DeleteEntry(@PathVariable("entry_no") int entry_no){
+    public ResponseEntity DeleteEntry(@PathVariable("entry_no") int entry_no) {
         return loudSourcingService.deleteEntry(entry_no);
     }
 
-    private String uploadFile(String originalName, byte[] fileDate) throws IOException {
+    private String uploadFile(String originalName, MultipartFile mfile, String entry_info) throws IOException {
         UUID uid = UUID.randomUUID();
+        String mOriginalName = originalName;
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
-        File target = new File(upload_path, savedName);
-        //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
-        FileCopyUtils.copy(fileDate, target);
         CDNService cdnService = new CDNService();
-        if(Format.CheckIMGFile(originalName)) {
-            cdnService.upload("api/images/" + savedName, target);
-        }else if(Format.CheckFile(originalName)){
-            cdnService.upload("api/files/" + savedName, target);
-        }else if(Format.CheckVODFile(originalName)){
-            cdnService.upload("api/videos/" + savedName, target);
-        }else{
+        if (Format.CheckIMGFile(originalName)) {
+            FileConverter fileConverter = new FileConverter();
+            File file = fileConverter.convert(mfile);
+            cdnService.upload("api/images/loudsourcing/" + entry_info + savedName, file);
+            Files.deleteIfExists(file.toPath());
+        } else if (Format.CheckVODFile(originalName)) {
+            File file = new File(upload_path, mOriginalName);
+            cdnService.upload("api/videos/loudsourcing/" + entry_info + savedName, file);
+            Files.deleteIfExists(file.toPath());
+        } else {
             throw new BusinessException(new Exception());
         }
         return savedName;

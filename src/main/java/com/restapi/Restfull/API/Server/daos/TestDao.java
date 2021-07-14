@@ -1,7 +1,7 @@
 package com.restapi.Restfull.API.Server.daos;
 
-import com.restapi.Restfull.API.Server.models.Test;
 import com.restapi.Restfull.API.Server.interfaces.mappers.TestMapper;
+import com.restapi.Restfull.API.Server.models.Test;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 

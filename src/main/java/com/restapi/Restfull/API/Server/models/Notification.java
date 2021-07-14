@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Data
 @Getter
 @Setter
@@ -17,4 +15,5 @@ public class Notification {
     private String type;
     private String content;
     private String reg_date;
+    private String next;
 }

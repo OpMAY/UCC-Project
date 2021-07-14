@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-import java.util.List;
-
 @Data
 @Getter
 @Setter
@@ -27,6 +24,7 @@ public class Board {
     private int like_number;
     private String artist_name;
     private String artist_profile_img;
-    private List<BoardLike> boardLikeList;
     private int fan_number;
+
+    private int spon_amount;
 }

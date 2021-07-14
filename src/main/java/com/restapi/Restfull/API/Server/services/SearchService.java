@@ -75,11 +75,11 @@ public class SearchService {
 
             //LIMIT 15
             List<Portfolio> portfolioList = portfolioDao.SearchPortfolioLimit(query);
-            if(start_index > -1) {
+            if (start_index > -1) {
                 //LIMIT start_index + 10
                 List<Board> boardList = boardDao.SearchBoard(query, start_index);
                 message.put("boards", boardList);
-            }else{
+            } else {
                 message.put("artists", artistList);
                 message.put("portfolios", portfolioList);
             }

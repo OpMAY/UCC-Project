@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
 import java.util.Map;
 
 @Data
@@ -26,6 +25,8 @@ public class Inquiry {
     private String reg_date;
     private String answer_date;
     private String file;
+
+    private String user_name;
 
     private Map<String, Object> files;
 }

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.util.List;
 
 @Log4j2
@@ -74,6 +73,7 @@ public class RequestChangeService {
         artist.setArtist_private(false);
         artist.setHashtag(rc.getHashtag());
         artist.setArtist_profile_img(rc.getArtist_profile_img());
+        artist.setLoudsourcing_push(true);
 
         /** DB INSERT **/
         rc.setReg_date(d);

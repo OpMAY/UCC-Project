@@ -21,17 +21,17 @@ public class FAQDao {
         return faqMapper.getFAQ(start_index, start_index + 10);
     }
 
-    public void insertFAQ(FAQ faq){
+    public void insertFAQ(FAQ faq) {
         FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
         faqMapper.insertFAQ(faq);
     }
 
-    public void deleteFAQ(int faq_no){
+    public void deleteFAQ(int faq_no) {
         FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
         faqMapper.deleteFAQ(faq_no);
     }
 
-    public void updateFAQ(FAQ faq){
+    public void updateFAQ(FAQ faq) {
         FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
         faqMapper.updateFAQ(faq);
     }

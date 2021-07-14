@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +32,7 @@ public class Message {
         Set set = map.keySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext()) {
-            boolean check = ((String) iterator.next()).equals(key) ? true : false;
+            boolean check = ((String) iterator.next()).equals(key);
             if (check) {
                 map.remove(key);
                 return true;

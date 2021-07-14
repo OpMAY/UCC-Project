@@ -5,6 +5,8 @@ import com.restapi.Restfull.API.Server.models.User;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserDao {
     private SqlSession sqlSession;
@@ -34,8 +36,18 @@ public class UserDao {
         userMapper.deleteUser(user_no);
     }
 
-    public void updateUser(User user){
+    public void updateUser(User user) {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         userMapper.updateUser(user);
+    }
+
+    public List<User> selectUserBySNS(String sns) {
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        return userMapper.selectUserBySNS(sns);
+    }
+
+    public List<User> getAllUserList(){
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        return userMapper.getAllUserList();
     }
 }

@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.interfaces.mappers;
 
 import com.restapi.Restfull.API.Server.models.BoardComment;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface BoardCommentMapper {
@@ -13,5 +14,9 @@ public interface BoardCommentMapper {
 
     void deleteComment(int comment_no);
 
+    void updateComment(BoardComment boardComment);
+
     BoardComment getCommentByCommentNo(int comment_no);
+
+    List<BoardComment> getCommentNumberByBoardNo(int board_no);
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 @Data
 @Getter
@@ -17,4 +17,6 @@ public class FAQ {
     private String answer;
     private String img;
     private String reg_date;
+
+    private ArrayList<String> imgList;
 }

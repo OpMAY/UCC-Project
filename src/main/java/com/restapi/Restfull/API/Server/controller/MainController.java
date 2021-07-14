@@ -1,16 +1,18 @@
 package com.restapi.Restfull.API.Server.controller;
 
-import com.restapi.Restfull.API.Server.daos.UserDao;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
-import com.restapi.Restfull.API.Server.services.*;
+import com.restapi.Restfull.API.Server.services.MainService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 
@@ -43,7 +45,7 @@ public class MainController {
     }
 
     @RequestMapping(value = "/api/main", method = RequestMethod.GET)
-    public ResponseEntity GetMain(){
+    public ResponseEntity GetMain() {
         return mainService.GetMain();
     }
 

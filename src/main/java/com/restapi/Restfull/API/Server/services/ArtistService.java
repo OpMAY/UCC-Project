@@ -1,11 +1,9 @@
 package com.restapi.Restfull.API.Server.services;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.Artist;
-import com.restapi.Restfull.API.Server.models.ArtistVisit;
-import com.restapi.Restfull.API.Server.models.Board;
-import com.restapi.Restfull.API.Server.models.Portfolio;
+import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
@@ -18,10 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 @Log4j2
@@ -44,6 +40,9 @@ public class ArtistService {
 
     @Autowired
     private ArtistVisitDao artistVisitDao;
+
+    @Autowired
+    private PenaltyDao penaltyDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getNewArtists() {
@@ -126,45 +125,68 @@ public class ArtistService {
             subscribeDao.setSession(sqlSession);
 
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            if(artist.getHashtag() != null){
-                ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
-                artist.setHashtag_list(hashtagList);
-                log.info(hashtagList);
-            }
-            List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNoLimit(artist_no);
-            List<Portfolio> resPortfolioList = new ArrayList<>();
-            for(Portfolio portfolio : portfolioList){
-                portfolio.setUser_no(artist.getUser_no());
-                resPortfolioList.add(portfolio);
-            }
-            boolean subscribe = subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null;
-
-            if (start_index == -1) {
-                if (artistVisitDao.getArtistVisit(artist_no, user_no, now) == null) {
-                    // 당일 방문하지 않았을 경우 - 방문자 정보 추가 후 금일 방문자 수 수정
-                    if (artist.getUser_no() != user_no) { // 본인 페이지 입장은 방문자 수 변동 X
-                        // 방문 정보 SET
-                        ArtistVisit artistVisit = new ArtistVisit();
-                        artistVisit.setArtist_no(artist_no);
-                        artistVisit.setUser_no(user_no);
-                        String d = Time.TimeFormatDay();
-                        artistVisit.setVisit_date(d);
-                        artistVisitDao.insertVisit(artistVisit);
-
-                        // 방문 정보로 아티스트의 방문 숫자 변동
-                        List<ArtistVisit> artistVisitList = artistVisitDao.getArtistVisitByArtistNo(artist_no, now);
-                        artist.setVisit_today(artistVisitList.size());
-                        artistDao.updateArtist(artist);
-                    }
+            if(artist == null){
+                log.info("artist_no : " + artist_no);
+                return new ResponseEntity(DefaultRes.res(StatusCode.DELETED_USER, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
+            }else {
+                if (artist.getHashtag() != null) {
+                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                    artist.setHashtag_list(hashtagList);
+                    log.info(hashtagList);
                 }
-                message.put("artist", artist);
-                message.put("subscribe", subscribe);
-                message.put("portfolios", resPortfolioList);
-            } else {
-                List<Board> boardList = boardDao.getBoardListByArtistNoForRefresh(artist_no, start_index, start_index + 10);
+                List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNoLimit(artist_no);
+                List<Portfolio> resPortfolioList = new ArrayList<>();
+                for (Portfolio portfolio : portfolioList) {
+                    portfolio.setUser_no(artist.getUser_no());
+                    if (portfolio.getType().equals(PortfolioType.FILE)) {
+                        String jsonString = portfolio.getFile();
+                        Gson gson = new Gson();
+                        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                        ArrayList<Upload> uploads = new ArrayList<>();
+                        for (FileJson json : fileJson) {
+                            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                        }
+                        portfolio.setFile_list(uploads);
+                    } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
+                        if (portfolio.getFile() != null) {
+                            ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
+                            portfolio.setImage_list(filelist);
+                            log.info(filelist);
+                        }
+                    }
+                    resPortfolioList.add(portfolio);
+                }
+                boolean subscribe = subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null;
 
-                message.put("boards", boardList);
+                if (start_index == -1) {
+                    if(user_no != 0) {
+                        if (artistVisitDao.getArtistVisit(artist_no, user_no, now) == null) {
+                            // 당일 방문하지 않았을 경우 - 방문자 정보 추가 후 금일 방문자 수 수정
+                            if (artist.getUser_no() != user_no) { // 본인 페이지 입장은 방문자 수 변동 X, 로그인 하지 않은 유저도 변동 X
+                                // 방문 정보 SET
+                                ArtistVisit artistVisit = new ArtistVisit();
+                                artistVisit.setArtist_no(artist_no);
+                                artistVisit.setUser_no(user_no);
+                                String d = Time.TimeFormatDay();
+                                artistVisit.setVisit_date(d);
+                                artistVisitDao.insertVisit(artistVisit);
 
+                                // 방문 정보로 아티스트의 방문 숫자 변동
+                                List<ArtistVisit> artistVisitList = artistVisitDao.getArtistVisitByArtistNo(artist_no, now);
+                                artist.setVisit_today(artistVisitList.size());
+                                artistDao.updateArtist(artist);
+                            }
+                        }
+                    }
+                    message.put("artist", artist);
+                    message.put("subscribe", subscribe);
+                    message.put("portfolios", resPortfolioList);
+                } else {
+                    List<Board> boardList = boardDao.getBoardListByArtistNoForRefresh(artist_no, start_index, start_index + 10);
+
+                    message.put("boards", boardList);
+
+                }
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_INFO_CALL_SUCCESS, message.getHashMap("GetArtist()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -174,6 +196,7 @@ public class ArtistService {
     }
     //TODO 아티스트 목록 정렬 방식에 따라 서버에서 그에 맞게 데이터를 뿌려줄지, 앱단에서 처리할지? -> 기획의 의도에 맞게 화면 별 기준에 맞춰 서버처리 or 어플 단 처리
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity SearchArtist(String search) {
         try {
             Message message = new Message();
@@ -182,6 +205,49 @@ public class ArtistService {
             message.put("artists", artistList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SEARCH_ARTIST_RESULT_LOADED, message.getHashMap("SearchArtist()")), HttpStatus.OK);
         } catch (JSONException e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity getArtistBanInfo(int artist_no) {
+        try {
+            Message message = new Message();
+            penaltyDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            boolean artistchk = artistDao.getArtistByArtistNo(artist_no).isArtist_private();
+
+            if(artistchk){
+                List<Penalty> penaltyList = penaltyDao.getPenaltyListByArtistNo(artist_no);
+                message.put("penalty", penaltyList.get(0));
+            }
+
+            message.put("artist_no", artist_no);
+            message.put("is_artist_private", artistchk);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SEARCH_ARTIST_RESULT_LOADED, message.getHashMap("SearchArtist()")), HttpStatus.OK);
+        } catch (JSONException e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity updateArtistPush(int artist_no){
+        try{
+            Message message = new Message();
+            artistDao.setSession(sqlSession);
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            if(artist == null)
+                return new ResponseEntity(DefaultRes.res(StatusCode.DELETED_USER, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
+            if(artist.isLoudsourcing_push()) {
+                artistDao.updateArtistPush(artist_no, false);
+                message.put("loudsourcing_push", false);
+            }
+            else {
+                artistDao.updateArtistPush(artist_no, true);
+                message.put("loudsourcing_push", true);
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SEARCH_ARTIST_RESULT_LOADED, message.getHashMap("updateArtistPush()")), HttpStatus.OK);
+        }catch (JSONException e){
             throw new BusinessException(e);
         }
     }

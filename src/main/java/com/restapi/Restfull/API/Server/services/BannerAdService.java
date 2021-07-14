@@ -30,14 +30,14 @@ public class BannerAdService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getBanners() {
-        try{
+        try {
             bannerAdDao.setSession(sqlSession);
             Message message = new Message();
             List<BannerAd> bannerAdList = bannerAdDao.getBannerList();
 
             message.put("banners", bannerAdList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_BANNER_LIST, message.getHashMap("GetEntryList()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }

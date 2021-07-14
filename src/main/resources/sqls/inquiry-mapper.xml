@@ -16,7 +16,7 @@
     </update>
     <select id="getInquiryListByUserNo" resultType="Inquiry">
         select * from inquiry WHERE user_no=#{user_no} order by reg_date DESC
-        LIMIT #{start_index}, #{end_index}
+        LIMIT #{start_index}, 10
     </select>
     <select id="getInquiryListByAnswerStatus" resultType="Inquiry">
         select * from inquiry WHERE is_answered=#{is_answered}

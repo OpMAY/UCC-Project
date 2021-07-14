@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.ArtistMapper">
     <select id="getAllArtists" resultType="Artist">
-        select * from artist
+        select * from artist ORDER BY reg_date DESC
     </select>
     <insert id="insertArtist" useGeneratedKeys="true" keyProperty="artist_no">
-        insert into artist(user_no, artist_name, bank_name, bank_account, bank_owner, email, artist_phone, main_img, reg_date, `explain`, artist_private, hashtag, artist_profile_img, recent_act_date)
-        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{email}, #{artist_phone}, #{main_img}, #{reg_date}, #{explain}, #{artist_private}, #{hashtag}, #{artist_profile_img}, #{recent_act_date})
+        insert into artist(user_no, artist_name, bank_name, bank_account, bank_owner, email, artist_phone, main_img, reg_date, `explain`, artist_private, hashtag, artist_profile_img, recent_act_date, loudsourcing_push)
+        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{email}, #{artist_phone}, #{main_img}, #{reg_date}, #{explain}, #{artist_private}, #{hashtag}, #{artist_profile_img}, #{recent_act_date}, #{loudsourcing_push})
     </insert>
     <select id="getArtistByUserNo" resultType="Artist">
         select * from artist where user_no=#{user_no}
@@ -39,9 +39,12 @@
         select * from artist order by recent_act_date DESC limit #{start_index}, #{end_index}
     </select>
     <select id="getAllArtistListSortByNameRefresh" resultType="Artist">
-        select * from artist order by artist_name limit #{start_index}, #{end_index}
+        select * from artist order by artist_name limit #{start_index}, 10
     </select>
     <select id="getAllArtistListSortByFanNumRefresh" resultType="Artist">
-        select * from artist order by fan_number DESC limit #{start_index}, #{end_index}
+        select * from artist order by fan_number DESC limit #{start_index}, 10
     </select>
+    <update id="updateArtistPush">
+        update artist SET loudsourcing_push=#{loudsourcing_push} WHERE artist_no=#{artist_no}
+    </update>
 </mapper>

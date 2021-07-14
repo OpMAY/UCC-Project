@@ -22,16 +22,16 @@ public class BoardDao {
         return boardMapper.getBoardListByArtistNo(artist_no);
     }
 
-    public List<Board> getBoardListByArtistNoForRefresh(int artist_no, int start_index, int end_index){
+    public List<Board> getBoardListByArtistNoForRefresh(int artist_no, int start_index, int end_index) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         return boardMapper.getBoardListByArtistNoForRefresh(artist_no, start_index, end_index);
     }
 
     public List<Board> getBoardList(String sort, int start_index) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
-        if(sort.equals(DataListSortType.SORT_BY_RECENT))
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
             return boardMapper.getBoardListSortByRegDate(start_index, start_index + 10);
-        else if(sort.equals(DataListSortType.SORT_BY_FANKOK))
+        else if (sort.equals(DataListSortType.SORT_BY_FANKOK))
             return boardMapper.getBoardListSortByFanNumber(start_index, start_index + 10);
         else
             return boardMapper.getBoardListSortByTitle(start_index, start_index + 10);
@@ -60,23 +60,23 @@ public class BoardDao {
     public void updateBoardByComment(int board_no, int number) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         Board board = boardMapper.getBoardByBoardNo(board_no);
-        board.setComment_number(board.getComment_number() + number);
+        board.setComment_number(number);
         boardMapper.updateBoardByComment(board);
     }
 
     public void updateBoardByLike(int board_no, int number) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         Board board = boardMapper.getBoardByBoardNo(board_no);
-        board.setLike_number(board.getLike_number() + number);
+        board.setLike_number(number);
         boardMapper.updateBoardByLike(board);
     }
 
-    public void updateBoardByVisit(Board board){
+    public void updateBoardByVisit(Board board) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         boardMapper.updateBoardByVisit(board);
     }
 
-    public void updateBoardByFankok(Board board){
+    public void updateBoardByFankok(Board board) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         boardMapper.updateBoardByFankok(board);
     }
@@ -90,5 +90,10 @@ public class BoardDao {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         String sqlSearch = "%" + query + "%";
         return boardMapper.searchBoard(sqlSearch, start_index, start_index + 10);
+    }
+
+    public void insertFiles(Board board) {
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        boardMapper.insertFiles(board);
     }
 }

@@ -20,4 +20,9 @@ public class NotificationDao {
         NotificationMapper notificationMapper = sqlSession.getMapper(NotificationMapper.class);
         return notificationMapper.getNotification(user_no, start_index, start_index + 10);
     }
+
+    public void insertNotification(Notification notification){
+        NotificationMapper notificationMapper = sqlSession.getMapper(NotificationMapper.class);
+        notificationMapper.insertNotification(notification);
+    }
 }

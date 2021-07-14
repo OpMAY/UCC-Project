@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-import java.util.List;
-
 @Data
 @Getter
 @Setter
@@ -16,7 +13,6 @@ public class LoudSourcingEntry {
     private int entry_no;
     private int loudsourcing_no;
     private int artist_no;
-    private String title;
     private String file;
     private String content;
     private String reg_date;
@@ -31,4 +27,5 @@ public class LoudSourcingEntry {
     private int fan_number;
     private String video_length;
     private int user_no;
+
 }

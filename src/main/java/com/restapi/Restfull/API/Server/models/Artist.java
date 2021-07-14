@@ -6,8 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @Getter
@@ -31,6 +29,7 @@ public class Artist {
     private boolean artist_private;
     private String hashtag;
     private String recent_act_date;
+    private boolean loudsourcing_push;
 
     private ArrayList<String> hashtag_list;
 }

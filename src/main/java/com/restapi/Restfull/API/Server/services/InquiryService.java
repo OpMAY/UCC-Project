@@ -10,7 +10,6 @@ import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
-import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONException;
@@ -35,13 +34,13 @@ public class InquiryService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getInquiryList(int user_no, int start_index) {
-        try{
+        try {
             inquiryDao.setSession(sqlSession);
             Message message = new Message();
-            List<Inquiry> myInquiryList =  inquiryDao.getInquiryListByUserNo(user_no, start_index);
-            for(Inquiry inquiry : myInquiryList){
+            List<Inquiry> myInquiryList = inquiryDao.getInquiryListByUserNo(user_no, start_index);
+            for (Inquiry inquiry : myInquiryList) {
                 Message file_msg = new Message();
-                if(!inquiry.getFile().isEmpty()){
+                if (!inquiry.getFile().isEmpty()) {
                     String jsonString = inquiry.getFile();
                     Gson gson = new Gson();
                     FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
@@ -55,21 +54,20 @@ public class InquiryService {
             }
             message.put("inquiries", myInquiryList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.USER_INQUIRY_LIST, message.getHashMap("GetInquiryList()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity uploadInquiry(Inquiry inquiry, ArrayList<Upload> uploads) {
-        try{
+        try {
             inquiryDao.setSession(sqlSession);
             Message message = new Message();
             // Inquiry SET
             inquiry.set_answered(false);
-            inquiry.setReg_date(Time.TimeFormatHMS());
             List<String> file_msgList = new ArrayList<>();
-            for(Upload upload : uploads){
+            for (Upload upload : uploads) {
                 Gson gson = new Gson();
                 FileJson fileJson = new FileJson();
                 String name = upload.getName();
@@ -84,7 +82,7 @@ public class InquiryService {
             inquiryDao.insertInquiry(inquiry);
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.INQUIRY_UPLOAD_SUCCESS, message.getHashMap("GetInquiryList()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }

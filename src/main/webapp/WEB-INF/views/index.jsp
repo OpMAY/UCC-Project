@@ -67,85 +67,23 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>한지우</td>
-                                    <td>문의 제목입니다.</td>
-                                    <td>미답변</td>
-                                    <td>2020/04/26</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                            <i class="btn-icon-prepend" data-feather="search"></i>
-                                        보기
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>조한석</td>
-                                    <td>두번째 문의</td>
-                                    <td>미답변</td>
-                                    <td>01/05/2020</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                            <i class="btn-icon-prepend" data-feather="search"></i>
-                                        보기
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>김우식</td>
-                                    <td>세번째 문의입니다.</td>
-                                    <td>미답변</td>
-                                    <td>01/05/2020</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                            <i class="btn-icon-prepend" data-feather="search"></i>
-                                            보기
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>유병준</td>
-                                    <td>네번째 문의입니다.</td>
-                                    <td>미답변</td>
-                                    <td>01/01/2020
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                            <i class="btn-icon-prepend" data-feather="search"></i>
-                                            보기
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>정지원</td>
-                                    <td>다섯번째 문의입니다.</td>
-                                    <td>미답변</td>
-                                    <td>01/01/2020</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                            <i class="btn-icon-prepend" data-feather="search"></i>
-                                            보기
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>박상우</td>
-                                    <td>여섯번째 문의입니다.</td>
-                                    <td>미답변</td>
-                                    <td>01/01/2020</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                            <i class="btn-icon-prepend" data-feather="search"></i>
-                                            보기
-                                        </button>
-                                    </td>
-                                </tr>
+                                <c:forEach var="i" begin="1" end="${InquiryList.size()}">
+                                    <c:if test="${i<=6}">
+                                        <tr>
+                                            <td>${i}</td>
+                                            <td>${InquiryList[i-1].user_name}</td>
+                                            <td>${InquiryList[i-1].title}</td>
+                                            <td>미답변</td>
+                                            <td>${InquiryList[i-1].reg_date}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                    <i class="btn-icon-prepend" data-feather="search"></i>
+                                                    보기
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>
@@ -173,19 +111,19 @@
                                     <tbody>
                                     <tr>
                                         <td>NAVER</td>
-                                        <td>100 회</td>
+                                        <td>${NaverUser} 회</td>
                                     </tr>
                                     <tr>
                                         <td>KAKAO</td>
-                                        <td>20 회</td>
+                                        <td>${KakaoUser} 회</td>
                                     </tr>
                                     <tr>
                                         <td>GOOGLE</td>
-                                        <td>40 회</td>
+                                        <td>${GoogleUser} 회</td>
                                     </tr>
                                     <tr>
                                         <td>APPLE</td>
-                                        <td>15 회</td>
+                                        <td>${AppleUser} 회</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -209,7 +147,7 @@
                                         <th class="pt-0">#</th>
                                         <th class="pt-0">공모전 이름</th>
                                         <th class="pt-0">상태</th>
-                                        <th class="pt-0">참여인원 / 총 참여인원</th>
+                                        <th class="pt-0">참여인원</th>
                                         <th class="pt-0">총 기간</th>
                                         <th class="pt-0">모집 기간</th>
                                         <th class="pt-0">진행 기간</th>
@@ -219,67 +157,36 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>NobleUI jQuery</td>
-                                        <td>01/01/2020</td>
-                                        <td>26/04/2020</td>
-                                        <td><span class="badge badge-danger">Released</span></td>
-                                        <td>Leonardo Payne</td>
-                                        <td>01/01/2020</td>
-                                        <td>26/04/2020</td>
-                                        <td><span class="badge badge-danger">Released</span></td>
-                                        <td>Leonardo Payne</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>NobleUI Angular</td>
-                                        <td>01/01/2020</td>
-                                        <td>26/04/2020</td>
-                                        <td><span class="badge badge-success">Review</span></td>
-                                        <td>Carl Henson</td>
-                                        <td>01/01/2020</td>
-                                        <td>26/04/2020</td>
-                                        <td><span class="badge badge-danger">Released</span></td>
-                                        <td>Leonardo Payne</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>NobleUI ReactJs</td>
-                                        <td>01/05/2020</td>
-                                        <td>10/09/2020</td>
-                                        <td><span class="badge badge-info-muted">Pending</span></td>
-                                        <td>Jensen Combs</td>
-                                        <td>01/01/2020</td>
-                                        <td>26/04/2020</td>
-                                        <td><span class="badge badge-danger">Released</span></td>
-                                        <td>Leonardo Payne</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>NobleUI VueJs</td>
-                                        <td>01/01/2020</td>
-                                        <td>31/11/2020</td>
-                                        <td><span class="badge badge-warning">Work in Progress</span>
-                                        </td>
-                                        <td>Amiah Burton</td>
-                                        <td>01/01/2020</td>
-                                        <td>26/04/2020</td>
-                                        <td><span class="badge badge-danger">Released</span></td>
-                                        <td>Leonardo Payne</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>NobleUI Laravel</td>
-                                        <td>01/01/2020</td>
-                                        <td>31/12/2020</td>
-                                        <td><span class="badge badge-danger-muted text-white">Coming soon</span></td>
-                                        <td>Yaretzi Mayo</td>
-                                        <td>01/01/2020</td>
-                                        <td>26/04/2020</td>
-                                        <td><span class="badge badge-danger">Released</span></td>
-                                        <td>Leonardo Payne</td>
-                                    </tr>
+                                    <c:forEach var="i" begin="1" end="${LoudsourcingList.size()}">
+                                        <c:if test="${i<=6}">
+                                            <tr>
+                                                <td>${i}</td>
+                                                <td>${LoudsourcingList[i-1].name}</td>
+                                                <td>${LoudsourcingList[i-1].status}</td>
+                                                <td>${LoudsourcingList[i-1].applied_artist_num}</td>
+                                                <td>${LoudsourcingList[i-1].start_date} ~ ${LoudsourcingList[i-1].end_date}</td>
+                                                <td>${LoudsourcingList[i-1].start_date} ~ ${LoudsourcingList[i-1].recruitment_end_date}</td>
+                                                <td>${LoudsourcingList[i-1].process_start_date} ~ ${LoudsourcingList[i-1].process_end_date}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                    <i class="btn-icon-prepend" data-feather="search"></i>
+                                                    보기
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                        <i class="btn-icon-prepend" data-feather="search"></i>
+                                                        보기
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                        삭제
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </c:if>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -290,7 +197,7 @@
 
         </div>
 
-        <!-- partial:partials/_footer.html -->
+        <!-- partial:partials/_footer.jsp -->
         <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
             <p class="text-muted text-center text-md-left">Copyright © 2020 <a href="https://www.nobleui.com"
                                                                                target="_blank">NobleUI</a>. All rights

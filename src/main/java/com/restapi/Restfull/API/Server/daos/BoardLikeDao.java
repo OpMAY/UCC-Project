@@ -16,6 +16,7 @@ public class BoardLikeDao {
         if (this.sqlSession == null)
             this.sqlSession = sqlSession;
     }
+
     public void insertLike(BoardLike boardLike) {
         BoardLikeMapper boardLikeMapper = sqlSession.getMapper(BoardLikeMapper.class);
         boardLikeMapper.insertLike(boardLike);

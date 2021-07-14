@@ -1,14 +1,10 @@
 package com.restapi.Restfull.API.Server.services;
 
-import com.restapi.Restfull.API.Server.daos.ArtistDao;
-import com.restapi.Restfull.API.Server.daos.BoardDao;
-import com.restapi.Restfull.API.Server.daos.PortfolioDao;
-import com.restapi.Restfull.API.Server.daos.UserDao;
+import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.Board;
 import com.restapi.Restfull.API.Server.models.Portfolio;
-import com.restapi.Restfull.API.Server.models.Subscribe;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
@@ -45,8 +41,23 @@ public class MainService {
     @Autowired
     private PortfolioDao portfolioDao;
 
+    @Autowired
+    private LoudSourcingEntryDao loudSourcingEntryDao;
+
+    @Autowired
+    private LoudSourcingDao loudSourcingDao;
+
+    @Autowired
+    private NoticeDao noticeDao;
+
+    @Autowired
+    private RequestChangeDao requestChangeDao;
+
+    @Autowired
+    private FAQDao faqDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity GetMain(){
+    public ResponseEntity GetMain() {
         try {
             Message message = new Message();
             artistDao.setSession(sqlSession);
@@ -65,10 +76,10 @@ public class MainService {
 
             // Popular Artist - total 15
             List<Artist> popularArtistList = artistDao.getArtistListByPopular();
-            for(Artist artist : popularArtistList){
+            for (Artist artist : popularArtistList) {
                 String hashtag = artist.getHashtag();
                 log.info(hashtag);
-                if(hashtag != null) {
+                if (hashtag != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(hashtag.split(", ")));
                     artist.setHashtag_list(hashtagList);
                     log.info(hashtagList);
@@ -90,6 +101,19 @@ public class MainService {
         } catch (JSONException e) {
             throw new BusinessException(e);
         }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteCDNFiles(){
+        userDao.setSession(sqlSession);
+        artistDao.setSession(sqlSession);
+        portfolioDao.setSession(sqlSession);
+        boardDao.setSession(sqlSession);
+        loudSourcingEntryDao.setSession(sqlSession);
+        loudSourcingDao.setSession(sqlSession);
+        noticeDao.setSession(sqlSession);
+        requestChangeDao.setSession(sqlSession);
+        faqDao.setSession(sqlSession);
     }
 
 }

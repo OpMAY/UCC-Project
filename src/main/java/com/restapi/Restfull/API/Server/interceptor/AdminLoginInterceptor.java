@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,11 +21,13 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
-                             Object handler ) throws Exception{
+                             Object handler) throws Exception {
 
         System.out.println("Start adminLoginInterceptor session");
 
         HttpSession session = request.getSession(false);
+
+
         if (session != null) {
             Object admin = session.getAttribute("adminLogin");
             log.info("session is not null");
@@ -32,7 +35,7 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
                 log.info("adminLogin is not null");
                 Admin admin1 = (Admin) admin;
 
-                if(adminService.loginAdmin(admin1.getId(), admin1.getPw()) != null)
+                if (adminService.loginAdmin(admin1.getId(), admin1.getPw()) != null)
                     return true;
             } else {
                 log.info("adminLogin is null");

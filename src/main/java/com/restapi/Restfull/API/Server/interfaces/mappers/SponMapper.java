@@ -2,7 +2,6 @@ package com.restapi.Restfull.API.Server.interfaces.mappers;
 
 import com.restapi.Restfull.API.Server.models.Spon;
 
-import java.util.Date;
 import java.util.List;
 
 public interface SponMapper {

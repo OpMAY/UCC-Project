@@ -4,32 +4,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioMapper">
     <select id="getPortfolioListByArtistNo" resultType="Portfolio">
-        select * from portfolio where artist_no=#{artist_no} LIMIT 1000
+        select * from portfolio where artist_no=#{artist_no} order by revise_date DESC
     </select>
     <select id="getPortfolioByPortfolioNo" resultType="Portfolio">
         select * from portfolio where portfolio_no=#{portfolio_no}
     </select>
     <select id="getPortfolioListByTypeVODSortRecent" resultType="Portfolio">
         select * from portfolio where type=#{type} order by reg_date DESC
-        LIMIT #{start_index}, #{end_index}
+        LIMIT #{start_index}, 10
     </select>
     <select id="getPortfolioListByTypeVODSortTitle" resultType="Portfolio">
         select * from portfolio where type=#{type} order by title
-        LIMIT #{start_index}, #{end_index}
+        LIMIT #{start_index}, 10
     </select>
     <select id="getPortfolioListByTypeVODSortFanNumber" resultType="Portfolio">
         select * from portfolio where type=#{type} order by fan_number DESC
-        LIMIT #{start_index}, #{end_index}
+        LIMIT #{start_index}, 10
     </select>
     <insert id="insertPortfolio" useGeneratedKeys="true" keyProperty="portfolio_no">
-        insert into portfolio(artist_no, title, type, file, content, reg_date, revise_date, thumbnail, artist_name, artist_profile_img, fan_number)
-        VALUES (#{artist_no}, #{title}, #{type}, #{file}, #{content}, #{reg_date}, #{revise_date}, #{thumbnail}, #{artist_name}, #{artist_profile_img}, #{fan_number})
+        insert into portfolio(artist_no, title, type, file, content, reg_date, revise_date, thumbnail, artist_name, artist_profile_img, fan_number, video_length)
+        VALUES (#{artist_no}, #{title}, #{type}, #{file}, #{content}, #{reg_date}, #{revise_date}, #{thumbnail}, #{artist_name}, #{artist_profile_img}, #{fan_number}, #{video_length})
     </insert>
     <delete id="deletePortfolio">
         delete from portfolio where portfolio_no=#{portfolio_no}
     </delete>
     <update id="updatePortfolio">
-        update portfolio SET title=#{title}, content=#{content}, revise_date=#{revise_date}, artist_name=#{artist_name}, artist_profile_img=#{artist_profile_img}
+        update portfolio SET title=#{title}, content=#{content}, revise_date=#{revise_date}, artist_name=#{artist_name}, artist_profile_img=#{artist_profile_img}, file=#{file}, thumbnail=#{thumbnail}, video_length=#{video_length}
         WHERE portfolio_no=#{portfolio_no}
     </update>
     <update id="updatePortfolioByComment">
@@ -53,6 +53,19 @@
         select * from portfolio WHERE title like #{query} or artist_name like #{query} LIMIT 15
     </select>
     <select id="getPortfolioListByArtistNoLimit" resultType="Portfolio">
-        select * from portfolio WHERE artist_no=#{artist_no} order by reg_date limit 15
+        select * from portfolio WHERE artist_no=#{artist_no} order by reg_date DESC limit 15
+    </select>
+    <update id="insertFiles">
+        update portfolio SET file=#{file}, thumbnail=#{thumbnail}
+        WHERE portfolio_no=#{portfolio_no}
+    </update>
+    <select id="getPortfolioByTypeAdmin" resultType="Portfolio">
+        select * from portfolio WHERE artist_no=#{artist_no} AND type=#{type} ORDER BY revise_date DESC
+    </select>
+    <select id="getPortfolioListSortRecent" resultType="Portfolio">
+        select * from portfolio WHERE artist_no=#{artist_no} ORDER BY reg_date DESC LIMIT #{start_index}, 10
+    </select>
+    <select id="getPortfolioListSortWord" resultType="Portfolio">
+        select * from portfolio WHERE artist_no=#{artist_no} ORDER BY title LIMIT #{start_index}, 10
     </select>
 </mapper>

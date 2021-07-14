@@ -52,31 +52,36 @@ public class ArtistDao {
         return artistMapper.getArtistListByPopular();
     }
 
-    public List<Artist> getNewArtistList(){
+    public List<Artist> getNewArtistList() {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getNewArtistList();
     }
 
-    public List<Artist> SearchArtist(String search){
+    public List<Artist> SearchArtist(String search) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         String sqlSearch = "%" + search + "%";
         return artistMapper.searchArtist(sqlSearch);
     }
 
-    public List<Artist> SearchArtistLimit(String search){
+    public List<Artist> SearchArtistLimit(String search) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         String sqlSearch = "%" + search + "%";
         return artistMapper.searchArtistLimit(sqlSearch);
     }
 
-    public List<Artist> getAllArtistRefresh(int start_index, String sort){
+    public List<Artist> getAllArtistRefresh(int start_index, String sort) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
-        if(sort.equals(DataListSortType.SORT_BY_RECENT))
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
             return artistMapper.getAllArtistListSortByRecentRefresh(start_index, start_index + 10);
         else if (sort.equals(DataListSortType.SORT_BY_WORD))
             return artistMapper.getAllArtistListSortByNameRefresh(start_index, start_index + 10);
         else
             return artistMapper.getAllArtistListSortByFanNumRefresh(start_index, start_index + 10);
+    }
+
+    public void updateArtistPush(int artist_no, boolean loudsourcing_push){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        artistMapper.updateArtistPush(artist_no, loudsourcing_push);
     }
 
 }

@@ -22,58 +22,63 @@ public class LoudSourcingEntryDao {
         loudSourcingEntryMapper.insertEntry(loudSourcingEntry);
     }
 
-    public List<LoudSourcingEntry> getEntryListByLoudSourcingNo(int loudsourcing_no, String sort, int start_index){
+    public List<LoudSourcingEntry> getEntryListByLoudSourcingNo(int loudsourcing_no, String sort, int start_index) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
-        if(sort.equals(DataListSortType.SORT_BY_RECENT))
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
             return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortRecent(loudsourcing_no, start_index, start_index + 10);
-        else if(sort.equals(DataListSortType.SORT_BY_WORD))
+        else if (sort.equals(DataListSortType.SORT_BY_WORD))
             return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortTitle(loudsourcing_no, start_index, start_index + 10);
         else
             return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortFankok(loudsourcing_no, start_index, start_index + 10);
     }
 
-    public List<LoudSourcingEntry> getEntryListByArtistNo(int artist_no){
+    public List<LoudSourcingEntry> getEntryListByArtistNo(int artist_no) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         return loudSourcingEntryMapper.getEntryListByArtistNo(artist_no);
     }
 
-    public LoudSourcingEntry getEntryByEntryNo(int entry_no){
+    public LoudSourcingEntry getEntryByEntryNo(int entry_no) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         return loudSourcingEntryMapper.getEntryByEntryNo(entry_no);
     }
 
-    public void updateEntry(LoudSourcingEntry loudSourcingEntry){
+    public void updateEntry(LoudSourcingEntry loudSourcingEntry) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         loudSourcingEntryMapper.updateEntry(loudSourcingEntry);
     }
 
-    public void updateEntryByComment(LoudSourcingEntry loudSourcingEntry){
+    public void updateEntryByComment(LoudSourcingEntry loudSourcingEntry) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         loudSourcingEntryMapper.updateEntryByComment(loudSourcingEntry);
     }
 
-    public void updateEntryByVote(LoudSourcingEntry loudSourcingEntry){
+    public void updateEntryByVote(LoudSourcingEntry loudSourcingEntry) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         loudSourcingEntryMapper.updateEntryByVote(loudSourcingEntry);
     }
 
-    public void updateEntryByVisit(LoudSourcingEntry loudSourcingEntry){
+    public void updateEntryByVisit(LoudSourcingEntry loudSourcingEntry) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         loudSourcingEntryMapper.updateEntryByVisit(loudSourcingEntry);
     }
 
-    public void updateEntryByFankok(LoudSourcingEntry loudSourcingEntry){
+    public void updateEntryByFankok(LoudSourcingEntry loudSourcingEntry) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         loudSourcingEntryMapper.updateEntryByFankok(loudSourcingEntry);
     }
 
-    public void deleteEntry(int entry_no){
+    public void deleteEntry(int entry_no) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         loudSourcingEntryMapper.deleteEntry(entry_no);
     }
 
-    public LoudSourcingEntry getEntryByArtistNOAndLoudSourcingNo(int artist_no, int loudsourcing_no){
+    public LoudSourcingEntry getEntryByArtistNOAndLoudSourcingNo(int artist_no, int loudsourcing_no) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         return loudSourcingEntryMapper.getEntryByArtistNOAndLoudSourcingNo(artist_no, loudsourcing_no);
+    }
+
+    public int getEntryListNumByLoudsourcingNo(int loudsourcing_no){
+        LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
+        return loudSourcingEntryMapper.getEntryListNum(loudsourcing_no).size();
     }
 }

@@ -16,7 +16,7 @@ public class SearchDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<Search> getKeywords(){
+    public List<Search> getKeywords() {
         SearchMapper searchMapper = sqlSession.getMapper(SearchMapper.class);
         return searchMapper.getKeywords();
     }

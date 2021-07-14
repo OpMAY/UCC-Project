@@ -14,9 +14,6 @@ import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.utility.Time;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -26,8 +23,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Log4j2
 @Service
@@ -105,11 +100,7 @@ public class SecurityService {
             }
 
             /** Timer Limit Valid Checker*/
-            if (!(jwt.getExpiresAt().getTime() <= Time.LongTimeStamp().getTime())) {
-                return false;
-            }
-
-            return true;
+            return jwt.getExpiresAt().getTime() <= Time.LongTimeStamp().getTime();
         } catch (NullPointerException e) {
             throw new NullPointerException();
         } catch (JWTDecodeException e) {

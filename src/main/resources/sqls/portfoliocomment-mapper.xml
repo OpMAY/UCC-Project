@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioCommentMapper">
     <select id="getCommentListByPortfolioNo" resultType="PortfolioComment">
         select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} order by reg_date DESC
-        LIMIT #{start_index}, #{end_index}
+        LIMIT #{start_index}, 10
     </select>
     <select id="getCommentListByUserNo" resultType="PortfolioComment">
         select * from portfoliocomment WHERE user_no=#{user_no}
@@ -18,10 +18,13 @@
         delete from portfoliocomment WHERE comment_no=#{comment_no}
     </delete>
     <update id="updateComment">
-        update portfoliocomment SET content=#{content}, revise_date=#{revise_date}, comment_private=#{comment_private}
+        update portfoliocomment SET comment_private=#{comment_private}, commenter_name=#{commenter_name}, profile_img=#{profile_img}
         WHERE comment_no=#{comment_no}
     </update>
     <select id="getCommentByCommentNo" resultType="PortfolioComment">
         select * from portfoliocomment WHERE comment_no=#{comment_no}
+    </select>
+    <select id="getCommentNumberByPortfolioNo" resultType="PortfolioComment">
+        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no}
     </select>
 </mapper>

@@ -2,13 +2,18 @@ package com.restapi.Restfull.API.Server.controller;
 
 import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.*;
-import com.restapi.Restfull.API.Server.response.*;
+import com.restapi.Restfull.API.Server.models.Artist;
+import com.restapi.Restfull.API.Server.models.Board;
+import com.restapi.Restfull.API.Server.models.BoardComment;
+import com.restapi.Restfull.API.Server.models.Upload;
+import com.restapi.Restfull.API.Server.response.DefaultRes;
+import com.restapi.Restfull.API.Server.response.Message;
+import com.restapi.Restfull.API.Server.response.ResMessage;
+import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.ArtistService;
 import com.restapi.Restfull.API.Server.services.BoardService;
 import com.restapi.Restfull.API.Server.services.CDNService;
-import com.restapi.Restfull.API.Server.utility.Format;
-import com.restapi.Restfull.API.Server.utility.Time;
+import com.restapi.Restfull.API.Server.utility.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,15 +23,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
+import java.nio.file.Files;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Log4j2
 @RestController
@@ -63,51 +69,88 @@ public class BoardController {
         log.info("NullPointer Exception Handler");
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
     }
-
+    
     @Setter
     @Getter
     @Data
-    class BoardRequest{
+    class BoardRequest {
         private int user_no;
         private int board_no;
     }
-
-
+    
+    /** 
+        주석 생성 날짜 - 2021-07-29, 목, 14:21
+        코드 설명 : 게시글 정보를 받아오는 URL
+        특이 사항 : X
+        파일 업로드 여부 : X
+    **/
     @RequestMapping(value = "/api/board", method = RequestMethod.POST) // CHECK
-    public ResponseEntity GetBoard(@RequestBody String body){
+    public ResponseEntity GetBoard(@RequestBody String body) {
         BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
         return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), -1);
     }
 
+    /** 
+        주석 생성 날짜 - 2021-07-29, 목, 14:22
+        코드 설명 : 게시글의 댓글을 불러오는 URL
+        특이 사항 : 10개씩 리로딩
+        파일 업로드 여부 : X
+    **/
     @RequestMapping(value = "/api/board/comments/{start_index}", method = RequestMethod.POST) //CHECK
-    public ResponseEntity GetBoardComments(@RequestBody String body, @PathVariable("start_index") int start_index){
+    public ResponseEntity GetBoardComments(@RequestBody String body, @PathVariable("start_index") int start_index) {
         BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
+        log.info(start_index);
         return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), start_index);
     }
 
+    /** 
+        주석 생성 날짜 - 2021-07-29, 목, 14:22
+        코드 설명 : 게시글을 업로드하는 URL
+        특이 사항 : 스마트 에디터 내의 임시 사진 URL 을 지정 URL로 변경, 썸네일은 개별 업로드
+        파일 업로드 여부 : thumbnail
+    **/
     @RequestMapping(value = "/api/board/upload", method = RequestMethod.POST) //CHECK
-    public ResponseEntity UploadBoard(@RequestPart(value = "board")Board board,
-                                      @RequestPart(value = "thumbnail", required = false)MultipartFile thumbnail){
-        try{
+    public ResponseEntity UploadBoard(@RequestParam(value = "board") String body,
+                                      @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
+        try {
+
+            Board board = new Gson().fromJson(body, Board.class);
+            StringBuilder board_info = new StringBuilder();
+            board_info.append(board.getArtist_no());
+            board_info.append("/");
+
+            log.info(thumbnail);
+
+            String content = board.getContent();
+
+            String revisedContent = moveBoardsFile(content, board_info.toString());
+
+            board.setContent(revisedContent);
+
             Message message = new Message();
-            if(!thumbnail.isEmpty()){
-                if(!Format.CheckIMGFile(thumbnail.getOriginalFilename())){
-                    return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+            if (thumbnail != null) {
+                if (!thumbnail.isEmpty()) {
+                    if (!Format.CheckIMGFile(thumbnail.getOriginalFilename())) {
+                        return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+                    }
+                    /** File Upload Log Logic*/
+                    log.info("originalName:" + thumbnail.getOriginalFilename());
+                    log.info("size:" + thumbnail.getSize());
+                    log.info("ContentType:" + thumbnail.getContentType());
+
+
+                    /** File Upload Logic */
+                    String file_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail, board_info.toString());
+
+                    URLConverter urlConverter = new URLConverter();
+                    /** Board Set **/
+                    board.setThumbnail(urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name));
+
+                    /** Response Json Logic*/
+                    message.put("files", new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name)));
                 }
-                /** File Upload Log Logic*/
-                log.info("originalName:" + thumbnail.getOriginalFilename());
-                log.info("size:" + thumbnail.getSize());
-                log.info("ContentType:" + thumbnail.getContentType());
-
-                /** File Upload Logic */
-                String file_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail.getBytes());
-
-                /** Board Set **/
-                board.setThumbnail(cdn_path + file_name);
-
-                /** Response Json Logic*/
-                message.put("files", new Upload(file_name, cdn_path + file_name));
             }
+
             Artist artist = artistService.getArtistByArtistNo(board.getArtist_no());
             board.setArtist_name(artist.getArtist_name());
             board.setArtist_profile_img(artist.getArtist_profile_img());
@@ -116,52 +159,74 @@ public class BoardController {
             board.setRevise_date(d);
             boardService.insertBoard(board);
 
-            Board board1 = boardService.getBoardByBoardNo(board.getBoard_no());
+
+            Board board1 = boardService.getBoard(board.getBoard_no());
             board1.setUser_no(artist.getUser_no());
             message.put("board", board1);
+
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPLOAD_BOARD_SUCCESS, message.getHashMap("UploadBoard()")), HttpStatus.OK);
-        } catch (JSONException e) {
+        } catch (
+                JSONException e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    /** 
+        주석 생성 날짜 - 2021-07-29, 목, 14:23
+        코드 설명 : 
+        특이 사항 : 
+        파일 업로드 여부 : 
+    **/
     @RequestMapping(value = "/api/board/edit", method = RequestMethod.POST) //CHECK
-    public ResponseEntity EditBoard(@RequestPart("board") Board board,
-                                    @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
+    public ResponseEntity EditBoard(@RequestParam("board") String body,
+                                    @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
+        Board board = new Gson().fromJson(body, Board.class);
         Message message = new Message();
-        if(!thumbnail.isEmpty()){
-            if(!Format.CheckIMGFile(thumbnail.getOriginalFilename())){
-                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+        StringBuilder board_info = new StringBuilder();
+        board_info.append(board.getArtist_no());
+        board_info.append("/");
+
+        String board_content = board.getContent();
+        String revised_content = moveBoardsFile(board_content, board_info.toString());
+        board.setContent(revised_content);
+
+        if (thumbnail != null) {
+            if (!thumbnail.isEmpty()) {
+                if (!Format.CheckIMGFile(thumbnail.getOriginalFilename())) {
+                    return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+                }
+                /** File Upload Log Logic*/
+                log.info("originalName:" + thumbnail.getOriginalFilename());
+                log.info("size:" + thumbnail.getSize());
+                log.info("ContentType:" + thumbnail.getContentType());
+
+                /** File Upload Logic */
+                String file_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail, board_info.toString());
+
+                /** Board Set **/
+                URLConverter urlConverter = new URLConverter();
+                board.setThumbnail(urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name));
+
+                /** Response Json Logic*/
+                message.put("name", file_name);
+                message.put("url", urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name));
             }
-            /** File Upload Log Logic*/
-            log.info("originalName:" + thumbnail.getOriginalFilename());
-            log.info("size:" + thumbnail.getSize());
-            log.info("ContentType:" + thumbnail.getContentType());
-
-            /** File Upload Logic */
-            String file_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail.getBytes());
-
-            /** Board Set **/
-            board.setThumbnail(cdn_path + file_name);
-
-            /** Response Json Logic*/
-            message.put("name", file_name);
-            message.put("url", cdn_path + file_name);
         }
         return boardService.updateBoard(board, message);
     }
 
     @RequestMapping(value = "/api/board/delete/{board_no}", method = RequestMethod.POST) //CHECK
-    public ResponseEntity DeleteBoard(@PathVariable("board_no") int board_no){
+    public ResponseEntity DeleteBoard(@PathVariable("board_no") int board_no) {
         return boardService.deleteBoard(board_no);
     }
 
     @RequestMapping(value = "/api/board/like", method = RequestMethod.POST) //CHECK
-    public ResponseEntity PressPortfolioLike(@RequestBody String body){
+    public ResponseEntity PressPortfolioLike(@RequestBody String body) {
         BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
         int user_no = boardRequest.getUser_no();
         int board_no = boardRequest.getBoard_no();
@@ -169,7 +234,7 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/api/board/comment", method = RequestMethod.POST) // CHECK
-    public ResponseEntity InsertBoardComment(@RequestBody String body){
+    public ResponseEntity InsertBoardComment(@RequestBody String body) {
         BoardComment boardComment = new Gson().fromJson(body, BoardComment.class);
         return boardService.updateBoardByComment(boardComment, "UPDATE");
     }
@@ -177,13 +242,14 @@ public class BoardController {
     @Getter
     @Setter
     @Data
-    class CommentDeleteRequest{
+    class CommentDeleteRequest {
         private int comment_no;
         private int board_no;
     }
 
     @RequestMapping(value = "/api/board/comment/delete", method = RequestMethod.POST) //CHECK
-    public ResponseEntity DeleteBoardComment(@RequestBody String body){
+    public ResponseEntity DeleteBoardComment(@RequestBody String body) {
+        log.info(body);
         CommentDeleteRequest commentDeleteRequest = new Gson().fromJson(body, CommentDeleteRequest.class);
         BoardComment boardComment = new BoardComment();
         boardComment.setComment_no(commentDeleteRequest.getComment_no());
@@ -191,23 +257,22 @@ public class BoardController {
         return boardService.updateBoardByComment(boardComment, "DELETE");
     }
 
-    @RequestMapping(value = "/api/board/edit_source/{board_no}", method = RequestMethod.GET) //CHECK
-    public ResponseEntity GetBoardForEdit(@PathVariable("board_no") int board_no){
-        try {
-            Message message = new Message();
-            // Board SET
-            Board board = boardService.getBoardByBoardNo(board_no);
-            // Response Message SET
-            message.put("board", board);
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_BOARD_SUCCESS, message.getHashMap("GetBoardForEdit()")), HttpStatus.OK);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        }
+    @Getter
+    @Setter
+    @Data
+    class BoardEditRequest {
+        private int artist_no;
+        private int board_no;
+    }
+
+    @RequestMapping(value = "/api/board/edit_source", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetBoardForEdit(@RequestBody String body) {
+        BoardEditRequest boardEditRequest = new Gson().fromJson(body, BoardEditRequest.class);
+        return boardService.getBoardByBoardNo(boardEditRequest.getBoard_no(), boardEditRequest.getArtist_no());
     }
 
     @RequestMapping(value = "/api/boardList/{sort}/{start_index}", method = RequestMethod.GET) //CHECK
-    public ResponseEntity GetBoardList(@PathVariable("start_index") int start_index, @PathVariable("sort") String sort){
+    public ResponseEntity GetBoardList(@PathVariable("start_index") int start_index, @PathVariable("sort") String sort) {
         try {
             Message message = new Message();
 
@@ -223,25 +288,63 @@ public class BoardController {
     }
 
     /*업로드된 파일을 저장하는 함수*/
-    private String uploadFile(String originalName, byte[] fileDate) throws IOException {
+    private String uploadFile(String originalName, MultipartFile mfile, String board_info) throws IOException {
         UUID uid = UUID.randomUUID();
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
-        File target = new File(upload_path, savedName);
-        //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
-        FileCopyUtils.copy(fileDate, target);
+        FileConverter fileConverter = new FileConverter();
+        File file = fileConverter.convert(mfile);
         CDNService cdnService = new CDNService();
-        if(Format.CheckIMGFile(originalName)) {
-            cdnService.upload("api/images/" + savedName, target);
-        }else if(Format.CheckFile(originalName)){
-            cdnService.upload("api/files/" + savedName, target);
-        }else if(Format.CheckVODFile(originalName)){
-            cdnService.upload("api/videos/" + savedName, target);
-        }else{
-            throw new BusinessException(new Exception());
-        }
+        cdnService.upload("api/images/board/thumbnail/" + board_info + savedName, file);
+        Files.deleteIfExists(file.toPath());
         return savedName;
     }
+
+    public String moveBoardsFile(String content, String board_info) {
+        try {
+            CDNService cdnService = new CDNService();
+            List<String> url = new ArrayList<>();
+            String original_content = content;
+            int index;
+            while (true) {
+                index = content.indexOf("<img src=");
+                if (index < 0)
+                    break;
+                int next_multi_index = content.substring(index).indexOf(">");
+                String substring = content.substring(index + 10, index + next_multi_index - 1);
+                if(substring.contains("/api/temp/")) {
+                    url.add(substring);
+                }
+                content = content.substring(index).substring(next_multi_index + 1);
+            }
+            List<File> files = new ArrayList<>();
+            List<String> newUrl = new ArrayList<>();
+            for (String str : url) {
+                String path = str.substring(str.indexOf("vodappserver/") + 13);
+                String filename = path.substring(path.lastIndexOf("/") + 1);
+                log.info("Check Path Before downloading : " + path);
+                files.add(cdnService.download(upload_path, filename, path));
+                cdnService.delete(path);
+            }
+            for (File file : files) {
+                UUID uid = UUID.randomUUID();
+                String originalName = file.getName().replace(" ", "");
+                String savedName = uid.toString().substring(0, 8) + "_" + originalName;
+                cdnService.upload("api/images/board/" + board_info + savedName, file);
+                newUrl.add(cdn_path + "images/board/" + board_info + savedName);
+                file.deleteOnExit();
+            }
+            for (int i = 0; i < url.size(); i++) {
+                original_content = original_content.replace(url.get(i), newUrl.get(i));
+            }
+
+            return original_content;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
 
     /** ALL CHECKED **/
 }

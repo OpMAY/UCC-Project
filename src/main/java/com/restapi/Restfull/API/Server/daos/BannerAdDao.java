@@ -16,7 +16,7 @@ public class BannerAdDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<BannerAd> getBannerList(){
+    public List<BannerAd> getBannerList() {
         BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
         return bannerAdMapper.getBannerList(false);
     }

@@ -16,27 +16,27 @@ public class LoudSourcingApplyDao {
             this.sqlSession = sqlSession;
     }
 
-    public LoudSourcingApply getLoudSourcingApplyByArtistNoAndLoudSourcingNo(int artist_no, int loudsourcing_no){
+    public LoudSourcingApply getLoudSourcingApplyByArtistNoAndLoudSourcingNo(int artist_no, int loudsourcing_no) {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         return loudSourcingApplyMapper.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(artist_no, loudsourcing_no);
     }
 
-    public List<LoudSourcingApply> getLoudSourcingApplyListByArtistNo(int artist_no){
+    public List<LoudSourcingApply> getLoudSourcingApplyListByArtistNo(int artist_no) {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         return loudSourcingApplyMapper.getLoudSourcingApplyListByArtistNo(artist_no);
     }
 
-    public List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNo(int loudsourcing_no){
+    public List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNo(int loudsourcing_no) {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         return loudSourcingApplyMapper.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
     }
 
-    public void insertLoudSourcingApply(LoudSourcingApply loudSourcingApply){
+    public void insertLoudSourcingApply(LoudSourcingApply loudSourcingApply) {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         loudSourcingApplyMapper.insertLoudSourcingApply(loudSourcingApply);
     }
 
-    public void deleteLoudSourcingApply(int artist_no, int loudsourcing_no){
+    public void deleteLoudSourcingApply(int artist_no, int loudsourcing_no) {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         loudSourcingApplyMapper.deleteLoudSourcingApply(artist_no, loudsourcing_no);
     }
@@ -46,7 +46,7 @@ public class LoudSourcingApplyDao {
         loudSourcingApplyMapper.updateApply(loudSourcingApply);
     }
 
-    public List<LoudSourcingApply> getEntryNum(int loudsourcing_no){
+    public List<LoudSourcingApply> getEntryNum(int loudsourcing_no) {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         return loudSourcingApplyMapper.getEntryNum(loudsourcing_no);
     }

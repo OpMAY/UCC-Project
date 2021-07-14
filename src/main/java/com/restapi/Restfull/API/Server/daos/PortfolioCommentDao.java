@@ -46,4 +46,8 @@ public class PortfolioCommentDao {
         return portfolioCommentMapper.getCommentByCommentNo(comment_no);
     }
 
+    public List<PortfolioComment> getCommentNumberByPortfolioNo(int portfolio_no) {
+        PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
+        return portfolioCommentMapper.getCommentNumberByPortfolioNo(portfolio_no);
+    }
 }

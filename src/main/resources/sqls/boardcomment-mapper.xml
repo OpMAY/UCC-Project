@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.BoardCommentMapper">
     <select id="getCommentListByBoardNo" resultType="BoardComment">
         select * from boardcomment where board_no=#{board_no} order by reg_date DESC
-        LIMIT #{start_index}, #{end_index}
+        LIMIT #{start_index}, 10
     </select>
     <select id="getCommentListByUserNo" resultType="BoardComment">
         select * from boardcomment where user_no=#{user_no}
@@ -19,5 +19,12 @@
     </delete>
     <select id="getCommentByCommentNo" resultType="BoardComment">
         select * from boardcomment where comment_no=#{comment_no}
+    </select>
+    <update id="updateComment">
+        update boardcomment SET comment_private=#{comment_private}, commenter_name=#{commenter_name}, profile_img=#{profile_img}
+        WHERE comment_no=#{comment_no}
+    </update>
+    <select id="getCommentNumberByBoardNo" resultType="BoardComment">
+        select * from boardcomment WHERE board_no=#{board_no}
     </select>
 </mapper>

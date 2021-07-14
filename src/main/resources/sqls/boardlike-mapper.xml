@@ -17,6 +17,6 @@
         select * from boardlike where user_no=#{user_no}
     </select>
     <select id="getBoardLike" resultType="BoardLike">
-        select * from boardlike where board_no=#{board_no} AND user_no=#{user_no}
+        select * from boardlike where board_no=#{board_no} AND user_no=#{user_no} ORDER BY reg_date DESC LIMIT 1
     </select>
 </mapper>

@@ -30,4 +30,6 @@ public interface ArtistMapper {
     List<Artist> getAllArtistListSortByNameRefresh(int start_index, int end_index);
 
     List<Artist> getAllArtistListSortByFanNumRefresh(int start_index, int end_index);
+
+    void updateArtistPush(int artist_no, boolean loudsourcing_push);
 }

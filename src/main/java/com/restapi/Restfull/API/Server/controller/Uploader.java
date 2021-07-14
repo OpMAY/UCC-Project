@@ -1,26 +1,31 @@
 package com.restapi.Restfull.API.Server.controller;
 
 import com.restapi.Restfull.API.Server.models.Upload;
-import com.restapi.Restfull.API.Server.response.*;
+import com.restapi.Restfull.API.Server.response.DefaultRes;
+import com.restapi.Restfull.API.Server.response.Message;
+import com.restapi.Restfull.API.Server.response.ResMessage;
+import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.utility.Format;
 import lombok.extern.log4j.Log4j2;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.MediaTypeEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * API Test

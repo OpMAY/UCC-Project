@@ -34,4 +34,12 @@ public interface PortfolioMapper {
     List<Portfolio> SearchPortfolioLimit(String query);
 
     List<Portfolio> getPortfolioListByArtistNoLimit(int artist_no);
+
+    void insertFiles(Portfolio portfolio);
+
+    List<Portfolio> getPortfolioByTypeAdmin(int artist_no, String type);
+
+    List<Portfolio> getPortfolioListSortRecent(int artist_no, int start_index);
+
+    List<Portfolio> getPortfolioListSortWord(int artist_no, int start_index);
 }

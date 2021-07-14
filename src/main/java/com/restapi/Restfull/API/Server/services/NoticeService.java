@@ -2,7 +2,6 @@ package com.restapi.Restfull.API.Server.services;
 
 import com.restapi.Restfull.API.Server.daos.NoticeDao;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.Notice;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
@@ -33,14 +32,14 @@ public class NoticeService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getNotice(int start_index) {
-        try{
+        try {
             noticeDao.setSession(sqlSession);
             Message message = new Message();
             List<Notice> noticeList = noticeDao.getNotice(start_index);
-            for(Notice notice : noticeList){
+            for (Notice notice : noticeList) {
                 String img = notice.getImg();
                 log.info(img);
-                if(img != null) {
+                if (img != null) {
                     ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
                     notice.setImgList(imgList);
                     log.info(imgList);
@@ -49,7 +48,7 @@ public class NoticeService {
 
             message.put("notice", noticeList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_NOTICE_LIST, message.getHashMap("GetNotice()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }

@@ -10,18 +10,20 @@ import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.UserService;
+import com.restapi.Restfull.API.Server.utility.FileConverter;
 import com.restapi.Restfull.API.Server.utility.Format;
+import com.restapi.Restfull.API.Server.utility.URLConverter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -73,84 +75,106 @@ public class UserController {
 
 
     @RequestMapping(value = "/api/user/valid/{user_no}", method = RequestMethod.GET) // CHECK
-    public ResponseEntity CheckUserPrivate(@PathVariable("user_no") int user_no){
+    public ResponseEntity CheckUserPrivate(@PathVariable("user_no") int user_no) {
         log.info(user_no);
         return userService.checkUserPrivate(user_no);
     }
 
     @RequestMapping(value = "/api/user/mypage/{user_no}", method = RequestMethod.GET) // CHECK
-    public ResponseEntity GetUserInfo(@PathVariable("user_no") int user_no){
+    public ResponseEntity GetUserInfo(@PathVariable("user_no") int user_no) {
         return userService.GetUserSpecificInfo(user_no);
     }
 
     @RequestMapping(value = "/api/user/mypage", method = RequestMethod.POST) //CHECK
-    public ResponseEntity UpdateUserInfo(@RequestPart("user") User user,
-                                         @RequestPart(value = "artist", required = false) Artist artist,
-                                         @RequestPart(value = "profile_img", required = false)MultipartFile profile_img,
-                                         @RequestPart(value = "main_img", required = false) MultipartFile fan_main_img){
-        log.info("test");
-        log.info(artist);
-        try{
+    public ResponseEntity UpdateUserInfo(@RequestParam("user") String body,
+                                         @RequestParam(value = "artist", required = false) String artistBody,
+                                         @RequestParam(value = "profile_img", required = false) MultipartFile profile_img,
+                                         @RequestParam(value = "main_img", required = false) MultipartFile fan_main_img) {
+        try {
+            log.info(body);
+            log.info(artistBody);
+            User user = new Gson().fromJson(body, User.class);
+            Artist artist = new Gson().fromJson(artistBody, Artist.class);
+            log.info(user);
+            log.info(artist);
             ArrayList<Upload> uploads = new ArrayList<>();
-            if(!profile_img.isEmpty()){
-                if(!Format.CheckIMGFile(profile_img.getOriginalFilename())){
-                    return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+            URLConverter urlConverter = new URLConverter();
+            if(profile_img != null) {
+                if (!profile_img.isEmpty()) {
+                    if (!Format.CheckIMGFile(profile_img.getOriginalFilename())) {
+                        return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+                    }
+                    /** File Upload Log Logic*/
+                    log.info("originalName:" + profile_img.getOriginalFilename());
+                    log.info("size:" + profile_img.getSize());
+                    log.info("ContentType:" + profile_img.getContentType());
+
+                    /** File Upload Logic */
+
+
+                    if (artist != null) {
+                        String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
+                        artist.setArtist_profile_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
+                        uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name)));
+                    } else {
+                        String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img, "api/images/user/" + user.getUser_no() + "/");
+                        user.setProfile_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name));
+                        uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name)));
+                    }
                 }
-                /** File Upload Log Logic*/
-                log.info("originalName:" + profile_img.getOriginalFilename());
-                log.info("size:" + profile_img.getSize());
-                log.info("ContentType:" + profile_img.getContentType());
-
-                /** File Upload Logic */
-
-
-                if(artist != null) {
-                    String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img.getBytes(),  "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
-                    artist.setArtist_profile_img(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name);
-                    uploads.add(new Upload(file_name, cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
-                }
-                else{
-                    String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img.getBytes(), "api/images/user/" + user.getUser_no() + "/");
-                    user.setProfile_img(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name);
-                    uploads.add(new Upload(file_name, cdn_path + "images/user/" + user.getUser_no() + "/" + file_name));
-                }
-
-
             }
-            if(!fan_main_img.isEmpty() && artist != null){
-                if(!Format.CheckIMGFile(fan_main_img.getOriginalFilename())){
-                    return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+            if(fan_main_img != null) {
+                if (!fan_main_img.isEmpty() && artist != null) {
+                    if (!Format.CheckIMGFile(fan_main_img.getOriginalFilename())) {
+                        return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
+                    }
+                    /** File Upload Log Logic*/
+                    log.info("originalName:" + fan_main_img.getOriginalFilename());
+                    log.info("size:" + fan_main_img.getSize());
+                    log.info("ContentType:" + fan_main_img.getContentType());
+
+                    /** File Upload Logic */
+                    String file_name = uploadFile(fan_main_img.getOriginalFilename(), fan_main_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
+
+                    artist.setMain_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
+                    uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name)));
                 }
-                /** File Upload Log Logic*/
-                log.info("originalName:" + fan_main_img.getOriginalFilename());
-                log.info("size:" + fan_main_img.getSize());
-                log.info("ContentType:" + fan_main_img.getContentType());
-
-                /** File Upload Logic */
-                String file_name = uploadFile(fan_main_img.getOriginalFilename(), fan_main_img.getBytes(), "api/images/user/"+ user.getUser_no() + "/artist/" + artist.getArtist_no()  + "/");
-
-                artist.setMain_img(cdn_path + "images/user/"+ user.getUser_no() + "/artist/" + artist.getArtist_no()  + "/" + file_name);
-                uploads.add(new Upload(file_name, cdn_path + "images/user/"+ user.getUser_no() + "/artist/" + artist.getArtist_no()  + "/" + file_name));
             }
 
-
+            log.info(user);
+            log.info(artist);
             return userService.UpdateUserInfo(artist, user, uploads);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private String uploadFile(String originalName, byte[] fileDate, String file_path) throws IOException {
+    @RequestMapping(value = "/api/user/set_push/all/{user_no}", method = RequestMethod.POST)
+    public ResponseEntity UpdateUserAllPushSet(@PathVariable("user_no") int user_no){
+        return userService.updateUserPush(user_no, "all");
+    }
+
+    @RequestMapping(value = "/api/user/set_push/comment/{user_no}", method = RequestMethod.POST)
+    public ResponseEntity UpdateUserCommentPushSet(@PathVariable("user_no") int user_no){
+        return userService.updateUserPush(user_no, "comment");
+    }
+
+    @RequestMapping(value = "/api/user/set_push/fankok/{user_no}", method = RequestMethod.POST)
+    public ResponseEntity UpdateUserFankokPushSet(@PathVariable("user_no") int user_no){
+        return userService.updateUserPush(user_no, "fankok");
+    }
+
+    private String uploadFile(String originalName, MultipartFile mfile, String file_path) throws IOException {
         UUID uid = UUID.randomUUID();
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
-        File target = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/", savedName);
-        //org.springframework.util 패키지의 FileCopyUtils는 파일 데이터를 파일로 처리하거나, 복사하는 등의 기능이 있다.
-        FileCopyUtils.copy(fileDate, target);
+        FileConverter fileConverter = new FileConverter();
+        File file = fileConverter.convert(mfile);
         log.info(file_path);
         CDNService cdnService = new CDNService();
-        cdnService.upload(file_path + savedName, target);
+        cdnService.upload(file_path + savedName, file);
+        Files.deleteIfExists(file.toPath());
         return savedName;
     }
 

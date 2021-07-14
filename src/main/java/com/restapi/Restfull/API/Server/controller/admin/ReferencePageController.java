@@ -53,7 +53,6 @@ public class ReferencePageController implements ControllerInitialize {
     }
 
 
-
     @RequestMapping(value = "/admin/register.do", method = RequestMethod.GET)
     public ModelAndView Register() {
         modelAndView = new ModelAndView("/pages/auth/register");

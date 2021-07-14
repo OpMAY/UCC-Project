@@ -15,20 +15,20 @@
     <ul class="nav">
       <li class="nav-item nav-category">Main</li>
       <li class="nav-item">
-        <a href="index.jsp" class="nav-link">
+        <a href="/admin/main.do" class="nav-link">
           <i class="link-icon" data-feather="box"></i>
           <span class="link-title">HOME</span>
         </a>
       </li>
       <li class="nav-item nav-category">회원 관리</li>
       <li class="nav-item">
-        <a href="pages/apps/chat.html" class="nav-link">
+        <a href="/admin/users.do" class="nav-link">
           <i class="link-icon" data-feather="user"></i>
           <span class="link-title">사용자</span>
         </a>
       </li>
       <li class="nav-item">
-        <a href="pages/apps/calendar.html" class="nav-link">
+        <a href="/admin/artists.do" class="nav-link">
           <i class="link-icon" data-feather="user-check"></i>
           <span class="link-title">아티스트</span>
         </a>
@@ -44,16 +44,16 @@
         <div class="collapse" id="uiComponents">
           <ul class="nav sub-menu">
             <li class="nav-item">
-              <a href="pages/ui-components/alerts.html" class="nav-link">모집</a>
+              <a href="/admin/loudsourcing_recruitment.do" class="nav-link">모집</a>
             </li>
             <li class="nav-item">
-              <a href="pages/ui-components/badges.html" class="nav-link">진행</a>
+              <a href="/admin/loudsourcing_process.do" class="nav-link">진행</a>
             </li>
             <li class="nav-item">
-              <a href="pages/ui-components/breadcrumbs.html" class="nav-link">심사</a>
+              <a href="/admin/loudsourcing_judge.do" class="nav-link">심사</a>
             </li>
             <li class="nav-item">
-              <a href="pages/ui-components/buttons.html" class="nav-link">종료</a>
+              <a href="/admin/loudsourcing_end.do" class="nav-link">종료</a>
             </li>
           </ul>
         </div>

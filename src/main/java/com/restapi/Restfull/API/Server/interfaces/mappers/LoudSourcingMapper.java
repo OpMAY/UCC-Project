@@ -28,4 +28,7 @@ public interface LoudSourcingMapper {
     List<LoudSourcing> searchLoudSourcingByStatusRecruitment(String status, String query, int start_index, int end_index);
 
     List<LoudSourcing> searchLoudSourcingAll(String query, int start_index, int end_index);
+
+    List<LoudSourcing> getRecentLSAdminMain(String status);
+
 }

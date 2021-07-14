@@ -10,28 +10,21 @@ import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.SecurityService;
 import com.restapi.Restfull.API.Server.services.TestService;
 import com.restapi.Restfull.API.Server.services.UserService;
+import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
 import com.restapi.Restfull.API.Server.utility.VideoUtility;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * API Test
@@ -45,12 +38,15 @@ import java.util.Map;
 public class HomeController {
     @Autowired
     private TestService testService;
-//22
+    //22
     @Autowired
     private SecurityService securityService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FirebaseMessagingSnippets firebaseMessagingSnippets;
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity BusinessException(Exception e) {
@@ -77,7 +73,7 @@ public class HomeController {
     public ResponseEntity Auth() {
         String name = "okiwi";
         String key = "test";
-            try {
+        try {
             String api_access_key = securityService.createToken(new Auth(name, key));
             Message message = new Message();
             message.put("access_token", api_access_key);
@@ -231,6 +227,19 @@ public class HomeController {
             message.put("key4", 0.22d);
             message.put("key5", new Auth("func", "hi"));
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS, message.getHashMap("Home()")), HttpStatus.OK);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/api/test_firebase", method = RequestMethod.GET)
+    public ResponseEntity Firebase(){
+        try {
+            Message message = new Message();
+            String token = "femn0IVxQ8-04NUrQKk7HP:APA91bFddaHInKMoJLkArgFv7bME-L64bq0mWo9pbVygX71L0l_WqI8txCzyFBO0nB3gpHQEBSvz_7003DDol9YVSY1LcJvzFyD4QoCiNHFN-Sn-nrAzOtqldtKypfZq0B0kXqh_Q-L8";
+            //firebaseMessagingSnippets.push(token, "테스트 알림 입니다.", "테스트 알림 내용");
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS, message.getHashMap("Firebase()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);

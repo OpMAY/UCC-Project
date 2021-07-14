@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.interfaces.mappers;
 
 import com.restapi.Restfull.API.Server.models.EntryComment;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface EntryCommentMapper {
@@ -14,4 +15,8 @@ public interface EntryCommentMapper {
     void deleteComment(int entry_comment_no);
 
     EntryComment getEntryCommentByCommentNo(int entry_comment_no);
+
+    void updateComment(EntryComment entryComment);
+
+    List<EntryComment> getCommentNumberByEntryNo(int entry_no);
 }

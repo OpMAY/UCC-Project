@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.EntryCommentMapper">
     <select id="getCommentListByEntryNo" resultType="EntryComment">
         select * from entrycomment WHERE entry_no=#{entry_no} ORDER BY reg_date DESC
-        LIMIT #{start_index}, #{end_index}
+        LIMIT #{start_index}, 10
     </select>
     <select id="getCommentListByUserNo" resultType="EntryComment">
         select * from entrycomment WHERE user_no=#{user_no}
@@ -19,5 +19,12 @@
     </delete>
     <select id="getEntryCommentByCommentNo" resultType="EntryComment">
         select * from entrycomment WHERE entry_comment_no=#{entry_comment_no}
+    </select>
+    <update id="updateComment">
+        update entrycomment SET comment_private=#{comment_private}, commenter_name=#{commenter_name}, profile_img=#{profile_img}
+        WHERE entry_comment_no=#{entry_comment_no}
+    </update>
+    <select id="getCommentNumberByEntryNo" resultType="EntryComment">
+        select * from entrycomment WHERE entry_no=#{entry_no}
     </select>
 </mapper>

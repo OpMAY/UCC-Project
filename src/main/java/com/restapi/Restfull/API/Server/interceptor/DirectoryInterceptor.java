@@ -4,9 +4,7 @@ import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
-import com.restapi.Restfull.API.Server.services.SecurityService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +51,7 @@ public class DirectoryInterceptor implements HandlerInterceptor {
         // 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
         if (!folder.exists()) {
             try {
-                folder.mkdir(); //폴더 생성합니다.
+                folder.mkdirs(); //폴더 생성합니다.
             } catch (Exception e) {
                 throw new BusinessException(e);
             }

@@ -17,22 +17,22 @@ public class LoudSourcingDao {
             this.sqlSession = sqlSession;
     }
 
-    public LoudSourcing getLoudSourcingByLoudsourcingNo(int loudsourcing_no){
+    public LoudSourcing getLoudSourcingByLoudsourcingNo(int loudsourcing_no) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         return loudSourcingMapper.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
     }
 
-    public void insertLoudSourcing(LoudSourcing loudSourcing){
+    public void insertLoudSourcing(LoudSourcing loudSourcing) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         loudSourcingMapper.insertLoudSourcing(loudSourcing);
     }
 
-    public void deleteLoudSourcing(int loudsourcing_no){
+    public void deleteLoudSourcing(int loudsourcing_no) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         loudSourcingMapper.deleteLoudSourcing(loudsourcing_no);
     }
 
-    public List<LoudSourcing> searchLoudSourcing(String sort, String query, int start_index){
+    public List<LoudSourcing> searchLoudSourcing(String sort, String query, int start_index) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         String sqlSearch = "%" + query + "%";
         switch (sort) {
@@ -47,7 +47,7 @@ public class LoudSourcingDao {
         }
     }
 
-    public List<LoudSourcing> getLoudSourcingListByStatus(String sort, int start_index){
+    public List<LoudSourcing> getLoudSourcingListByStatus(String sort, int start_index) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         switch (sort) {
             case DataListSortType.SORT_BY_RECRUITMENT:
@@ -61,4 +61,13 @@ public class LoudSourcingDao {
         }
     }
 
+    public List<LoudSourcing> getRecentLSAdminMain() {
+        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        return loudSourcingMapper.getRecentLSAdminMain("recruitment");
+    }
+
+    public List<LoudSourcing> getLoudSourcingListByStatusAdmin(String status) {
+        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        return loudSourcingMapper.getRecentLSAdminMain(status);
+    }
 }

@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,16 +28,18 @@ public class NotificationService {
     @Autowired
     private NotificationDao notificationDao;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getNotification(int user_no, int start_index) {
-        try{
+        try {
             notificationDao.setSession(sqlSession);
             Message message = new Message();
 
             List<Notification> notificationList = notificationDao.getNotification(user_no, start_index);
             message.put("notification", notificationList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_NOTIFICATION_LIST, message.getHashMap("GetUserFankok()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }
+
 }

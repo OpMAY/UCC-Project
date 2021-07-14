@@ -10,8 +10,8 @@
         select * from loudsourcing WHERE loudsourcing_no=#{loudsourcing_no}
     </select>
     <insert id="insertLoudSourcing" useGeneratedKeys="true" keyProperty="loudsourcing_no">
-        insert into loudsourcing(name, status, host, type, reward, warning, reg_date, files, img, content, host_profile_img, hashtag, start_date, recruitment_end_date, process_start_date, process_end_date, end_date)
-        VALUES (#{name}, #{status}, #{host}, #{type}, #{reward}, #{warning}, #{reg_date}, #{files}, #{img}, #{content}, #{host_profile_img}, #{hashtag}, #{start_date}, #{recruitment_end_date}, #{process_end_date}, #{process_start_date}, #{end_date})
+        insert into loudsourcing(name, status, host, type, reward, warning, reg_date, revise_date, files, img, content, host_profile_img, hashtag, start_date, recruitment_end_date, process_start_date, process_end_date, end_date, total_recruitment_number)
+        VALUES (#{name}, #{status}, #{host}, #{type}, #{reward}, #{warning}, #{reg_date}, #{revise_date}, #{files}, #{img}, #{content}, #{host_profile_img}, #{hashtag}, #{start_date}, #{recruitment_end_date}, #{process_end_date}, #{process_start_date}, #{end_date}, #{total_recruitment_number})
     </insert>
     <delete id="deleteLoudSourcing">
         delete from loudsourcing WHERE loudsourcing_no=#{loudsourcing_no}
@@ -20,28 +20,31 @@
         select * from loudsourcing WHERE name=#{query} OR host=#{query} OR hashtag=#{hashtag}
     </select>
     <select id="getLoudSourcingListByStatusProcess" resultType="LoudSourcing">
-        select * from loudsourcing WHERE status=#{status} ORDER BY process_start_date LIMIT #{start_index}, #{end_index}
+        select * from loudsourcing WHERE status=#{status} ORDER BY process_start_date LIMIT #{start_index}, 10
     </select>
     <select id="getLoudSourcingListByStatusRecruitment" resultType="LoudSourcing">
-        select * from loudsourcing WHERE status=#{status} ORDER BY start_date LIMIT #{start_index}, #{end_index}
+        select * from loudsourcing WHERE status=#{status} ORDER BY start_date LIMIT #{start_index}, 10
     </select>
     <select id="getLoudSourcingListByStatusEnd" resultType="LoudSourcing">
-        select * from loudsourcing WHERE status=#{status} ORDER BY end_date DESC LIMIT #{start_index}, #{end_index}
+        select * from loudsourcing WHERE status=#{status} ORDER BY end_date DESC LIMIT #{start_index}, 10
     </select>
     <select id="searchLoudSourcingByStatusProcess" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
-        ORDER BY process_start_date DESC LIMIT #{start_index}, #{end_index}
+        ORDER BY process_start_date DESC LIMIT #{start_index}, 10
     </select>
     <select id="searchLoudSourcingByStatusEnd" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
-        ORDER BY end_date DESC LIMIT #{start_index}, #{end_index}
+        ORDER BY end_date DESC LIMIT #{start_index}, 10
     </select>
     <select id="searchLoudSourcingByStatusRecruitment" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
-        ORDER BY start_date DESC LIMIT #{start_index}, #{end_index}
+        ORDER BY start_date DESC LIMIT #{start_index}, 10
     </select>
     <select id="searchLoudSourcingAll" resultType="LoudSourcing">
         select * from loudsourcing WHERE name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query}
-        ORDER BY revise_date DESC LIMIT #{start_index}, #{end_index}
+        ORDER BY revise_date DESC LIMIT #{start_index}, 10
+    </select>
+    <select id="getRecentLSAdminMain" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} ORDER BY start_date
     </select>
 </mapper>

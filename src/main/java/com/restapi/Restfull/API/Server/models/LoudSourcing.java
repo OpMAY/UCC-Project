@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 @Data
 @Getter
@@ -17,10 +17,11 @@ public class LoudSourcing {
     private String status;
     private String host;
     private String type;
-    private String reward;
+    private int reward;
     private String warning;
     private String reg_date;
     private String revise_date;
+    private String hashtag;
     private String files;
     private String img;
     private String content;
@@ -29,4 +30,12 @@ public class LoudSourcing {
     private String process_start_date;
     private String process_end_date;
     private String end_date;
+
+    private String judge_date;
+    private int selected_artist_num;
+    private int total_selected_artist_num;
+    private int total_recruitment_number;
+
+    private int applied_artist_num;
+    private ArrayList<String> hashtag_list;
 }

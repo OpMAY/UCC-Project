@@ -77,4 +77,9 @@ public class ResMessage {
     public static final String GET_MY_LOUDSOURCING_LIST = "Getting my applied loudsourcing list";
     public static final String GET_NOTIFICATION_LIST = "Getting Notification List";
     public static final String UNAUTHORIZED = "Unauthorized token";
+    public static final String PURCHASE_DATA_ERROR = "Purchase data error";
+    public static final String NO_ARTIST_DETECTED = "No Artist Detected in Given artist_no";
+    public static final String NO_CONTENT_DETECTED = "No Content Detected in Given content number";
+    public static final String BANNED_ARTIST = "Wrong Access By Banned Artist";
+    public static final String UPDATE_PUSH_SETTING = "Push Setting updated";
 }

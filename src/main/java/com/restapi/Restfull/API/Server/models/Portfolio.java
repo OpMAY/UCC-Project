@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Getter
@@ -30,4 +29,7 @@ public class Portfolio {
     private String artist_profile_img;
     private int fan_number;
     private String video_length;
+
+    private ArrayList<String> image_list;
+    private ArrayList<Upload> file_list;
 }

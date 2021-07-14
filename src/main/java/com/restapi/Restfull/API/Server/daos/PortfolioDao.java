@@ -1,14 +1,16 @@
 package com.restapi.Restfull.API.Server.daos;
 
+import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioMapper;
 import com.restapi.Restfull.API.Server.models.Portfolio;
 import com.restapi.Restfull.API.Server.response.DataListSortType;
+import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+@Log4j2
 @Repository
 public class PortfolioDao {
     private SqlSession sqlSession;
@@ -30,9 +32,9 @@ public class PortfolioDao {
 
     public List<Portfolio> getPortfolioListByTypeVODSort(String type, String sort, int start_index) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
-        if(sort.equals(DataListSortType.SORT_BY_RECENT))
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
             return portfolioMapper.getPortfolioListByTypeVODSortRecent(type, start_index, start_index + 10);
-        else if(sort.equals(DataListSortType.SORT_BY_WORD))
+        else if (sort.equals(DataListSortType.SORT_BY_WORD))
             return portfolioMapper.getPortfolioListByTypeVODSortTitle(type, start_index, start_index + 10);
         else
             return portfolioMapper.getPortfolioListByTypeVODSortFanNumber(type, start_index, start_index + 10);
@@ -61,23 +63,23 @@ public class PortfolioDao {
     public void updatePortfolioByComment(int portfolio_no, int number) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         Portfolio portfolio = portfolioMapper.getPortfolioByPortfolioNo(portfolio_no);
-        portfolio.setComment_number(portfolio.getComment_number() + number);
+        portfolio.setComment_number(number);
         portfolioMapper.updatePortfolioByComment(portfolio);
     }
 
     public void updatePortfolioByLike(int portfolio_no, int number) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         Portfolio portfolio = portfolioMapper.getPortfolioByPortfolioNo(portfolio_no);
-        portfolio.setLike_number(portfolio.getLike_number() + number);
+        portfolio.setLike_number(number);
         portfolioMapper.updatePortfolioByLike(portfolio);
     }
 
-    public void updatePortfolioByVisit(Portfolio portfolio){
+    public void updatePortfolioByVisit(Portfolio portfolio) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         portfolioMapper.updatePortfolioByVisit(portfolio);
     }
 
-    public List<Portfolio> getPortfolioListByRandom(){
+    public List<Portfolio> getPortfolioListByRandom() {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         return portfolioMapper.getPortfolioListByRandom("vod");
     }
@@ -88,8 +90,30 @@ public class PortfolioDao {
         return portfolioMapper.SearchPortfolioLimit(sqlSearch);
     }
 
-    public void updatePortfolioByFankok(Portfolio portfolio){
+    public void updatePortfolioByFankok(Portfolio portfolio) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         portfolioMapper.updatePortfolioByFankok(portfolio);
+    }
+
+    public void insertFiles(Portfolio portfolio) {
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        portfolioMapper.insertFiles(portfolio);
+    }
+
+    public List<Portfolio> getPortfolioByTypeAdmin(int artist_no, String type){
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        return portfolioMapper.getPortfolioByTypeAdmin(artist_no, type);
+    }
+
+    public List<Portfolio> getPortfolioListSort(int artist_no, String sort, int start_index){
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        if(sort.equals(DataListSortType.SORT_BY_RECENT)){
+            return portfolioMapper.getPortfolioListSortRecent(artist_no, start_index);
+        } else if (sort.equals(DataListSortType.SORT_BY_WORD)){
+            return portfolioMapper.getPortfolioListSortWord(artist_no, start_index);
+        } else {
+            log.info("Wrong Sort Type");
+            throw new BusinessException(new Exception());
+        }
     }
 }

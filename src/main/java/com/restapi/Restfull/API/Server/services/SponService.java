@@ -1,9 +1,11 @@
 package com.restapi.Restfull.API.Server.services;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
+import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -39,6 +41,9 @@ public class SponService {
     @Autowired
     private BoardCommentDao boardCommentDao;
 
+    @Autowired
+    private NotificationDao notificationDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity insertSpon(Spon spon) {
         try {
@@ -47,15 +52,21 @@ public class SponService {
             boardCommentDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
 
             int artist_no = spon.getArtist_no();
 
-            if(artist_no == 0){
+            if (artist_no == 0) {
                 artist_no = boardDao.getBoardByBoardNo(spon.getBoard_no()).getArtist_no();
                 spon.setArtist_no(artist_no);
             }
+            Artist sponned_artist = artistDao.getArtistByArtistNo(artist_no);
+            User user = userDao.selectUserByUserNo(spon.getUser_no());
+            Artist artist = artistDao.getArtistByUserNo(user.getUser_no());
 
-            if(artistDao.getArtistByArtistNo(artist_no).getUser_no() == spon.getUser_no()){
+            FirebaseMessagingSnippets firebaseMessagingSnippets= new FirebaseMessagingSnippets();
+
+            if (sponned_artist.getUser_no() == spon.getUser_no()) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.CANNOT_SPON_YOURSELF), HttpStatus.OK);
             }
             Message message = new Message();
@@ -69,15 +80,14 @@ public class SponService {
                 // DB Set
                 sponDao.insertSpon(spon);
                 // BoardDao, BoardCommentDao SET
-                User user = userDao.selectUserByUserNo(spon.getUser_no());
-                Artist artist = artistDao.getArtistByUserNo(user.getUser_no());
+
                 BoardComment boardSponComment = new BoardComment();
                 boardSponComment.setBoard_no(spon.getBoard_no());
                 boardSponComment.setUser_no(spon.getUser_no());
-                if(artist != null){
+                if (artist != null) {
                     boardSponComment.setCommenter_name(artist.getArtist_name());
                     boardSponComment.setProfile_img(artist.getArtist_profile_img());
-                }else {
+                } else {
                     boardSponComment.setCommenter_name(user.getName());
                     boardSponComment.setProfile_img(user.getProfile_img());
                 }
@@ -92,9 +102,9 @@ public class SponService {
                 Board board = boardDao.getBoardByBoardNo(spon.getBoard_no());
 
                 ArrayList<BoardComment> resCommentList = new ArrayList<>();
-                for(BoardComment boardComment1 : boardCommentList){
+                for (BoardComment boardComment1 : boardCommentList) {
                     int commentWriter = boardComment1.getUser_no();
-                    if(!sponDao.getSponByArtistNoANDUserNo(commentWriter, board.getArtist_no()).isEmpty())
+                    if (!sponDao.getSponByArtistNoANDUserNo(commentWriter, board.getArtist_no()).isEmpty())
                         boardComment1.set_sponned(true);
                     else
                         boardComment1.set_sponned(false);
@@ -105,11 +115,37 @@ public class SponService {
                 message.put("spon", spon);
                 message.put("comment_number", board.getComment_number());
                 message.put("board_comment", resCommentList);
+
+                //FCM SET
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, NotificationType.CONTENT_TYPE_BOARD, null, board.getBoard_no(), null, spon.getArtist_no());
+                firebaseMessagingSnippets.push(userDao.selectUserByUserNo(sponned_artist.getUser_no()).getFcm_token(), NotificationType.ARTIST_SPON_FCM,"'" + user.getName() + "'님이 회원님의 '" + board.getTitle() + "'에 '" + spon.getPrice() + "'원을 후원했습니다.", new Gson().toJson(notificationNext));
+
+                //Notification SET
+                Notification notification = new Notification();
+                notification.setUser_no(sponned_artist.getUser_no());
+                notification.setType(NotificationType.ARTIST_SPON);
+                notification.setContent("'" + user.getName() + "'님이 회원님의 '" + board.getTitle() + "'에 '" + spon.getPrice() + "'원을 후원했습니다.");
+                notification.setReg_date(Time.TimeFormatHMS());
+                notification.setNext(new Gson().toJson(notificationNext));
+                notificationDao.insertNotification(notification);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_SPON_SUCCESS, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
             } else {
                 spon.setType(SponType.Artist_SPON);
                 // DB Set
                 sponDao.insertSpon(spon);
+
+                //FCM SET
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, null, null, 0, null, spon.getArtist_no());
+                firebaseMessagingSnippets.push(userDao.selectUserByUserNo(sponned_artist.getUser_no()).getFcm_token(), NotificationType.ARTIST_SPON_FCM,"'" + user.getName() + "'님이 회원님께 '" + spon.getPrice() + "'원을 후원했습니다.", new Gson().toJson(notificationNext));
+
+                //Notification SET
+                Notification notification = new Notification();
+                notification.setUser_no(sponned_artist.getUser_no());
+                notification.setType(NotificationType.ARTIST_SPON);
+                notification.setContent("'" + user.getName() + "'님이 회원님께 '" + spon.getPrice() + "'원을 후원했습니다.");
+                notification.setReg_date(Time.TimeFormatHMS());
+                notification.setNext(new Gson().toJson(notificationNext));
+                notificationDao.insertNotification(notification);
 
                 // Message Set
                 message.put("spon", spon);

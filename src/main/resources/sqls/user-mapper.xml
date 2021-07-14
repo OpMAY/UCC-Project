@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.UserMapper">
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="user_no">
-        insert into user(name, email, sns, reg_date, is_artist, profile_img, is_user_private, fcm_token, access_token)
-        VALUES(#{name}, #{email}, #{sns}, #{reg_date}, #{is_artist}, #{profile_img}, #{is_user_private}, #{fcm_token}, #{access_token})
+        insert into user(name, email, sns, reg_date, is_artist, profile_img, is_user_private, fcm_token, access_token, push, comment_push, fankok_push)
+        VALUES(#{name}, #{email}, #{sns}, #{reg_date}, #{is_artist}, #{profile_img}, #{is_user_private}, #{fcm_token}, #{access_token}, #{push}, #{comment_push}, #{fankok_push})
     </insert>
     <select id="selectUserByAccessToken" resultType="User">
         select * from user where access_token=#{access_token} and sns=#{sns}
@@ -17,7 +17,13 @@
         delete from user where user_no=#{user_no}
     </delete>
     <update id="updateUser">
-        update user SET name=#{name}, email=#{email}, is_artist=#{is_artist}, profile_img=#{profile_img}, is_user_private=#{is_user_private}, fcm_token=#{fcm_token}
+        update user SET name=#{name}, email=#{email}, is_artist=#{is_artist}, profile_img=#{profile_img}, is_user_private=#{is_user_private}, fcm_token=#{fcm_token}, push=#{push}, comment_push=#{comment_push}, fankok_push=#{fankok_push}
         WHERE user_no=#{user_no}
     </update>
+    <select id="selectUserBySNS" resultType="User">
+        select * from user WHERE sns=#{sns}
+    </select>
+    <select id="getAllUserList" resultType="User">
+        select * from user ORDER BY reg_date DESC
+    </select>
 </mapper>

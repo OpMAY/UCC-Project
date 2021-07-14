@@ -20,7 +20,7 @@ pageEncoding="UTF-8" %>
 					<div class="dropdown-body">
 						<ul class="profile-nav p-0 pt-3">
 							<li class="nav-item">
-								<a href="pages/general/profile.html" class="nav-link">
+								<a href="/admin/logout" class="nav-link">
 									<i data-feather="user"></i>
 									<span>로그아웃</span>
 								</a>

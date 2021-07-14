@@ -11,9 +11,9 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,9 +24,9 @@ import java.util.Iterator;
 @Log4j2
 @Service
 public class CDNService {
-    private String accessKey = "test";
-    private String secretKey = "test";
-    private String bucketName = "test";
+    private String accessKey = "AKIAJLBYKVWCC3IPIINQ";
+    private String secretKey = "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";
+    private String bucketName = "vodappserver";
 
     private AmazonS3 s3Client;
 
@@ -56,12 +56,17 @@ public class CDNService {
         return awsCdnFilePath;
     }
 
-    public File download(String awsCdnFilePath) throws IOException {
-        File file = null;
-        S3Object s3object = s3Client.getObject(bucketName, awsCdnFilePath);    //#1 - 버킷에 있는 파일을 다운로드함
-        S3ObjectInputStream inputStream = s3object.getObjectContent();
-        FileUtils.copyInputStreamToFile(inputStream, file);  //#2 - 스트림을 파일로 저장함
-        return file;
+    public File download(String local_path, String file_name, String directory) {
+        try {
+            File file = new File(local_path + file_name);
+            S3Object s3object = s3Client.getObject(bucketName, directory);    //#1 - 버킷에 있는 파일을 다운로드함
+            S3ObjectInputStream inputStream = s3object.getObjectContent();
+            FileUtils.copyInputStreamToFile(inputStream, file);  //#2 - 스트림을 파일로 저장함
+            return file;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
     }
 
     public boolean delete(String awsCdnFilePath) {
@@ -81,9 +86,7 @@ public class CDNService {
         int i = 0;
         int j = 0;
         while (true) {
-            Iterator<S3ObjectSummary> iterator = objectListing.getObjectSummaries().iterator();
-            while (iterator.hasNext()) {
-                S3ObjectSummary object = iterator.next();
+            for (S3ObjectSummary object : objectListing.getObjectSummaries()) {
                 log.info("Directory Index : " + j + "\nItem Index : " + i + "\nKey : " + object.getKey());
                 log.info("Directory : " + object.getKey().substring(0, object.getKey().lastIndexOf("/")));
                 log.info("File : " + object.getKey().substring(object.getKey().lastIndexOf("/") + 1));

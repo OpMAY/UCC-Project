@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Log4j2
@@ -54,6 +53,9 @@ public class SubscribeService {
             loudSourcingEntryDao.setSession(sqlSession);
 
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            if(artist == null){
+                return new ResponseEntity(DefaultRes.res(StatusCode.DELETED_USER, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
+            }
             if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null) {
                 // 팬콕 했을 경우 -> 팬콕 취소
                 subscribeDao.deleteSubscribe(user_no, artist_no);
@@ -75,7 +77,7 @@ public class SubscribeService {
                 }
 
                 List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByArtistNo(artist_no);
-                for(LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList){
+                for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
                     loudSourcingEntry.setFan_number(subscribeDao.getSubscribeListByArtistNo(artist_no).size());
                     loudSourcingEntryDao.updateEntryByFankok(loudSourcingEntry);
                 }
@@ -98,8 +100,8 @@ public class SubscribeService {
                                 Date d1 = new Date();
                                 Date d2 = new Date();
                                 try {
-                                    d1 = Time.StringToDateFormat(ds1);
-                                    d2 = Time.StringToDateFormat(ds2);
+                                    d1 = Time.StringToDateTimeFormat(ds1);
+                                    d2 = Time.StringToDateTimeFormat(ds2);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -165,7 +167,7 @@ public class SubscribeService {
                 }
 
                 List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByArtistNo(artist_no);
-                for(LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList){
+                for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
                     loudSourcingEntry.setFan_number(subscribeDao.getSubscribeListByArtistNo(artist_no).size());
                     loudSourcingEntryDao.updateEntryByFankok(loudSourcingEntry);
                 }
@@ -203,7 +205,6 @@ public class SubscribeService {
             boardDao.setSession(sqlSession);
 
             Message message = new Message();
-
             List<Subscribe> subscribeList = subscribeDao.getSubscribeListByUserNo(user_no);
             List<Artist> artistList = new ArrayList<>();
             List<Fankok> fankokList = new ArrayList<>();
@@ -211,7 +212,7 @@ public class SubscribeService {
                 /** Artist Info **/
                 int artist_no = subscribe.getArtist_no();
                 Artist artist = artistDao.getArtistByArtistNo(artist_no);
-                if(artist.getHashtag() != null){
+                if (artist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                     artist.setHashtag_list(hashtagList);
                     log.info(hashtagList);
@@ -245,8 +246,8 @@ public class SubscribeService {
                 Date d1 = new Date();
                 Date d2 = new Date();
                 try {
-                    d1 = Time.StringToDateFormat(ds1);
-                    d2 = Time.StringToDateFormat(ds2);
+                    d1 = Time.StringToDateTimeFormat(ds1);
+                    d2 = Time.StringToDateTimeFormat(ds2);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -264,21 +265,13 @@ public class SubscribeService {
                 return Integer.compare(f2, f1);
             });
 
+            Collections.shuffle(artistList);
+
             List<Artist> resArtist = new ArrayList<>();
-            List<Integer> randomNum = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 if (artistList.size() <= i)
                     break;
-                Random random = new Random();
-                int randomIndex = random.nextInt(artistList.size());
-                while (randomNum.contains(randomIndex)) {
-                    if (randomIndex == 0)
-                        randomIndex++;
-                    else
-                        randomIndex--;
-                }
-                resArtist.add(artistList.get(randomIndex));
-                randomNum.add(randomIndex);
+                resArtist.add(artistList.get(i));
             }
 
             /** Response Message Set **/
@@ -294,8 +287,10 @@ public class SubscribeService {
             }
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_LIST, message.getHashMap("GetUserFankok()")), HttpStatus.OK);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             throw new BusinessException(e);
+        } finally {
+            sqlSession.clearCache();
         }
     }
 
@@ -312,7 +307,7 @@ public class SubscribeService {
             for (Subscribe subscribe : subscribeList) {
                 int artist_no = subscribe.getArtist_no();
                 Artist artist = artistDao.getArtistByArtistNo(artist_no);
-                if(artist.getHashtag() != null){
+                if (artist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                     artist.setHashtag_list(hashtagList);
                     log.info(hashtagList);
@@ -327,8 +322,8 @@ public class SubscribeService {
                     Date d1 = new Date();
                     Date d2 = new Date();
                     try {
-                        d1 = Time.StringToDateFormat(ds1);
-                        d2 = Time.StringToDateFormat(ds2);
+                        d1 = Time.StringToDateTimeFormat(ds1);
+                        d2 = Time.StringToDateTimeFormat(ds2);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -370,7 +365,7 @@ public class SubscribeService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getSubscribedArtists(int user_no) {
-        try{
+        try {
             subscribeDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
@@ -378,15 +373,15 @@ public class SubscribeService {
 
             List<Subscribe> subscribeList = subscribeDao.getSubscribeListByUserNo(user_no);
             List<Integer> subscribedArtistNo = new ArrayList<>();
-            for(Subscribe subscribe : subscribeList){
+            for (Subscribe subscribe : subscribeList) {
                 int artist_no = subscribe.getArtist_no();
                 subscribedArtistNo.add(artist_no);
             }
-            if(user_no != 0) {
+            if (user_no != 0) {
                 User login_user = userDao.selectUserByUserNo(user_no);
                 // FCM TOKEN UPDATE
 
-                if(login_user != null) {
+                if (login_user != null) {
                     // USER SET MESSAGE
                     login_user.set_register(false);
                     message.put("user", login_user);
@@ -394,13 +389,18 @@ public class SubscribeService {
 
                     if (artistDao.getArtistByUserNo(user_no) != null) {
                         Artist artist = artistDao.getArtistByUserNo(user_no);
+                        if (artist.getHashtag() != null) {
+                            ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                            artist.setHashtag_list(hashtagList);
+                            log.info(hashtagList);
+                        }
                         message.put("artist", artist);
                     }
                     message.put("artist_no_list", subscribedArtistNo);
                 }
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_ARTIST_LIST, message.getHashMap("GetSubscribedArtists()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }

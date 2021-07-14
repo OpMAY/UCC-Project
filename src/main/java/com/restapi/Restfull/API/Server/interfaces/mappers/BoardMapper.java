@@ -35,5 +35,5 @@ public interface BoardMapper {
 
     List<Board> getBoardListSortByTitle(int start_index, int end_index);
 
-
+    void insertFiles(Board board);
 }

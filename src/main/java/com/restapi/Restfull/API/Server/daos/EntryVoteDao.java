@@ -16,27 +16,27 @@ public class EntryVoteDao {
             this.sqlSession = sqlSession;
     }
 
-    public void insertVote(EntryVote entryVote){
+    public void insertVote(EntryVote entryVote) {
         EntryVoteMapper entryVoteMapper = sqlSession.getMapper(EntryVoteMapper.class);
         entryVoteMapper.insertVote(entryVote);
     }
 
-    public void deleteVote(int user_no, int entry_no){
+    public void deleteVote(int user_no, int entry_no) {
         EntryVoteMapper entryVoteMapper = sqlSession.getMapper(EntryVoteMapper.class);
         entryVoteMapper.deleteVote(entry_no, user_no);
     }
 
-    public List<EntryVote> getEntryVoteByEntryNo(int entry_no){
+    public List<EntryVote> getEntryVoteByEntryNo(int entry_no) {
         EntryVoteMapper entryVoteMapper = sqlSession.getMapper(EntryVoteMapper.class);
         return entryVoteMapper.getEntryVoteByEntryNo(entry_no);
     }
 
-    public List<EntryVote> getEntryVoteByUserNo(int user_no){
+    public List<EntryVote> getEntryVoteByUserNo(int user_no) {
         EntryVoteMapper entryVoteMapper = sqlSession.getMapper(EntryVoteMapper.class);
         return entryVoteMapper.getEntryVoteByUserNo(user_no);
     }
 
-    public EntryVote getEntryVote(int user_no, int entry_no){
+    public EntryVote getEntryVote(int user_no, int entry_no) {
         EntryVoteMapper entryVoteMapper = sqlSession.getMapper(EntryVoteMapper.class);
         return entryVoteMapper.getEntryVote(user_no, entry_no);
     }

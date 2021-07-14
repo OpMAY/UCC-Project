@@ -30,4 +30,6 @@ public interface LoudSourcingEntryMapper {
     void updateEntryByFankok(LoudSourcingEntry loudSourcingEntry);
 
     void deleteEntry(int entry_no);
+
+    List<LoudSourcingEntry> getEntryListNum(int loudsourcing_no);
 }

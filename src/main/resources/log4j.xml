@@ -22,7 +22,7 @@
         </logger>
         <!-- rolling file에는 debug, console에는 info 분리하여 처리 가능하다. -->
         <logger name="com.restapi.Restfull.API.Server" additivity="true">
-            <AppenderRef ref="console" level="info"/>
+            <AppenderRef ref="console" level="debug"/>
         </logger>
     </Loggers>
 </Configuration>

@@ -1,7 +1,6 @@
 package com.restapi.Restfull.API.Server.services;
 
 import com.restapi.Restfull.API.Server.daos.PortfolioLikeDao;
-import com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioLikeMapper;
 import com.restapi.Restfull.API.Server.models.PortfolioLike;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;

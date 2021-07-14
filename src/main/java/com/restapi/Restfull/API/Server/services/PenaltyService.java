@@ -1,0 +1,117 @@
+package com.restapi.Restfull.API.Server.services;
+
+import com.restapi.Restfull.API.Server.daos.ArtistDao;
+import com.restapi.Restfull.API.Server.daos.PenaltyDao;
+import com.restapi.Restfull.API.Server.daos.UserDao;
+import com.restapi.Restfull.API.Server.exceptions.BusinessException;
+import com.restapi.Restfull.API.Server.models.Artist;
+import com.restapi.Restfull.API.Server.models.Penalty;
+import com.restapi.Restfull.API.Server.models.User;
+import com.restapi.Restfull.API.Server.response.DefaultRes;
+import com.restapi.Restfull.API.Server.response.Message;
+import com.restapi.Restfull.API.Server.response.ResMessage;
+import com.restapi.Restfull.API.Server.response.StatusCode;
+import com.restapi.Restfull.API.Server.utility.Time;
+import lombok.extern.log4j.Log4j2;
+import org.apache.ibatis.session.SqlSession;
+import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Log4j2
+@Service
+public class PenaltyService {
+    @Autowired
+    private SqlSession sqlSession;
+
+    @Autowired
+    private PenaltyDao penaltyDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private ArtistDao artistDao;
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity getPenaltyInfo(int user_no) {
+        try {
+            penaltyDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            Message message = new Message();
+
+            if (!userDao.selectUserByUserNo(user_no).is_user_private() && !artistDao.getArtistByUserNo(user_no).isArtist_private()) {
+                message.put("is_penalty", false);
+            } else {
+                List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
+                message.put("is_penalty", true);
+                message.put("penalty", penaltyList.get(0));
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_NOTIFICATION_LIST, message.getHashMap("GetPenaltyInfo()")), HttpStatus.OK);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void setUserPrivate() throws ParseException {
+        penaltyDao.setSession(sqlSession);
+        userDao.setSession(sqlSession);
+        artistDao.setSession(sqlSession);
+
+        List<Penalty> penaltyList = penaltyDao.getPenaltyList();
+        List<Penalty> latestPenaltyList = new ArrayList<>();
+        List<Artist> artistList = new ArrayList<>();
+        for (Penalty penalty : penaltyList) {
+            Artist artist = new Artist();
+            artist.setUser_no(penalty.getUser_no());
+            artist.setArtist_no(penalty.getArtist_no());
+            if (!artistList.contains(artist)) {
+                artistList.add(artist);
+                latestPenaltyList.add(penalty);
+            }
+        }
+        for (Penalty penalty : latestPenaltyList) {
+            Date now = new Date();
+            for (Artist artist : artistList) {
+                if (penalty.getUser_no() == artist.getUser_no()) {
+                    if (now.before(Time.StringToDateFormat(penalty.getPenalty_start_date())) || now.after(Time.StringToDateFormat(penalty.getPenalty_end_date()))) {
+                        if (artist.getArtist_no() > 0) {
+                            Artist artist1 = artistDao.getArtistByArtistNo(artist.getArtist_no());
+                            artist1.setArtist_private(false);
+                            artistDao.updateArtist(artist1);
+                        }
+                        User user = userDao.selectUserByUserNo(artist.getUser_no());
+                        user.set_user_private(false);
+                        userDao.updateUser(user);
+                    } else if (now.after(Time.StringToDateFormat(penalty.getPenalty_start_date())) && now.before(Time.StringToDateFormat(penalty.getPenalty_end_date()))) {
+                        if (artist.getArtist_no() > 0) {
+                            Artist artist1 = artistDao.getArtistByArtistNo(artist.getArtist_no());
+                            if (!artist1.isArtist_private()) {
+                                artist1.setArtist_private(true);
+                                artistDao.updateArtist(artist1);
+                            }
+                        }
+                        User user = userDao.selectUserByUserNo(artist.getUser_no());
+                        if (!user.is_user_private()) {
+                            user.set_user_private(true);
+                            userDao.updateUser(user);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

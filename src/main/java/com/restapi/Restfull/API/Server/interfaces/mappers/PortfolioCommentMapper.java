@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.interfaces.mappers;
 
 import com.restapi.Restfull.API.Server.models.PortfolioComment;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface PortfolioCommentMapper {
@@ -16,4 +17,6 @@ public interface PortfolioCommentMapper {
     void updateComment(PortfolioComment portfolioComment);
 
     PortfolioComment getCommentByCommentNo(int comment_no);
+
+    List<PortfolioComment> getCommentNumberByPortfolioNo(int portfolio_no);
 }

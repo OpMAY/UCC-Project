@@ -14,7 +14,7 @@ public class AdminDao {
             this.sqlSession = sqlSession;
     }
 
-    public Admin loginAdmin(String id, String password){
+    public Admin loginAdmin(String id, String password) {
         AdminMapper adminMapper = sqlSession.getMapper(AdminMapper.class);
         return adminMapper.loginAdmin(id, password);
     }

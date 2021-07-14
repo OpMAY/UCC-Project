@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Data
 @Getter
 @Setter
@@ -17,4 +15,6 @@ public class LoudSourcingApply {
     private int artist_no;
     private boolean entry;
     private String reg_date;
+    private boolean is_pre_selected;
+    private boolean is_selected;
 }

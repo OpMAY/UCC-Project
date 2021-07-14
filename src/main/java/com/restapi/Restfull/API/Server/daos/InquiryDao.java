@@ -16,27 +16,27 @@ public class InquiryDao {
             this.sqlSession = sqlSession;
     }
 
-    public void insertInquiry(Inquiry inquiry){
+    public void insertInquiry(Inquiry inquiry) {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         inquiryMapper.insertInquiry(inquiry);
     }
 
-    public void deleteInquiry(int inquiry_no){
+    public void deleteInquiry(int inquiry_no) {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         inquiryMapper.deleteInquiry(inquiry_no);
     }
 
-    public void answerInquiry(Inquiry inquiry){
+    public void answerInquiry(Inquiry inquiry) {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         inquiryMapper.answerInquiry(inquiry);
     }
 
-    public List<Inquiry> getInquiryListByUserNo(int user_no, int start_index){
+    public List<Inquiry> getInquiryListByUserNo(int user_no, int start_index) {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         return inquiryMapper.getInquiryListByUserNo(user_no, start_index, start_index + 10);
     }
 
-    public List<Inquiry> getInquiryListByAnswerStatus(boolean is_answered){
+    public List<Inquiry> getInquiryListByAnswerStatus(boolean is_answered) {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         return inquiryMapper.getInquiryListByAnswerStatus(is_answered);
     }

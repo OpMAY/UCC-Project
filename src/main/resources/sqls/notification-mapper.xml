@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.NotificationMapper">
     <select id="getNotification" resultType="Notification">
-        select * from notification WHERE user_no=#{user_no} ORDER BY reg_date DESC LIMIT #{start_index}, #{end_index}
+        select * from notification WHERE user_no=#{user_no} ORDER BY reg_date DESC LIMIT #{start_index}, 10
     </select>
     <insert id="insertNotification" useGeneratedKeys="true" keyProperty="notification_no">
-        insert into notification(user_no,  type, content, reg_date)
-        VALUES (#{user_no}, #{type}, #{content}, #{reg_date} )
+        insert into notification(user_no,  type, content, reg_date, next)
+        VALUES (#{user_no}, #{type}, #{content}, #{reg_date}, #{next} )
     </insert>
     <delete id="deleteNotification">
         delete from notification WHERE notification_no=#{notification_no}

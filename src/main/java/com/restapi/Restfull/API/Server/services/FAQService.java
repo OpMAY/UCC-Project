@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
@@ -30,13 +32,22 @@ public class FAQService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getFAQ(int start_index) {
-        try{
+        try {
             Message message = new Message();
             faqDao.setSession(sqlSession);
             List<FAQ> faqList = faqDao.getFAQ(start_index);
+            for (FAQ faq : faqList) {
+                String img = faq.getImg();
+                log.info(img);
+                if (img != null) {
+                    ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
+                    faq.setImgList(imgList);
+                    log.info(imgList);
+                }
+            }
             message.put("faq", faqList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_FAQ_LIST, message.getHashMap("GetFAQ()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }
