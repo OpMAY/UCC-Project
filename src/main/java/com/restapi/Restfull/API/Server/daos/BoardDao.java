@@ -22,19 +22,34 @@ public class BoardDao {
         return boardMapper.getBoardListByArtistNo(artist_no);
     }
 
-    public List<Board> getBoardListByArtistNoForRefresh(int artist_no, int start_index, int end_index) {
+    public List<Board> getBoardListByArtistNoForRefresh(int artist_no, int board_no, String reg_date) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
-        return boardMapper.getBoardListByArtistNoForRefresh(artist_no, start_index, end_index);
+        return boardMapper.getBoardListByArtistNoForRefresh(artist_no, board_no, reg_date);
     }
 
-    public List<Board> getBoardList(String sort, int start_index) {
+    public List<Board> getBoardListByArtistNoLimit(int artist_no){
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        return boardMapper.getBoardListByArtistNoLimit(artist_no);
+    }
+
+    public List<Board> getBoardList(String sort) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         if (sort.equals(DataListSortType.SORT_BY_RECENT))
-            return boardMapper.getBoardListSortByRegDate(start_index, start_index + 10);
+            return boardMapper.getBoardListSortByRegDate();
         else if (sort.equals(DataListSortType.SORT_BY_FANKOK))
-            return boardMapper.getBoardListSortByFanNumber(start_index, start_index + 10);
+            return boardMapper.getBoardListSortByFanNumber();
         else
-            return boardMapper.getBoardListSortByTitle(start_index, start_index + 10);
+            return boardMapper.getBoardListSortByTitle();
+    }
+
+    public List<Board> getBoardListRefresh(String sort, Board board) {
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
+            return boardMapper.getBoardListSortByRegDateRefresh(board.getReg_date(), board.getBoard_no());
+        else if (sort.equals(DataListSortType.SORT_BY_FANKOK))
+            return boardMapper.getBoardListSortByFanNumberRefresh(board.getFan_number(), board.getBoard_no());
+        else
+            return boardMapper.getBoardListSortByTitleRefresh(board.getTitle(), board.getBoard_no());
     }
 
     public Board getBoardByBoardNo(int board_no) {
@@ -86,10 +101,16 @@ public class BoardDao {
         return boardMapper.getRecentBoardList();
     }
 
-    public List<Board> SearchBoard(String query, int start_index) {
+    public List<Board> SearchBoard(String query) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         String sqlSearch = "%" + query + "%";
-        return boardMapper.searchBoard(sqlSearch, start_index, start_index + 10);
+        return boardMapper.searchBoard(sqlSearch);
+    }
+
+    public List<Board> SearchBoardRefresh(String query, Board board) {
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        String sqlSearch = "%" + query + "%";
+        return boardMapper.searchBoardRefresh(sqlSearch, board.getBoard_no());
     }
 
     public void insertFiles(Board board) {

@@ -3,8 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingMapper">
+    <select id="getLoudSourcingListSortAllRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE loudsourcing_no <![CDATA[<]]> #{loudsourcing_no} AND revise_date <![CDATA[<=]]> #{revise_date} ORDER BY revise_date, loudsourcing_no DESC LIMIT 10
+    </select>
     <select id="getLoudSourcingListSortAll" resultType="LoudSourcing">
-        select * from loudsourcing ORDER BY revise_date LIMIT #{start_index}, #{end_index}
+        select * from loudsourcing ORDER BY revise_date, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="getLoudSourcingByLoudsourcingNo" resultType="LoudSourcing">
         select * from loudsourcing WHERE loudsourcing_no=#{loudsourcing_no}
@@ -19,30 +22,55 @@
     <select id="searchLoudSourcing" resultType="LoudSourcing">
         select * from loudsourcing WHERE name=#{query} OR host=#{query} OR hashtag=#{hashtag}
     </select>
+    <select id="getLoudSourcingListByStatusProcessRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND loudsourcing_no <![CDATA[<]]> #{loudsourcing_no} AND process_start_date <![CDATA[>=]]> #{process_start_date} ORDER BY process_start_date, loudsourcing_no DESC LIMIT 10
+    </select>
+    <select id="getLoudSourcingListByStatusRecruitmentRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND loudsourcing_no <![CDATA[<]]> #{loudsourcing_no} AND start_date <![CDATA[<=]]> #{start_date} ORDER BY start_date, loudsourcing_no DESC LIMIT 10
+    </select>
+    <select id="getLoudSourcingListByStatusEndRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND loudsourcing_no <![CDATA[<]]> #{loudsourcing_no} AND end_date <![CDATA[<=]]> #{end_date} ORDER BY end_date DESC, loudsourcing_no DESC LIMIT 10
+    </select>
     <select id="getLoudSourcingListByStatusProcess" resultType="LoudSourcing">
-        select * from loudsourcing WHERE status=#{status} ORDER BY process_start_date LIMIT #{start_index}, 10
+        select * from loudsourcing WHERE status=#{status} ORDER BY process_start_date, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="getLoudSourcingListByStatusRecruitment" resultType="LoudSourcing">
-        select * from loudsourcing WHERE status=#{status} ORDER BY start_date LIMIT #{start_index}, 10
+        select * from loudsourcing WHERE status=#{status} ORDER BY start_date, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="getLoudSourcingListByStatusEnd" resultType="LoudSourcing">
-        select * from loudsourcing WHERE status=#{status} ORDER BY end_date DESC LIMIT #{start_index}, 10
+        select * from loudsourcing WHERE status=#{status} ORDER BY end_date DESC, loudsourcing_no DESC LIMIT 10
+    </select>
+    <select id="searchLoudSourcingByStatusProcessRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query}) AND loudsourcing_no <![CDATA[>]]> #{loudsourcing_no} AND process_start_date <![CDATA[<=]]> #{process_start_date}
+        ORDER BY process_start_date, loudsourcing_no DESC LIMIT 10
+    </select>
+    <select id="searchLoudSourcingByStatusEndRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query}) AND loudsourcing_no <![CDATA[<]]> #{loudsourcing_no} AND end_date <![CDATA[<=]]> #{end_date}
+        ORDER BY end_date DESC, loudsourcing_no DESC LIMIT 10
+    </select>
+    <select id="searchLoudSourcingByStatusRecruitmentRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query}) AND loudsourcing_no <![CDATA[<]]> #{loudsourcing_no} AND start_date <![CDATA[>=]]> #{start_date}
+        ORDER BY start_date DESC, loudsourcing_no DESC LIMIT 10
+    </select>
+    <select id="searchLoudSourcingAllRefresh" resultType="LoudSourcing">
+        select * from loudsourcing WHERE loudsourcing_no <![CDATA[<]]> #{loudsourcing_no} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query}) AND revise_date <![CDATA[<=]]> #{revise_date}
+        ORDER BY revise_date DESC, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="searchLoudSourcingByStatusProcess" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
-        ORDER BY process_start_date DESC LIMIT #{start_index}, 10
+        ORDER BY process_start_date DESC, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="searchLoudSourcingByStatusEnd" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
-        ORDER BY end_date DESC LIMIT #{start_index}, 10
+        ORDER BY end_date DESC, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="searchLoudSourcingByStatusRecruitment" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} AND (name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query})
-        ORDER BY start_date DESC LIMIT #{start_index}, 10
+        ORDER BY start_date DESC, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="searchLoudSourcingAll" resultType="LoudSourcing">
         select * from loudsourcing WHERE name LIKE #{query} OR host LIKE #{query} OR hashtag LIKE #{query}
-        ORDER BY revise_date DESC LIMIT #{start_index}, 10
+        ORDER BY revise_date DESC, loudsourcing_no DESC LIMIT 10
     </select>
     <select id="getRecentLSAdminMain" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} ORDER BY start_date

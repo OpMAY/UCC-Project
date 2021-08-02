@@ -65,19 +65,39 @@ public class LoudSourcingService {
     private UserDao userDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getLoudSourcingList(String sort, int start_index) {
+    public ResponseEntity getLoudSourcingList(String sort, int last_index) {
         try {
             Message message = new Message();
             loudSourcingDao.setSession(sqlSession);
-            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatus(sort, start_index);
-            for (LoudSourcing loudSourcing : loudSourcingList) {
-                if (loudSourcing.getHashtag() != null) {
-                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(", ")));
-                    loudSourcing.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
+            if (last_index == 0) {
+                List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatus(sort);
+                for (LoudSourcing loudSourcing : loudSourcingList) {
+                    if (loudSourcing.getHashtag() != null) {
+                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(", ")));
+                        loudSourcing.setHashtag_list(hashtagList);
+                        log.info(hashtagList);
+                    }
                 }
+                message.put("loudsourcing", loudSourcingList);
+                if(loudSourcingList.size() > 0)
+                    message.put("last_index", loudSourcingList.get(loudSourcingList.size() - 1).getLoudsourcing_no());
+            } else {
+                LoudSourcing loudSourcing1 = loudSourcingDao.getLoudSourcingByLoudsourcingNo(last_index);
+                if(loudSourcing1 == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusRefresh(sort, loudSourcing1);
+                for (LoudSourcing loudSourcing : loudSourcingList) {
+                    if (loudSourcing.getHashtag() != null) {
+                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(", ")));
+                        loudSourcing.setHashtag_list(hashtagList);
+                        log.info(hashtagList);
+                    }
+                }
+                message.put("loudsourcing", loudSourcingList);
+                if(loudSourcingList.size() > 0)
+                    message.put("last_index", loudSourcingList.get(loudSourcingList.size() - 1).getLoudsourcing_no());
             }
-            message.put("loudsourcing", loudSourcingList);
             message.put("sort", sort);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_LOUDSOURCING_LIST, message.getHashMap("GetLoudSourcingList()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -208,7 +228,7 @@ public class LoudSourcingService {
                                 NotificationNext notificationNext = new NotificationNext(NotificationType.CONTENT_UPLOADED, NotificationType.CONTENT_TYPE_ENTRY, NotificationType.CONTENT_CATEGORY_VOD, loudSourcingEntry.getEntry_no(), null, loudSourcingEntry.getArtist_no());
                                 firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.CONTENT_UPLOADED_FCM, "회원님이 팬콕한 " + artist.getArtist_name() + "님이" + loudSourcing.getName() + " 새로운 출품작을 업로드 하였습니다. 많은 응원 부탁드립니다.", new Gson().toJson(notificationNext));
                             } else {
-                                if(user.getFcm_token() == null)
+                                if (user.getFcm_token() == null)
                                     log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
                                 else if (user.isFankok_push())
                                     log.info("this user's push alarm off");
@@ -236,7 +256,7 @@ public class LoudSourcingService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getEntryList(int user_no, int loudsourcing_no, String sort, int start_index) {
+    public ResponseEntity getEntryList(int user_no, int loudsourcing_no, String sort, int last_index) {
         try {
             artistDao.setSession(sqlSession);
             loudSourcingEntryDao.setSession(sqlSession);
@@ -258,27 +278,57 @@ public class LoudSourcingService {
                 }
             }
 
-            List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByLoudSourcingNo(loudsourcing_no, sort, start_index);
+            if(last_index == 0){
+                List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByLoudSourcingNo(loudsourcing_no, sort);
 
-
-            log.info(loudSourcingEntryList.size());
-            if (loudSourcingEntryList.size() > 0) {
-                for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
-                    log.info(loudSourcingEntry);
-                    if (loudSourcingEntry.getArtist_no() != 0) {
-                        Artist artist = artistDao.getArtistByArtistNo(loudSourcingEntry.getArtist_no());
-                        log.info(artist);
-                        loudSourcingEntry.setFan_number(artist.getFan_number());
-                        loudSourcingEntry.setUser_no(artist.getUser_no());
+                log.info(loudSourcingEntryList.size());
+                if (loudSourcingEntryList.size() > 0) {
+                    for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
+                        log.info(loudSourcingEntry);
+                        if (loudSourcingEntry.getArtist_no() != 0) {
+                            Artist artist = artistDao.getArtistByArtistNo(loudSourcingEntry.getArtist_no());
+                            log.info(artist);
+                            loudSourcingEntry.setFan_number(artist.getFan_number());
+                            loudSourcingEntry.setUser_no(artist.getUser_no());
+                        }
                     }
                 }
+
+                int entry_num = loudSourcingEntryDao.getEntryListNumByLoudsourcingNo(loudsourcing_no);
+
+                message.put("entry_num", entry_num);
+                message.put("entry_list", loudSourcingEntryList);
+                if(loudSourcingEntryList.size() > 0)
+                    message.put("last_index", loudSourcingEntryList.get(loudSourcingEntryList.size() - 1).getEntry_no());
+            } else {
+                LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(last_index);
+                if(entry == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByLoudSourcingNoRefresh(loudsourcing_no, sort, entry);
+
+                log.info(loudSourcingEntryList.size());
+                if (loudSourcingEntryList.size() > 0) {
+                    for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
+                        log.info(loudSourcingEntry);
+                        if (loudSourcingEntry.getArtist_no() != 0) {
+                            Artist artist = artistDao.getArtistByArtistNo(loudSourcingEntry.getArtist_no());
+                            log.info(artist);
+                            loudSourcingEntry.setFan_number(artist.getFan_number());
+                            loudSourcingEntry.setUser_no(artist.getUser_no());
+                        }
+                    }
+                }
+
+                int entry_num = loudSourcingEntryDao.getEntryListNumByLoudsourcingNo(loudsourcing_no);
+
+                message.put("entry_num", entry_num);
+                message.put("entry_list", loudSourcingEntryList);
+                if(loudSourcingEntryList.size() > 0)
+                    message.put("last_index", loudSourcingEntryList.get(loudSourcingEntryList.size() - 1).getEntry_no());
             }
-
-            int entry_num = loudSourcingEntryDao.getEntryListNumByLoudsourcingNo(loudsourcing_no);
-
-            message.put("entry_num", entry_num);
-            message.put("entry_list", loudSourcingEntryList);
             message.put("sort", sort);
+
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_ENTRY_LIST, message.getHashMap("GetEntryList()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -317,13 +367,25 @@ public class LoudSourcingService {
 
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity searchLoudSourcing(String sort, String query, int start_index) {
+    public ResponseEntity searchLoudSourcing(String sort, String query, int last_index) {
         try {
             loudSourcingDao.setSession(sqlSession);
             Message message = new Message();
-            List<LoudSourcing> searchedLoudSourcingList = loudSourcingDao.searchLoudSourcing(sort, query, start_index);
-
-            message.put("result", searchedLoudSourcingList);
+            if(last_index == 0){
+                List<LoudSourcing> searchedLoudSourcingList = loudSourcingDao.searchLoudSourcing(sort, query);
+                message.put("result", searchedLoudSourcingList);
+                if(searchedLoudSourcingList.size() > 0)
+                    message.put("last_index", searchedLoudSourcingList.get(searchedLoudSourcingList.size() - 1).getLoudsourcing_no());
+            } else {
+                LoudSourcing loudsourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(last_index);
+                if(loudsourcing == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<LoudSourcing> searchedLoudSourcingList = loudSourcingDao.searchLoudSourcingRefresh(sort, query, loudsourcing);
+                message.put("result", searchedLoudSourcingList);
+                if(searchedLoudSourcingList.size() > 0)
+                    message.put("last_index", searchedLoudSourcingList.get(searchedLoudSourcingList.size() - 1).getLoudsourcing_no());
+            }
             message.put("query", query);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SEARCH_SUCCESS, message.getHashMap("SearchLoudSourcing()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -365,7 +427,7 @@ public class LoudSourcingService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getEntryComment(int entry_no, int start_index) {
+    public ResponseEntity getEntryComment(int entry_no, int last_index) {
         try {
             entryCommentDao.setSession(sqlSession);
             subscribeDao.setSession(sqlSession);
@@ -379,22 +441,46 @@ public class LoudSourcingService {
             }
             int artist_no = loudSourcingEntry.getArtist_no();
 
-            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNo(entry_no, start_index);
-            List<EntryComment> resEntryComments = new ArrayList<>();
+            if(last_index == 0){
+                List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNo(entry_no);
+                List<EntryComment> resEntryComments = new ArrayList<>();
 
-            if (artist_no != 0) {
-                for (EntryComment entryComment : entryCommentList) {
-                    if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(entryComment.getUser_no(), artist_no) != null)
-                        entryComment.set_fankoked(true);
-                    else
-                        entryComment.set_fankoked(false);
-                    resEntryComments.add(entryComment);
+                if (artist_no != 0) {
+                    for (EntryComment entryComment : entryCommentList) {
+                        if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(entryComment.getUser_no(), artist_no) != null)
+                            entryComment.set_fankoked(true);
+                        else
+                            entryComment.set_fankoked(false);
+                        resEntryComments.add(entryComment);
+                    }
+                    message.put("comments", resEntryComments);
+                } else {
+                    message.put("comments", entryCommentList);
                 }
-                message.put("comments", resEntryComments);
+                message.put("comment_number", loudSourcingEntry.getComment_number());
             } else {
-                message.put("comments", entryCommentList);
+                EntryComment entryComment1 = entryCommentDao.getEntryCommentByCommentNo(last_index);
+                if(entryComment1 == null)
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNoRefresh(entry_no, entryComment1);
+                List<EntryComment> resEntryComments = new ArrayList<>();
+
+                if (artist_no != 0) {
+                    for (EntryComment entryComment : entryCommentList) {
+                        if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(entryComment.getUser_no(), artist_no) != null)
+                            entryComment.set_fankoked(true);
+                        else
+                            entryComment.set_fankoked(false);
+                        resEntryComments.add(entryComment);
+                    }
+                    message.put("comments", resEntryComments);
+                } else {
+                    message.put("comments", entryCommentList);
+                }
+                message.put("comment_number", loudSourcingEntry.getComment_number());
             }
-            message.put("comment_number", loudSourcingEntry.getComment_number());
+
+
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_ENTRY_COMMENTS_SUCCESS, message.getHashMap("GetEntryComment()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);
@@ -482,7 +568,7 @@ public class LoudSourcingService {
             loudSourcingEntryDao.updateEntryByComment(thisEntry);
 
             // MAKE RESPONSE MESSAGE
-            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNo(entryComment.getEntry_no(), 0);
+            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNo(entryComment.getEntry_no());
             List<EntryComment> resCommentList = new ArrayList<>();
             if (thisEntry.getArtist_no() != 0) {
                 for (EntryComment comment : entryCommentList) {
@@ -532,7 +618,7 @@ public class LoudSourcingService {
                                 NotificationNext notificationNext = new NotificationNext(NotificationType.COMMENT_ARTIST, NotificationType.CONTENT_TYPE_ENTRY, NotificationType.CONTENT_CATEGORY_VOD, entryComment.getEntry_no(), null, entry_artist.getArtist_no());
                                 firebaseMessagingSnippets.push(comment_user.getFcm_token(), NotificationType.COMMENT_ARTIST_FCM, "댓글을 작성한 출품작에 작성한 아티스트가 댓글을 남겼습니다. '" + comment_short + "...'", new Gson().toJson(notificationNext));
                             } else {
-                                if(comment_user.getFcm_token() == null)
+                                if (comment_user.getFcm_token() == null)
                                     log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
                                 else if (comment_user.isFankok_push())
                                     log.info("this user's push alarm off");
@@ -594,7 +680,7 @@ public class LoudSourcingService {
             Artist entryArtist = artistDao.getArtistByArtistNo(loudSourcingEntryDao.getEntryByEntryNo(entry_no).getArtist_no());
 
             // RESPONSE MESSAGE SET
-            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNo(entry_no, 0);
+            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNo(entry_no);
             List<EntryComment> resCommentList = new ArrayList<>();
             if (entry.getArtist_no() != 0) {
                 for (EntryComment comment : entryCommentList) {

@@ -96,11 +96,11 @@ public class BoardController {
         특이 사항 : 10개씩 리로딩
         파일 업로드 여부 : X
     **/
-    @RequestMapping(value = "/api/board/comments/{start_index}", method = RequestMethod.POST) //CHECK
-    public ResponseEntity GetBoardComments(@RequestBody String body, @PathVariable("start_index") int start_index) {
+    @RequestMapping(value = "/api/board/comments/{last_index}", method = RequestMethod.POST) //CHECK
+    public ResponseEntity GetBoardComments(@RequestBody String body, @PathVariable("last_index") int last_index) {
         BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
-        log.info(start_index);
-        return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), start_index);
+        log.info(last_index);
+        return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), last_index);
     }
 
     /** 
@@ -271,20 +271,9 @@ public class BoardController {
         return boardService.getBoardByBoardNo(boardEditRequest.getBoard_no(), boardEditRequest.getArtist_no());
     }
 
-    @RequestMapping(value = "/api/boardList/{sort}/{start_index}", method = RequestMethod.GET) //CHECK
-    public ResponseEntity GetBoardList(@PathVariable("start_index") int start_index, @PathVariable("sort") String sort) {
-        try {
-            Message message = new Message();
-
-            List<Board> boardList = boardService.getBoardList(sort, start_index);
-
-            message.put("boards", boardList);
-            message.put("sort", sort);
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_BOARD_LIST_SUCCESS, message.getHashMap("GetBoardList()")), HttpStatus.OK);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        }
+    @RequestMapping(value = "/api/boardList/{sort}/{last_index}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetBoardList(@PathVariable("last_index") int last_index, @PathVariable("sort") String sort) {
+        return boardService.getBoardList(sort, last_index);
     }
 
     /*업로드된 파일을 저장하는 함수*/
@@ -319,23 +308,27 @@ public class BoardController {
             }
             List<File> files = new ArrayList<>();
             List<String> newUrl = new ArrayList<>();
-            for (String str : url) {
-                String path = str.substring(str.indexOf("vodappserver/") + 13);
-                String filename = path.substring(path.lastIndexOf("/") + 1);
-                log.info("Check Path Before downloading : " + path);
-                files.add(cdnService.download(upload_path, filename, path));
-                cdnService.delete(path);
-            }
-            for (File file : files) {
-                UUID uid = UUID.randomUUID();
-                String originalName = file.getName().replace(" ", "");
-                String savedName = uid.toString().substring(0, 8) + "_" + originalName;
-                cdnService.upload("api/images/board/" + board_info + savedName, file);
-                newUrl.add(cdn_path + "images/board/" + board_info + savedName);
-                file.deleteOnExit();
-            }
-            for (int i = 0; i < url.size(); i++) {
-                original_content = original_content.replace(url.get(i), newUrl.get(i));
+            if(url.size() > 0) {
+                for (String str : url) {
+                    String path = str.substring(str.indexOf("vodappserver/") + 13);
+                    String filename = path.substring(path.lastIndexOf("/") + 1);
+                    log.info("Check Path Before downloading : " + path);
+                    files.add(cdnService.download(upload_path, filename, path));
+                    cdnService.delete(path);
+                }
+                if(files.size() > 0) {
+                    for (File file : files) {
+                        UUID uid = UUID.randomUUID();
+                        String originalName = file.getName().replace(" ", "");
+                        String savedName = uid.toString().substring(0, 8) + "_" + originalName;
+                        cdnService.upload("api/images/board/" + board_info + savedName, file);
+                        newUrl.add(cdn_path + "images/board/" + board_info + savedName);
+                        file.deleteOnExit();
+                    }
+                    for (int i = 0; i < url.size(); i++) {
+                        original_content = original_content.replace(url.get(i), newUrl.get(i));
+                    }
+                }
             }
 
             return original_content;

@@ -98,7 +98,7 @@ public class SponService {
                 boardSponComment.setReg_date(date);
                 boardCommentDao.insertComment(boardSponComment);
 
-                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByBoardNo(spon.getBoard_no(), 0);
+                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByBoardNo(spon.getBoard_no());
                 Board board = boardDao.getBoardByBoardNo(spon.getBoard_no());
 
                 ArrayList<BoardComment> resCommentList = new ArrayList<>();
@@ -115,6 +115,8 @@ public class SponService {
                 message.put("spon", spon);
                 message.put("comment_number", board.getComment_number());
                 message.put("board_comment", resCommentList);
+                if(resCommentList.size() > 0)
+                    message.put("last_index", resCommentList.get(resCommentList.size() - 1).getComment_no());
 
                 //FCM SET
                 NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, NotificationType.CONTENT_TYPE_BOARD, null, board.getBoard_no(), null, spon.getArtist_no());

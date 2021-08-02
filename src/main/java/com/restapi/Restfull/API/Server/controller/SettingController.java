@@ -57,18 +57,18 @@ public class SettingController {
         return loudSourcingService.getMyLoudsourcingList(user_no, start_index);
     }
 
-    @RequestMapping(value = "/api/notice/{start_index}", method = RequestMethod.GET)
-    public ResponseEntity GetNotice(@PathVariable("start_index") int start_index) {
-        return noticeService.getNotice(start_index);
+    @RequestMapping(value = "/api/notice/{last_index}", method = RequestMethod.GET)
+    public ResponseEntity GetNotice(@PathVariable("last_index") int last_index) {
+        return noticeService.getNotice(last_index);
     }
 
-    @RequestMapping(value = "/api/faq/{start_index}", method = RequestMethod.GET)
-    public ResponseEntity GetFAQ(@PathVariable("start_index") int start_index) {
-        return faqService.getFAQ(start_index);
+    @RequestMapping(value = "/api/faq/{last_index}", method = RequestMethod.GET)
+    public ResponseEntity GetFAQ(@PathVariable("last_index") int last_index) {
+        return faqService.getFAQ(last_index);
     }
 
-    @RequestMapping(value = "/api/notification/{user_no}/start_index/{start_index}", method = RequestMethod.GET)
-    public ResponseEntity GetNotification(@PathVariable("user_no") int user_no, @PathVariable("start_index") int start_index) {
-        return notificationService.getNotification(user_no, start_index);
+    @RequestMapping(value = "/api/notification/{user_no}/last_index/{last_index}", method = RequestMethod.GET)
+    public ResponseEntity GetNotification(@PathVariable("user_no") int user_no, @PathVariable("last_index") int last_index) {
+        return notificationService.getNotification(user_no, last_index);
     }
 }

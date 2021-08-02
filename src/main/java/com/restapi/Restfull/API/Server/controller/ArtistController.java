@@ -71,14 +71,14 @@ public class ArtistController {
     /**
         주석 생성 날짜 - 2021-07-29, 목, 14:04
         코드 설명 : 아티스트 팬페이지 화면에 사용할 게시글 리스트를 받아오는 URL
-        특이 사항 : start_index로 10개 씩 리로딩
+        특이 사항 : last_index 로 10개 씩 리로딩
         파일 업로드 여부 : X
     **/
-    @RequestMapping(value = "/api/artist/{start_index}", method = RequestMethod.POST) // CHECK
-    public ResponseEntity GetArtistBoard(@RequestBody String body, @PathVariable("start_index") int start_index) {
+    @RequestMapping(value = "/api/artist/{last_index}", method = RequestMethod.POST) // CHECK
+    public ResponseEntity GetArtistBoard(@RequestBody String body, @PathVariable("last_index") int last_index) {
         ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
         log.info(body);
-        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), start_index);
+        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), last_index);
     }
 
     /**
@@ -109,13 +109,13 @@ public class ArtistController {
     /**
         주석 생성 날짜 - 2021-07-29, 목, 14:08
         코드 설명 : 모든 아티스트 목록을 받아오는 URL
-        특이 사항 : 정렬 기준, start_index
+        특이 사항 : 정렬 기준, last_index
         파일 업로드 여부 : X
     **/
-    @RequestMapping(value = "/api/artists/all/{sort}/{start_index}", method = RequestMethod.GET) //CHECK
+    @RequestMapping(value = "/api/artists/all/{sort}/{last_index}", method = RequestMethod.GET) //CHECK
     public ResponseEntity GetAllArtistList(@PathVariable("sort") String sort,
-                                           @PathVariable("start_index") int start_index) {
-        return artistService.getAllArtists(start_index, sort);
+                                           @PathVariable("last_index") int last_index) {
+        return artistService.getAllArtists(last_index, sort);
     }
 
     /**

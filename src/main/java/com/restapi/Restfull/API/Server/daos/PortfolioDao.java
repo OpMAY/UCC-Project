@@ -30,14 +30,24 @@ public class PortfolioDao {
         return portfolioMapper.getPortfolioListByArtistNoLimit(artist_no);
     }
 
-    public List<Portfolio> getPortfolioListByTypeVODSort(String type, String sort, int start_index) {
+    public List<Portfolio> getPortfolioListByTypeVODSortRefresh(String type, String sort, Portfolio portfolio) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         if (sort.equals(DataListSortType.SORT_BY_RECENT))
-            return portfolioMapper.getPortfolioListByTypeVODSortRecent(type, start_index, start_index + 10);
+            return portfolioMapper.getPortfolioListByTypeVODSortRecentRefresh(type, portfolio.getReg_date(), portfolio.getPortfolio_no());
         else if (sort.equals(DataListSortType.SORT_BY_WORD))
-            return portfolioMapper.getPortfolioListByTypeVODSortTitle(type, start_index, start_index + 10);
+            return portfolioMapper.getPortfolioListByTypeVODSortTitleRefresh(type, portfolio.getTitle(), portfolio.getPortfolio_no());
         else
-            return portfolioMapper.getPortfolioListByTypeVODSortFanNumber(type, start_index, start_index + 10);
+            return portfolioMapper.getPortfolioListByTypeVODSortFanNumberRefresh(type, portfolio.getFan_number(), portfolio.getPortfolio_no());
+    }
+
+    public List<Portfolio> getPortfolioListByTypeVODSort(String type, String sort) {
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
+            return portfolioMapper.getPortfolioListByTypeVODSortRecent(type);
+        else if (sort.equals(DataListSortType.SORT_BY_WORD))
+            return portfolioMapper.getPortfolioListByTypeVODSortTitle(type);
+        else
+            return portfolioMapper.getPortfolioListByTypeVODSortFanNumber(type);
     }
 
     public Portfolio getPortfolioByPortfolioNo(int portfolio_no) {
@@ -105,12 +115,28 @@ public class PortfolioDao {
         return portfolioMapper.getPortfolioByTypeAdmin(artist_no, type);
     }
 
-    public List<Portfolio> getPortfolioListSort(int artist_no, String sort, int start_index){
+    public List<Portfolio> getPortfolioListSortRefresh(int artist_no, String sort, Portfolio portfolio){
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
         if(sort.equals(DataListSortType.SORT_BY_RECENT)){
-            return portfolioMapper.getPortfolioListSortRecent(artist_no, start_index);
+            return portfolioMapper.getPortfolioListSortRecentRefresh(artist_no, portfolio.getRevise_date(), portfolio.getPortfolio_no());
         } else if (sort.equals(DataListSortType.SORT_BY_WORD)){
-            return portfolioMapper.getPortfolioListSortWord(artist_no, start_index);
+            return portfolioMapper.getPortfolioListSortWordRefresh(artist_no, portfolio.getTitle(), portfolio.getPortfolio_no());
+        } else if (sort.equals(DataListSortType.SORT_BY_FANKOK)) {
+            return portfolioMapper.getPortfolioListSortFanNumberRefresh(artist_no, portfolio.getFan_number(), portfolio.getPortfolio_no());
+        } else {
+            log.info("Wrong Sort Type");
+            throw new BusinessException(new Exception());
+        }
+    }
+
+    public List<Portfolio> getPortfolioListSort(int artist_no, String sort) {
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        if(sort.equals(DataListSortType.SORT_BY_RECENT)){
+            return portfolioMapper.getPortfolioListSortRecent(artist_no);
+        } else if (sort.equals(DataListSortType.SORT_BY_WORD)){
+            return portfolioMapper.getPortfolioListSortWord(artist_no);
+        } else if (sort.equals(DataListSortType.SORT_BY_FANKOK)){
+            return portfolioMapper.getPortfolioListSortFanNumber(artist_no);
         } else {
             log.info("Wrong Sort Type");
             throw new BusinessException(new Exception());

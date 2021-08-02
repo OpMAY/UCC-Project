@@ -59,7 +59,7 @@ public class PortfolioService {
     private SubscribeDao subscribeDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity GetPortfolio(int user_no, int portfolio_no, int start_index) {
+    public ResponseEntity GetPortfolio(int user_no, int portfolio_no, int last_index) {
         try {
             Message message = new Message();
             /** required Data
@@ -80,20 +80,45 @@ public class PortfolioService {
             }
 
 
-            if (start_index > -1) {
-                List<PortfolioComment> commentList = portfolioCommentDao.getCommentListByPortfolioNo(portfolio_no, start_index);
-                Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolio_no);
-                for (PortfolioComment portfolioComment : commentList) {
-                    int commentWriter = portfolioComment.getUser_no();
-                    if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(commentWriter, portfolio.getArtist_no()) != null)
-                        portfolioComment.set_fankoked(true);
-                    else
-                        portfolioComment.set_fankoked(false);
-                }
+            if (last_index > -1) {
+                if(last_index == 0){
+                    List<PortfolioComment> commentList = portfolioCommentDao.getCommentListByPortfolioNo(portfolio_no);
+                    Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolio_no);
+                    for (PortfolioComment portfolioComment : commentList) {
+                        int commentWriter = portfolioComment.getUser_no();
+                        if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(commentWriter, portfolio.getArtist_no()) != null)
+                            portfolioComment.set_fankoked(true);
+                        else
+                            portfolioComment.set_fankoked(false);
+                    }
 
-                log.info(commentList);
-                message.put("comment_number", portfolio.getComment_number());
-                message.put("portfolio_comment", commentList);
+                    log.info(commentList);
+                    message.put("comment_number", portfolio.getComment_number());
+                    message.put("portfolio_comment", commentList);
+                    if(commentList.size() > 0){
+                        message.put("last_index", commentList.get(commentList.size() - 1).getComment_no());
+                    }
+                } else {
+                    PortfolioComment portfolioComment1 = portfolioCommentDao.getCommentByCommentNo(last_index);
+                    if(portfolioComment1 == null){
+                        return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                    }
+                    List<PortfolioComment> commentList = portfolioCommentDao.getCommentListByPortfolioNoRefresh(portfolio_no, portfolioComment1);
+                    Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolio_no);
+                    for (PortfolioComment portfolioComment : commentList) {
+                        int commentWriter = portfolioComment.getUser_no();
+                        if (subscribeDao.getSubscribeInfoByUserNoANDArtistNo(commentWriter, portfolio.getArtist_no()) != null)
+                            portfolioComment.set_fankoked(true);
+                        else
+                            portfolioComment.set_fankoked(false);
+                    }
+                    log.info(commentList);
+                    message.put("comment_number", portfolio.getComment_number());
+                    message.put("portfolio_comment", commentList);
+                    if(commentList.size() > 0){
+                        message.put("last_index", commentList.get(commentList.size() - 1).getComment_no());
+                    }
+                }
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_PORTFOLIO_COMMENT_SUCCESS, message.getHashMap("GetPortfolioComment()")), HttpStatus.OK);
             } else {
                 // GET DATA FROM DB
@@ -143,14 +168,24 @@ public class PortfolioService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getPortfolioListByTypeVOD(String type, String sort, int start_index) {
+    public ResponseEntity getPortfolioListByTypeVOD(String type, String sort, int last_index) {
         try {
             portfolioDao.setSession(sqlSession);
             Message message = new Message();
-            List<Portfolio> vodList = portfolioDao.getPortfolioListByTypeVODSort(type, sort, start_index);
+            List<Portfolio> vodList;
+            if (last_index == 0) {
+                vodList = portfolioDao.getPortfolioListByTypeVODSort(type, sort);
+            } else {
+                Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(last_index);
+                if (portfolio == null) {
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                vodList = portfolioDao.getPortfolioListByTypeVODSortRefresh(type, sort, portfolio);
+            }
 
             message.put("vod", vodList);
             message.put("sort", sort);
+            message.put("last_index", vodList.get(vodList.size() - 1).getPortfolio_no());
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.VOD_LIST_CALL_SUCCESS, message.getHashMap("GetVODList()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -196,7 +231,7 @@ public class PortfolioService {
                 FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
                 ArrayList<Upload> uploads = new ArrayList<>();
                 for (FileJson json : fileJson) {
-                    uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                    uploads.add(new Upload(json.getName(), json.getUrl()));
                 }
                 message.put("files", uploads);
             } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
@@ -389,7 +424,7 @@ public class PortfolioService {
                 portfolioDao.updatePortfolioByComment(portfolioComment.getPortfolio_no(), portfolioCommentDao.getCommentNumberByPortfolioNo(portfolioComment.getPortfolio_no()).size());
 
                 // Response Message SET
-                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByPortfolioNo(portfolioComment.getPortfolio_no(), 0);
+                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByPortfolioNo(portfolioComment.getPortfolio_no());
                 List<PortfolioComment> resCommentList = new ArrayList<>();
                 Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolioComment.getPortfolio_no());
                 for (PortfolioComment portfolioComment1 : portfolioCommentList) {
@@ -476,7 +511,7 @@ public class PortfolioService {
 
                 portfolioDao.updatePortfolioByComment(portfolioComment.getPortfolio_no(), portfolioCommentDao.getCommentNumberByPortfolioNo(portfolioComment.getPortfolio_no()).size());
 
-                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByPortfolioNo(portfolioComment.getPortfolio_no(), 0);
+                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByPortfolioNo(portfolioComment.getPortfolio_no());
                 List<PortfolioComment> resCommentList = new ArrayList<>();
                 Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolioComment.getPortfolio_no());
                 for (PortfolioComment portfolioComment1 : portfolioCommentList) {
@@ -554,7 +589,7 @@ public class PortfolioService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getPortfolioList(int artist_no, String sort, int start_index) {
+    public ResponseEntity getPortfolioList(int artist_no, String sort, int last_index) {
         try {
             Message message = new Message();
             portfolioDao.setSession(sqlSession);
@@ -564,31 +599,66 @@ public class PortfolioService {
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETED_USER, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
             }
 
-
-            List<Portfolio> portfolioList = portfolioDao.getPortfolioListSort(artist_no, sort, start_index);
-            List<Portfolio> resPortfolioList = new ArrayList<>();
-            for (Portfolio portfolio : portfolioList) {
-                portfolio.setUser_no(artist.getUser_no());
-                if (portfolio.getType().equals(PortfolioType.FILE)) {
-                    String jsonString = portfolio.getFile();
-                    Gson gson = new Gson();
-                    FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-                    ArrayList<Upload> uploads = new ArrayList<>();
-                    for (FileJson json : fileJson) {
-                        uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+            if(last_index == 0){
+                List<Portfolio> portfolioList = portfolioDao.getPortfolioListSort(artist_no, sort);
+                List<Portfolio> resPortfolioList = new ArrayList<>();
+                for (Portfolio portfolio : portfolioList) {
+                    portfolio.setUser_no(artist.getUser_no());
+                    if (portfolio.getType().equals(PortfolioType.FILE)) {
+                        String jsonString = portfolio.getFile();
+                        Gson gson = new Gson();
+                        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                        ArrayList<Upload> uploads = new ArrayList<>();
+                        for (FileJson json : fileJson) {
+                            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                        }
+                        portfolio.setFile_list(uploads);
+                    } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
+                        if (portfolio.getFile() != null) {
+                            ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
+                            portfolio.setImage_list(filelist);
+                            log.info(filelist);
+                        }
                     }
-                    portfolio.setFile_list(uploads);
-                } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
-                    if (portfolio.getFile() != null) {
-                        ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
-                        portfolio.setImage_list(filelist);
-                        log.info(filelist);
-                    }
+                    resPortfolioList.add(portfolio);
                 }
-                resPortfolioList.add(portfolio);
+
+                message.put("portfolios", resPortfolioList);
+                if(resPortfolioList.size() > 0)
+                    message.put("last_index", resPortfolioList.get(resPortfolioList.size() - 1).getPortfolio_no());
+            } else {
+                Portfolio portfolio1 = portfolioDao.getPortfolioByPortfolioNo(last_index);
+                if(portfolio1 == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<Portfolio> portfolioList = portfolioDao.getPortfolioListSortRefresh(artist_no, sort, portfolio1);
+                List<Portfolio> resPortfolioList = new ArrayList<>();
+                for (Portfolio portfolio : portfolioList) {
+                    portfolio.setUser_no(artist.getUser_no());
+                    if (portfolio.getType().equals(PortfolioType.FILE)) {
+                        String jsonString = portfolio.getFile();
+                        Gson gson = new Gson();
+                        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                        ArrayList<Upload> uploads = new ArrayList<>();
+                        for (FileJson json : fileJson) {
+                            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                        }
+                        portfolio.setFile_list(uploads);
+                    } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
+                        if (portfolio.getFile() != null) {
+                            ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
+                            portfolio.setImage_list(filelist);
+                            log.info(filelist);
+                        }
+                    }
+                    resPortfolioList.add(portfolio);
+                }
+
+                message.put("portfolios", resPortfolioList);
+                if(resPortfolioList.size() > 0)
+                    message.put("last_index", resPortfolioList.get(resPortfolioList.size() - 1).getPortfolio_no());
             }
 
-            message.put("portfolios", resPortfolioList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.LIKE_PORTFOLIO_SUCCESS, message.getHashMap("PressPortfolioLike()")), HttpStatus.OK);
         } catch (JSONException e) {
             e.printStackTrace();

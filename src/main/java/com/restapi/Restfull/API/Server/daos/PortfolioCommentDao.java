@@ -16,9 +16,9 @@ public class PortfolioCommentDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no, int start_index) {
+    public List<PortfolioComment> getCommentListByPortfolioNoRefresh(int portfolio_no, PortfolioComment portfolioComment) {
         PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
-        return portfolioCommentMapper.getCommentListByPortfolioNo(portfolio_no, start_index, start_index + 10);
+        return portfolioCommentMapper.getCommentListByPortfolioNoRefresh(portfolio_no, portfolioComment.getReg_date(), portfolioComment.getComment_no());
     }
 
     public List<PortfolioComment> getCommentListByUserNo(int user_no) {
@@ -49,5 +49,10 @@ public class PortfolioCommentDao {
     public List<PortfolioComment> getCommentNumberByPortfolioNo(int portfolio_no) {
         PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
         return portfolioCommentMapper.getCommentNumberByPortfolioNo(portfolio_no);
+    }
+
+    public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no) {
+        PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
+        return portfolioCommentMapper.getCommentListByPortfolioNo(portfolio_no);
     }
 }

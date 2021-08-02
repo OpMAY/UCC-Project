@@ -11,7 +11,11 @@ public interface InquiryMapper {
 
     void answerInquiry(Inquiry inquiry);
 
-    List<Inquiry> getInquiryListByUserNo(int user_no, int start_index, int end_index);
+    List<Inquiry> getInquiryListByUserNoRefresh(int user_no, int inquiry_no, String reg_date);
+
+    List<Inquiry> getInquiryListByUserNo(int user_no);
 
     List<Inquiry> getInquiryListByAnswerStatus(boolean is_answered);
+
+    Inquiry getInquiryByInquiryNo(int inquiry_no);
 }

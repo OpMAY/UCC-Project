@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface BoardCommentMapper {
-    List<BoardComment> getCommentListByBoardNo(int board_no, int start_index, int end_index);
+    List<BoardComment> getCommentListByBoardNoRefresh(int board_no, String reg_date, int comment_no);
+
+    List<BoardComment> getCommentListByBoardNo(int board_no);
 
     List<BoardComment> getCommentListByUserNo(int user_no);
 

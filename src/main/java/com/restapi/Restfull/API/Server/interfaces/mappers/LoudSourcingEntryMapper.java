@@ -5,11 +5,13 @@ import com.restapi.Restfull.API.Server.models.LoudSourcingEntry;
 import java.util.List;
 
 public interface LoudSourcingEntryMapper {
-    List<LoudSourcingEntry> getEntryListByLoudSourcingNoSortTitle(int loudsourcing_no, int start_index, int end_index);
+    List<LoudSourcingEntry> getEntryListByLoudSourcingNoSortFankokRefresh(int loudsourcing_no, int entry_no, int fan_number);
 
-    List<LoudSourcingEntry> getEntryListByLoudSourcingNoSortFankok(int loudsourcing_no, int start_index, int end_index);
+    List<LoudSourcingEntry> getEntryListByLoudSourcingNoSortRecentRefresh(int loudsourcing_no, int entry_no, String reg_date);
 
-    List<LoudSourcingEntry> getEntryListByLoudSourcingNoSortRecent(int loudsourcing_no, int start_index, int end_index);
+    List<LoudSourcingEntry> getEntryListByLoudSourcingNoSortFankok(int loudsourcing_no);
+
+    List<LoudSourcingEntry> getEntryListByLoudSourcingNoSortRecent(int loudsourcing_no);
 
     List<LoudSourcingEntry> getEntryListByArtistNo(int artist_no);
 

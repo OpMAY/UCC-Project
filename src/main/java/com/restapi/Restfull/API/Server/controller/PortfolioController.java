@@ -12,8 +12,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,12 +76,12 @@ public class PortfolioController {
         return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no(), -1);
     }
 
-    @RequestMapping(value = "/api/portfolio/comments/{start_index}", method = RequestMethod.POST) //CHECK
-    public ResponseEntity GetPortfolioComment(@RequestBody String body, @PathVariable("start_index") int start_index) {
+    @RequestMapping(value = "/api/portfolio/comments/{last_index}", method = RequestMethod.POST) //CHECK
+    public ResponseEntity GetPortfolioComment(@RequestBody String body, @PathVariable("last_index") int last_index) {
         PortfolioRequest portfolioRequest = new Gson().fromJson(body, PortfolioRequest.class);
-        log.info("Start_index : " + start_index);
+        log.info("Start_index : " + last_index);
         log.info("Portfolio_no : " + portfolioRequest.getPortfolio_no());
-        return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no(), start_index);
+        return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no(), last_index);
     }
 
     @RequestMapping(value = "/api/portfolio/upload", method = RequestMethod.POST) //CHECK
@@ -214,7 +212,6 @@ public class PortfolioController {
                             } else {
                                 uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "files/portfolio/" + portfolio_info.toString() + file_name)));
                             }
-
                         }
                     }
                     break;
@@ -390,11 +387,9 @@ public class PortfolioController {
                                     log.info("size:" + multipartFile.getSize());
                                     log.info("ContentType:" + multipartFile.getContentType());
 
-
                                     /** File Upload Logic */
                                     String file_name = uploadFile(multipartFile.getOriginalFilename(), multipartFile, portfolio_info.toString());
                                     uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "files/portfolio/" + portfolio_info.toString() + file_name)));
-
                                 }
                             }
                         }
@@ -500,15 +495,15 @@ public class PortfolioController {
         return portfolioService.getPortfolioForEdit(portfolioEditRequest.getPortfolio_no(), portfolioEditRequest.getArtist_no());
     }
 
-    @RequestMapping(value = "/api/portfolio/vod_list/{sort}/{start_index}", method = RequestMethod.GET) //CHECK
-    public ResponseEntity GetVODList(@PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
-        return portfolioService.getPortfolioListByTypeVOD(PortfolioType.VOD, sort, start_index);
+    @RequestMapping(value = "/api/portfolio/vod_list/{sort}/{last_index}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetVODList(@PathVariable("sort") String sort, @PathVariable("last_index") int last_index) {
+        return portfolioService.getPortfolioListByTypeVOD(PortfolioType.VOD, sort, last_index);
     }
 
-    @RequestMapping(value = "/api/artist/portfolioList/{sort}/{start_index}", method = RequestMethod.POST)
-    public ResponseEntity GetPortfolioList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("start_index") int start_index){
+    @RequestMapping(value = "/api/artist/portfolioList/{sort}/{last_index}", method = RequestMethod.POST)
+    public ResponseEntity GetPortfolioList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("last_index") int last_index){
         PortfolioEditRequest portfolioRequest = new Gson().fromJson(body, PortfolioEditRequest.class);
-        return portfolioService.getPortfolioList(portfolioRequest.getArtist_no(), sort, start_index);
+        return portfolioService.getPortfolioList(portfolioRequest.getArtist_no(), sort, last_index);
     }
 
 

@@ -3,9 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioCommentMapper">
+    <select id="getCommentListByPortfolioNoRefresh" resultType="PortfolioComment">
+        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} AND reg_date <![CDATA[<=]]> #{reg_date} AND comment_no <![CDATA[<]]> #{comment_no} order by reg_date DESC
+        LIMIT 10
+    </select>
     <select id="getCommentListByPortfolioNo" resultType="PortfolioComment">
-        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} order by reg_date DESC
-        LIMIT #{start_index}, 10
+        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} order by reg_date DESC, comment_no DESC
+        LIMIT 10
     </select>
     <select id="getCommentListByUserNo" resultType="PortfolioComment">
         select * from portfoliocomment WHERE user_no=#{user_no}

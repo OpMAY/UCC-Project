@@ -31,21 +31,45 @@ public class FAQService {
     private FAQDao faqDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getFAQ(int start_index) {
+    public ResponseEntity getFAQ(int last_index) {
         try {
             Message message = new Message();
             faqDao.setSession(sqlSession);
-            List<FAQ> faqList = faqDao.getFAQ(start_index);
-            for (FAQ faq : faqList) {
-                String img = faq.getImg();
-                log.info(img);
-                if (img != null) {
-                    ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
-                    faq.setImgList(imgList);
-                    log.info(imgList);
+            if(last_index == 0){
+                List<FAQ> faqList = faqDao.getFAQ();
+                for (FAQ faq : faqList) {
+                    String img = faq.getImg();
+                    log.info(img);
+                    if (img != null) {
+                        ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
+                        faq.setImgList(imgList);
+                        log.info(imgList);
+                    }
                 }
+                message.put("faq", faqList);
+                if(faqList.size() > 0)
+                    message.put("last_index", faqList.get(faqList.size() - 1).getFaq_no());
+            } else {
+                FAQ faq1 = faqDao.getFAQByFAQNo(last_index);
+                if(faq1 == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<FAQ> faqList = faqDao.getFAQRefresh(faq1);
+                for (FAQ faq : faqList) {
+                    String img = faq.getImg();
+                    log.info(img);
+                    if (img != null) {
+                        ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
+                        faq.setImgList(imgList);
+                        log.info(imgList);
+                    }
+                }
+                message.put("faq", faqList);
+                if(faqList.size() > 0)
+                    message.put("last_index", faqList.get(faqList.size() - 1).getFaq_no());
             }
-            message.put("faq", faqList);
+
+
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_FAQ_LIST, message.getHashMap("GetFAQ()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);

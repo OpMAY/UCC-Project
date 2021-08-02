@@ -16,13 +16,23 @@ public class NotificationDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<Notification> getNotification(int user_no, int start_index) {
+    public List<Notification> getNotification(int user_no) {
         NotificationMapper notificationMapper = sqlSession.getMapper(NotificationMapper.class);
-        return notificationMapper.getNotification(user_no, start_index, start_index + 10);
+        return notificationMapper.getNotification(user_no);
+    }
+
+    public List<Notification> getNotificationRefresh(int user_no, Notification notification){
+        NotificationMapper notificationMapper = sqlSession.getMapper(NotificationMapper.class);
+        return notificationMapper.getNotificationRefresh(user_no, notification.getNotification_no(), notification.getReg_date());
     }
 
     public void insertNotification(Notification notification){
         NotificationMapper notificationMapper = sqlSession.getMapper(NotificationMapper.class);
         notificationMapper.insertNotification(notification);
+    }
+
+    public Notification getNotificationByNotificationNo(int notification_no) {
+        NotificationMapper notificationMapper = sqlSession.getMapper(NotificationMapper.class);
+        return notificationMapper.getNotificationByNotificationNo(notification_no);
     }
 }

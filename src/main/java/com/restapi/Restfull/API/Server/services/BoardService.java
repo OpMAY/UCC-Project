@@ -79,7 +79,7 @@ public class BoardService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity GetBoard(int user_no, int board_no, int start_index) {
+    public ResponseEntity GetBoard(int user_no, int board_no, int last_index) {
         try {
             Message message = new Message();
             /** required Data
@@ -99,21 +99,46 @@ public class BoardService {
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
-            if (start_index > -1) {
-                List<BoardComment> commentList = boardCommentDao.getCommentListByBoardNo(board_no, start_index);
-                Board board = boardDao.getBoardByBoardNo(board_no);
-                List<BoardComment> resCommentList = new ArrayList<>();
-                for (BoardComment boardComment : commentList) {
-                    int commentWriter = boardComment.getUser_no();
-                    if (!sponDao.getSponByArtistNoANDUserNo(commentWriter, board.getArtist_no()).isEmpty())
-                        boardComment.set_sponned(true);
-                    else
-                        boardComment.set_sponned(false);
+            if (last_index > -1) {
+                if(last_index == 0){
+                    List<BoardComment> commentList = boardCommentDao.getCommentListByBoardNo(board_no);
+                    Board board = boardDao.getBoardByBoardNo(board_no);
+                    List<BoardComment> resCommentList = new ArrayList<>();
+                    for (BoardComment boardComment : commentList) {
+                        int commentWriter = boardComment.getUser_no();
+                        if (!sponDao.getSponByArtistNoANDUserNo(commentWriter, board.getArtist_no()).isEmpty())
+                            boardComment.set_sponned(true);
+                        else
+                            boardComment.set_sponned(false);
 
-                    resCommentList.add(boardComment);
+                        resCommentList.add(boardComment);
+                    }
+                    message.put("comment_number", board.getComment_number());
+                    message.put("board_comment", resCommentList);
+                    if(resCommentList.size() > 0)
+                        message.put("last_index", resCommentList.get(resCommentList.size() - 1).getComment_no());
+                } else {
+                    BoardComment boardComment1 = boardCommentDao.getCommentByCommentNo(last_index);
+                    if(boardComment1 == null){
+                        return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                    }
+                    List<BoardComment> commentList = boardCommentDao.getCommentListByBoardNoRefresh(board_no, boardComment1);
+                    Board board = boardDao.getBoardByBoardNo(board_no);
+                    List<BoardComment> resCommentList = new ArrayList<>();
+                    for (BoardComment boardComment : commentList) {
+                        int commentWriter = boardComment.getUser_no();
+                        if (!sponDao.getSponByArtistNoANDUserNo(commentWriter, board.getArtist_no()).isEmpty())
+                            boardComment.set_sponned(true);
+                        else
+                            boardComment.set_sponned(false);
+
+                        resCommentList.add(boardComment);
+                    }
+                    message.put("comment_number", board.getComment_number());
+                    message.put("board_comment", resCommentList);
+                    if(resCommentList.size() > 0)
+                        message.put("last_index", resCommentList.get(resCommentList.size() - 1).getComment_no());
                 }
-                message.put("comment_number", board.getComment_number());
-                message.put("board_comment", resCommentList);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_BOARD_COMMENT_SUCCESS, message.getHashMap("GetBoardComment()")), HttpStatus.OK);
             } else {
                 // GET DATA FROM DB
@@ -136,9 +161,32 @@ public class BoardService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Board> getBoardList(String sort, int start_index) {
-        boardDao.setSession(sqlSession);
-        return boardDao.getBoardList(sort, start_index);
+    public ResponseEntity getBoardList(String sort, int last_index) {
+        try {
+            boardDao.setSession(sqlSession);
+            Message message = new Message();
+
+            if(last_index == 0){
+                List<Board> boardList = boardDao.getBoardList(sort);
+                message.put("boards", boardList);
+                if(boardList.size() > 0)
+                    message.put("last_index", boardList.get(boardList.size() - 1).getBoard_no());
+            } else {
+                Board board = boardDao.getBoardByBoardNo(last_index);
+                if(board == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<Board> boardList = boardDao.getBoardListRefresh(sort, board);
+                message.put("boards", boardList);
+                if(boardList.size() > 0)
+                    message.put("last_index", boardList.get(boardList.size() - 1).getBoard_no());
+            }
+            message.put("sort", sort);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_BOARD_LIST_SUCCESS, message.getHashMap("GetBoardList()")), HttpStatus.OK);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -237,21 +285,26 @@ public class BoardService {
             artistDao.setSession(sqlSession);
 
             Message message = new Message();
+            Board origin_board = boardDao.getBoardByBoardNo(board.getBoard_no());
 
-            if (boardDao.getBoardByBoardNo(board.getBoard_no()) == null) {
+            if (origin_board == null) {
                 log.info("board_no : " + board.getBoard_no());
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
+            Artist artist = artistDao.getArtistByArtistNo(origin_board.getArtist_no());
+
+            if(file_msg.getMap().get("name") == null){
+                board.setThumbnail(origin_board.getThumbnail());
+            }
             // Update Method
+            board.setArtist_name(artist.getArtist_name());
+            board.setArtist_profile_img(artist.getArtist_profile_img());
             String d = Time.TimeFormatHMS();
             board.setRevise_date(d);
             boardDao.updateBoard(board);
 
-
-            Board board1 = boardDao.getBoardByBoardNo(board.getBoard_no());
-
             // Update Artist recent_act_date
-            Artist artist = artistDao.getArtistByArtistNo(board1.getArtist_no());
+
             artist.setRecent_act_date(Time.TimeFormatHMS());
             artistDao.updateArtist(artist);
 
@@ -346,7 +399,7 @@ public class BoardService {
                 boardDao.updateBoardByComment(boardComment.getBoard_no(), boardCommentDao.getCommentNumberByBoardNo(boardComment.getBoard_no()).size());
 
                 // Response Message SET
-                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByBoardNo(boardComment.getBoard_no(), 0);
+                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByBoardNo(boardComment.getBoard_no());
 
                 ArrayList<BoardComment> resCommentList = new ArrayList<>();
                 Board board = boardDao.getBoardByBoardNo(boardComment.getBoard_no());
@@ -360,6 +413,8 @@ public class BoardService {
                 }
                 message.put("comment_number", board.getComment_number());
                 message.put("board_comment", resCommentList);
+                if(resCommentList.size() > 0)
+                    message.put("last_index", resCommentList.get(resCommentList.size() - 1).getComment_no());
 
                 //FCM MESSAGE SEND
                 FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
@@ -428,7 +483,7 @@ public class BoardService {
                 // Board SET
                 boardDao.updateBoardByComment(boardComment.getBoard_no(), boardCommentDao.getCommentNumberByBoardNo(boardComment.getBoard_no()).size());
 
-                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByBoardNo(boardComment.getBoard_no(), 0);
+                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByBoardNo(boardComment.getBoard_no());
 
                 ArrayList<BoardComment> resCommentList = new ArrayList<>();
                 Board board = boardDao.getBoardByBoardNo(boardComment.getBoard_no());
@@ -443,6 +498,8 @@ public class BoardService {
 
                 message.put("comment_number", board.getComment_number());
                 message.put("board_comment", resCommentList);
+                if(resCommentList.size() > 0)
+                    message.put("last_index", resCommentList.get(resCommentList.size() - 1).getComment_no());
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_COMMENT_DELETE_SUCCESS, message.getHashMap("DeleteBoardComment()")), HttpStatus.OK);
             }
         } catch (JSONException e) {

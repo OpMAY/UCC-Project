@@ -7,7 +7,9 @@ import java.util.List;
 public interface BoardMapper {
     List<Board> getBoardListByArtistNo(int artist_no);
 
-    List<Board> getBoardListByArtistNoForRefresh(int artist_no, int start_index, int end_index);
+    List<Board> getBoardListByArtistNoForRefresh(int artist_no, int board_no, String reg_date);
+
+    List<Board> getBoardListByArtistNoLimit(int artist_no);
 
     Board getBoardByBoardNo(int board_no);
 
@@ -27,13 +29,21 @@ public interface BoardMapper {
 
     List<Board> getRecentBoardList();
 
-    List<Board> searchBoard(String query, int start_index, int end_index);
+    List<Board> searchBoard(String query);
 
-    List<Board> getBoardListSortByRegDate(int start_index, int end_index);
+    List<Board> searchBoardRefresh(String query, int board_no);
 
-    List<Board> getBoardListSortByFanNumber(int start_index, int end_index);
+    List<Board> getBoardListSortByRegDateRefresh(String reg_date, int board_no);
 
-    List<Board> getBoardListSortByTitle(int start_index, int end_index);
+    List<Board> getBoardListSortByFanNumberRefresh(int fan_number, int board_no);
+
+    List<Board> getBoardListSortByTitleRefresh(String title, int board_no);
+
+    List<Board> getBoardListSortByRegDate();
+
+    List<Board> getBoardListSortByFanNumber();
+
+    List<Board> getBoardListSortByTitle();
 
     void insertFiles(Board board);
 }

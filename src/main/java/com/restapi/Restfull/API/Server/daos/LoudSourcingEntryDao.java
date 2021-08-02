@@ -22,14 +22,20 @@ public class LoudSourcingEntryDao {
         loudSourcingEntryMapper.insertEntry(loudSourcingEntry);
     }
 
-    public List<LoudSourcingEntry> getEntryListByLoudSourcingNo(int loudsourcing_no, String sort, int start_index) {
+    public List<LoudSourcingEntry> getEntryListByLoudSourcingNoRefresh(int loudsourcing_no, String sort, LoudSourcingEntry entry) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         if (sort.equals(DataListSortType.SORT_BY_RECENT))
-            return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortRecent(loudsourcing_no, start_index, start_index + 10);
-        else if (sort.equals(DataListSortType.SORT_BY_WORD))
-            return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortTitle(loudsourcing_no, start_index, start_index + 10);
+            return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortRecentRefresh(loudsourcing_no, entry.getEntry_no(), entry.getReg_date());
         else
-            return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortFankok(loudsourcing_no, start_index, start_index + 10);
+            return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortFankokRefresh(loudsourcing_no, entry.getEntry_no(), entry.getFan_number());
+    }
+
+    public List<LoudSourcingEntry> getEntryListByLoudSourcingNo(int loudsourcing_no, String sort) {
+        LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
+            return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortRecent(loudsourcing_no);
+        else
+            return loudSourcingEntryMapper.getEntryListByLoudSourcingNoSortFankok(loudsourcing_no);
     }
 
     public List<LoudSourcingEntry> getEntryListByArtistNo(int artist_no) {
@@ -81,4 +87,6 @@ public class LoudSourcingEntryDao {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         return loudSourcingEntryMapper.getEntryListNum(loudsourcing_no).size();
     }
+
+
 }

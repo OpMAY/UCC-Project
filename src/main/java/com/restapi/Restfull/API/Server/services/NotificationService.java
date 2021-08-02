@@ -29,13 +29,29 @@ public class NotificationService {
     private NotificationDao notificationDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getNotification(int user_no, int start_index) {
+    public ResponseEntity getNotification(int user_no, int last_index) {
         try {
             notificationDao.setSession(sqlSession);
             Message message = new Message();
 
-            List<Notification> notificationList = notificationDao.getNotification(user_no, start_index);
-            message.put("notification", notificationList);
+            if(last_index == 0){
+                List<Notification> notificationList = notificationDao.getNotification(user_no);
+                message.put("notification", notificationList);
+                if(notificationList.size() > 0){
+                    message.put("last_index", last_index);
+                }
+            } else {
+                Notification notification = notificationDao.getNotificationByNotificationNo(last_index);
+                if(notification == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<Notification> notificationList = notificationDao.getNotificationRefresh(user_no, notification);
+                message.put("notification", notificationList);
+                if(notificationList.size() > 0){
+                    message.put("last_index", last_index);
+                }
+            }
+
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_NOTIFICATION_LIST, message.getHashMap("GetUserFankok()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);

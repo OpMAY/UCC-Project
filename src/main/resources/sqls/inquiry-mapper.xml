@@ -14,11 +14,18 @@
         update inquiry SET answer_content=#{answer_content}, answer_date=#{answer_date}, is_answered=#{is_answered}
         WHERE inquiry_no=#{inquiry_no}
     </update>
+    <select id="getInquiryListByUserNoRefresh" resultType="Inquiry">
+        select * from inquiry WHERE user_no=#{user_no} AND inquiry_no <![CDATA[<]]> #{inquiry_no} AND reg_date <![CDATA[<=]]> #{reg_date} order by reg_date DESC, inquiry_no DESC
+        LIMIT 10
+    </select>
     <select id="getInquiryListByUserNo" resultType="Inquiry">
-        select * from inquiry WHERE user_no=#{user_no} order by reg_date DESC
-        LIMIT #{start_index}, 10
+        select * from inquiry WHERE user_no=#{user_no} order by reg_date DESC, inquiry_no DESC
+        LIMIT 10
     </select>
     <select id="getInquiryListByAnswerStatus" resultType="Inquiry">
         select * from inquiry WHERE is_answered=#{is_answered}
+    </select>
+    <select id="getInquiryByInquiryNo" resultType="Inquiry">
+        select * from inquiry WHERE inquiry_no=#{inquiry_no}
     </select>
 </mapper>

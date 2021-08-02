@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface EntryCommentMapper {
-    List<EntryComment> getCommentListByEntryNo(int entry_no, int start_index, int end_index);
+    List<EntryComment> getCommentListByEntryNoRefresh(int entry_no, String reg_date, int entry_comment_no);
 
     List<EntryComment> getCommentListByUserNo(int user_no);
 
@@ -19,4 +19,6 @@ public interface EntryCommentMapper {
     void updateComment(EntryComment entryComment);
 
     List<EntryComment> getCommentNumberByEntryNo(int entry_no);
+
+    List<EntryComment> getCommentListByEntryNo(int entry_no);
 }

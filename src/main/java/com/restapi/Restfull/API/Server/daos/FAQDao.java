@@ -16,9 +16,19 @@ public class FAQDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<FAQ> getFAQ(int start_index) {
+    public List<FAQ> getFAQ() {
         FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
-        return faqMapper.getFAQ(start_index, start_index + 10);
+        return faqMapper.getFAQ();
+    }
+
+    public List<FAQ> getFAQRefresh(FAQ faq) {
+        FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
+        return faqMapper.getFAQRefresh(faq.getReg_date(), faq.getFaq_no());
+    }
+
+    public FAQ getFAQByFAQNo(int faq_no) {
+        FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
+        return faqMapper.getFAQByFAQNo(faq_no);
     }
 
     public void insertFAQ(FAQ faq) {

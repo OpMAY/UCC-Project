@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.services;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
@@ -197,7 +198,7 @@ public class SubscribeService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getSubscribeListByUserNo(int user_no, int start_index) {
+    public ResponseEntity getSubscribeListByUserNo(int user_no) {
         try {
             subscribeDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
@@ -223,6 +224,22 @@ public class SubscribeService {
                 for (Portfolio portfolio : individualPortfolioList) {
                     Fankok fankok = new Fankok();
                     portfolio.setUser_no(artistDao.getArtistByArtistNo(portfolio.getArtist_no()).getUser_no());
+                    if (portfolio.getType().equals(PortfolioType.FILE)) {
+                        String jsonString = portfolio.getFile();
+                        Gson gson = new Gson();
+                        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                        ArrayList<Upload> uploads = new ArrayList<>();
+                        for (FileJson json : fileJson) {
+                            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                        }
+                        portfolio.setFile_list(uploads);
+                    } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
+                        if (portfolio.getFile() != null) {
+                            ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
+                            portfolio.setImage_list(filelist);
+                            log.info(filelist);
+                        }
+                    }
                     fankok.setPortfolio(portfolio);
                     fankok.setReg_date(portfolio.getReg_date());
                     fankok.setType("Portfolio");
@@ -276,15 +293,13 @@ public class SubscribeService {
 
             /** Response Message Set **/
             List<Fankok> indexList = new ArrayList<>();
-            for (int i = start_index; i < start_index + 10; i++) {
+            for (int i = 0; i < 50; i++) {
                 if (fankokList.size() <= i)
                     break;
                 indexList.add(fankokList.get(i));
             }
             message.put("contents", indexList);
-            if (start_index == 0) {
-                message.put("artists", resArtist);
-            }
+            message.put("artists", resArtist);
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_LIST, message.getHashMap("GetUserFankok()")), HttpStatus.OK);
         } catch (Exception e) {
@@ -295,7 +310,7 @@ public class SubscribeService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getSubscribeArtistList(int user_no, int start_index, String sort) {
+    public ResponseEntity getSubscribeArtistList(int user_no, int last_index, String sort) {
         try {
             subscribeDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
@@ -303,7 +318,7 @@ public class SubscribeService {
             Message message = new Message();
 
             List<Subscribe> subscribeList = subscribeDao.getSubscribeListByUserNo(user_no);
-            List<Artist> artistList = new ArrayList<>();
+            List<Integer> artistList = new ArrayList<>();
             for (Subscribe subscribe : subscribeList) {
                 int artist_no = subscribe.getArtist_no();
                 Artist artist = artistDao.getArtistByArtistNo(artist_no);
@@ -312,50 +327,17 @@ public class SubscribeService {
                     artist.setHashtag_list(hashtagList);
                     log.info(hashtagList);
                 }
-                artistList.add(artist);
+                artistList.add(subscribe.getArtist_no());
             }
-            /** Arrange List by Sort **/
-            if (sort.equals(DataListSortType.SORT_BY_RECENT)) {
-                artistList.sort((o1, o2) -> {
-                    String ds1 = o1.getRecent_act_date();
-                    String ds2 = o2.getRecent_act_date();
-                    Date d1 = new Date();
-                    Date d2 = new Date();
-                    try {
-                        d1 = Time.StringToDateTimeFormat(ds1);
-                        d2 = Time.StringToDateTimeFormat(ds2);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    if (d1.after(d2))
-                        return -1;
-                    else if (d1.before(d2))
-                        return 1;
-                    else
-                        return 0;
-                });
-            } else if (sort.equals(DataListSortType.SORT_BY_FANKOK)) {
-                artistList.sort((o1, o2) -> {
-                    int f1 = o1.getFan_number();
-                    int f2 = o2.getFan_number();
-                    return Integer.compare(f2, f1);
-                });
-            } else {
-                artistList.sort((o1, o2) -> {
-                    String a1 = o1.getArtist_name();
-                    String a2 = o2.getArtist_name();
-                    return a2.compareTo(a1);
-                });
-            }
-            /** Refactor List by Start Index **/
-            List<Artist> responseArtistList = new ArrayList<>();
-            for (int i = start_index; i < start_index + 10; i++) {
-                if (artistList.size() <= i)
+            ArrayList<Integer> refreshArtistList = new ArrayList<>();
+            for(int i = last_index; i < last_index + 10; i ++){
+                if(artistList.size() <= i)
                     break;
-                responseArtistList.add(artistList.get(i));
+                refreshArtistList.add(artistList.get(i));
             }
+            List<Artist> artists = artistDao.getSubscribedArtistListSortRecent(refreshArtistList);
 
-            message.put("artists", responseArtistList);
+            message.put("artists", artists);
             message.put("sort", sort);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_ARTIST_LIST, message.getHashMap("GetUserFankokArtist()")), HttpStatus.OK);
         } catch (JSONException e) {

@@ -32,32 +32,32 @@ public class LoudSourcingDao {
         loudSourcingMapper.deleteLoudSourcing(loudsourcing_no);
     }
 
-    public List<LoudSourcing> searchLoudSourcing(String sort, String query, int start_index) {
+    public List<LoudSourcing> searchLoudSourcingRefresh(String sort, String query, LoudSourcing loudSourcing) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         String sqlSearch = "%" + query + "%";
         switch (sort) {
             case DataListSortType.SORT_BY_RECRUITMENT:
-                return loudSourcingMapper.searchLoudSourcingByStatusRecruitment(sort, sqlSearch, start_index, start_index + 10);
+                return loudSourcingMapper.searchLoudSourcingByStatusRecruitmentRefresh(sort, sqlSearch, loudSourcing.getLoudsourcing_no(), loudSourcing.getStart_date());
             case DataListSortType.SORT_BY_PROCESS:
-                return loudSourcingMapper.searchLoudSourcingByStatusProcess(sort, sqlSearch, start_index, start_index + 10);
+                return loudSourcingMapper.searchLoudSourcingByStatusProcessRefresh(sort, sqlSearch, loudSourcing.getLoudsourcing_no(), loudSourcing.getProcess_start_date());
             case DataListSortType.SORT_BY_END:
-                return loudSourcingMapper.searchLoudSourcingByStatusEnd(sort, sqlSearch, start_index, start_index + 10);
+                return loudSourcingMapper.searchLoudSourcingByStatusEndRefresh(sort, sqlSearch, loudSourcing.getLoudsourcing_no(), loudSourcing.getEnd_date());
             default:
-                return loudSourcingMapper.searchLoudSourcingAll(sqlSearch, start_index, start_index + 10);
+                return loudSourcingMapper.searchLoudSourcingAllRefresh(sqlSearch, loudSourcing.getLoudsourcing_no(), loudSourcing.getRevise_date());
         }
     }
 
-    public List<LoudSourcing> getLoudSourcingListByStatus(String sort, int start_index) {
+    public List<LoudSourcing> getLoudSourcingListByStatusRefresh(String sort, LoudSourcing loudSourcing) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         switch (sort) {
             case DataListSortType.SORT_BY_RECRUITMENT:
-                return loudSourcingMapper.getLoudSourcingListByStatusRecruitment(sort, start_index, start_index + 10);
+                return loudSourcingMapper.getLoudSourcingListByStatusRecruitmentRefresh(sort, loudSourcing.getLoudsourcing_no(), loudSourcing.getStart_date());
             case DataListSortType.SORT_BY_PROCESS:
-                return loudSourcingMapper.getLoudSourcingListByStatusProcess(sort, start_index, start_index + 10);
+                return loudSourcingMapper.getLoudSourcingListByStatusProcessRefresh(sort, loudSourcing.getLoudsourcing_no(), loudSourcing.getProcess_start_date());
             case DataListSortType.SORT_BY_END:
-                return loudSourcingMapper.getLoudSourcingListByStatusEnd(sort, start_index, start_index + 10);
+                return loudSourcingMapper.getLoudSourcingListByStatusEndRefresh(sort, loudSourcing.getLoudsourcing_no(), loudSourcing.getEnd_date());
             default:
-                return loudSourcingMapper.getLoudSourcingListSortAll(start_index, start_index + 10);
+                return loudSourcingMapper.getLoudSourcingListSortAllRefresh(loudSourcing.getLoudsourcing_no(), loudSourcing.getRevise_date());
         }
     }
 
@@ -69,5 +69,34 @@ public class LoudSourcingDao {
     public List<LoudSourcing> getLoudSourcingListByStatusAdmin(String status) {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         return loudSourcingMapper.getRecentLSAdminMain(status);
+    }
+
+    public List<LoudSourcing> getLoudSourcingListByStatus(String sort) {
+        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        switch (sort) {
+            case DataListSortType.SORT_BY_RECRUITMENT:
+                return loudSourcingMapper.getLoudSourcingListByStatusRecruitment(sort);
+            case DataListSortType.SORT_BY_PROCESS:
+                return loudSourcingMapper.getLoudSourcingListByStatusProcess(sort);
+            case DataListSortType.SORT_BY_END:
+                return loudSourcingMapper.getLoudSourcingListByStatusEnd(sort);
+            default:
+                return loudSourcingMapper.getLoudSourcingListSortAll();
+        }
+    }
+
+    public List<LoudSourcing> searchLoudSourcing(String sort, String query) {
+        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        String sqlSearch = "%" + query + "%";
+        switch (sort) {
+            case DataListSortType.SORT_BY_RECRUITMENT:
+                return loudSourcingMapper.searchLoudSourcingByStatusRecruitment(sort, sqlSearch);
+            case DataListSortType.SORT_BY_PROCESS:
+                return loudSourcingMapper.searchLoudSourcingByStatusProcess(sort, sqlSearch);
+            case DataListSortType.SORT_BY_END:
+                return loudSourcingMapper.searchLoudSourcingByStatusEnd(sort, sqlSearch);
+            default:
+                return loudSourcingMapper.searchLoudSourcingAll(sqlSearch);
+        }
     }
 }

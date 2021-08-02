@@ -16,9 +16,9 @@ public class NoticeDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<Notice> getNotice(int start_index) {
+    public List<Notice> getNoticeRefresh(Notice notice) {
         NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
-        return noticeMapper.getNotice(start_index, start_index + 10);
+        return noticeMapper.getNoticeRefresh(notice.getRevise_date(), notice.getNotice_no());
     }
 
     public void insertNotice(Notice notice) {
@@ -34,5 +34,15 @@ public class NoticeDao {
     public void deleteNotice(int notice_no) {
         NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
         noticeMapper.deleteNotice(notice_no);
+    }
+
+    public List<Notice> getNotice() {
+        NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+        return noticeMapper.getNotice();
+    }
+
+    public Notice getNoticeByNoticeNo(int notice_no) {
+        NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+        return noticeMapper.getNoticeByNoticeNo(notice_no);
     }
 }

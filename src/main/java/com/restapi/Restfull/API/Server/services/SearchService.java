@@ -63,7 +63,7 @@ public class SearchService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity Search(String query, int start_index) {
+    public ResponseEntity Search(String query, int last_index) {
         try {
             Message message = new Message();
             artistDao.setSession(sqlSession);
@@ -75,10 +75,24 @@ public class SearchService {
 
             //LIMIT 15
             List<Portfolio> portfolioList = portfolioDao.SearchPortfolioLimit(query);
-            if (start_index > -1) {
+            if (last_index > -1) {
                 //LIMIT start_index + 10
-                List<Board> boardList = boardDao.SearchBoard(query, start_index);
-                message.put("boards", boardList);
+                if(last_index == 0) {
+                    List<Board> boardList = boardDao.SearchBoard(query);
+                    message.put("boards", boardList);
+                    if(boardList.size() > 0)
+                        message.put("last_index", boardList.get(boardList.size() - 1).getBoard_no());
+                } else {
+                    Board board = boardDao.getBoardByBoardNo(last_index);
+                    if(board == null){
+                        return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                    }
+                    List<Board> boardList = boardDao.SearchBoardRefresh(query, board);
+                    message.put("boards", boardList);
+                    if(boardList.size() > 0)
+                        message.put("last_index", boardList.get(boardList.size() - 1).getBoard_no());
+                }
+
             } else {
                 message.put("artists", artistList);
                 message.put("portfolios", portfolioList);

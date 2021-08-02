@@ -3,14 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingEntryMapper">
-    <select id="getEntryListByLoudSourcingNoSortTitle" resultType="LoudSourcingEntry">
-        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY title LIMIT #{start_index}, 10
+    <select id="getEntryListByLoudSourcingNoSortFankokRefresh" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} AND fan_number <![CDATA[<=]]> #{fan_number} AND entry_no <![CDATA[<]]> #{entry_no} ORDER BY fan_number DESC, entry_no DESC LIMIT 10
+    </select>
+    <select id="getEntryListByLoudSourcingNoSortRecentRefresh" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} AND reg_date <![CDATA[<=]]> #{reg_date} AND entry_no <![CDATA[<]]> #{entry_no} ORDER BY reg_date DESC, entry_no DESC LIMIT 10
     </select>
     <select id="getEntryListByLoudSourcingNoSortFankok" resultType="LoudSourcingEntry">
-        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY fan_number DESC LIMIT #{start_index}, 10
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY fan_number DESC, entry_no DESC LIMIT 10
     </select>
     <select id="getEntryListByLoudSourcingNoSortRecent" resultType="LoudSourcingEntry">
-        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY reg_date DESC LIMIT #{start_index}, 10
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY reg_date DESC, entry_no DESC LIMIT 10
     </select>
     <select id="getEntryListByArtistNo" resultType="LoudSourcingEntry">
         select * from loudsourcingentry WHERE artist_no=#{artist_no}

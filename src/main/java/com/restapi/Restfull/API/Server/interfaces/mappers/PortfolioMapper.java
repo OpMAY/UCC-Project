@@ -9,11 +9,17 @@ public interface PortfolioMapper {
 
     Portfolio getPortfolioByPortfolioNo(int portfolio_no);
 
-    List<Portfolio> getPortfolioListByTypeVODSortRecent(String type, int start_index, int end_index);
+    List<Portfolio> getPortfolioListByTypeVODSortRecentRefresh(String type, String reg_date, int portfolio_no);
 
-    List<Portfolio> getPortfolioListByTypeVODSortTitle(String type, int start_index, int end_index);
+    List<Portfolio> getPortfolioListByTypeVODSortTitleRefresh(String type, String title, int portfolio_no);
 
-    List<Portfolio> getPortfolioListByTypeVODSortFanNumber(String type, int start_index, int end_index);
+    List<Portfolio> getPortfolioListByTypeVODSortFanNumberRefresh(String type, int fan_number, int portfolio_no);
+
+    List<Portfolio> getPortfolioListByTypeVODSortRecent(String type);
+
+    List<Portfolio> getPortfolioListByTypeVODSortTitle(String type);
+
+    List<Portfolio> getPortfolioListByTypeVODSortFanNumber(String type);
 
     void insertPortfolio(Portfolio portfolio);
 
@@ -39,7 +45,15 @@ public interface PortfolioMapper {
 
     List<Portfolio> getPortfolioByTypeAdmin(int artist_no, String type);
 
-    List<Portfolio> getPortfolioListSortRecent(int artist_no, int start_index);
+    List<Portfolio> getPortfolioListSortRecentRefresh(int artist_no, String revise_date, int portfolio_no);
 
-    List<Portfolio> getPortfolioListSortWord(int artist_no, int start_index);
+    List<Portfolio> getPortfolioListSortWordRefresh(int artist_no, String title, int portfolio_no);
+
+    List<Portfolio> getPortfolioListSortFanNumberRefresh(int artist_no, int fan_number, int portfolio_no);
+
+    List<Portfolio> getPortfolioListSortRecent(int artist_no);
+
+    List<Portfolio> getPortfolioListSortWord(int artist_no);
+
+    List<Portfolio> getPortfolioListSortFanNumber(int artist_no);
 }

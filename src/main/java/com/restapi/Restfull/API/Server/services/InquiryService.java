@@ -33,26 +33,54 @@ public class InquiryService {
     private InquiryDao inquiryDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getInquiryList(int user_no, int start_index) {
+    public ResponseEntity getInquiryList(int user_no, int last_index) {
         try {
             inquiryDao.setSession(sqlSession);
             Message message = new Message();
-            List<Inquiry> myInquiryList = inquiryDao.getInquiryListByUserNo(user_no, start_index);
-            for (Inquiry inquiry : myInquiryList) {
-                Message file_msg = new Message();
-                if (!inquiry.getFile().isEmpty()) {
-                    String jsonString = inquiry.getFile();
-                    Gson gson = new Gson();
-                    FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-                    ArrayList<Upload> uploads = new ArrayList<>();
-                    for (FileJson json : fileJson) {
-                        uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+
+            if(last_index == 0){
+                List<Inquiry> myInquiryList = inquiryDao.getInquiryListByUserNo(user_no);
+                for (Inquiry inquiry : myInquiryList) {
+                    Message file_msg = new Message();
+                    if (!inquiry.getFile().isEmpty()) {
+                        String jsonString = inquiry.getFile();
+                        Gson gson = new Gson();
+                        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                        ArrayList<Upload> uploads = new ArrayList<>();
+                        for (FileJson json : fileJson) {
+                            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                        }
+                        file_msg.put("files", uploads);
+                        inquiry.setFiles(file_msg.getMap());
                     }
-                    file_msg.put("files", uploads);
-                    inquiry.setFiles(file_msg.getMap());
                 }
+                message.put("inquiries", myInquiryList);
+                if(myInquiryList.size() > 0)
+                    message.put("last_index", myInquiryList.get(myInquiryList.size() - 1).getInquiry_no());
+            } else {
+                Inquiry inquiry1 = inquiryDao.getInquiryByInquiryNo(last_index);
+                if(inquiry1 == null){
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<Inquiry> myInquiryList = inquiryDao.getInquiryListByUserNoRefresh(user_no, last_index, inquiry1.getReg_date());
+                for (Inquiry inquiry : myInquiryList) {
+                    Message file_msg = new Message();
+                    if (!inquiry.getFile().isEmpty()) {
+                        String jsonString = inquiry.getFile();
+                        Gson gson = new Gson();
+                        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                        ArrayList<Upload> uploads = new ArrayList<>();
+                        for (FileJson json : fileJson) {
+                            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                        }
+                        file_msg.put("files", uploads);
+                        inquiry.setFiles(file_msg.getMap());
+                    }
+                }
+                message.put("inquiries", myInquiryList);
+                if(myInquiryList.size() > 0)
+                    message.put("last_index", myInquiryList.get(myInquiryList.size() - 1).getInquiry_no());
             }
-            message.put("inquiries", myInquiryList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.USER_INQUIRY_LIST, message.getHashMap("GetInquiryList()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);

@@ -64,18 +64,38 @@ public class ArtistService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getAllArtists(int start_index, String sort) {
+    public ResponseEntity getAllArtists(int last_index, String sort) {
         try {
             Message message = new Message();
             artistDao.setSession(sqlSession);
+            Artist artist = artistDao.getArtistByArtistNo(last_index);
+            if (last_index != 0) {
+                if (artist == null) {
+                    log.info(last_index);
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
+                }
 
-            List<Artist> resArtistList = artistDao.getAllArtistRefresh(start_index, sort);
+                List<Artist> resArtistList = artistDao.getAllArtistRefresh(artist.getArtist_no(), sort, artist);
 
-            int artist_size = artistDao.getAllArtists().size();
+                int artist_size = artistDao.getAllArtists().size();
 
-            message.put("artists", resArtistList);
-            message.put("sort", sort);
-            message.put("artist_size", artist_size);
+                message.put("artists", resArtistList);
+                message.put("sort", sort);
+                message.put("artist_size", artist_size);
+                if (resArtistList.size() > 0)
+                    message.put("last_index", resArtistList.get(resArtistList.size() - 1).getArtist_no());
+            } else {
+                List<Artist> resArtistList = artistDao.getAllArtistLimit(sort);
+
+                int artist_size = artistDao.getAllArtists().size();
+
+                message.put("artists", resArtistList);
+                message.put("sort", sort);
+                message.put("artist_size", artist_size);
+                if (resArtistList.size() > 0) {
+                    message.put("last_index", resArtistList.get(resArtistList.size() - 1).getArtist_no());
+                }
+            }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_LIST_LOADED, message.getHashMap("GetArtistList()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);
@@ -108,7 +128,7 @@ public class ArtistService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity ArtistMain(int user_no, int artist_no, int start_index) {
+    public ResponseEntity ArtistMain(int user_no, int artist_no, int last_index) {
         try {
             Message message = new Message();
             /** required Data
@@ -125,41 +145,42 @@ public class ArtistService {
             subscribeDao.setSession(sqlSession);
 
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            if(artist == null){
+            if (artist == null) {
                 log.info("artist_no : " + artist_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETED_USER, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
-            }else {
-                if (artist.getHashtag() != null) {
-                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
-                    artist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
-                }
-                List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNoLimit(artist_no);
-                List<Portfolio> resPortfolioList = new ArrayList<>();
-                for (Portfolio portfolio : portfolioList) {
-                    portfolio.setUser_no(artist.getUser_no());
-                    if (portfolio.getType().equals(PortfolioType.FILE)) {
-                        String jsonString = portfolio.getFile();
-                        Gson gson = new Gson();
-                        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-                        ArrayList<Upload> uploads = new ArrayList<>();
-                        for (FileJson json : fileJson) {
-                            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
-                        }
-                        portfolio.setFile_list(uploads);
-                    } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
-                        if (portfolio.getFile() != null) {
-                            ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
-                            portfolio.setImage_list(filelist);
-                            log.info(filelist);
-                        }
+            } else {
+                if (last_index == -1) {
+                    if (artist.getHashtag() != null) {
+                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                        artist.setHashtag_list(hashtagList);
+                        log.info(hashtagList);
                     }
-                    resPortfolioList.add(portfolio);
-                }
-                boolean subscribe = subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null;
+                    List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNoLimit(artist_no);
+                    List<Portfolio> resPortfolioList = new ArrayList<>();
+                    for (Portfolio portfolio : portfolioList) {
+                        portfolio.setUser_no(artist.getUser_no());
+                        if (portfolio.getType().equals(PortfolioType.FILE)) {
+                            String jsonString = portfolio.getFile();
+                            Gson gson = new Gson();
+                            FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                            ArrayList<Upload> uploads = new ArrayList<>();
+                            for (FileJson json : fileJson) {
+                                uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                            }
+                            portfolio.setFile_list(uploads);
+                        } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
+                            if (portfolio.getFile() != null) {
+                                ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
+                                portfolio.setImage_list(filelist);
+                                log.info(filelist);
+                            }
+                        }
+                        resPortfolioList.add(portfolio);
+                    }
+                    boolean subscribe = subscribeDao.getSubscribeInfoByUserNoANDArtistNo(user_no, artist_no) != null;
 
-                if (start_index == -1) {
-                    if(user_no != 0) {
+
+                    if (user_no != 0) {
                         if (artistVisitDao.getArtistVisit(artist_no, user_no, now) == null) {
                             // 당일 방문하지 않았을 경우 - 방문자 정보 추가 후 금일 방문자 수 수정
                             if (artist.getUser_no() != user_no) { // 본인 페이지 입장은 방문자 수 변동 X, 로그인 하지 않은 유저도 변동 X
@@ -182,9 +203,20 @@ public class ArtistService {
                     message.put("subscribe", subscribe);
                     message.put("portfolios", resPortfolioList);
                 } else {
-                    List<Board> boardList = boardDao.getBoardListByArtistNoForRefresh(artist_no, start_index, start_index + 10);
-
-                    message.put("boards", boardList);
+                    if (last_index == 0) {
+                        List<Board> boardList = boardDao.getBoardListByArtistNoLimit(artist_no);
+                        message.put("boards", boardList);
+                        if (boardList.size() > 0) {
+                            message.put("last_index", boardList.get(boardList.size() - 1).getBoard_no());
+                        }
+                    } else {
+                        Board board = boardDao.getBoardByBoardNo(last_index);
+                        List<Board> boardList = boardDao.getBoardListByArtistNoForRefresh(artist_no, last_index, board.getReg_date());
+                        message.put("boards", boardList);
+                        if (boardList.size() > 0) {
+                            message.put("last_index", boardList.get(boardList.size() - 1).getBoard_no());
+                        }
+                    }
 
                 }
             }
@@ -217,7 +249,7 @@ public class ArtistService {
             artistDao.setSession(sqlSession);
             boolean artistchk = artistDao.getArtistByArtistNo(artist_no).isArtist_private();
 
-            if(artistchk){
+            if (artistchk) {
                 List<Penalty> penaltyList = penaltyDao.getPenaltyListByArtistNo(artist_no);
                 message.put("penalty", penaltyList.get(0));
             }
@@ -231,23 +263,22 @@ public class ArtistService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity updateArtistPush(int artist_no){
-        try{
+    public ResponseEntity updateArtistPush(int artist_no) {
+        try {
             Message message = new Message();
             artistDao.setSession(sqlSession);
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            if(artist == null)
+            if (artist == null)
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETED_USER, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
-            if(artist.isLoudsourcing_push()) {
+            if (artist.isLoudsourcing_push()) {
                 artistDao.updateArtistPush(artist_no, false);
                 message.put("loudsourcing_push", false);
-            }
-            else {
+            } else {
                 artistDao.updateArtistPush(artist_no, true);
                 message.put("loudsourcing_push", true);
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.SEARCH_ARTIST_RESULT_LOADED, message.getHashMap("updateArtistPush()")), HttpStatus.OK);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new BusinessException(e);
         }
     }

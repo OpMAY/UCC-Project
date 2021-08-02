@@ -38,24 +38,44 @@
         select * from board order by reg_date DESC limit 15
     </select>
     <select id="searchBoard" resultType="Board">
-        select * from board WHERE title like #{query} or artist_name like #{query}
-        LIMIT #{start_index}, 10
+        select * from board WHERE title like #{query} or artist_name like #{query} ORDER BY board_no DESC
+        LIMIT 10
+    </select>
+    <select id="searchBoardRefresh" resultType="Board">
+        select * from board WHERE board_no <![CDATA[<]]> #{board_no} AND (title like #{query} or artist_name like #{query}) ORDER BY board_no DESC
+        LIMIT 10
+    </select>
+    <select id="getBoardListSortByRegDateRefresh" resultType="Board">
+        select * from board WHERE reg_date <![CDATA[<=]]> #{reg_date} AND board_no <![CDATA[<]]> #{board_no} order by reg_date DESC, board_no DESC
+        LIMIT 10
+    </select>
+    <select id="getBoardListSortByFanNumberRefresh" resultType="Board">
+        select * from board WHERE fan_number <![CDATA[<=]]> #{fan_number} AND board_no <![CDATA[<]]> #{board_no} order by fan_number DESC, board_no DESC
+        LIMIT 10
+    </select>
+    <select id="getBoardListSortByTitleRefresh" resultType="Board">
+        select * from board WHERE title <![CDATA[>]]> #{title} AND board_no <![CDATA[<]]> #{board_no} order by title, board_no DESC
+        LIMIT 10
     </select>
     <select id="getBoardListSortByRegDate" resultType="Board">
-        select * from board order by reg_date DESC
-        LIMIT #{start_index}, 10
+        select * from board order by reg_date DESC, board_no DESC
+        LIMIT 10
     </select>
     <select id="getBoardListSortByFanNumber" resultType="Board">
-        select * from board order by fan_number DESC
-        LIMIT #{start_index}, 10
+        select * from board order by fan_number DESC, board_no DESC
+        LIMIT 10
     </select>
     <select id="getBoardListSortByTitle" resultType="Board">
-        select * from board order by title
-        LIMIT #{start_index}, 10
+        select * from board order by title, board_no DESC
+        LIMIT 10
     </select>
     <select id="getBoardListByArtistNoForRefresh" resultType="Board">
-        select * from board WHERE artist_no=#{artist_no} order by reg_date DESC
-        LIMIT #{start_index}, 10
+        select * from board WHERE artist_no=#{artist_no} AND reg_date <![CDATA[<=]]> #{reg_date} AND board_no <![CDATA[<]]> #{board_no} order by reg_date DESC, board_no DESC
+        LIMIT 10
+    </select>
+    <select id="getBoardListByArtistNoLimit" resultType="Board">
+        select * from board WHERE artist_no=#{artist_no} order by reg_date DESC, board_no DESC
+        LIMIT 10
     </select>
     <update id="insertFiles">
         update board SET thumbnail=#{thumbnail}

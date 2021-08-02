@@ -20,11 +20,6 @@ public class PortfolioCommentService {
     @Autowired
     private PortfolioCommentDao portfolioCommentDao;
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no) {
-        portfolioCommentDao.setSession(sqlSession);
-        return portfolioCommentDao.getCommentListByPortfolioNo(portfolio_no, 0);
-    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<PortfolioComment> getCommentListByUserNo(int user_no) {

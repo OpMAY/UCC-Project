@@ -20,16 +20,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -81,12 +77,12 @@ public class LoudSourcingController {
         private int user_no;
     }
 
-    @RequestMapping(value = "/api/loudsourcing/{sort}/start_index/{start_index}", method = RequestMethod.GET) // CHECK
-    public ResponseEntity GetLoudSourcingList(@PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
+    @RequestMapping(value = "/api/loudsourcing/{sort}/last_index/{last_index}", method = RequestMethod.GET) // CHECK
+    public ResponseEntity GetLoudSourcingList(@PathVariable("sort") String sort, @PathVariable("last_index") int last_index) {
         /**
          * 1. LoudSourcingList
          * **/
-        return loudSourcingService.getLoudSourcingList(sort, start_index);
+        return loudSourcingService.getLoudSourcingList(sort, last_index);
     }
 
     @RequestMapping(value = "/api/banner", method = RequestMethod.GET) // CHECK
@@ -149,13 +145,13 @@ public class LoudSourcingController {
         }
     }
 
-    @RequestMapping(value = "/api/loudsourcing/entry/list/{sort}/start_index/{start_index}", method = RequestMethod.POST)
-    public ResponseEntity GetEntryList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
+    @RequestMapping(value = "/api/loudsourcing/entry/list/{sort}/last_index/{last_index}", method = RequestMethod.POST)
+    public ResponseEntity GetEntryList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("last_index") int last_index) {
         DetailRequest detailRequest = new Gson().fromJson(body, DetailRequest.class);
         log.info(body);
         log.info(sort);
-        log.info(start_index);
-        return loudSourcingService.getEntryList(detailRequest.getUser_no(), detailRequest.getLoudsourcing_no(), sort, start_index);
+        log.info(last_index);
+        return loudSourcingService.getEntryList(detailRequest.getUser_no(), detailRequest.getLoudsourcing_no(), sort, last_index);
     }
 
     @RequestMapping(value = "/api/loudsourcing/apply", method = RequestMethod.POST) //CHECK
@@ -164,10 +160,10 @@ public class LoudSourcingController {
         return loudSourcingService.applyLoudSourcing(loudSourcingApply);
     }
 
-    @RequestMapping(value = "/api/loudsourcing/{sort}/start_index/{start_index}/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/loudsourcing/{sort}/last_index/{last_index}/search", method = RequestMethod.GET)
     // CHECK
-    public ResponseEntity SearchLoudSourcing(@RequestParam("query") String query, @PathVariable("sort") String sort, @PathVariable("start_index") int start_index) {
-        return loudSourcingService.searchLoudSourcing(sort, query, start_index);
+    public ResponseEntity SearchLoudSourcing(@RequestParam("query") String query, @PathVariable("sort") String sort, @PathVariable("last_index") int last_index) {
+        return loudSourcingService.searchLoudSourcing(sort, query, last_index);
     }
 
     @Getter
@@ -184,10 +180,10 @@ public class LoudSourcingController {
         return loudSourcingService.getEntry(entryRequest.getUser_no(), entryRequest.getEntry_no());
     }
 
-    @RequestMapping(value = "/api/loudsourcing/entry/comments/{start_index}", method = RequestMethod.POST)
-    public ResponseEntity GetEntryComment(@RequestBody String body, @PathVariable("start_index") int start_index) {
+    @RequestMapping(value = "/api/loudsourcing/entry/comments/{last_index}", method = RequestMethod.POST)
+    public ResponseEntity GetEntryComment(@RequestBody String body, @PathVariable("last_index") int last_index) {
         EntryRequest entryRequest = new Gson().fromJson(body, EntryRequest.class);
-        return loudSourcingService.getEntryComment(entryRequest.getEntry_no(), start_index);
+        return loudSourcingService.getEntryComment(entryRequest.getEntry_no(), last_index);
     }
 
     @RequestMapping(value = "/api/loudsourcing/entry/vote", method = RequestMethod.POST)

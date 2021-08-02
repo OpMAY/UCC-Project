@@ -15,7 +15,7 @@ public class Format {
 
     public static boolean CheckVODFile(String str) {
         str = str.substring(str.lastIndexOf(".")).toLowerCase();
-        return str.contains("mp4") || str.contains("avi") || str.contains("m4a") || str.contains("asx") || str.contains("mpeg") || str.contains("mpg") || str.contains("mov");
+        return str.contains("mp4") || str.contains("avi") || str.contains("m4a") || str.contains("asx") || str.contains("mpeg") || str.contains("mpg");
     }
 
     public static boolean CheckIMGFile(String str) {

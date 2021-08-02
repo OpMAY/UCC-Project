@@ -6,6 +6,7 @@ import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -69,14 +70,24 @@ public class ArtistDao {
         return artistMapper.searchArtistLimit(sqlSearch);
     }
 
-    public List<Artist> getAllArtistRefresh(int start_index, String sort) {
+    public List<Artist> getAllArtistRefresh(int artist_no, String sort, Artist artist) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         if (sort.equals(DataListSortType.SORT_BY_RECENT))
-            return artistMapper.getAllArtistListSortByRecentRefresh(start_index, start_index + 10);
+            return artistMapper.getAllArtistListSortByRecentRefresh(artist_no, artist.getRecent_act_date());
         else if (sort.equals(DataListSortType.SORT_BY_WORD))
-            return artistMapper.getAllArtistListSortByNameRefresh(start_index, start_index + 10);
+            return artistMapper.getAllArtistListSortByNameRefresh(artist_no, artist.getArtist_name());
         else
-            return artistMapper.getAllArtistListSortByFanNumRefresh(start_index, start_index + 10);
+            return artistMapper.getAllArtistListSortByFanNumRefresh(artist_no, artist.getFan_number());
+    }
+
+    public List<Artist> getAllArtistLimit(String sort){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
+            return artistMapper.getAllArtistListSortByRecent();
+        else if (sort.equals(DataListSortType.SORT_BY_WORD))
+            return artistMapper.getAllArtistListSortByName();
+        else
+            return artistMapper.getAllArtistListSortByFanNum();
     }
 
     public void updateArtistPush(int artist_no, boolean loudsourcing_push){
@@ -84,4 +95,8 @@ public class ArtistDao {
         artistMapper.updateArtistPush(artist_no, loudsourcing_push);
     }
 
+    public List<Artist> getSubscribedArtistListSortRecent(ArrayList<Integer> artist_list){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getSubscribedArtistListSortRecent(artist_list);
+    }
 }

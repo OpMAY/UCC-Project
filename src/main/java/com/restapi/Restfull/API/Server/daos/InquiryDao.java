@@ -31,13 +31,23 @@ public class InquiryDao {
         inquiryMapper.answerInquiry(inquiry);
     }
 
-    public List<Inquiry> getInquiryListByUserNo(int user_no, int start_index) {
+    public List<Inquiry> getInquiryListByUserNoRefresh(int user_no, int inquiry_no, String reg_date) {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
-        return inquiryMapper.getInquiryListByUserNo(user_no, start_index, start_index + 10);
+        return inquiryMapper.getInquiryListByUserNoRefresh(user_no, inquiry_no, reg_date);
     }
 
     public List<Inquiry> getInquiryListByAnswerStatus(boolean is_answered) {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         return inquiryMapper.getInquiryListByAnswerStatus(is_answered);
+    }
+
+    public List<Inquiry> getInquiryListByUserNo(int user_no) {
+        InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
+        return inquiryMapper.getInquiryListByUserNo(user_no);
+    }
+
+    public Inquiry getInquiryByInquiryNo(int inquiry_no) {
+        InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
+        return inquiryMapper.getInquiryByInquiryNo(inquiry_no);
     }
 }

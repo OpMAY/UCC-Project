@@ -100,6 +100,7 @@ public class SponController {
             // TODO 부트페이 REST API로 결제변조 여부 확인 로직 -> 서버 연결 후 작성
             return sponService.insertSpon(spon);
         } catch (Exception e){
+            e.printStackTrace();
             throw new BusinessException(e);
         }
     }

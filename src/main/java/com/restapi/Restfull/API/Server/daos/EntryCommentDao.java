@@ -16,9 +16,9 @@ public class EntryCommentDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<EntryComment> getCommentListByEntryNo(int entry_no, int start_index) {
+    public List<EntryComment> getCommentListByEntryNoRefresh(int entry_no, EntryComment entryComment) {
         EntryCommentMapper entryCommentMapper = sqlSession.getMapper(EntryCommentMapper.class);
-        return entryCommentMapper.getCommentListByEntryNo(entry_no, start_index, start_index + 10);
+        return entryCommentMapper.getCommentListByEntryNoRefresh(entry_no, entryComment.getReg_date(), entryComment.getEntry_comment_no());
     }
 
     public List<EntryComment> getCommentListByUserNo(int user_no) {
@@ -49,5 +49,10 @@ public class EntryCommentDao {
     public List<EntryComment> getCommentNumberByEntryNo(int entry_no) {
         EntryCommentMapper entryCommentMapper = sqlSession.getMapper(EntryCommentMapper.class);
         return entryCommentMapper.getCommentNumberByEntryNo(entry_no);
+    }
+
+    public List<EntryComment> getCommentListByEntryNo(int entry_no) {
+        EntryCommentMapper entryCommentMapper = sqlSession.getMapper(EntryCommentMapper.class);
+        return entryCommentMapper.getCommentListByEntryNo(entry_no);
     }
 }

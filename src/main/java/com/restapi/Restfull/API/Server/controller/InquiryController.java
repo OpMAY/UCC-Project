@@ -65,9 +65,9 @@ public class InquiryController {
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/inquiry/{user_no}/start_index/{start_index}", method = RequestMethod.GET) // CHECK
-    public ResponseEntity GetInquiryList(@PathVariable("user_no") int user_no, @PathVariable("start_index") int start_index) {
-        return inquiryService.getInquiryList(user_no, start_index);
+    @RequestMapping(value = "/api/inquiry/{user_no}/start_index/{last_index}", method = RequestMethod.GET) // CHECK
+    public ResponseEntity GetInquiryList(@PathVariable("user_no") int user_no, @PathVariable("last_index") int last_index) {
+        return inquiryService.getInquiryList(user_no, last_index);
     }
 
     @RequestMapping(value = "/api/inquiry/upload", method = RequestMethod.POST) // CHECK

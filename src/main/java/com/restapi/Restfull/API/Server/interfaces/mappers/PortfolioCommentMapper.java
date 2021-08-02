@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface PortfolioCommentMapper {
-    List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no, int start_index, int end_index);
+    List<PortfolioComment> getCommentListByPortfolioNoRefresh(int portfolio_no, String reg_date, int comment_no);
 
     List<PortfolioComment> getCommentListByUserNo(int user_no);
 
@@ -19,4 +19,6 @@ public interface PortfolioCommentMapper {
     PortfolioComment getCommentByCommentNo(int comment_no);
 
     List<PortfolioComment> getCommentNumberByPortfolioNo(int portfolio_no);
+
+    List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no);
 }

@@ -31,22 +31,46 @@ public class NoticeService {
     private NoticeDao noticeDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getNotice(int start_index) {
+    public ResponseEntity getNotice(int last_index) {
         try {
             noticeDao.setSession(sqlSession);
             Message message = new Message();
-            List<Notice> noticeList = noticeDao.getNotice(start_index);
-            for (Notice notice : noticeList) {
-                String img = notice.getImg();
-                log.info(img);
-                if (img != null) {
-                    ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
-                    notice.setImgList(imgList);
-                    log.info(imgList);
+            if(last_index == 0){
+                List<Notice> noticeList = noticeDao.getNotice();
+                for (Notice notice : noticeList) {
+                    String img = notice.getImg();
+                    log.info(img);
+                    if (img != null) {
+                        ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
+                        notice.setImgList(imgList);
+                        log.info(imgList);
+                    }
                 }
+
+                message.put("notice", noticeList);
+                if(noticeList.size() > 0)
+                    message.put("last_index", noticeList.get(noticeList.size() - 1).getNotice_no());
+            } else {
+                Notice notice1 = noticeDao.getNoticeByNoticeNo(last_index);
+                if(notice1 == null) {
+                    return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
+                }
+                List<Notice> noticeList = noticeDao.getNoticeRefresh(notice1);
+                for (Notice notice : noticeList) {
+                    String img = notice.getImg();
+                    log.info(img);
+                    if (img != null) {
+                        ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
+                        notice.setImgList(imgList);
+                        log.info(imgList);
+                    }
+                }
+
+                message.put("notice", noticeList);
+                if(noticeList.size() > 0)
+                    message.put("last_index", noticeList.get(noticeList.size() - 1).getNotice_no());
             }
 
-            message.put("notice", noticeList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_NOTICE_LIST, message.getHashMap("GetNotice()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);

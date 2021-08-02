@@ -19,5 +19,6 @@ public class StatusCode {
 
     public static final int BAN_ARTIST = 1234;
     public static final int DELETED_USER = 2222;
+    public static final int RETRY_RELOAD = 3330;
     public static final int DELETE_CONTENTS = 3333;
 }

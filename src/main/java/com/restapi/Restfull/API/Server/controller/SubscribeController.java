@@ -63,18 +63,17 @@ public class SubscribeController {
         }
     }
 
-    @RequestMapping(value = "/api/fankok/user/{user_no}/start_index/{start_index}", method = RequestMethod.GET) //CHECK
-    public ResponseEntity GetUserFankokContents(@PathVariable("user_no") int user_no,
-                                                @PathVariable("start_index") int start_index) {
-        return subscribeService.getSubscribeListByUserNo(user_no, start_index);
+    @RequestMapping(value = "/api/fankok/user/{user_no}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetUserFankokContents(@PathVariable("user_no") int user_no) {
+        return subscribeService.getSubscribeListByUserNo(user_no);
     }
 
-    @RequestMapping(value = "/api/fankok/user/{user_no}/artists/{sort}/{start_index}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/fankok/user/{user_no}/artists/{sort}/{last_index}", method = RequestMethod.GET)
     // CHECK
     public ResponseEntity GetUserFankokArtist(@PathVariable("user_no") int user_no,
                                               @PathVariable("sort") String sort,
-                                              @PathVariable("start_index") int start_index) {
-        return subscribeService.getSubscribeArtistList(user_no, start_index, sort);
+                                              @PathVariable("last_index") int last_index) {
+        return subscribeService.getSubscribeArtistList(user_no, last_index, sort);
     }
 
     @RequestMapping(value = "/api/user/{user_no}/fankoklist", method = RequestMethod.GET)
