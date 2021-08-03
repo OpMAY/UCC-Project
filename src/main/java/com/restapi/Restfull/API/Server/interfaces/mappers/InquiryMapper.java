@@ -18,4 +18,6 @@ public interface InquiryMapper {
     List<Inquiry> getInquiryListByAnswerStatus(boolean is_answered);
 
     Inquiry getInquiryByInquiryNo(int inquiry_no);
+
+    List<Inquiry> getInquiryForCDN();
 }

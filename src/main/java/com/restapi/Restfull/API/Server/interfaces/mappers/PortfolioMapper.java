@@ -56,4 +56,6 @@ public interface PortfolioMapper {
     List<Portfolio> getPortfolioListSortWord(int artist_no);
 
     List<Portfolio> getPortfolioListSortFanNumber(int artist_no);
+
+    List<Portfolio> getPortfolioForCDN();
 }

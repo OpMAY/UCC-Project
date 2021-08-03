@@ -75,4 +75,7 @@
     <select id="getRecentLSAdminMain" resultType="LoudSourcing">
         select * from loudsourcing WHERE status=#{status} ORDER BY start_date
     </select>
+    <select id="getLoudsourcingForCDN" resultType="LoudSourcing">
+        select * from loudsourcing
+    </select>
 </mapper>

@@ -28,4 +28,7 @@
     <select id="getInquiryByInquiryNo" resultType="Inquiry">
         select * from inquiry WHERE inquiry_no=#{inquiry_no}
     </select>
+    <select id="getInquiryForCDN" resultType="Inquiry">
+        select * from inquiry
+    </select>
 </mapper>

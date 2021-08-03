@@ -45,4 +45,9 @@ public class NoticeDao {
         NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
         return noticeMapper.getNoticeByNoticeNo(notice_no);
     }
+
+    public List<Notice> getNoticeForCDN() {
+        NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+        return noticeMapper.getNoticeForCDN();
+    }
 }

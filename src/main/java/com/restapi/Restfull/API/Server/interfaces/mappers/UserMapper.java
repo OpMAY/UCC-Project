@@ -18,4 +18,6 @@ public interface UserMapper {
     List<User> selectUserBySNS(String sns);
 
     List<User> getAllUserList();
+
+    List<User> getUserForCDN();
 }

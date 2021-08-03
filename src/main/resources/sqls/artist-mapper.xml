@@ -132,4 +132,7 @@
         </choose>
         ORDER BY recent_act_date DESC LIMIT 10
     </select>
+    <select id="getAllArtistForCDN" resultType="Artist">
+        select * from artist
+    </select>
 </mapper>

@@ -89,4 +89,8 @@ public class LoudSourcingEntryDao {
     }
 
 
+    public List<LoudSourcingEntry> getEntryForCDN() {
+        LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
+        return loudSourcingEntryMapper.getEntryForCDN();
+    }
 }

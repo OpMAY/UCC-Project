@@ -90,6 +90,7 @@ public class CDNService {
                 log.info("Directory Index : " + j + "\nItem Index : " + i + "\nKey : " + object.getKey());
                 log.info("Directory : " + object.getKey().substring(0, object.getKey().lastIndexOf("/")));
                 log.info("File : " + object.getKey().substring(object.getKey().lastIndexOf("/") + 1));
+                finds.add(object.getKey());
                 i++;
             }
             if (objectListing.isTruncated()) {

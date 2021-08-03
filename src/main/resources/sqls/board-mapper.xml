@@ -81,4 +81,7 @@
         update board SET thumbnail=#{thumbnail}
         WHERE board_no=#{board_no}
     </update>
+    <select id="getBoardForCDN" resultType="Board">
+        select * from board
+    </select>
 </mapper>

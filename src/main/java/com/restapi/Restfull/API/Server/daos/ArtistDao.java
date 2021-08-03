@@ -99,4 +99,9 @@ public class ArtistDao {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getSubscribedArtistListSortRecent(artist_list);
     }
+
+    public List<Artist> getAllArtistForCDN(){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getAllArtistForCDN();
+    }
 }

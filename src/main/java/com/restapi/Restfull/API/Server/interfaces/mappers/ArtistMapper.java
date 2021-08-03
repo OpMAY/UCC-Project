@@ -42,4 +42,6 @@ public interface ArtistMapper {
     void updateArtistPush(int artist_no, boolean loudsourcing_push);
 
     List<Artist> getSubscribedArtistListSortRecent(@Param("artist_list") ArrayList<Integer> artist_list);
+
+    List<Artist> getAllArtistForCDN();
 }

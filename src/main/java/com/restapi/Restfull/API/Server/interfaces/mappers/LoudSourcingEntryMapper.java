@@ -34,4 +34,6 @@ public interface LoudSourcingEntryMapper {
     void deleteEntry(int entry_no);
 
     List<LoudSourcingEntry> getEntryListNum(int loudsourcing_no);
+
+    List<LoudSourcingEntry> getEntryForCDN();
 }

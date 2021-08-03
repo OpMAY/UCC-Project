@@ -50,4 +50,7 @@
     <select id="getEntryListNum" resultType="LoudSourcingEntry">
         select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no}
     </select>
+    <select id="getEntryForCDN" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry
+    </select>
 </mapper>

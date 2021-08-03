@@ -16,4 +16,6 @@ public interface FAQMapper {
     List<FAQ> getFAQRefresh(String reg_date, int faq_no);
 
     FAQ getFAQByFAQNo(int faq_no);
+
+    List<FAQ> getFAQForCDN();
 }

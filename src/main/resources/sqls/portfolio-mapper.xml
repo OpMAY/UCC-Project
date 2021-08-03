@@ -94,4 +94,7 @@
         select * from portfolio where artist_no=#{artist_no} order by fan_number DESC, portfolio_no DESC
         LIMIT 10
     </select>
+    <select id="getPortfolioForCDN" resultType="Portfolio">
+        select * from portfolio
+    </select>
 </mapper>

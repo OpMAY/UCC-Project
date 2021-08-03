@@ -46,4 +46,6 @@ public interface BoardMapper {
     List<Board> getBoardListSortByTitle();
 
     void insertFiles(Board board);
+
+    List<Board> getBoardForCDN();
 }

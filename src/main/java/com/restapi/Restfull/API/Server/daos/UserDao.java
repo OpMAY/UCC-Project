@@ -50,4 +50,9 @@ public class UserDao {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         return userMapper.getAllUserList();
     }
+
+    public List<User> getUserForCDN() {
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        return userMapper.getUserForCDN();
+    }
 }

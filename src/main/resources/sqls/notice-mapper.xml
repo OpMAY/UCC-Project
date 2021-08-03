@@ -23,4 +23,7 @@
     <delete id="deleteNotice">
         delete from notice WHERE notice_no=#{notice_no}
     </delete>
+    <select id="getNoticeForCDN" resultType="Notice">
+        select * from notice
+    </select>
 </mapper>

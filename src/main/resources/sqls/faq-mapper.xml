@@ -22,4 +22,7 @@
         update faq SET question=#{question}, answer=#{answer}, img=#{img}
         WHERE faq_no=#{faq_no}
     </update>
+    <select id="getFAQForCDN" resultType="FAQ">
+        select * from faq
+    </select>
 </mapper>

@@ -99,4 +99,9 @@ public class LoudSourcingDao {
                 return loudSourcingMapper.searchLoudSourcingAll(sqlSearch);
         }
     }
+
+    public List<LoudSourcing> getLoudsourcingForCDN() {
+        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        return loudSourcingMapper.getLoudsourcingForCDN();
+    }
 }

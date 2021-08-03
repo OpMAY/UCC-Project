@@ -16,4 +16,7 @@
     <delete id="deleteBanner">
         delete from bannerad WHERE banner_ad_no=#{banner_ad_no}
     </delete>
+    <select id="getBannerForCDN" resultType="BannerAd">
+        select * from bannerad
+    </select>
 </mapper>

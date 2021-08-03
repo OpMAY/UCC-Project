@@ -5,8 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableRetry
+@EnableScheduling
 @SpringBootApplication(scanBasePackages = "com.restapi.Restfull.API.Server")
 public class RestfullApiServerApplication extends SpringBootServletInitializer {
 

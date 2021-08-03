@@ -12,4 +12,6 @@ public interface BannerAdMapper {
     void updateBanner(BannerAd bannerAd);
 
     void deleteBanner(int banner_ad_no);
+
+    List<BannerAd> getBannerForCDN();
 }

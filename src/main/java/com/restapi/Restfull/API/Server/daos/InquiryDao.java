@@ -50,4 +50,9 @@ public class InquiryDao {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         return inquiryMapper.getInquiryByInquiryNo(inquiry_no);
     }
+
+    public List<Inquiry> getInquiryForCDN() {
+        InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
+        return inquiryMapper.getInquiryForCDN();
+    }
 }

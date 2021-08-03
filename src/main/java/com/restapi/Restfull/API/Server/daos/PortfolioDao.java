@@ -142,4 +142,9 @@ public class PortfolioDao {
             throw new BusinessException(new Exception());
         }
     }
+
+    public List<Portfolio> getPortfolioForCDN() {
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        return portfolioMapper.getPortfolioForCDN();
+    }
 }

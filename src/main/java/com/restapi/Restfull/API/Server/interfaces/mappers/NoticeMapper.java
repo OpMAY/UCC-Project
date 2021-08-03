@@ -16,4 +16,6 @@ public interface NoticeMapper {
     void deleteNotice(int notice_no);
 
     Notice getNoticeByNoticeNo(int notice_no);
+
+    List<Notice> getNoticeForCDN();
 }

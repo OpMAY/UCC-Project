@@ -21,4 +21,9 @@ public class BannerAdDao {
         return bannerAdMapper.getBannerList(false);
     }
 
+    public List<BannerAd> getBannerForCDN() {
+        BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
+        return bannerAdMapper.getBannerForCDN();
+    }
+
 }

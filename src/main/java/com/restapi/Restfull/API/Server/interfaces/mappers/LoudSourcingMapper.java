@@ -47,4 +47,5 @@ public interface LoudSourcingMapper {
 
     List<LoudSourcing> getRecentLSAdminMain(String status);
 
+    List<LoudSourcing> getLoudsourcingForCDN();
 }

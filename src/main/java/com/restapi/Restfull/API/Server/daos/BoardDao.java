@@ -117,4 +117,9 @@ public class BoardDao {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         boardMapper.insertFiles(board);
     }
+
+    public List<Board> getBoardForCDN() {
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        return boardMapper.getBoardForCDN();
+    }
 }

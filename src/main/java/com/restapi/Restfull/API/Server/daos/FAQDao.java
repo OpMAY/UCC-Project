@@ -45,4 +45,9 @@ public class FAQDao {
         FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
         faqMapper.updateFAQ(faq);
     }
+
+    public List<FAQ> getFAQForCDN() {
+        FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
+        return faqMapper.getFAQForCDN();
+    }
 }
