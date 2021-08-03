@@ -203,5 +203,26 @@ public class AdminController implements ControllerInitialize {
         return adminService.getLoudSourcingEndPage();
     }
 
+    @GetMapping("/admin/recruitment_apply_list.do")
+    public ModelAndView RecruitmentApplyListPage(@RequestParam("loudsourcing_no") String loudsourcing_no){
+        init("GET RecruitmentApplyListPage");
+        return adminService.getRecruitmentApplyListPage(loudsourcing_no);
+    }
+
+    @Getter
+    @Setter
+    @Data
+    class LoudSourcingNotificationRequest{
+        private int loudsourcing_no;
+    }
+
+    @PostMapping("/admin/recruit_alarm.do")
+    @ResponseBody
+    public int RecruitAlarmSend(@RequestBody String body){
+        init("POST RecruitAlarmSend");
+        LoudSourcingNotificationRequest loudSourcingNotificationRequest = new Gson().fromJson(body, LoudSourcingNotificationRequest.class);
+        return adminService.recruitAlarmSend(loudSourcingNotificationRequest.getLoudsourcing_no());
+    }
+
 }
 

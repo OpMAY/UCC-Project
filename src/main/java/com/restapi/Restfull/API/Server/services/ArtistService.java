@@ -56,6 +56,13 @@ public class ArtistService {
                     break;
                 resArtistList.add(newArtistList.get(i));
             }
+            for (Artist artist : resArtistList){
+                if (artist.getHashtag() != null) {
+                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                    artist.setHashtag_list(hashtagList);
+                    log.info(hashtagList);
+                }
+            }
             message.put("new_artists", resArtistList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_LIST_LOADED, message.getHashMap("GetArtistList()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -77,6 +84,14 @@ public class ArtistService {
 
                 List<Artist> resArtistList = artistDao.getAllArtistRefresh(artist.getArtist_no(), sort, artist);
 
+                for (Artist artist1 : resArtistList){
+                    if (artist1.getHashtag() != null) {
+                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist1.getHashtag().split(", ")));
+                        artist1.setHashtag_list(hashtagList);
+                        log.info(hashtagList);
+                    }
+                }
+
                 int artist_size = artistDao.getAllArtists().size();
 
                 message.put("artists", resArtistList);
@@ -86,6 +101,14 @@ public class ArtistService {
                     message.put("last_index", resArtistList.get(resArtistList.size() - 1).getArtist_no());
             } else {
                 List<Artist> resArtistList = artistDao.getAllArtistLimit(sort);
+
+                for (Artist artist1 : resArtistList) {
+                    if (artist1.getHashtag() != null) {
+                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist1.getHashtag().split(", ")));
+                        artist1.setHashtag_list(hashtagList);
+                        log.info(hashtagList);
+                    }
+                }
 
                 int artist_size = artistDao.getAllArtists().size();
 

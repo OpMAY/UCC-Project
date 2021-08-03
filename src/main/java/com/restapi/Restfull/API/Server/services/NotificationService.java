@@ -38,7 +38,7 @@ public class NotificationService {
                 List<Notification> notificationList = notificationDao.getNotification(user_no);
                 message.put("notification", notificationList);
                 if(notificationList.size() > 0){
-                    message.put("last_index", last_index);
+                    message.put("last_index", notificationList.get(notificationList.size() - 1).getNotification_no());
                 }
             } else {
                 Notification notification = notificationDao.getNotificationByNotificationNo(last_index);
@@ -48,7 +48,7 @@ public class NotificationService {
                 List<Notification> notificationList = notificationDao.getNotificationRefresh(user_no, notification);
                 message.put("notification", notificationList);
                 if(notificationList.size() > 0){
-                    message.put("last_index", last_index);
+                    message.put("last_index", notificationList.get(notificationList.size() - 1).getNotification_no());
                 }
             }
 

@@ -470,7 +470,7 @@ public class PortfolioService {
                                 //FCM MESSAGE SEND
                                 if (comment_user.getFcm_token() != null && comment_user.isComment_push()) {
                                     NotificationNext notificationNext = new NotificationNext(NotificationType.COMMENT_ARTIST, NotificationType.CONTENT_TYPE_PORTFOLIO, portfolio.getType(), portfolio.getPortfolio_no(), null, portfolio_artist.getArtist_no());
-                                    firebaseMessagingSnippets.push(comment_user.getFcm_token(), NotificationType.COMMENT_ARTIST_FCM, "댓글을 작성한 " + portfolio.getTitle() + "에 작성한 아티스트가 댓글을 남겼습니다. '" + comment_short + "...'", new Gson().toJson(notificationNext));
+                                    firebaseMessagingSnippets.push(comment_user.getFcm_token(), NotificationType.COMMENT_ARTIST_FCM, "댓글을 작성한 '" + portfolio.getTitle() + "'에 작성한 아티스트가 댓글을 남겼습니다. '" + comment_short + "...'", new Gson().toJson(notificationNext));
                                 } else {
                                     if (comment_user.getFcm_token() == null)
                                         log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
@@ -481,7 +481,7 @@ public class PortfolioService {
                                 Notification notification = new Notification();
                                 notification.setUser_no(comment_user.getUser_no());
                                 notification.setType(NotificationType.COMMENT_ARTIST);
-                                notification.setContent("댓글을 작성한 " + portfolio.getTitle() + "에 작성한 아티스트가 댓글을 남겼습니다. '" + comment_short + "...'");
+                                notification.setContent("댓글을 작성한 '" + portfolio.getTitle() + "'에 작성한 아티스트가 댓글을 남겼습니다. '" + comment_short + "...'");
                                 notification.setReg_date(Time.TimeFormatHMS());
                                 NotificationNext notificationNext = new NotificationNext(NotificationType.COMMENT_ARTIST, NotificationType.CONTENT_TYPE_PORTFOLIO, portfolio.getType(), portfolio.getPortfolio_no(), null, portfolio_artist.getArtist_no());
                                 notification.setNext(new Gson().toJson(notificationNext));
@@ -492,11 +492,11 @@ public class PortfolioService {
                 } else {
                     NotificationNext notificationNext = new NotificationNext(NotificationType.COMMENT_OTHERS, NotificationType.CONTENT_TYPE_PORTFOLIO, portfolio.getType(), portfolio.getPortfolio_no(), null, portfolio_artist.getArtist_no());
                     if (portfolio_artist_user.getFcm_token() != null && portfolio_artist_user.isComment_push())
-                        firebaseMessagingSnippets.push(portfolio_artist_user.getFcm_token(), NotificationType.COMMENT_OTHERS_FCM, portfolio.getTitle() + "에 새로운 댓글이 등록되었습니다. '" + comment_short + "...'", new Gson().toJson(notificationNext));
+                        firebaseMessagingSnippets.push(portfolio_artist_user.getFcm_token(), NotificationType.COMMENT_OTHERS_FCM, "'"+ portfolio.getTitle() + "'에 새로운 댓글이 등록되었습니다. '" + comment_short + "...'", new Gson().toJson(notificationNext));
                     Notification notification = new Notification();
                     notification.setUser_no(portfolio_artist_user.getUser_no());
                     notification.setReg_date(Time.TimeFormatHMS());
-                    notification.setContent(portfolio.getTitle() + "에 새로운 댓글이 등록되었습니다. '" + comment_short + "...'");
+                    notification.setContent("'"+ portfolio.getTitle() + "'에 새로운 댓글이 등록되었습니다. '" + comment_short + "...'");
                     notification.setType(NotificationType.COMMENT_OTHERS);
                     notification.setNext(new Gson().toJson(notificationNext));
                     notificationDao.insertNotification(notification);

@@ -321,22 +321,27 @@ public class SubscribeService {
             List<Integer> artistList = new ArrayList<>();
             for (Subscribe subscribe : subscribeList) {
                 int artist_no = subscribe.getArtist_no();
-                Artist artist = artistDao.getArtistByArtistNo(artist_no);
-                if (artist.getHashtag() != null) {
-                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
-                    artist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
-                }
-                artistList.add(subscribe.getArtist_no());
+                artistList.add(artist_no);
             }
             ArrayList<Integer> refreshArtistList = new ArrayList<>();
-            for(int i = last_index; i < last_index + 10; i ++){
+            int ref_index = 0;
+            if(last_index != 0) {
+                for (int j = 0; j < artistList.size(); j++) {
+                    if (artistList.get(j) == last_index) {
+                        ref_index = j;
+                        break;
+                    } else
+                        j++;
+                }
+            }
+            for(int i = ref_index; i < ref_index + 10; i ++){
                 if(artistList.size() <= i)
                     break;
                 refreshArtistList.add(artistList.get(i));
             }
             List<Artist> artists = artistDao.getSubscribedArtistListSortRecent(refreshArtistList);
 
+            message.put("last_index", artists.get(artists.size() - 1).getArtist_no());
             message.put("artists", artists);
             message.put("sort", sort);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_ARTIST_LIST, message.getHashMap("GetUserFankokArtist()")), HttpStatus.OK);

@@ -60,19 +60,19 @@
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
                                 종료 </a></h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>공모전 이름</th>
-                                        <th>상태</th>
-                                        <th>참여인원 / 총 모집인원</th>
-                                        <th>총 기간</th>
-                                        <th>모집 기간</th>
-                                        <th>진행 기간</th>
-                                        <th>참여 인원 리스트</th>
-                                        <th>자세히 보기</th>
-                                        <th>삭제</th>
+                                        <th width="30px">#</th>
+                                        <th width="150px">공모전 이름</th>
+                                        <th width="50px">상태</th>
+                                        <th width="110px">참여인원/총 모집인원</th>
+                                        <th width="150px">총 기간</th>
+                                        <th width="150px">모집 기간</th>
+                                        <th width="150px">진행 기간</th>
+                                        <th width="80px">참여 인원 리스트</th>
+                                        <th width="80px">자세히 보기</th>
+                                        <th width="80px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -81,7 +81,7 @@
                                             <td>
                                                 ${i}
                                             </td>
-                                            <td>
+                                            <td class="overflow-hidden" style="text-overflow: ellipsis">
                                                 ${loudsourcingList[i-1].name}
                                             </td>
                                             <td>

@@ -43,60 +43,63 @@
 
             <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
                 <div>
-                    <h4 class="mb-3 mb-md-0">관리자 페이지에 오신 것을 환영합니다.</h4>
+                    <h4 class="mb-3 mb-md-0">UCC 관리자 페이지에 오신 것을 환영합니다.</h4>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-7 col-xl-8 stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-baseline mb-2">
-                            <h6 class="card-title mb-3">미답변 문의</h6>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                <tr>
-                                    <th class="pt-0">#</th>
-                                    <th class="pt-0">작성자 명</th>
-                                    <th class="pt-0">제목</th>
-                                    <th class="pt-0">답변 상태</th>
-                                    <th class="pt-0">생성일자</th>
-                                    <th class="pt-0">자세히 보기</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="i" begin="1" end="${InquiryList.size()}">
-                                    <c:if test="${i<=6}">
-                                        <tr>
-                                            <td>${i}</td>
-                                            <td>${InquiryList[i-1].user_name}</td>
-                                            <td>${InquiryList[i-1].title}</td>
-                                            <td>미답변</td>
-                                            <td>${InquiryList[i-1].reg_date}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                                    <i class="btn-icon-prepend" data-feather="search"></i>
-                                                    보기
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </c:if>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                <h6 class="card-title mb-3">미답변 문의</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th class="pt-0">#</th>
+                                        <th class="pt-0">작성자 명</th>
+                                        <th class="pt-0">제목</th>
+                                        <th class="pt-0">답변 상태</th>
+                                        <th class="pt-0">생성일자</th>
+                                        <th class="pt-0">자세히 보기</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="i" begin="1" end="${InquiryList.size()}">
+                                        <c:if test="${i<=6}">
+                                            <tr>
+                                                <td>${i}</td>
+                                                <td>${InquiryList[i-1].user_name}</td>
+                                                <td>${InquiryList[i-1].title}</td>
+                                                <td>미답변</td>
+                                                <td>${InquiryList[i-1].reg_date}</td>
+                                                <td>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                        <i class="btn-icon-prepend" data-feather="search"></i>
+                                                        보기
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </c:if>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
                 <div class="col-lg-5 col-xl-4 stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline mb-2">
                                 <h6 class="card-title mb-auto">가입 SNS</h6>
-                                <div class="input-group date datepicker dashboard-date mr-2 mb-4 mb-md-0 d-md-none d-xl-flex" id="dashboardDate">
-                                    <span class="input-group-addon bg-transparent"><i data-feather="calendar" class="text-primary"></i></span>
+                                <div class="input-group date datepicker dashboard-date mr-2 mb-4 mb-md-0 d-md-none d-xl-flex"
+                                     id="dashboardDate">
+                                    <span class="input-group-addon bg-transparent"><i data-feather="calendar"
+                                                                                      class="text-primary"></i></span>
                                     <input type="text" class="form-control">
                                 </div>
                             </div>
@@ -141,19 +144,19 @@
                                 <h6 class="card-title mb-4">최신 크라우드 현황</h6>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0">
+                                <table class="table table-hover mb-0" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th class="pt-0">#</th>
-                                        <th class="pt-0">공모전 이름</th>
-                                        <th class="pt-0">상태</th>
-                                        <th class="pt-0">참여인원</th>
-                                        <th class="pt-0">총 기간</th>
-                                        <th class="pt-0">모집 기간</th>
-                                        <th class="pt-0">진행 기간</th>
-                                        <th class="pt-0">참여 인원 리스트</th>
-                                        <th class="pt-0">자세히 보기</th>
-                                        <th class="pt-0">삭제</th>
+                                        <th class="pt-0" width="30px">#</th>
+                                        <th class="pt-0" width="150px">공모전 이름</th>
+                                        <th class="pt-0" width="50px">상태</th>
+                                        <th class="pt-0" width="50px">참여인원</th>
+                                        <th class="pt-0" width="150px">총 기간</th>
+                                        <th class="pt-0" width="150px">모집 기간</th>
+                                        <th class="pt-0" width="150px">진행 기간</th>
+                                        <th class="pt-0" width="80px">참여 인원 리스트</th>
+                                        <th class="pt-0" width="80px">자세히 보기</th>
+                                        <th class="pt-0" width="80px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -161,26 +164,44 @@
                                         <c:if test="${i<=6}">
                                             <tr>
                                                 <td>${i}</td>
-                                                <td>${LoudsourcingList[i-1].name}</td>
-                                                <td>${LoudsourcingList[i-1].status}</td>
-                                                <td>${LoudsourcingList[i-1].applied_artist_num}</td>
-                                                <td>${LoudsourcingList[i-1].start_date} ~ ${LoudsourcingList[i-1].end_date}</td>
-                                                <td>${LoudsourcingList[i-1].start_date} ~ ${LoudsourcingList[i-1].recruitment_end_date}</td>
-                                                <td>${LoudsourcingList[i-1].process_start_date} ~ ${LoudsourcingList[i-1].process_end_date}</td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${LoudsourcingList[i-1].name}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
-                                                    <i class="btn-icon-prepend" data-feather="search"></i>
-                                                    보기
-                                                    </button>
+                                                    <c:choose>
+                                                        <c:when test="${LoudsourcingList[i-1].status == 'recruitment'}">모집 중</c:when>
+                                                        <c:when test="${LoudsourcingList[i-1].status == 'process'}">진행 중</c:when>
+                                                        <c:when test="${LoudsourcingList[i-1].status == 'judge'}">심사 중</c:when>
+                                                        <c:when test="${LoudsourcingList[i-1].status == 'end'}">종료</c:when>
+                                                    </c:choose>
                                                 </td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${LoudsourcingList[i-1].applied_artist_num}/${LoudsourcingList[i-1].total_recruitment_number}</td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${LoudsourcingList[i-1].start_date}
+                                                    ~ ${LoudsourcingList[i-1].end_date}</td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${LoudsourcingList[i-1].start_date}
+                                                    ~ ${LoudsourcingList[i-1].recruitment_end_date}</td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${LoudsourcingList[i-1].process_start_date}
+                                                    ~ ${LoudsourcingList[i-1].process_end_date}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                        <i class="btn-icon-prepend" data-feather="search"></i>
+                                                        보기
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
                                                         삭제
                                                     </button>
                                                 </td>

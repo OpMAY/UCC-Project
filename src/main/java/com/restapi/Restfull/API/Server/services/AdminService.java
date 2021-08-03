@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
+import com.restapi.Restfull.API.Server.response.NotificationType;
 import com.restapi.Restfull.API.Server.response.PortfolioType;
+import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -64,6 +66,9 @@ public class AdminService {
 
     @Autowired
     private EntryCommentDao entryCommentDao;
+
+    @Autowired
+    private NotificationDao notificationDao;
 
     private ModelAndView modelAndView;
 
@@ -550,5 +555,82 @@ public class AdminService {
         modelAndView.addObject("loudsourcingList", loudSourcingList);
 
         return modelAndView;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getRecruitmentApplyListPage(String query) {
+        loudSourcingDao.setSession(sqlSession);
+        loudSourcingApplyDao.setSession(sqlSession);
+        artistDao.setSession(sqlSession);
+        int loudsourcing_no = Integer.parseInt(query);
+        modelAndView = new ModelAndView("loudsourcing_recruitment_apply_list");
+
+        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
+        List<RecruitArtist> artistList = new ArrayList<>();
+        for(LoudSourcingApply loudSourcingApply : applyList){
+            int artist_no = loudSourcingApply.getArtist_no();
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            RecruitArtist recruitArtist = new RecruitArtist();
+            recruitArtist.setArtist_no(artist_no);
+            recruitArtist.setLoudsourcing_no(loudsourcing_no);
+            recruitArtist.setArtist_name(artist.getArtist_name());
+            recruitArtist.setEmail(artist.getEmail());
+            recruitArtist.setPhone(artist.getArtist_phone());
+            recruitArtist.setApply_date(loudSourcingApply.getReg_date());
+            artistList.add(recruitArtist);
+        }
+
+        modelAndView.addObject("artistList", artistList);
+
+        return modelAndView;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int recruitAlarmSend(int loudsourcing_no) {
+        try {
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
+            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            List<User> userList = new ArrayList<>();
+            if (applyList != null && !applyList.isEmpty()) {
+                for (LoudSourcingApply loudSourcingApply : applyList) {
+                    Artist artist = artistDao.getArtistByArtistNo(loudSourcingApply.getArtist_no());
+                    User user = userDao.selectUserByUserNo(artist.getUser_no());
+                    userList.add(user);
+                }
+
+                if (!userList.isEmpty()) {
+                    for (User user : userList) {
+                        //FCM MESSAGE SEND
+                        if (user.getFcm_token() != null && user.isFankok_push()) {
+                            NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                            firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.LOUDSOURCING_NOTIFICATION_FCM, "[" + loudSourcing.getName() + "] 아티스트님이 '모집' 신청하신 크라우드 공고가 '진행'시작되었습니다. 확인해주시고 출품작을 업로드 하여 주세요.", new Gson().toJson(notificationNext));
+                        } else {
+                            log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+                        }
+                        //NOTIFICATION SET
+                        Notification notification = new Notification();
+                        notification.setUser_no(user.getUser_no());
+                        notification.setType(NotificationType.LOUDSOURCING_NOTIFICATION);
+                        notification.setContent("[" + loudSourcing.getName() + "] 아티스트님이 '모집' 신청하신 크라우드 공고가 '진행'시작되었습니다. 확인해주시고 출품작을 업로드 하여 주세요.");
+                        notification.setReg_date(Time.TimeFormatHMS());
+                        NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                        notification.setNext(new Gson().toJson(notificationNext));
+                        notificationDao.insertNotification(notification);
+                    }
+                }
+            }
+
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 1;
+        }
     }
 }

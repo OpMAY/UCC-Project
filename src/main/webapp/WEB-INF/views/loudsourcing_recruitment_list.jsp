@@ -30,6 +30,28 @@
     <link rel="shortcut icon" href="../assets/images/favicon.png"/>
 </head>
 <body>
+<!-- core:js -->
+<script src="../assets/vendors/core/core.js"></script>
+<!-- endinject -->
+<!-- plugin js for this page -->
+<script src="../assets/vendors/chartjs/Chart.min.js"></script>
+<script src="../assets/vendors/jquery.flot/jquery.flot.js"></script>
+<script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
+<script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<!-- end plugin js for this page -->
+<!-- inject:js -->
+<script src="../assets/vendors/feather-icons/feather.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<!-- endinject -->
+<!-- custom js for this page -->
+<script src="../assets/js/dashboard.js"></script>
+<script src="../assets/js/datepicker.js"></script>
+<script src="../assets/js/data-table.js"></script>
+<!-- end custom js for this page -->
 <div class="main-wrapper">
     <!-- partial:partials/_sidebar.jsp -->
     <jsp:include page="partials/_sidebar.jsp" flush="true"></jsp:include>
@@ -60,19 +82,19 @@
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
                                 종료 </a></h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>공모전 이름</th>
-                                        <th>상태</th>
-                                        <th>모집인원 / 총 모집인원</th>
-                                        <th>총 기간</th>
-                                        <th>모집 기간</th>
-                                        <th>진행 기간</th>
-                                        <th>모집 인원 리스트</th>
-                                        <th>자세히 보기</th>
-                                        <th>삭제</th>
+                                        <th width="30px">#</th>
+                                        <th width="150px">공모전 이름</th>
+                                        <th width="50px">상태</th>
+                                        <th width="110px">모집인원/총 모집인원</th>
+                                        <th width="150px">총 기간</th>
+                                        <th width="150px">모집 기간</th>
+                                        <th width="150px">진행 기간</th>
+                                        <th width="80px">모집 인원 리스트</th>
+                                        <th width="80px">자세히 보기</th>
+                                        <th width="80px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -81,7 +103,7 @@
                                             <td>
                                                 ${i}
                                             </td>
-                                            <td>
+                                            <td class="overflow-hidden" style="text-overflow: ellipsis">
                                                 ${loudsourcingList[i-1].name}
                                             </td>
                                             <td>
@@ -90,19 +112,19 @@
                                             <td>
                                                 ${loudsourcingList[i-1].applied_artist_num}/${loudsourcingList[i-1].total_recruitment_number}
                                             </td>
-                                            <td>
+                                            <td class="overflow-hidden" style="text-overflow: ellipsis">
                                                 ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].end_date}
                                             </td>
-                                            <td>
+                                            <td class="overflow-hidden" style="text-overflow: ellipsis">
                                                 ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].recruitment_end_date}
                                             </td>
-                                            <td>
+                                            <td class="overflow-hidden" style="text-overflow: ellipsis">
                                                 ${loudsourcingList[i-1].process_start_date}~${loudsourcingList[i-1].process_end_date}
                                             </td>
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
+                                                        onclick="location.href='/admin/recruitment_apply_list.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -136,27 +158,6 @@
     </div>
 </div>
 
-<!-- core:js -->
-<script src="../assets/vendors/core/core.js"></script>
-<!-- endinject -->
-<!-- plugin js for this page -->
-<script src="../assets/vendors/chartjs/Chart.min.js"></script>
-<script src="../assets/vendors/jquery.flot/jquery.flot.js"></script>
-<script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
-<script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
-<script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
-<script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
-<script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-<!-- end plugin js for this page -->
-<!-- inject:js -->
-<script src="../assets/vendors/feather-icons/feather.min.js"></script>
-<script src="../assets/js/template.js"></script>
-<!-- endinject -->
-<!-- custom js for this page -->
-<script src="../assets/js/dashboard.js"></script>
-<script src="../assets/js/datepicker.js"></script>
-<script src="../assets/js/data-table.js"></script>
-<!-- end custom js for this page -->
+
 </body>
 </html>

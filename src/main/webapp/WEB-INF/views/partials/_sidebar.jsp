@@ -3,7 +3,7 @@
 <nav class="sidebar">
   <div class="sidebar-header">
     <a href="#" class="sidebar-brand">
-      <span>VOD</span> 관리자
+      <span>UCC</span> 관리자
     </a>
     <div class="sidebar-toggler not-active">
       <span></span>

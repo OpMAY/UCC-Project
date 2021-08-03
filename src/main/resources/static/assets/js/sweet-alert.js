@@ -157,14 +157,14 @@ $(function() {
     } else if (type === 'mixin') {
       const Toast = Swal.mixin({
         toast: true,
-        position: 'top-end',
+        position: 'top',
         showConfirmButton: false,
         timer: 1113000
       });
       
       Toast.fire({
         icon: 'success',
-        title: 'Signed in successfully'
+        title: '전송 완료!'
       })
     }
   }
