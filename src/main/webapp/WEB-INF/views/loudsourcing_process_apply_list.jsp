@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>크라우드 관리 - 모집 인원 리스트</title>
+    <title>크라우드 관리 - 참여 인원 리스트</title>
     <!-- core:css -->
     <link rel="stylesheet" href="../assets/vendors/core/core.css">
     <!-- endinject -->
@@ -46,7 +46,7 @@
             <nav class="page-breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item" style="color: #baa2fc">크라우드</li>
-                    <li class="breadcrumb-item active" aria-current="page">모집 인원 리스트</li>
+                    <li class="breadcrumb-item active" aria-current="page">참여 인원 리스트</li>
                 </ol>
             </nav>
 
@@ -54,14 +54,14 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">크라우드 - 모집 인원 리스트
+                            <h6 class="card-title" style="font-size: x-large">크라우드 - 참여 인원 리스트
                                 <c:if test="${artistList.size() > 0}">
                                     <button type="button"
                                             class="btn btn-outline-primary btn-icon-text"
                                             style="float: right"
                                             onclick="SendMessageToAll(${artistList[0].loudsourcing_no})">
                                         <i class="btn-icon-prepend" data-feather="send"></i>
-                                        알림 전체 전송
+                                        진행 시작 알림 전체 전송
                                     </button>
                                 </c:if>
                             </h6>
@@ -74,8 +74,11 @@
                                         <th>아티스트 명</th>
                                         <th>연락처</th>
                                         <th>이메일</th>
-                                        <th>신청 일자</th>
+                                        <th>출품작 업로드 일자</th>
+                                        <th>투표 갯수</th>
                                         <th>자세히 보기</th>
+                                        <th>진행 시작 알림 보내기</th>
+                                        <th>탈락 알림 보내기</th>
                                         <th>삭제</th>
                                     </tr>
                                     </thead>
@@ -86,16 +89,31 @@
                                         <td>${i}</td>
                                         <td>${artistList[i-1].artist_name}</td>
                                         <td>${artistList[i-1].phone}</td>
-                                        <td>
-                                                ${artistList[i-1].email}
-                                        </td>
-                                        <td>${artistList[i-1].apply_date}</td>
+                                        <td>${artistList[i-1].email}</td>
+                                        <td>${artistList[i-1].upload_date}</td>
+                                        <td>${artistList[i-1].vote_number}</td>
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="location.href='/admin/artist_detail.do?artist_no=${artistList[i-1].artist_no}'">
+                                                    onclick="location.href='/admin/entry_detail.do?entry_no=${artistList[i-1].entry_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button type="button"
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                    onclick="sendProcessAlarm(${artistList[i-1].artist_no})">
+                                                <i class="btn-icon-prepend" data-feather="search"></i>
+                                                보내기
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button type="button"
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                    onclick="sendFailAlarm(${artistList[i-1].artist_no})">
+                                                <i class="btn-icon-prepend" data-feather="search"></i>
+                                                보내기
                                             </button>
                                         </td>
                                         <td>
@@ -142,7 +160,51 @@
 <script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function SendMessageToAll(loudsourcing_no) {
+    function sendFailAlarm(artist_no) {
+        let data = {"artist_no" : artist_no};
+        $.ajax({
+            type: 'POST',
+            url: '/admin/recruit_alarm.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            console.log(result);
+            if (result === 0) {
+                alert("탈락 알림 전송 완료");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류 발생");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            alert(error);
+            window.location.reload();
+        })
+    }
+    function sendProcessAlarm(artist_no) {
+        let data = {"artist_no" : artist_no};
+        $.ajax({
+            type: 'POST',
+            url: '/admin/recruit_alarm.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            console.log(result);
+            if (result === 0) {
+                alert("진행 시작 알림 전송 완료");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류 발생");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            alert(error);
+            window.location.reload();
+        })
+    }
+    function SendProcessMessageToAll(loudsourcing_no) {
         const data = {"loudsourcing_no": loudsourcing_no};
         $.ajax({
             type: 'POST',
@@ -153,7 +215,7 @@
         }).done(function (result) {
             console.log(result);
             if (result === 0) {
-                alert("알림 전송 완료");
+                alert("진행 시작 알림 전체 전송 완료");
                 window.location.reload();
             } else {
                 alert("알 수 없는 오류 발생");

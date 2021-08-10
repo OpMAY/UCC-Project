@@ -339,10 +339,36 @@ public class SubscribeService {
                     break;
                 refreshArtistList.add(artistList.get(i));
             }
-            List<Artist> artists = artistDao.getSubscribedArtistListSortRecent(refreshArtistList);
+            if(refreshArtistList.size() > 0) {
+                List<Artist> artists = new ArrayList<>();
+                switch (sort) {
+                    case DataListSortType.SORT_BY_RECENT:
+                        artists = artistDao.getSubscribedArtistListSortRecent(refreshArtistList);
+                        break;
+                    case DataListSortType.SORT_BY_WORD:
+                        artists = artistDao.getSubscribedArtistListSortName(refreshArtistList);
+                        break;
+                    case DataListSortType.SORT_BY_FANKOK:
+                        artists = artistDao.getSubscribedArtistListSortFankok(refreshArtistList);
+                        break;
+                    default:
+                        return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.NOT_RIGHT_SORT), HttpStatus.OK);
+                }
+                for(Artist artist : artists) {
+                    if (artist.getHashtag() != null) {
+                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                        artist.setHashtag_list(hashtagList);
+                        log.info(hashtagList);
+                    }
+                }
+                if(artists.size() > 0)
+                    message.put("last_index", artists.get(artists.size() - 1).getArtist_no());
+                message.put("artists", artists);
+            } else {
+                message.put("last_index", 0);
+                message.put("artists", refreshArtistList);
+            }
 
-            message.put("last_index", artists.get(artists.size() - 1).getArtist_no());
-            message.put("artists", artists);
             message.put("sort", sort);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_USER_FANKOK_ARTIST_LIST, message.getHashMap("GetUserFankokArtist()")), HttpStatus.OK);
         } catch (JSONException e) {

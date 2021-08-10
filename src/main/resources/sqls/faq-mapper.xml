@@ -7,7 +7,7 @@
         select * from faq order by reg_date DESC, faq_no DESC LIMIT 10
     </select>
     <select id="getFAQRefresh" resultType="FAQ">
-        select * from faq WHERE reg_date <![CDATA[<=]]> #{reg_date} AND faq_no <![CDATA[<]]> #{faq_no} order by reg_date DESC, faq_no DESC LIMIT 10
+        select * from faq WHERE (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND faq_no <![CDATA[<]]> #{faq_no})) order by reg_date DESC, faq_no DESC LIMIT 10
     </select>
     <select id="getFAQByFAQNo" resultType="FAQ">
         select * from faq WHERE faq_no=#{faq_no}

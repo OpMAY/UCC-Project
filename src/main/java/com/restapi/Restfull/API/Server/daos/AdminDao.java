@@ -19,4 +19,9 @@ public class AdminDao {
         return adminMapper.loginAdmin(id, password);
     }
 
+    public void testEncode(String decode){
+        AdminMapper adminMapper = sqlSession.getMapper(AdminMapper.class);
+        adminMapper.testEncode(decode);
+    }
+
 }

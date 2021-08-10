@@ -82,4 +82,5 @@ public class ResMessage {
     public static final String NO_CONTENT_DETECTED = "No Content Detected in Given content number";
     public static final String BANNED_ARTIST = "Wrong Access By Banned Artist";
     public static final String UPDATE_PUSH_SETTING = "Push Setting updated";
+    public static final String NOT_RIGHT_SORT = "sort is null";
 }

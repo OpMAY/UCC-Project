@@ -13,7 +13,10 @@ import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.ArtistService;
 import com.restapi.Restfull.API.Server.services.BoardService;
 import com.restapi.Restfull.API.Server.services.CDNService;
-import com.restapi.Restfull.API.Server.utility.*;
+import com.restapi.Restfull.API.Server.utility.FileConverter;
+import com.restapi.Restfull.API.Server.utility.Format;
+import com.restapi.Restfull.API.Server.utility.Time;
+import com.restapi.Restfull.API.Server.utility.URLConverter;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,9 +33,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Log4j2
 @RestController
@@ -69,7 +75,7 @@ public class BoardController {
         log.info("NullPointer Exception Handler");
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
     }
-    
+
     @Setter
     @Getter
     @Data
@@ -77,25 +83,25 @@ public class BoardController {
         private int user_no;
         private int board_no;
     }
-    
-    /** 
-        주석 생성 날짜 - 2021-07-29, 목, 14:21
-        코드 설명 : 게시글 정보를 받아오는 URL
-        특이 사항 : X
-        파일 업로드 여부 : X
-    **/
+
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:21
+     * 코드 설명 : 게시글 정보를 받아오는 URL
+     * 특이 사항 : X
+     * 파일 업로드 여부 : X
+     **/
     @RequestMapping(value = "/api/board", method = RequestMethod.POST) // CHECK
     public ResponseEntity GetBoard(@RequestBody String body) {
         BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
         return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), -1);
     }
 
-    /** 
-        주석 생성 날짜 - 2021-07-29, 목, 14:22
-        코드 설명 : 게시글의 댓글을 불러오는 URL
-        특이 사항 : 10개씩 리로딩
-        파일 업로드 여부 : X
-    **/
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:22
+     * 코드 설명 : 게시글의 댓글을 불러오는 URL
+     * 특이 사항 : 10개씩 리로딩
+     * 파일 업로드 여부 : X
+     **/
     @RequestMapping(value = "/api/board/comments/{last_index}", method = RequestMethod.POST) //CHECK
     public ResponseEntity GetBoardComments(@RequestBody String body, @PathVariable("last_index") int last_index) {
         BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
@@ -103,12 +109,12 @@ public class BoardController {
         return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), last_index);
     }
 
-    /** 
-        주석 생성 날짜 - 2021-07-29, 목, 14:22
-        코드 설명 : 게시글을 업로드하는 URL
-        특이 사항 : 스마트 에디터 내의 임시 사진 URL 을 지정 URL로 변경, 썸네일은 개별 업로드
-        파일 업로드 여부 : thumbnail
-    **/
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:22
+     * 코드 설명 : 게시글을 업로드하는 URL
+     * 특이 사항 : 스마트 에디터 내의 임시 사진 URL 을 지정 URL로 변경, 썸네일은 개별 업로드
+     * 파일 업로드 여부 : thumbnail
+     **/
     @RequestMapping(value = "/api/board/upload", method = RequestMethod.POST) //CHECK
     public ResponseEntity UploadBoard(@RequestParam(value = "board") String body,
                                       @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
@@ -176,12 +182,12 @@ public class BoardController {
         }
     }
 
-    /** 
-        주석 생성 날짜 - 2021-07-29, 목, 14:23
-        코드 설명 : 
-        특이 사항 : 
-        파일 업로드 여부 : 
-    **/
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:23
+     * 코드 설명 :
+     * 특이 사항 :
+     * 파일 업로드 여부 :
+     **/
     @RequestMapping(value = "/api/board/edit", method = RequestMethod.POST) //CHECK
     public ResponseEntity EditBoard(@RequestParam("board") String body,
                                     @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
@@ -205,8 +211,15 @@ public class BoardController {
                 log.info("size:" + thumbnail.getSize());
                 log.info("ContentType:" + thumbnail.getContentType());
 
+                String decoded_file_name = thumbnail.getOriginalFilename();
+
+                if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                    decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
+                    log.info(decoded_file_name);
+                }
+
                 /** File Upload Logic */
-                String file_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail, board_info.toString());
+                String file_name = uploadFile(decoded_file_name, thumbnail, board_info.toString());
 
                 /** Board Set **/
                 URLConverter urlConverter = new URLConverter();
@@ -294,29 +307,27 @@ public class BoardController {
             CDNService cdnService = new CDNService();
             List<String> url = new ArrayList<>();
             String original_content = content;
-            int index;
-            while (true) {
-                index = content.indexOf("<img src=");
-                if (index < 0)
-                    break;
-                int next_multi_index = content.substring(index).indexOf(">");
-                String substring = content.substring(index + 10, index + next_multi_index - 1);
-                if(substring.contains("/api/temp/")) {
-                    url.add(substring);
-                }
-                content = content.substring(index).substring(next_multi_index + 1);
+            Pattern p = Pattern.compile("src=\"(.*?)\"");
+            Matcher m = p.matcher(original_content);
+            while (m.find()) {
+                log.info("Url : " + m.group(1));
+                url.add(m.group(1));
             }
             List<File> files = new ArrayList<>();
             List<String> newUrl = new ArrayList<>();
-            if(url.size() > 0) {
+            if (url.size() > 0) {
                 for (String str : url) {
-                    String path = str.substring(str.indexOf("vodappserver/") + 13);
+                    String path = "";
+                    if (str.contains("vodappserver/"))
+                        path = str.substring(str.indexOf("vodappserver/") + 13);
+                    else
+                        path = str.substring(str.indexOf(".com/") + 5);
                     String filename = path.substring(path.lastIndexOf("/") + 1);
                     log.info("Check Path Before downloading : " + path);
                     files.add(cdnService.download(upload_path, filename, path));
                     cdnService.delete(path);
                 }
-                if(files.size() > 0) {
+                if (files.size() > 0) {
                     for (File file : files) {
                         UUID uid = UUID.randomUUID();
                         String originalName = file.getName().replace(" ", "");

@@ -1,6 +1,9 @@
 package com.restapi.Restfull.API.Server.services;
 
+import com.restapi.Restfull.API.Server.daos.AdminDao;
 import com.restapi.Restfull.API.Server.daos.TestDao;
+import com.restapi.Restfull.API.Server.models.Admin;
+import com.restapi.Restfull.API.Server.models.AdminComment;
 import com.restapi.Restfull.API.Server.models.Test;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -18,6 +21,9 @@ public class TestService {
     @Autowired
     private TestDao testDao;
 
+    @Autowired
+    private AdminDao adminDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void sqlRollbackTest() {
         testDao.setSession(sqlSession);
@@ -26,5 +32,12 @@ public class TestService {
         test.setTestcol("updated");
         testDao.updateTest(test);
         testDao.insertTest();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Admin encodeTest(String decode){
+        adminDao.setSession(sqlSession);
+        adminDao.testEncode(decode);
+        return adminDao.loginAdmin(decode, decode);
     }
 }

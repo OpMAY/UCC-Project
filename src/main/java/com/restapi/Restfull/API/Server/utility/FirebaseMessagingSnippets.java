@@ -19,8 +19,8 @@ public class FirebaseMessagingSnippets {
     //초기화
     public void initFirebase(){
         try{
-            //FileInputStream refreshToken = new FileInputStream("/www/mvsolutions_co_kr/ROOT/resources/weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
-            FileInputStream refreshToken = new FileInputStream("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
+            FileInputStream refreshToken = new FileInputStream("/www/mvsolutions_co_kr/ROOT/resources/weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
+            //FileInputStream refreshToken = new FileInputStream("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))
                     .build();

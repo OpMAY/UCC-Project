@@ -1,10 +1,12 @@
 package com.restapi.Restfull.API.Server.services;
 
 import com.restapi.Restfull.API.Server.daos.ArtistDao;
+import com.restapi.Restfull.API.Server.daos.BoardDao;
 import com.restapi.Restfull.API.Server.daos.PenaltyDao;
 import com.restapi.Restfull.API.Server.daos.UserDao;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
+import com.restapi.Restfull.API.Server.models.Board;
 import com.restapi.Restfull.API.Server.models.Penalty;
 import com.restapi.Restfull.API.Server.models.User;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
@@ -42,6 +44,9 @@ public class PenaltyService {
     @Autowired
     private ArtistDao artistDao;
 
+    @Autowired
+    private BoardDao boardDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getPenaltyInfo(int user_no) {
         try {
@@ -69,44 +74,65 @@ public class PenaltyService {
         penaltyDao.setSession(sqlSession);
         userDao.setSession(sqlSession);
         artistDao.setSession(sqlSession);
+        boardDao.setSession(sqlSession);
 
         List<Penalty> penaltyList = penaltyDao.getPenaltyList();
         List<Penalty> latestPenaltyList = new ArrayList<>();
         List<Artist> artistList = new ArrayList<>();
-        for (Penalty penalty : penaltyList) {
-            Artist artist = new Artist();
-            artist.setUser_no(penalty.getUser_no());
-            artist.setArtist_no(penalty.getArtist_no());
-            if (!artistList.contains(artist)) {
-                artistList.add(artist);
-                latestPenaltyList.add(penalty);
+        if(penaltyList != null && penaltyList.size() > 0) {
+            for (Penalty penalty : penaltyList) {
+                Artist artist = new Artist();
+                artist.setUser_no(penalty.getUser_no());
+                artist.setArtist_no(penalty.getArtist_no());
+                if (!artistList.contains(artist)) {
+                    artistList.add(artist);
+                    latestPenaltyList.add(penalty);
+                }
             }
-        }
-        for (Penalty penalty : latestPenaltyList) {
-            Date now = new Date();
-            for (Artist artist : artistList) {
-                if (penalty.getUser_no() == artist.getUser_no()) {
-                    if (now.before(Time.StringToDateFormat(penalty.getPenalty_start_date())) || now.after(Time.StringToDateFormat(penalty.getPenalty_end_date()))) {
-                        if (artist.getArtist_no() > 0) {
-                            Artist artist1 = artistDao.getArtistByArtistNo(artist.getArtist_no());
-                            artist1.setArtist_private(false);
-                            artistDao.updateArtist(artist1);
-                        }
-                        User user = userDao.selectUserByUserNo(artist.getUser_no());
-                        user.set_user_private(false);
-                        userDao.updateUser(user);
-                    } else if (now.after(Time.StringToDateFormat(penalty.getPenalty_start_date())) && now.before(Time.StringToDateFormat(penalty.getPenalty_end_date()))) {
-                        if (artist.getArtist_no() > 0) {
-                            Artist artist1 = artistDao.getArtistByArtistNo(artist.getArtist_no());
-                            if (!artist1.isArtist_private()) {
-                                artist1.setArtist_private(true);
-                                artistDao.updateArtist(artist1);
+            if(latestPenaltyList.size() > 0) {
+                for (Penalty penalty : latestPenaltyList) {
+                    Date now = new Date();
+                    if (artistList.size() > 0) {
+                        for (Artist artist : artistList) {
+                            if (penalty.getUser_no() == artist.getUser_no()) {
+                                if (now.before(Time.StringToDateFormat(penalty.getPenalty_start_date())) || now.after(Time.StringToDateFormat(penalty.getPenalty_end_date()))) {
+                                    if (artist.getArtist_no() > 0) {
+                                        Artist artist1 = artistDao.getArtistByArtistNo(artist.getArtist_no());
+                                        artist1.setArtist_private(false);
+                                        artistDao.updateArtist(artist1);
+                                        List<Board> boardList = boardDao.getBoardListByArtistNo(artist1.getArtist_no());
+                                        if (boardList != null && boardList.size() > 0) {
+                                            for (Board board : boardList) {
+                                                board.setBoard_private(false);
+                                                boardDao.updateBoardByPenalty(board);
+                                            }
+                                        }
+                                    }
+                                    User user = userDao.selectUserByUserNo(artist.getUser_no());
+                                    user.set_user_private(false);
+                                    userDao.updateUser(user);
+                                } else if (now.after(Time.StringToDateFormat(penalty.getPenalty_start_date())) && now.before(Time.StringToDateFormat(penalty.getPenalty_end_date()))) {
+                                    if (artist.getArtist_no() > 0) {
+                                        Artist artist1 = artistDao.getArtistByArtistNo(artist.getArtist_no());
+                                        if (!artist1.isArtist_private()) {
+                                            artist1.setArtist_private(true);
+                                            artistDao.updateArtist(artist1);
+                                            List<Board> boardList = boardDao.getBoardListByArtistNo(artist1.getArtist_no());
+                                            if (boardList != null && boardList.size() > 0) {
+                                                for (Board board : boardList) {
+                                                    board.setBoard_private(true);
+                                                    boardDao.updateBoardByPenalty(board);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    User user = userDao.selectUserByUserNo(artist.getUser_no());
+                                    if (!user.is_user_private()) {
+                                        user.set_user_private(true);
+                                        userDao.updateUser(user);
+                                    }
+                                }
                             }
-                        }
-                        User user = userDao.selectUserByUserNo(artist.getUser_no());
-                        if (!user.is_user_private()) {
-                            user.set_user_private(true);
-                            userDao.updateUser(user);
                         }
                     }
                 }

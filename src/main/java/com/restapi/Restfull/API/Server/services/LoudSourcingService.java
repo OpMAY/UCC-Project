@@ -73,7 +73,7 @@ public class LoudSourcingService {
                 List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatus(sort);
                 for (LoudSourcing loudSourcing : loudSourcingList) {
                     if (loudSourcing.getHashtag() != null) {
-                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(", ")));
+                        ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(",")));
                         loudSourcing.setHashtag_list(hashtagList);
                         log.info(hashtagList);
                     }
@@ -730,7 +730,7 @@ public class LoudSourcingService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity getMyLoudsourcingList(int user_no, int start_index) {
+    public ResponseEntity getMyLoudsourcingList(int user_no, int last_index) {
         try {
             Message message = new Message();
             artistDao.setSession(sqlSession);
@@ -771,12 +771,25 @@ public class LoudSourcingService {
                 });
 
                 List<MyLoudSourcingResponse> indexList = new ArrayList<>();
-                for (int i = start_index; i < start_index + 10; i++) {
+                int index = 0;
+                if(last_index != 0) {
+                    for (MyLoudSourcingResponse myLoudSourcingResponse : myLoudsourcingList) {
+                        if (myLoudSourcingResponse.getLoudSourcing().getLoudsourcing_no() == last_index) {
+                            index++;
+                            break;
+                        }
+                        index++;
+                    }
+                }
+                for (int i = index; i < index + 10; i++) {
                     if (myLoudsourcingList.size() <= i)
                         break;
                     indexList.add(myLoudsourcingList.get(i));
                 }
                 message.put("loudsourcing_list", indexList);
+                if(indexList.size() > 0) {
+                    message.put("last_index", indexList.get(indexList.size() - 1).getLoudSourcing().getLoudsourcing_no());
+                }
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_MY_LOUDSOURCING_LIST, message.getHashMap("GetMyLoudsourcingList()")), HttpStatus.OK);
         } catch (JSONException e) {

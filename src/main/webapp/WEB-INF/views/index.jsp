@@ -187,21 +187,25 @@
                                                     ~ ${LoudsourcingList[i-1].process_end_date}</td>
                                                 <td>
                                                     <button type="button"
-                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                    onclick="location.href='/admin/recruitment_apply_list.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>
                                                 </td>
                                                 <td>
                                                     <button type="button"
-                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                            onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>
                                                 </td>
                                                 <td>
                                                     <button type="button"
-                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                            onclick="if(confirm('정말 삭제 하시겠습니까?')){DeleteLoudSourcing(${LoudsourcingList[i-1].loudsourcing_no});} else {return false;}">
+                                                        <i class="btn-icon-prepend" data-feather="trash"></i>
                                                         삭제
                                                     </button>
                                                 </td>
@@ -245,10 +249,36 @@
 <!-- inject:js -->
 <script src="../assets/vendors/feather-icons/feather.min.js"></script>
 <script src="../assets/js/template.js"></script>
+<script src="../assets/js/inspect.js"></script>
 <!-- endinject -->
 <!-- custom js for this page -->
 <script src="../assets/js/dashboard.js"></script>
 <script src="../assets/js/datepicker.js"></script>
 <!-- end custom js for this page -->
+<script>
+    function DeleteLoudSourcing(loudsourcing_no){
+        let data = {"loudsourcing_no" : loudsourcing_no};
+        $.ajax({
+            type: 'POST',
+            url: '/admin/delete_loudsourcing.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            console.log(result);
+            if (result === 0) {
+                alert("해당 크라우드를 삭제했습니다.");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error);
+            alert(error);
+            window.location.reload();
+        })
+    }
+</script>
 </body>
 </html>    

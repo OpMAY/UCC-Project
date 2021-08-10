@@ -46,6 +46,7 @@
 <!-- inject:js -->
 <script src="../assets/vendors/feather-icons/feather.min.js"></script>
 <script src="../assets/js/template.js"></script>
+<script src="../assets/js/inspect.js"></script>
 <!-- endinject -->
 <!-- custom js for this page -->
 <script src="../assets/js/dashboard.js"></script>
@@ -80,7 +81,15 @@
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_judge.do">
                                 심사 </a><a
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
-                                종료 </a></h6>
+                                종료 </a>
+                                <button type="button"
+                                        class="btn btn-outline-primary btn-icon-text"
+                                        style="float: right"
+                                        onclick="location.href='/admin/loudsourcing_upload.do'">
+                                    <i class="btn-icon-prepend" data-feather="edit"></i>
+                                    새 크라우드 만들기
+                                </button>
+                            </h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
@@ -101,25 +110,25 @@
                                     <c:forEach var="i" begin="1" end="${loudsourcingList.size()}">
                                         <tr>
                                             <td>
-                                                ${i}
+                                                    ${i}
                                             </td>
                                             <td class="overflow-hidden" style="text-overflow: ellipsis">
-                                                ${loudsourcingList[i-1].name}
+                                                    ${loudsourcingList[i-1].name}
                                             </td>
                                             <td>
                                                 모집 중
                                             </td>
                                             <td>
-                                                ${loudsourcingList[i-1].applied_artist_num}/${loudsourcingList[i-1].total_recruitment_number}
+                                                    ${loudsourcingList[i-1].applied_artist_num}/${loudsourcingList[i-1].total_recruitment_number}
                                             </td>
                                             <td class="overflow-hidden" style="text-overflow: ellipsis">
-                                                ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].end_date}
+                                                    ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].end_date}
                                             </td>
                                             <td class="overflow-hidden" style="text-overflow: ellipsis">
-                                                ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].recruitment_end_date}
+                                                    ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].recruitment_end_date}
                                             </td>
                                             <td class="overflow-hidden" style="text-overflow: ellipsis">
-                                                ${loudsourcingList[i-1].process_start_date}~${loudsourcingList[i-1].process_end_date}
+                                                    ${loudsourcingList[i-1].process_start_date}~${loudsourcingList[i-1].process_end_date}
                                             </td>
                                             <td>
                                                 <button type="button"
@@ -132,14 +141,15 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
+                                                        onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
                                             </td>
                                             <td>
                                                 <button type="button"
-                                                        class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="if(confirm('정말 삭제 하시겠습니까?')){DeletePortfolio(${portfolioList[i-1].portfolio_no});} else {return false;}">
+                                                        class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                        onclick="if(confirm('정말 삭제 하시겠습니까?')){DeleteLoudSourcing(${loudsourcingList[i-1].loudsourcing_no});} else {return false;}">
                                                     <i class="btn-icon-prepend" data-feather="trash"></i>
                                                     삭제
                                                 </button>
@@ -157,7 +167,31 @@
         </div>
     </div>
 </div>
-
+<script>
+    function DeleteLoudSourcing(loudsourcing_no){
+        let data = {"loudsourcing_no" : loudsourcing_no};
+        $.ajax({
+            type: 'POST',
+            url: '/admin/delete_loudsourcing.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            console.log(result);
+            if (result === 0) {
+                alert("해당 크라우드를 삭제했습니다.");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error);
+            alert(error);
+            window.location.reload();
+        })
+    }
+</script>
 
 </body>
 </html>

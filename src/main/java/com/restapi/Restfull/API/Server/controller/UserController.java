@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -109,15 +110,22 @@ public class UserController {
                     log.info("size:" + profile_img.getSize());
                     log.info("ContentType:" + profile_img.getContentType());
 
+                    /** IOS EUC-KR Name Converter **/
+                    String profile_img_decoded_file_name = profile_img.getOriginalFilename();
+
+                    if(!Normalizer.isNormalized(profile_img_decoded_file_name, Normalizer.Form.NFC)) {
+                        profile_img_decoded_file_name = Normalizer.normalize(profile_img.getOriginalFilename(), Normalizer.Form.NFC);
+                        log.info(profile_img_decoded_file_name);
+                    }
+
                     /** File Upload Logic */
 
-
                     if (artist != null) {
-                        String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
+                        String file_name = uploadFile(profile_img_decoded_file_name, profile_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
                         artist.setArtist_profile_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
                         uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name)));
                     } else {
-                        String file_name = uploadFile(profile_img.getOriginalFilename(), profile_img, "api/images/user/" + user.getUser_no() + "/");
+                        String file_name = uploadFile(profile_img_decoded_file_name, profile_img, "api/images/user/" + user.getUser_no() + "/");
                         user.setProfile_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name));
                         uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name)));
                     }
@@ -133,8 +141,16 @@ public class UserController {
                     log.info("size:" + fan_main_img.getSize());
                     log.info("ContentType:" + fan_main_img.getContentType());
 
+                    /** IOS EUC-KR Name Converter **/
+                    String main_img_decoded_file_name = fan_main_img.getOriginalFilename();
+
+                    if(!Normalizer.isNormalized(main_img_decoded_file_name, Normalizer.Form.NFC)) {
+                        main_img_decoded_file_name = Normalizer.normalize(fan_main_img.getOriginalFilename(), Normalizer.Form.NFC);
+                        log.info(main_img_decoded_file_name);
+                    }
+
                     /** File Upload Logic */
-                    String file_name = uploadFile(fan_main_img.getOriginalFilename(), fan_main_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
+                    String file_name = uploadFile(main_img_decoded_file_name, fan_main_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
 
                     artist.setMain_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
                     uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name)));

@@ -15,7 +15,7 @@
         WHERE inquiry_no=#{inquiry_no}
     </update>
     <select id="getInquiryListByUserNoRefresh" resultType="Inquiry">
-        select * from inquiry WHERE user_no=#{user_no} AND inquiry_no <![CDATA[<]]> #{inquiry_no} AND reg_date <![CDATA[<=]]> #{reg_date} order by reg_date DESC, inquiry_no DESC
+        select * from inquiry WHERE user_no=#{user_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (inquiry_no <![CDATA[<]]> #{inquiry_no} AND reg_date <![CDATA[=]]> #{reg_date})) order by reg_date DESC, inquiry_no DESC
         LIMIT 10
     </select>
     <select id="getInquiryListByUserNo" resultType="Inquiry">

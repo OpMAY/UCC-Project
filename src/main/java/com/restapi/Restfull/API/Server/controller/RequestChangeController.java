@@ -32,6 +32,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -132,6 +133,21 @@ public class RequestChangeController {
                 log.info("size:" + fan_main_img_file.getSize());
                 log.info("ContentType:" + fan_main_img_file.getContentType());
 
+                /** IOS EUC-KR Name Converter **/
+                String profile_img_decoded_file_name = profile_img_file.getOriginalFilename();
+
+                if(!Normalizer.isNormalized(profile_img_decoded_file_name, Normalizer.Form.NFC)) {
+                    profile_img_decoded_file_name = Normalizer.normalize(profile_img_file.getOriginalFilename(), Normalizer.Form.NFC);
+                    log.info(profile_img_decoded_file_name);
+                }
+
+                String fan_main_img_decoded_file_name = fan_main_img_file.getOriginalFilename();
+
+                if(!Normalizer.isNormalized(fan_main_img_decoded_file_name, Normalizer.Form.NFC)) {
+                    fan_main_img_decoded_file_name = Normalizer.normalize(fan_main_img_file.getOriginalFilename(), Normalizer.Form.NFC);
+                    log.info(fan_main_img_decoded_file_name);
+                }
+
                 /** RequestChange Set **/
                 requestChange.setAgree(true);
                 requestChange.setStatus(true);
@@ -144,8 +160,8 @@ public class RequestChangeController {
                 String artist_info = "user/" + requestChange.getUser_no() + "/artist/" + artist.getArtist_no() + "/";
 
                 /** File Upload Logic */
-                String profile_img_file_name = uploadFile(profile_img_file.getOriginalFilename(), profile_img_file, artist_info);
-                String fan_main_img_file_name = uploadFile(fan_main_img_file.getOriginalFilename(), fan_main_img_file, artist_info);
+                String profile_img_file_name = uploadFile(profile_img_decoded_file_name, profile_img_file, artist_info);
+                String fan_main_img_file_name = uploadFile(fan_main_img_decoded_file_name, fan_main_img_file, artist_info);
 
                 /** Update Artist IMAGES **/
                 artist.setArtist_profile_img(urlConverter.convertSpecialLetter(cdn_path + "images/" + artist_info + profile_img_file_name));

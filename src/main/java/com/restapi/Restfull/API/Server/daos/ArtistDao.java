@@ -100,6 +100,16 @@ public class ArtistDao {
         return artistMapper.getSubscribedArtistListSortRecent(artist_list);
     }
 
+    public List<Artist> getSubscribedArtistListSortFankok(ArrayList<Integer> artist_list){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getSubscribedArtistListSortFankok(artist_list);
+    }
+
+    public List<Artist> getSubscribedArtistListSortName(ArrayList<Integer> artist_list){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getSubscribedArtistListSortName(artist_list);
+    }
+
     public List<Artist> getAllArtistForCDN(){
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getAllArtistForCDN();

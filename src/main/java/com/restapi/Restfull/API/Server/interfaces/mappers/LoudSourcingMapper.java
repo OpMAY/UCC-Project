@@ -48,4 +48,8 @@ public interface LoudSourcingMapper {
     List<LoudSourcing> getRecentLSAdminMain(String status);
 
     List<LoudSourcing> getLoudsourcingForCDN();
+
+    void updateLoudSourcing(LoudSourcing loudSourcing);
+
+    void updateAdvertiser(LoudSourcing loudSourcing);
 }

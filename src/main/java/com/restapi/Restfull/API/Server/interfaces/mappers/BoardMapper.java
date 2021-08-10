@@ -48,4 +48,6 @@ public interface BoardMapper {
     void insertFiles(Board board);
 
     List<Board> getBoardForCDN();
+
+    void updateBoardByPenalty(Board board);
 }

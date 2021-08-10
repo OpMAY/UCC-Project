@@ -10,15 +10,15 @@
         select * from portfolio where portfolio_no=#{portfolio_no}
     </select>
     <select id="getPortfolioListByTypeVODSortRecentRefresh" resultType="Portfolio">
-        select * from portfolio where type=#{type} AND reg_date <![CDATA[<=]]> #{reg_date} AND portfolio_no <![CDATA[<]]> #{portfolio_no} order by reg_date DESC, portfolio_no DESC
+        select * from portfolio where type=#{type} AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND portfolio_no <![CDATA[<]]> #{portfolio_no})) order by reg_date DESC, portfolio_no DESC
         LIMIT 10
     </select>
     <select id="getPortfolioListByTypeVODSortTitleRefresh" resultType="Portfolio">
-        select * from portfolio where type=#{type} AND title <![CDATA[<]]> #{title} AND portfolio_no <![CDATA[<]]> #{portfolio_no} order by title, portfolio_no DESC
+        select * from portfolio where type=#{type} AND (title <![CDATA[<]]> #{title} OR (title <![CDATA[=]]> #{title} AND portfolio_no <![CDATA[<]]> #{portfolio_no})) order by title, portfolio_no DESC
         LIMIT 10
     </select>
     <select id="getPortfolioListByTypeVODSortFanNumberRefresh" resultType="Portfolio">
-        select * from portfolio where type=#{type} AND fan_number <![CDATA[<=]]> #{fan_number} AND portfolio_no <![CDATA[<]]> #{portfolio_no} order by fan_number DESC, portfolio_no DESC
+        select * from portfolio where type=#{type} AND (fan_number <![CDATA[<]]> #{fan_number} OR (fan_number <![CDATA[=]]> #{fan_number} AND portfolio_no <![CDATA[<]]> #{portfolio_no})) order by fan_number DESC, portfolio_no DESC
         LIMIT 10
     </select>
     <select id="getPortfolioListByTypeVODSortRecent" resultType="Portfolio">
@@ -75,13 +75,13 @@
         select * from portfolio WHERE artist_no=#{artist_no} AND type=#{type} ORDER BY revise_date DESC
     </select>
     <select id="getPortfolioListSortRecentRefresh" resultType="Portfolio">
-        select * from portfolio WHERE artist_no=#{artist_no} AND revise_date <![CDATA[<=]]> #{revise_date} AND portfolio_no <![CDATA[<]]> #{portfolio_no} ORDER BY reg_date DESC, portfolio_no DESC LIMIT 10
+        select * from portfolio WHERE artist_no=#{artist_no} AND (revise_date <![CDATA[<]]> #{revise_date} OR (revise_date <![CDATA[=]]> #{revise_date} AND portfolio_no <![CDATA[<]]> #{portfolio_no})) ORDER BY reg_date DESC, portfolio_no DESC LIMIT 10
     </select>
     <select id="getPortfolioListSortWordRefresh" resultType="Portfolio">
-        select * from portfolio WHERE artist_no=#{artist_no} AND title <![CDATA[>]]> #{title} AND portfolio_no <![CDATA[<]]> #{portfolio_no} ORDER BY title, portfolio_no DESC LIMIT 10
+        select * from portfolio WHERE artist_no=#{artist_no} AND (title <![CDATA[>]]> #{title} OR (title <![CDATA[=]]> #{title} AND portfolio_no <![CDATA[<]]> #{portfolio_no})) ORDER BY title, portfolio_no DESC LIMIT 10
     </select>
     <select id="getPortfolioListSortFanNumberRefresh" resultType="Portfolio">
-        select * from portfolio where fan_number <![CDATA[<=]]> #{fan_number} AND portfolio_no <![CDATA[<]]> #{portfolio_no} order by fan_number DESC, portfolio_no DESC
+        select * from portfolio where artist_no=#{artist_no} AND (fan_number <![CDATA[<]]> #{fan_number} OR (fan_number <![CDATA[=]]> #{fan_number} AND portfolio_no <![CDATA[<]]> #{portfolio_no})) order by fan_number DESC, portfolio_no DESC
         LIMIT 10
     </select>
     <select id="getPortfolioListSortRecent" resultType="Portfolio">

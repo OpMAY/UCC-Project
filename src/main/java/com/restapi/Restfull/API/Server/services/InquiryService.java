@@ -109,7 +109,7 @@ public class InquiryService {
             inquiry.setFile(file_msgList.toString());
             inquiryDao.insertInquiry(inquiry);
 
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.INQUIRY_UPLOAD_SUCCESS, message.getHashMap("GetInquiryList()")), HttpStatus.OK);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.INQUIRY_UPLOAD_SUCCESS, message.getHashMap("uploadInquiry()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);
         }

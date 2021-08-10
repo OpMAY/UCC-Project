@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.BoardCommentMapper">
     <select id="getCommentListByBoardNoRefresh" resultType="BoardComment">
-        select * from boardcomment where board_no=#{board_no} AND reg_date <![CDATA[<=]]> #{reg_date} AND comment_no <![CDATA[<]]> #{comment_no} order by reg_date DESC, comment_no DESC
+        select * from boardcomment where board_no=#{board_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND comment_no <![CDATA[<]]> #{comment_no})) order by reg_date DESC, comment_no DESC
         LIMIT 10
     </select>
     <select id="getCommentListByBoardNo" resultType="BoardComment">

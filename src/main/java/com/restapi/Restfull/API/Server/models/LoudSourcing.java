@@ -24,6 +24,7 @@ public class LoudSourcing {
     private String hashtag;
     private String files;
     private String img;
+    private String host_profile_img;
     private String content;
     private String start_date;
     private String recruitment_end_date;
@@ -38,4 +39,11 @@ public class LoudSourcing {
 
     private int applied_artist_num;
     private ArrayList<String> hashtag_list;
+
+    private String advertiser_name;
+    private String advertiser_phone;
+    private String advertiser_email;
+    private String advertiser_bank_name;
+    private String advertiser_bank_owner;
+    private String advertiser_bank_account;
 }

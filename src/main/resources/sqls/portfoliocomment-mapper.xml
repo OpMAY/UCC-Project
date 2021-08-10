@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioCommentMapper">
     <select id="getCommentListByPortfolioNoRefresh" resultType="PortfolioComment">
-        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} AND reg_date <![CDATA[<=]]> #{reg_date} AND comment_no <![CDATA[<]]> #{comment_no} order by reg_date DESC
+        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND comment_no <![CDATA[<]]> #{comment_no})) order by reg_date DESC
         LIMIT 10
     </select>
     <select id="getCommentListByPortfolioNo" resultType="PortfolioComment">

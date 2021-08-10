@@ -409,7 +409,7 @@ public class AdminService {
 
         int portfolio_no = Integer.parseInt(query);
         Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolio_no);
-        if(portfolio.getType().equals(PortfolioType.FILE)){
+        if (portfolio.getType().equals(PortfolioType.FILE)) {
             String jsonString = portfolio.getFile();
             Gson gson = new Gson();
             FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
@@ -440,7 +440,7 @@ public class AdminService {
             portfolioDao.setSession(sqlSession);
             portfolioDao.deletePortfolio(portfolio_no);
             return 0;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
@@ -455,7 +455,7 @@ public class AdminService {
 
         Board board = boardDao.getBoardByBoardNo(board_no);
         List<Spon> sponList = sponDao.getSponListByBoardNo(board_no);
-        for(Spon spon : sponList){
+        for (Spon spon : sponList) {
             board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
         }
 
@@ -466,12 +466,12 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public int deleteBoard(int board_no) {
-        try{
+        try {
             log.info(board_no);
             boardDao.setSession(sqlSession);
             boardDao.deleteBoard(board_no);
             return 0;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
@@ -485,7 +485,7 @@ public class AdminService {
 
         List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("recruitment");
 
-        for(LoudSourcing loudSourcing : loudSourcingList){
+        for (LoudSourcing loudSourcing : loudSourcingList) {
             int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
             loudSourcing.setApplied_artist_num(applied_num);
         }
@@ -504,7 +504,7 @@ public class AdminService {
 
         List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("process");
 
-        for(LoudSourcing loudSourcing : loudSourcingList){
+        for (LoudSourcing loudSourcing : loudSourcingList) {
             int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
             loudSourcing.setApplied_artist_num(applied_num);
         }
@@ -523,10 +523,10 @@ public class AdminService {
 
         List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("judge");
 
-        for(LoudSourcing loudSourcing : loudSourcingList){
+        for (LoudSourcing loudSourcing : loudSourcingList) {
             List<LoudSourcingApply> loudSourcingApplyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no());
-            for(LoudSourcingApply loudSourcingApply : loudSourcingApplyList){
-                if(loudSourcingApply.is_pre_selected()){
+            for (LoudSourcingApply loudSourcingApply : loudSourcingApplyList) {
+                if (loudSourcingApply.is_pre_selected()) {
                     loudSourcing.setSelected_artist_num(loudSourcing.getSelected_artist_num() + 1);
                 }
             }
@@ -547,7 +547,7 @@ public class AdminService {
 
         List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("end");
 
-        for(LoudSourcing loudSourcing : loudSourcingList){
+        for (LoudSourcing loudSourcing : loudSourcingList) {
             int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
             loudSourcing.setApplied_artist_num(applied_num);
         }
@@ -567,7 +567,7 @@ public class AdminService {
 
         List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
         List<RecruitArtist> artistList = new ArrayList<>();
-        for(LoudSourcingApply loudSourcingApply : applyList){
+        for (LoudSourcingApply loudSourcingApply : applyList) {
             int artist_no = loudSourcingApply.getArtist_no();
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
             RecruitArtist recruitArtist = new RecruitArtist();
@@ -628,9 +628,174 @@ public class AdminService {
             }
 
             return 0;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getLoudSourcingDetailPage(String query, String type) {
+        loudSourcingDao.setSession(sqlSession);
+        if (type.equals("Detail"))
+            modelAndView = new ModelAndView("loudsourcing_detail");
+        else if (type.equals("Edit"))
+            modelAndView = new ModelAndView("loudsourcing_detail_edit");
+        int loudsourcing_no = Integer.parseInt(query);
+        LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+        String jsonString = loudSourcing.getFiles();
+        Gson gson = new Gson();
+        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+        ArrayList<Upload> uploads = new ArrayList<>();
+        for (FileJson json : fileJson) {
+            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+        }
+        modelAndView.addObject("Loudsourcing", loudSourcing);
+        modelAndView.addObject("files", uploads);
+
+        return modelAndView;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int updateLoudsourcing(LoudSourcing loudSourcing) {
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            Gson gson = new Gson();
+            LoudSourcing original_loudsourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudSourcing.getLoudsourcing_no());
+            String og_jsonString = original_loudsourcing.getFiles();
+            String updated_jsonString = loudSourcing.getFiles();
+            FileJson[] og_files = gson.fromJson(og_jsonString, FileJson[].class);
+            FileJson[] updated_files = gson.fromJson(updated_jsonString, FileJson[].class);
+            for (FileJson fileJson : updated_files) {
+                for (FileJson original : og_files) {
+                    if (fileJson.getUrl().equals(original.getUrl())) {
+                        fileJson.setName(original.getName());
+                    }
+                }
+            }
+            String files = gson.toJson(updated_files);
+            loudSourcing.setFiles(files);
+            if (loudSourcing.getImg() == null)
+                loudSourcing.setImg(original_loudsourcing.getImg());
+            log.info(4);
+            loudSourcing.setType(original_loudsourcing.getType());
+            loudSourcing.setHost_profile_img(original_loudsourcing.getHost_profile_img());
+            loudSourcing.setRevise_date(Time.TimeFormatHMS());
+            loudSourcingDao.updateLoudSourcing(loudSourcing);
+            log.info("LoudSourcing Updated Successfully");
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getLoudSourcingUploadPage() {
+        modelAndView = new ModelAndView("loudsourcing_make");
+
+        return modelAndView;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int uploadLoudSourcing(LoudSourcing loudSourcing) {
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            String time = Time.TimeFormatHMS();
+            loudSourcing.setReg_date(time);
+            loudSourcing.setRevise_date(time);
+            loudSourcing.setType("default");
+            loudSourcing.setHost_profile_img("http://www.mvsolutions.co.kr/static/image/profile_img_basic.png");
+            loudSourcingDao.insertLoudSourcing(loudSourcing);
+
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int deleteLoudSourcing(int loudsourcing_no) {
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            log.info(loudsourcing_no);
+            loudSourcingDao.deleteLoudSourcing(loudsourcing_no);
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getLoudSourcingAdvertiserInfo(int loudsourcing_no) {
+        try{
+            loudSourcingDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("loudsourcing_advertiser_info");
+
+            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            loudSourcing.setReg_date(loudSourcing.getReg_date().substring(0, loudSourcing.getReg_date().lastIndexOf(".")));
+            loudSourcing.setRevise_date(loudSourcing.getRevise_date().substring(0, loudSourcing.getRevise_date().lastIndexOf(".")));
+            modelAndView.addObject("LoudSourcing", loudSourcing);
+
+            return modelAndView;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getLoudSourcingAdvertiserForEdit(int loudsourcing_no) {
+        try{
+            loudSourcingDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("loudsourcing_advertiser_info_edit");
+
+            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            loudSourcing.setReg_date(loudSourcing.getReg_date().substring(0, loudSourcing.getReg_date().lastIndexOf(".")));
+            loudSourcing.setRevise_date(loudSourcing.getRevise_date().substring(0, loudSourcing.getRevise_date().lastIndexOf(".")));
+            modelAndView.addObject("LoudSourcing", loudSourcing);
+
+            return modelAndView;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int advertiserEdit(AdvertiserEditRequest request) {
+        try{
+            loudSourcingDao.setSession(sqlSession);
+            log.info(request);
+            log.info("Advertiser Update...");
+            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(request.getLoudsourcing_no());
+            loudSourcing.setAdvertiser_name(request.getAdvertiser_name());
+            loudSourcing.setAdvertiser_phone(request.getAdvertiser_phone());
+            loudSourcing.setAdvertiser_email(request.getAdvertiser_email());
+            loudSourcing.setAdvertiser_bank_name(request.getAdvertiser_bank_name());
+            loudSourcing.setAdvertiser_bank_account(request.getAdvertiser_bank_account());
+            loudSourcing.setAdvertiser_bank_owner(request.getAdvertiser_bank_owner());
+            loudSourcing.setRevise_date(Time.TimeFormatHMS());
+            loudSourcingDao.updateAdvertiser(loudSourcing);
+            log.info("Advertiser Update Complete");
+            return 0;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getLoudSourcingProcessArtistList(int loudsourcing_no) {
+        loudSourcingDao.setSession(sqlSession);
+        loudSourcingApplyDao.setSession(sqlSession);
+        loudSourcingEntryDao.setSession(sqlSession);
+        artistDao.setSession(sqlSession);
+        modelAndView = new ModelAndView("loudsourcing_process_apply_list");
+        List<EntryProcessListRequest> requestList = new ArrayList<>();
+        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
+        return modelAndView;
     }
 }

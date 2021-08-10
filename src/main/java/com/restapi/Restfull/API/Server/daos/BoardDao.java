@@ -118,6 +118,11 @@ public class BoardDao {
         boardMapper.insertFiles(board);
     }
 
+    public void updateBoardByPenalty(Board board){
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        boardMapper.updateBoardByPenalty(board);
+    }
+
     public List<Board> getBoardForCDN() {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
         return boardMapper.getBoardForCDN();

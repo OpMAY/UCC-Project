@@ -35,7 +35,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         auth_excludeList.add("/api/auth");
         auth_excludeList.add("/api/login");
 
-        List<String> directory_excludeList = new ArrayList<String>();
+        List<String> directory_excludeList = new ArrayList<>();
         List<String> admin_excludeList = new ArrayList<>();
 
         admin_excludeList.add("/admin/login.do");

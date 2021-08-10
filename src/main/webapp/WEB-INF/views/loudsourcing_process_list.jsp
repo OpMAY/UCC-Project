@@ -110,7 +110,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
+                                                        onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -152,6 +152,7 @@
 <!-- inject:js -->
 <script src="../assets/vendors/feather-icons/feather.min.js"></script>
 <script src="../assets/js/template.js"></script>
+<script src="../assets/js/inspect.js"></script>
 <!-- endinject -->
 <!-- custom js for this page -->
 <script src="../assets/js/dashboard.js"></script>

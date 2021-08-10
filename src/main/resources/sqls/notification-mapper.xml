@@ -7,7 +7,7 @@
         select * from notification WHERE user_no=#{user_no} ORDER BY reg_date DESC, notification_no DESC LIMIT 10
     </select>
     <select id="getNotificationRefresh" resultType="Notification">
-        select * from notification WHERE user_no=#{user_no} AND notification_no <![CDATA[<]]> #{notification_no} AND reg_date <![CDATA[<=]]> #{reg_date} ORDER BY reg_date DESC, notification_no DESC LIMIT 10
+        select * from notification WHERE user_no=#{user_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (notification_no <![CDATA[<]]> #{notification_no} AND reg_date <![CDATA[=]]> #{reg_date})) ORDER BY reg_date DESC, notification_no DESC LIMIT 10
     </select>
     <select id="getNotificationByNotificationNo" resultType="Notification">
         select * from notification WHERE notification_no=#{notification_no}

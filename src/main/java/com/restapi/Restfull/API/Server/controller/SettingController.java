@@ -52,9 +52,10 @@ public class SettingController {
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/user/loudsourcing/{user_no}/start_index/{start_index}", method = RequestMethod.GET)
-    public ResponseEntity GetMyLoudsourcingList(@PathVariable("user_no") int user_no, @PathVariable("start_index") int start_index) {
-        return loudSourcingService.getMyLoudsourcingList(user_no, start_index);
+    @RequestMapping(value = "/api/user/loudsourcing/{user_no}/last_index/{last_index}", method = RequestMethod.GET)
+    public ResponseEntity GetMyLoudsourcingList(@PathVariable("user_no") int user_no, @PathVariable("last_index") int last_index) {
+        log.info("Last_index : " + last_index);
+        return loudSourcingService.getMyLoudsourcingList(user_no, last_index);
     }
 
     @RequestMapping(value = "/api/notice/{last_index}", method = RequestMethod.GET)

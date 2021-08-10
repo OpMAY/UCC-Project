@@ -7,7 +7,7 @@
         select * from notice ORDER BY revise_date DESC, notice_no DESC LIMIT 10
     </select>
     <select id="getNoticeRefresh" resultType="Notice">
-        select * from notice WHERE revise_date <![CDATA[<=]]> #{revise_date} AND notice_no <![CDATA[<]]> #{notice_no} ORDER BY revise_date DESC, notice_no DESC LIMIT 10
+        select * from notice WHERE (revise_date <![CDATA[<]]> #{revise_date} OR (revise_date <![CDATA[=]]> #{revise_date} AND notice_no <![CDATA[<]]> #{notice_no})) ORDER BY revise_date DESC, notice_no DESC LIMIT 10
     </select>
     <select id="getNoticeByNoticeNo" resultType="Notice">
         select * from notice WHERE notice_no=#{notice_no}

@@ -43,5 +43,9 @@ public interface ArtistMapper {
 
     List<Artist> getSubscribedArtistListSortRecent(@Param("artist_list") ArrayList<Integer> artist_list);
 
+    List<Artist> getSubscribedArtistListSortFankok(@Param("artist_list") ArrayList<Integer> artist_list);
+
+    List<Artist> getSubscribedArtistListSortName(@Param("artist_list") ArrayList<Integer> artist_list);
+
     List<Artist> getAllArtistForCDN();
 }

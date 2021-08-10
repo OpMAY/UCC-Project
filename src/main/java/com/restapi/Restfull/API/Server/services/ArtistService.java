@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -44,10 +42,14 @@ public class ArtistService {
     @Autowired
     private PenaltyDao penaltyDao;
 
+    @Autowired
+    private SearchDao searchDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getNewArtists() {
         try {
             Message message = new Message();
+            searchDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             List<Artist> newArtistList = artistDao.getNewArtistList();
             List<Artist> resArtistList = new ArrayList<>();
@@ -56,13 +58,23 @@ public class ArtistService {
                     break;
                 resArtistList.add(newArtistList.get(i));
             }
-            for (Artist artist : resArtistList){
+            for (Artist artist : resArtistList) {
                 if (artist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                     artist.setHashtag_list(hashtagList);
                     log.info(hashtagList);
                 }
             }
+            List<Search> searchList = searchDao.getKeywords();
+            List<String> keywordList = new ArrayList<>();
+            Collections.shuffle(searchList);
+            for (int i = 0; i < 10; i++) {
+                if(searchList.size() <= i)
+                    break;
+                String keyword = searchList.get(i).getWord();
+                keywordList.add(keyword);
+            }
+            message.put("keywords", keywordList);
             message.put("new_artists", resArtistList);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_LIST_LOADED, message.getHashMap("GetArtistList()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -84,7 +96,7 @@ public class ArtistService {
 
                 List<Artist> resArtistList = artistDao.getAllArtistRefresh(artist.getArtist_no(), sort, artist);
 
-                for (Artist artist1 : resArtistList){
+                for (Artist artist1 : resArtistList) {
                     if (artist1.getHashtag() != null) {
                         ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist1.getHashtag().split(", ")));
                         artist1.setHashtag_list(hashtagList);

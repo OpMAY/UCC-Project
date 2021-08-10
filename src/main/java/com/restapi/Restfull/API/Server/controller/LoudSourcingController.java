@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.UUID;
 
 @Log4j2
@@ -121,6 +122,20 @@ public class LoudSourcingController {
                 log.info("size:" + thumbnail.getSize());
                 log.info("ContentType:" + thumbnail.getContentType());
 
+                String vod_decoded_file_name = vod.getOriginalFilename();
+
+                if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
+                    vod_decoded_file_name = Normalizer.normalize(vod.getOriginalFilename(), Normalizer.Form.NFC);
+                    log.info(vod_decoded_file_name);
+                }
+
+                String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
+
+                if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
+                    thumbnail_decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
+                    log.info(thumbnail_decoded_file_name);
+                }
+
                 /** VOD THUMBNAIL LOGIC **/
                 VideoUtility videoUtility = new VideoUtility();
                 FileConverter fileConverter = new FileConverter();
@@ -130,8 +145,8 @@ public class LoudSourcingController {
                 URLConverter urlConverter = new URLConverter();
 
                 /** File Upload Logic */
-                String file_name = uploadFile(vod.getOriginalFilename(), vod, entry_info);
-                String thumbnail_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail, entry_info);
+                String file_name = uploadFile(vod_decoded_file_name, vod, entry_info);
+                String thumbnail_name = uploadFile(thumbnail_decoded_file_name, thumbnail, entry_info);
 
                 loudSourcingEntry.setFile(urlConverter.convertSpecialLetter(cdn_path + "videos/loudsourcing/" + entry_info + file_name));
                 loudSourcingEntry.setThumbnail(urlConverter.convertSpecialLetter(cdn_path + "images/loudsourcing/" + entry_info + thumbnail_name));
@@ -230,7 +245,7 @@ public class LoudSourcingController {
             cdnService.upload("api/images/loudsourcing/" + entry_info + savedName, file);
             Files.deleteIfExists(file.toPath());
         } else if (Format.CheckVODFile(originalName)) {
-            File file = new File(upload_path, mOriginalName);
+            File file = new File(upload_path, "test" + mfile.getOriginalFilename().substring(mfile.getOriginalFilename().lastIndexOf(".")).toLowerCase());
             cdnService.upload("api/videos/loudsourcing/" + entry_info + savedName, file);
             Files.deleteIfExists(file.toPath());
         } else {

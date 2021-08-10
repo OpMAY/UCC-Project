@@ -59,7 +59,11 @@ public class SponController {
             Message message = new Message();
             Spon spon = new Gson().fromJson(body, Spon.class);
             PurchaseData purchaseData = new Gson().fromJson(spon.getPurchase_data(), PurchaseData.class);
+            log.info("후원 정보 : " + spon);
+            log.info("영수증 정보 : " + purchaseData);
             if(spon.getPrice() != purchaseData.getPrice()){
+                log.info("Spon.getPrice() : " + spon.getPrice());
+                log.info("PurchaseData.getPrice() : " + purchaseData.getPrice());
                 return new ResponseEntity(DefaultRes.res(StatusCode.NOT_EXTENDED, ResMessage.PURCHASE_DATA_ERROR, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
             }
             String token = bootpayService.goGetToken();
@@ -85,7 +89,12 @@ public class SponController {
             Message message = new Message();
             Spon spon = new Gson().fromJson(body, Spon.class);
             PurchaseData purchaseData = new Gson().fromJson(spon.getPurchase_data(), PurchaseData.class);
+            log.info("후원 정보 : " + spon);
+            log.info("영수증 정보 : " + purchaseData);
             if(spon.getPrice() != purchaseData.getPrice()){
+                log.info("Spon.getPrice() : " + spon.getPrice());
+                log.info("PurchaseData.getPrice() : " + purchaseData.getPrice());
+                log.info("가격 정보가 맞지 않습니다.");
                 return new ResponseEntity(DefaultRes.res(StatusCode.NOT_EXTENDED, ResMessage.PURCHASE_DATA_ERROR, message.getHashMap("Spon()")), HttpStatus.OK);
             }
             String token = bootpayService.goGetToken();

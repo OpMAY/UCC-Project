@@ -169,6 +169,7 @@
     <!-- inject:js -->
     <script src="../assets/vendors/feather-icons/feather.min.js"></script>
     <script src="../assets/js/template.js"></script>
+    <script src="../assets/js/inspect.js"></script>
     <!-- endinject -->
     <!-- custom js for this page -->
     <script src="../assets/js/dashboard.js"></script>

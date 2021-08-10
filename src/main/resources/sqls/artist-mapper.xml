@@ -77,44 +77,47 @@
     <select id="getAllArtistListSortByRecentRefresh" resultType="Artist">
         select *
         from artist
-        WHERE artist_no <![CDATA[<]]> #{artist_no}
-          AND recent_act_date <![CDATA[<=]]> #{recent_act_date}
+        WHERE recent_act_date <![CDATA[<]]> #{recent_act_date}
+           OR (artist_no <![CDATA[<]]> #{artist_no}
+            AND recent_act_date <![CDATA[=]]> #{recent_act_date})
         order by recent_act_date DESC, artist_no DESC
-        limit 10
+        limit 12
     </select>
     <select id="getAllArtistListSortByNameRefresh" resultType="Artist">
         select *
         from artist
-        WHERE artist_no <![CDATA[<]]> #{artist_no}
-          AND artist_name <![CDATA[>]]> #{artist_name}
+        WHERE artist_name <![CDATA[>]]> #{artist_name}
+           OR (artist_no <![CDATA[<]]> #{artist_no}
+            AND artist_name <![CDATA[>]]> #{artist_name})
         order by artist_name, artist_no DESC
-        limit 10
+        limit 12
     </select>
     <select id="getAllArtistListSortByFanNumRefresh" resultType="Artist">
         select *
         from artist
-        WHERE artist_no <![CDATA[<]]> #{artist_no}
-          AND fan_number <![CDATA[<=]]> #{fan_number}
+        WHERE fan_number <![CDATA[<]]> #{fan_number}
+           OR (artist_no <![CDATA[<]]> #{artist_no}
+            AND fan_number <![CDATA[=]]> #{fan_number})
         order by fan_number DESC, artist_no DESC
-        limit 10
+        limit 12
     </select>
     <select id="getAllArtistListSortByRecent" resultType="Artist">
         select *
         from artist
         order by recent_act_date DESC, artist_no DESC
-        limit 10
+        limit 12
     </select>
     <select id="getAllArtistListSortByName" resultType="Artist">
         select *
         from artist
         order by artist_name, artist_no DESC
-        limit 10
+        limit 12
     </select>
     <select id="getAllArtistListSortByFanNum" resultType="Artist">
         select *
         from artist
         order by fan_number DESC, artist_no DESC
-        limit 10
+        limit 12
     </select>
     <update id="updateArtistPush">
         update artist
@@ -124,7 +127,7 @@
     <select id="getSubscribedArtistListSortRecent" resultType="Artist" parameterType="ArrayList">
         select * from artist WHERE artist_no in
         <choose>
-            <when test="artist_list.size != 0">
+            <when test="artist_list.size() != 0">
                 <foreach collection="artist_list" item="item" index="index" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
@@ -132,7 +135,30 @@
         </choose>
         ORDER BY recent_act_date DESC LIMIT 10
     </select>
+    <select id="getSubscribedArtistListSortFankok" resultType="Artist" parameterType="ArrayList">
+        select * from artist WHERE artist_no in
+        <choose>
+            <when test="artist_list.size() != 0">
+                <foreach collection="artist_list" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+        ORDER BY fan_number DESC LIMIT 10
+    </select>
+    <select id="getSubscribedArtistListSortName" resultType="Artist" parameterType="ArrayList">
+        select * from artist WHERE artist_no in
+        <choose>
+            <when test="artist_list.size() != 0">
+                <foreach collection="artist_list" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+        ORDER BY artist_name LIMIT 10
+    </select>
     <select id="getAllArtistForCDN" resultType="Artist">
-        select * from artist
+        select *
+        from artist
     </select>
 </mapper>

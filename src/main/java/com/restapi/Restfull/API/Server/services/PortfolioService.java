@@ -185,7 +185,9 @@ public class PortfolioService {
 
             message.put("vod", vodList);
             message.put("sort", sort);
-            message.put("last_index", vodList.get(vodList.size() - 1).getPortfolio_no());
+            if(vodList.size() > 0) {
+                message.put("last_index", vodList.get(vodList.size() - 1).getPortfolio_no());
+            }
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.VOD_LIST_CALL_SUCCESS, message.getHashMap("GetVODList()")), HttpStatus.OK);
         } catch (JSONException e) {

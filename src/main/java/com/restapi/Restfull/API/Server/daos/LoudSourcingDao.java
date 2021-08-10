@@ -104,4 +104,14 @@ public class LoudSourcingDao {
         LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
         return loudSourcingMapper.getLoudsourcingForCDN();
     }
+
+    public void updateLoudSourcing(LoudSourcing loudSourcing) {
+        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        loudSourcingMapper.updateLoudSourcing(loudSourcing);
+    }
+
+    public void updateAdvertiser(LoudSourcing loudSourcing){
+        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        loudSourcingMapper.updateAdvertiser(loudSourcing);
+    }
 }

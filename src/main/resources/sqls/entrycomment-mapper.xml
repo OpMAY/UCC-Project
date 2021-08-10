@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.EntryCommentMapper">
     <select id="getCommentListByEntryNoRefresh" resultType="EntryComment">
-        select * from entrycomment WHERE entry_no=#{entry_no} AND reg_date <![CDATA[<=]]> #{reg_date} AND entry_comment_no <![CDATA[<]]> #{entry_comment_no} ORDER BY reg_date DESC, entry_comment_no DESC
+        select * from entrycomment WHERE entry_no=#{entry_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND entry_comment_no <![CDATA[<]]> #{entry_comment_no})) ORDER BY reg_date DESC, entry_comment_no DESC
         LIMIT 10
     </select>
     <select id="getCommentListByEntryNo" resultType="EntryComment">

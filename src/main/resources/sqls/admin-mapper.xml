@@ -6,4 +6,7 @@
     <select id="loginAdmin" resultType="Admin">
         select * from admin WHERE id=#{id} AND pw=#{password}
     </select>
+    <insert id="testEncode">
+        insert into admin(id, pw, reg_date) VALUES (#{decode}, #{decode}, now())
+    </insert>
 </mapper>

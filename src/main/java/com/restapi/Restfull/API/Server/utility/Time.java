@@ -23,6 +23,12 @@ public class Time {
         return dateFormat.format(now);
     }
 
+    public static String TimeFormatNoSpecialCharacter() {
+        Date now = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+        return dateFormat.format(now);
+    }
+
     public static String TimeFormatter(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(date);
