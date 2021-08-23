@@ -63,7 +63,7 @@
                                         <th>#</th>
                                         <th>사용자 명</th>
                                         <th>소셜 로그인</th>
-                                        <th>아티스트 전환</th>
+                                        <th>유저 / 아티스트 여부</th>
                                         <th>생성 일자</th>
                                         <th>댓글 내역</th>
                                         <th>자세히 보기</th>
@@ -101,95 +101,10 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    data-toggle="modal" data-target="#user_ban_modal">
+                                                    onclick="openWindowPopBan('/admin/penalty.do?user_no=${UserList[i-1].user_no}','회원 정지')">
                                                 <i class="btn-icon-prepend" data-feather="x-square"></i>
                                                 정지
                                             </button>
-                                            <div class="modal fade" id="user_ban_modal" tabindex="-1" role="dialog"
-                                                 aria-labelledby="user_ban_modal" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">회원 정지 관리</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row justify-content-around">
-                                                                <div class="label col-4">
-                                                                    <label for="ban-start-date${i}" class="col-form-label">정지 시작 일</label>
-                                                                </div>
-                                                                <div class="label col-4">
-                                                                    <label for="ban-end-date${i}" class="col-form-label">해제일</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row justify-content-around">
-                                                                <div class="input-group date datepicker col-4 ban-date" id="ban-start-date${i}">
-                                                                    <input type="text" class="form-control" onchange="test(this)" id="ban-start-date-text${i}"><span class="input-group-addon"><i data-feather="calendar"></i></span>
-                                                                </div>
-                                                                <div class="input-group date datepicker col-4 ban-date-after" id="ban-end-date${i}">
-                                                                    <input type="text" disabled class="form-control" id="ban-end-date-text${i}"><span class="input-group-addon"><i data-feather="calendar"></i></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group" id="day-check-form">
-                                                                <div class="label">
-                                                                    <label for="day-check-form" class="col-form-label" style="font-size: 15px">정지 기간</label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label">
-                                                                        <input type="radio" class="form-check-input" name="optionsRadios" id="ban-3days" value="option1">
-                                                                        3일 정지
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label">
-                                                                        <input type="radio" class="form-check-input" name="optionsRadios" id="ban-7days" value="option1">
-                                                                        7일 정지
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label">
-                                                                        <input type="radio" class="form-check-input" name="optionsRadios" id="ban-15days" value="option1">
-                                                                        15일 정지
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label">
-                                                                        <input type="radio" class="form-check-input" name="optionsRadios" id="ban-30days" value="option1">
-                                                                        30일 정지
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label">
-                                                                        <input type="radio" class="form-check-input" name="optionsRadios" id="ban-90days" value="option1">
-                                                                        90일 정지
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label">
-                                                                        <input type="radio" class="form-check-input" name="optionsRadios" id="ban-perm" value="option1">
-                                                                        영구 정지
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="ban-message-text"
-                                                                       class="col-form-label" style="font-size: 15px">정지 사유</label>
-                                                                <textarea class="form-control"
-                                                                          id="ban-message-text" rows="8" style="line-height: 150%"></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary">보내기</button>
-                                                            <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">취소
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </td>
                                     </tr>
                                     </c:forEach>
@@ -228,10 +143,9 @@
 <script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function test(element){
-        $('#ban-end-date-text1').val(
-            element.value
-        )
+    function openWindowPopBan(url, name){
+        let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+        window.open(url, name, options);
     }
 </script>
 </body>

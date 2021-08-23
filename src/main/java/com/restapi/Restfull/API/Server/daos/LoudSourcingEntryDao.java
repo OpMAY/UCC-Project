@@ -93,4 +93,14 @@ public class LoudSourcingEntryDao {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         return loudSourcingEntryMapper.getEntryForCDN();
     }
+
+    public List<LoudSourcingEntry> getEntryListByLoudSourcingNoAdmin(int loudsourcing_no) {
+        LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
+        return loudSourcingEntryMapper.getEntryListNum(loudsourcing_no);
+    }
+
+    public List<LoudSourcingEntry> getEntryListByLoudSourcingNoAdminSortByVoteNumber(int loudsourcing_no) {
+        LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
+        return loudSourcingEntryMapper.getEntryListByLoudSourcingNoAdminSortByVoteNumber(loudsourcing_no);
+    }
 }

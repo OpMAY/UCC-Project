@@ -14,5 +14,5 @@ public class BannerAd {
     private String img;
     private String reg_date;
     private String revise_date;
-    private String status;
+    private boolean status;
 }

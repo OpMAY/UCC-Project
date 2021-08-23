@@ -70,9 +70,8 @@
                                         <th width="150px">총 기간</th>
                                         <th width="150px">모집 기간</th>
                                         <th width="80px">종료 일자</th>
-                                        <th width="80px">참여 인원 리스트</th>
+                                        <th width="80px">최종 선정 리스트</th>
                                         <th width="80px">자세히 보기</th>
-                                        <th width="80px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -102,7 +101,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
+                                                        onclick="location.href='/admin/final_selected.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -113,13 +112,6 @@
                                                         onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button type="button"
-                                                        class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="if(confirm('정말 삭제 하시겠습니까?')){DeletePortfolio(${portfolioList[i-1].portfolio_no});} else {return false;}">
-                                                    <i class="btn-icon-prepend" data-feather="trash"></i>
-                                                    삭제
                                                 </button>
                                             </td>
                                         </tr>

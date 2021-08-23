@@ -95,7 +95,7 @@ public class RequestChangeController {
             /** File Check Logic **/
             if (profile_img_file == null || profile_img_file.isEmpty()) {
                 log.info("profile img is empty or null");
-                File basic_profile_img = new File("/www/mvsolutions_co_kr/www/WEB-INF/classes/static/image/profile_img_basic.png");
+                File basic_profile_img = new File("/www/weart-page_com/www/WEB-INF/classes/static/image/profile_img_basic.png");
                 FileItem fileItem = new DiskFileItem("profile_img_basic", Files.probeContentType(basic_profile_img.toPath()), false, basic_profile_img.getName(), (int) basic_profile_img.length(), basic_profile_img.getParentFile());
                 InputStream input = new FileInputStream(basic_profile_img);
                 OutputStream os = fileItem.getOutputStream();
@@ -104,7 +104,7 @@ public class RequestChangeController {
             }
             if (fan_main_img_file == null || fan_main_img_file.isEmpty()) {
                 log.info("fan main img is empty or null");
-                File basic_fan_main_img = new File("/www/mvsolutions_co_kr/www/WEB-INF/classes/static/image/fan_main_img_basic.png");
+                File basic_fan_main_img = new File("/www/weart-page_com/www/WEB-INF/classes/static/image/fan_main_img_basic.png");
                 FileItem fileItem = new DiskFileItem("fan_main_img_basic", Files.probeContentType(basic_fan_main_img.toPath()), false, basic_fan_main_img.getName(), (int) basic_fan_main_img.length(), basic_fan_main_img.getParentFile());
                 InputStream input = new FileInputStream(basic_fan_main_img);
                 OutputStream os = fileItem.getOutputStream();
@@ -198,7 +198,7 @@ public class RequestChangeController {
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
         FileConverter fileConverter = new FileConverter();
-        File file = fileConverter.convert(mfile);
+        File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
         CDNService cdnService = new CDNService();
         cdnService.upload("api/images/" + artist_info + savedName, file);
         Files.deleteIfExists(file.toPath());

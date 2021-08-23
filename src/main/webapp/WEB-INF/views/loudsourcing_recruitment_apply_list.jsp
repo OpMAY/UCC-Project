@@ -108,6 +108,14 @@
                                     </tr>
                                     </c:forEach>
                                 </table>
+
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/loudsourcing_recruitment.do'">
+                                        뒤로가기
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

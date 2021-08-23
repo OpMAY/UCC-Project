@@ -13,7 +13,6 @@ import java.util.ArrayList;
 @ToString
 public class Notice {
     private int notice_no;
-    private int admin_no;
     private String title;
     private String content;
     private String reg_date;

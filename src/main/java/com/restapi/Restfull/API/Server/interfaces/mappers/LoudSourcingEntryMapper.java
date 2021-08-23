@@ -36,4 +36,6 @@ public interface LoudSourcingEntryMapper {
     List<LoudSourcingEntry> getEntryListNum(int loudsourcing_no);
 
     List<LoudSourcingEntry> getEntryForCDN();
+
+    List<LoudSourcingEntry> getEntryListByLoudSourcingNoAdminSortByVoteNumber(int loudsourcing_no);
 }

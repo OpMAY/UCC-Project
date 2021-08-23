@@ -15,5 +15,5 @@ public class Search {
     private int search_no;
     private int admin_no;
     private String word;
-    private Date reg_date;
+    private String reg_date;
 }

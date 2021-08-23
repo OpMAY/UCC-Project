@@ -3,12 +3,13 @@ package com.restapi.Restfull.API.Server.utility;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.*;
-import com.restapi.Restfull.API.Server.models.NotificationNext;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.TopicManagementResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.FileInputStream;
 import java.util.List;
 
@@ -17,26 +18,26 @@ import java.util.List;
 public class FirebaseMessagingSnippets {
 
     //초기화
-    public void initFirebase(){
-        try{
-            FileInputStream refreshToken = new FileInputStream("/www/mvsolutions_co_kr/ROOT/resources/weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
+    public void initFirebase() {
+        try {
+            FileInputStream refreshToken = new FileInputStream("/www/weart-page_com/ROOT/resources/weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
             //FileInputStream refreshToken = new FileInputStream("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))
                     .build();
 
             //Firebase 처음 호출시에만 initailizing 처리
-            if(FirebaseApp.getApps().isEmpty())
+            if (FirebaseApp.getApps().isEmpty())
                 FirebaseApp.initializeApp(options);
             refreshToken.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("notification error: " + e);
             e.printStackTrace();
         }
     }
 
-    public void test_sendAll_FCM(List<String> tokenId, String title, String content){
-        try{
+    public void test_sendAll_FCM(List<String> tokenId, String title, String content) {
+        try {
             initFirebase();
 
             String topic = "push";
@@ -62,13 +63,13 @@ public class FirebaseMessagingSnippets {
             // Response is a message ID string.
             System.out.println("Successfully sent message: " + firbaseResponse);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void push(String tokenId, String title, String content, String next){
-        try{
+    public void push(String tokenId, String title, String content, String next) {
+        try {
             Notification notification = new Notification(title, content);
             initFirebase();
 
@@ -87,7 +88,7 @@ public class FirebaseMessagingSnippets {
             log.info("Successfully sent message: " + response);
 
             log.info("notification 통과");
-        } catch (Exception e){
+        } catch (Exception e) {
             log.info("notification error: " + e);
             e.printStackTrace();
         }

@@ -44,6 +44,12 @@ function inspection(inputId, what) {
     const loudsourcing_content = /^.{10,2000}$/;
     const warning = /^.{10,2000}$/;
 
+    const inspect_notice_title = /^.{2,20}$/;
+    const inspect_notice_content = /^.{2,2000}$/;
+    const inspect_faq_question = /^.{2,40}$/;
+    const inspect_faq_answer = /^.{2,1000}$/;
+    const inspect_penalty_reason = /^.{10,100}$/;
+
 
 
     const inspect_text30 = /^.{1,30}/g;
@@ -235,6 +241,36 @@ function inspection(inputId, what) {
         case 'warning':
             let l_warning = document.getElementById(inputId);
             if(!check(warning, l_warning, "주의 사항은 최소 10자, 최대 2000자까지 입력해주세요.")){
+                return false;
+            }
+            break;
+        case 'notice_title':
+            let notice_title = document.getElementById(inputId);
+            if(!check(inspect_notice_title, notice_title, "공지사항 제목은 최소 2자, 최대 20자까지 입력해주세요.")){
+                return false;
+            }
+            break;
+        case 'notice_content':
+            let notice_content = document.getElementById(inputId);
+            if(!check(inspect_notice_content, notice_content, "공지사항 내용은 최소 2자, 최대 2000자까지 입력해주세요.")){
+                return false;
+            }
+            break;
+        case 'faq_question':
+            let faq_question = document.getElementById(inputId);
+            if(!check(inspect_faq_question, faq_question, "FAQ 질문은 최소 2자, 최대 40자까지 입력해주세요.")){
+                return false;
+            }
+            break;
+        case 'faq_answer':
+            let faq_answer = document.getElementById(inputId);
+            if(!check(inspect_faq_answer, faq_answer, "FAQ 답변은 최소 2자, 최대 1000자까지 입력해주세요.")){
+                return false;
+            }
+            break;
+        case 'penalty_reason':
+            let penalty_reason = document.getElementById(inputId);
+            if(!check(inspect_penalty_reason, penalty_reason, "정지 사유는 최소 10자, 최대 100자까지 입력해주세요.")){
                 return false;
             }
             break;

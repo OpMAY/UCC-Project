@@ -4,19 +4,47 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.BannerAdMapper">
     <select id="getBannerList" resultType="BannerAd">
-        select * from bannerad WHERE status=#{status} order by revise_date DESC LIMIT 4
+        select *
+        from bannerad
+        WHERE status = #{status}
+        order by revise_date
+        LIMIT 4
     </select>
     <insert id="insertBanner" useGeneratedKeys="true" keyProperty="banner_ad_no">
         insert into bannerad(img, reg_date, revise_date, status)
         VALUES (#{img}, #{reg_date}, #{revise_date}, #{status})
     </insert>
     <update id="updateBanner">
-        update bannerad SET img=#{img}, status=#{status}, revise_date=#{revise_date}
+        update bannerad
+        SET img=#{img},
+            status=#{status},
+            revise_date=#{revise_date}
+        WHERE banner_ad_no = #{banner_ad_no}
     </update>
     <delete id="deleteBanner">
-        delete from bannerad WHERE banner_ad_no=#{banner_ad_no}
+        delete
+        from bannerad
+        WHERE banner_ad_no = #{banner_ad_no}
     </delete>
     <select id="getBannerForCDN" resultType="BannerAd">
-        select * from bannerad
+        select *
+        from bannerad
+    </select>
+    <select id="getActiveBannerList" resultType="BannerAd">
+        select *
+        from bannerad
+        WHERE status = true
+        ORDER BY revise_date
+    </select>
+    <select id="getDisableBannerList" resultType="BannerAd">
+        select *
+        from bannerad
+        WHERE status = false
+        ORDER BY revise_date
+    </select>
+    <select id="getBannerAdByBannerAdNo" resultType="BannerAd">
+        select *
+        from bannerad
+        WHERE banner_ad_no = #{banner_ad_no}
     </select>
 </mapper>

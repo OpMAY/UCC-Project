@@ -37,16 +37,12 @@ $(function () {
 
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    $('.ban-date').datepicker({
+    $('#ban-start-date').datepicker({
         format: "yyyy-mm-dd",
         todayHighlight: true,
         autoclose: true
     });
-    $('.start-date').datepicker({
-        format: "yyyy-mm-dd",
-        todayHighlight: true,
-        autoclose: true
-    });
+    $('#ban-start-date').datepicker('setDate', today);
     /*$('.ban-date').on('changeDate', function () {
         $('#ban-end-date-text1').val(
             $('#ban-start-date-text1').datepicker('getFormattedDate')

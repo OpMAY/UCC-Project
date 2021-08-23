@@ -31,6 +31,63 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../assets/images/favicon.png"/>
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul {
+            padding: 16px 0;
+        }
+
+        ul li {
+            display: inline-block;
+            margin: 0 5px;
+            font-size: 20px;
+            letter-spacing: -.5px;
+        }
+
+        form {
+            padding-top: 16px;
+        }
+
+        ul li.tag-item {
+            padding: 4px 8px;
+            background-color: #98B6FF;
+            color: #000;
+            opacity: 80%;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tag-item:hover {
+            background-color: #6B5D7E;
+            color: #fff;
+            opacity: 80%;
+        }
+
+        .del-btn {
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        .tr_hashTag_area input[type="text"] {
+            width: 100%; /* 원하는 너비 설정 */
+            height: auto; /* 높이값 초기화 */
+            line-height: normal; /* line-height 초기화 */
+            padding: .8em .5em; /* 원하는 여백 설정, 상하단 여백으로 높이를 조절 */
+            font-family: inherit; /* 폰트 상속 */
+            border: 1px solid #999;
+            border-radius: 0; /* iSO 둥근모서리 제거 */
+            outline-style: none; /* 포커스시 발생하는 효과 제거를 원한다면 */
+            -webkit-appearance: none; /* 브라우저별 기본 스타일링 제거 */
+            -moz-appearance: none;
+            appearance: none;
+        }
+    </style>
 </head>
 <body>
 <script>
@@ -121,13 +178,21 @@
                                                     <textarea class="form-control" id="loudsourcing-make-reward" rows="1"
                                                               style="line-height: 150%; font-size: large; text-align: center"
                                                     ></textarea>
-                                                    <label class="label d-flex" for="loudsourcing-hashtag"
+                                                    <label class="label d-flex"
                                                            style="font-size: larger">
-                                                        해시태그 - [추가하려면 입력하고 엔터를 누르세요.]
+                                                        해시태그
                                                     </label>
-                                                    <div>
-                                                        <input hidden="hidden"/>
-                                                        <input name="tags" id="loudsourcing-hashtag">
+                                                    <div class="tr_hashTag_area">
+                                                        <div class="form-group">
+                                                            <input type="hidden" value="" name="tag" id="rdTag"/>
+                                                        </div>
+
+                                                        <ul id="tag-list"></ul>
+
+                                                        <div class="form-group">
+                                                            <input type="text" id="tag" size="7" placeholder="엔터로 해시태그를 등록해주세요. 최대 5자까지 가능하며 해시태그는 최대 10개 등록 가능합니다."
+                                                                   style="width: 100%;"/>
+                                                        </div>
                                                     </div>
                                                     <label class="label d-flex" for="make-total-recruit-number"
                                                            style="font-size: larger">
@@ -263,8 +328,8 @@
                                             </div>
                                             <div class="row mt-4 mb-3 justify-content-around">
                                                 <div class="col-md-6 justify-content-center d-flex">
-                                                    <button type="button" class="btn btn-outline-primary"
-                                                            onclick="uploadLoudSourcing()">
+                                                    <button type="button" id="makeButton" class="btn btn-outline-primary"
+                                                            >
                                                         확인
                                                     </button>
                                                 </div>
@@ -313,80 +378,170 @@
     <script src="../assets/js/data-table.js"></script>
     <!-- end custom js for this page -->
     <script>
-        function uploadLoudSourcing() {
-            if (!inspection("loudsourcing-make-name", "loudsourcing_name")) {
-                return false;
-            } else if (!inspection("loudsourcing-make-host", "host_name")){
-                return false;
-            } else if (!inspection("loudsourcing-make-reward", "reward")){
-                return false;
-            } else if(!inspection("make-total-recruit-number", "total_recruit_number")){
-                return false;
-            } else if (!inspection("loudsourcing-make-content", "loudsourcing_content")){
-                return false;
-            } else if (!inspection("loudsourcing-make-warning", "warning")){
-                return false;
+        $(document).ready(function () {
+            let tag = {};
+            let counter = 0;
+
+            // 입력한 값을 태그로 생성한다.
+            function addTag(value) {
+                tag[counter] = value;
+                counter++; // del-btn 의 고유 id 가 된다.
             }
 
-            let form = $("#loudsourcingEditForm")[0];
-            let formData = new FormData(form);
-            let status;
-            switch ($("#loudsourcing-make-status").val()) {
-                case "모집" : {
-                    status = "recruitment";
-                }
-                    break;
-                case "진행" : {
-                    status = "process";
-                }
-                    break;
-                case "심사" : {
-                    status = "judge";
-                }
-                    break;
-                case "종료" : {
-                    status = "end";
-                }
-                    break;
+            // tag 안에 있는 값을 array type 으로 만들어서 넘긴다.
+            function marginTag() {
+                return Object.values(tag).filter(function (word) {
+                    return word !== "";
+                });
             }
-            let loudsourcingData = {
-                "name": $("#loudsourcing-make-name").val(),
-                "status": status,
-                "host": $("#loudsourcing-make-host").val(),
-                "reward": $("#loudsourcing-make-reward").val(),
-                "warning": $("#loudsourcing-make-warning").val(),
-                "hashtag": $("#loudsourcing-hashtag").val(),
-                "content": $("#loudsourcing-make-content").val(),
-                "start_date": $("#start-date").val(),
-                "recruitment_end_date": $("#recruitment-end-date").val(),
-                "process_start_date": $("#process-start-date").val(),
-                "process_end_date": $("#process-end-date").val(),
-                "judge_date": $("#judge-date").val(),
-                "end_date": $("#end-date").val(),
-                "total_recruitment_number": $("#make-total-recruit-number").val()
-            };
-            formData.append("loudsourcing", JSON.stringify(loudsourcingData));
-            $.ajax({
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                url: '/admin/loudsourcing_make_post.do',
-                contentType: false,
-                processData: false,
-                data: formData
-            }).done(function (result) {
-                console.log(result);
-                if (result === 0) {
-                    alert("새 크라우드를 생성하였습니다.");
-                    window.location.href = 'http://localhost:8080/admin/loudsourcing_recruitment.do';
-                } else {
-                    alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
-                    window.location.href = 'http://localhost:8080/admin/loudsourcing_recruitment.do';
+
+            // 서버에 제공
+            $("#tag-form").on("submit", function (e) {
+                let value = marginTag(); // return array
+                $("#rdTag").val(value);
+
+                $(this).submit();
+            });
+
+
+            $("#tag").on("keypress", function (e) {
+                let self = $(this);
+
+                //엔터나 스페이스바 눌렀을때 실행
+                if (e.key === "Enter" || e.keyCode === 32) {
+
+                    let tagValue = self.val(); // 값 가져오기
+
+                    // 해시태그 값 없으면 실행X
+                    if (tagValue !== "") {
+                        console.log("length : " + tagValue.length);
+                        if (tagValue.length <= 5) {
+
+                            // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+                            let result = Object.values(tag).filter(function (word) {
+                                return word === tagValue;
+                            });
+
+                            // 해시태그가 중복되었는지 확인
+                            if (result.length === 0) {
+                                if (counter < 10) {
+                                    $("#tag-list").append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+                                    addTag(tagValue);
+                                    self.val("");
+                                } else {
+                                    alert("검색 해시태그는 최대 10개까지 등록 가능합니다.");
+                                }
+
+                            } else {
+                                alert("태그값이 중복됩니다.");
+                            }
+                        } else {
+                            alert("해시태그는 최대 5자까지 가능합니다.");
+                        }
+                    }
+                    e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
                 }
-            }).fail(function (error) {
-                console.log(error);
-                window.location.href = 'http://localhost:8080/admin/loudsourcing_recruitment.do';
-            })
-        }
+            });
+
+            // 삭제 버튼
+            // 인덱스 검사 후 삭제
+            $(document).on("click", ".del-btn", function (e) {
+                let index = $(this).attr("idx");
+                tag[index] = "";
+                $(this).parent().remove();
+            });
+
+            let placeholderTarget = $('.tr_hashTag_area input[type="text"]');
+            //포커스시
+            placeholderTarget.on('focus', function () {
+                $(this).siblings('label').fadeOut('fast');
+            });
+            //포커스아웃시
+            placeholderTarget.on('focusout', function () {
+                if ($(this).val() === '') {
+                    $(this).siblings('label').fadeIn('fast');
+                }
+            });
+
+            $("#makeButton").on("click", function(){
+               uploadLoudSourcing();
+            });
+
+            function uploadLoudSourcing() {
+                if (!inspection("loudsourcing-make-name", "loudsourcing_name")) {
+                    return false;
+                } else if (!inspection("loudsourcing-make-host", "host_name")){
+                    return false;
+                } else if (!inspection("loudsourcing-make-reward", "reward")){
+                    return false;
+                } else if(!inspection("make-total-recruit-number", "total_recruit_number")){
+                    return false;
+                } else if (!inspection("loudsourcing-make-content", "loudsourcing_content")){
+                    return false;
+                } else if (!inspection("loudsourcing-make-warning", "warning")){
+                    return false;
+                }
+
+                let form = $("#loudsourcingEditForm")[0];
+                let formData = new FormData(form);
+                let status;
+                switch ($("#loudsourcing-make-status").val()) {
+                    case "모집" : {
+                        status = "recruitment";
+                    }
+                        break;
+                    case "진행" : {
+                        status = "process";
+                    }
+                        break;
+                    case "심사" : {
+                        status = "judge";
+                    }
+                        break;
+                    case "종료" : {
+                        status = "end";
+                    }
+                        break;
+                }
+                let loudsourcingData = {
+                    "name": $("#loudsourcing-make-name").val(),
+                    "status": status,
+                    "host": $("#loudsourcing-make-host").val(),
+                    "reward": $("#loudsourcing-make-reward").val(),
+                    "warning": $("#loudsourcing-make-warning").val(),
+                    "hashtag": marginTag(),
+                    "content": $("#loudsourcing-make-content").val(),
+                    "start_date": $("#start-date").val(),
+                    "recruitment_end_date": $("#recruitment-end-date").val(),
+                    "process_start_date": $("#process-start-date").val(),
+                    "process_end_date": $("#process-end-date").val(),
+                    "judge_date": $("#judge-date").val(),
+                    "end_date": $("#end-date").val(),
+                    "total_recruitment_number": $("#make-total-recruit-number").val()
+                };
+                formData.append("loudsourcing", JSON.stringify(loudsourcingData));
+                $.ajax({
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    url: '/admin/loudsourcing_make_post.do',
+                    contentType: false,
+                    processData: false,
+                    data: formData
+                }).done(function (result) {
+                    console.log(result);
+                    if (result === 0) {
+                        alert("새 크라우드를 생성하였습니다.");
+                        window.location.href = 'http://localhost:8080/admin/loudsourcing_recruitment.do';
+                    } else {
+                        alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
+                        window.location.href = 'http://localhost:8080/admin/loudsourcing_recruitment.do';
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                    window.location.href = 'http://localhost:8080/admin/loudsourcing_recruitment.do';
+                })
+            }
+        })
     </script>
 </body>
 </html>

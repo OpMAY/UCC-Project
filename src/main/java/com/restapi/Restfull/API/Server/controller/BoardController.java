@@ -295,7 +295,7 @@ public class BoardController {
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
         FileConverter fileConverter = new FileConverter();
-        File file = fileConverter.convert(mfile);
+        File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
         CDNService cdnService = new CDNService();
         cdnService.upload("api/images/board/thumbnail/" + board_info + savedName, file);
         Files.deleteIfExists(file.toPath());

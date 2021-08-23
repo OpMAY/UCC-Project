@@ -440,6 +440,9 @@ public class PortfolioService {
                 }
                 message.put("comment_number", portfolio.getComment_number());
                 message.put("portfolio_comment", resCommentList);
+                if(resCommentList.size() > 0){
+                    message.put("last_index", resCommentList.get(resCommentList.size() - 1).getComment_no());
+                }
 
                 Artist portfolio_artist = artistDao.getArtistByArtistNo(portfolio.getArtist_no());
                 User portfolio_artist_user = userDao.selectUserByUserNo(portfolio_artist.getUser_no());
@@ -527,6 +530,10 @@ public class PortfolioService {
                 }
                 message.put("comment_number", portfolio.getComment_number());
                 message.put("portfolio_comment", resCommentList);
+                message.put("portfolio_comment", resCommentList);
+                if(resCommentList.size() > 0){
+                    message.put("last_index", resCommentList.get(resCommentList.size() - 1).getComment_no());
+                }
 
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.PORTFOLIO_COMMENT_DELETE_SUCCESS, message.getHashMap("DeletePortfolioComment()")), HttpStatus.OK);
             }

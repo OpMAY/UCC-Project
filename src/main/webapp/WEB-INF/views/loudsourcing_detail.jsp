@@ -122,11 +122,11 @@
                                                 </div>
                                                 <label class="label d-flex" for="total-recruit-number"
                                                        style="font-size: larger">
-                                                    총 모집 인원
+                                                    참여인원 / 모집인원 (명)
                                                 </label>
                                                 <textarea class="form-control" id="total-recruit-number" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center"
-                                                          disabled>${Loudsourcing.total_recruitment_number}명</textarea>
+                                                          style="line-height: 150%; font-size: large; text-align: center; overflow: hidden; resize: none"
+                                                          disabled>${Loudsourcing.applied_artist_num} / ${Loudsourcing.total_recruitment_number}</textarea>
                                                 <label class="label d-flex" for="total-date"
                                                        style="font-size: larger">
                                                     총 기간
@@ -203,17 +203,49 @@
                                                     </div>
                                                     <div class="col-md-6 justify-content-center d-flex">
                                                         <button class="btn btn-secondary"
-                                                                onclick="location.href = document.referrer;">
+                                                                onclick="location.href = '/admin/loudsourcing_recruitment.do';">
                                                             돌아가기
                                                         </button>
                                                     </div>
                                                 </div>
                                             </c:when>
-                                            <c:when test="${Loudsourcing.status != 'recruitment'}">
+                                            <c:when test="${Loudsourcing.status == 'process'}">
+                                                <div class="row mt-4 mb-3 justify-content-around">
+                                                    <div class="col-md-3" style="text-align: center">
+                                                        <button class="btn btn-outline-primary"
+                                                                onclick="if(confirm('진행 중인 크라우드를 수정합니다.\n\n진행 중인 크라우드를 수정하기 전 해당 크라우드에 참여한\n모든 아티스트에게 변경 여부를 꼭 공지하시길 바랍니다.\n정말 수정하시겠습니까?')){location.href='/admin/loudsourcing_edit.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'} else {return false}">
+                                                            수정
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-md-3" style="text-align: center">
+                                                        <button class="btn btn-outline-primary"
+                                                                onclick="if(confirm('진행 중인 크라우드를 삭제합니다.\n\n진행 중인 크라우드를 삭제하면 현재 등록된 출품작도 함께 삭제됩니다.\n정말 삭제하시겠습니까?')){deleteLoudSourcing(${Loudsourcing.loudsourcing_no});} else {return false;}">
+                                                            삭제
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-md-3" style="text-align: center">
+                                                        <button class="btn btn-secondary"
+                                                                onclick="location.href = '/admin/loudsourcing_process.do';">
+                                                            돌아가기
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </c:when>
+                                            <c:when test="${Loudsourcing.status == 'judge'}">
                                                 <div class="row mt-4 mb-3 justify-content-center">
                                                     <div class="col-md-10" style="text-align: center">
                                                         <button class="btn btn-secondary"
-                                                                onclick="location.href = document.referrer;">
+                                                                onclick="location.href = '/admin/loudsourcing_judge.do';">
+                                                            돌아가기
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </c:when>
+                                            <c:when test="${Loudsourcing.status == 'end'}">
+                                                <div class="row mt-4 mb-3 justify-content-center">
+                                                    <div class="col-md-10" style="text-align: center">
+                                                        <button class="btn btn-secondary"
+                                                                onclick="location.href = '/admin/loudsourcing_end.do';">
                                                             돌아가기
                                                         </button>
                                                     </div>
@@ -262,6 +294,30 @@
     function openWindowPop(url, name) {
         let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
         window.open(url, name, options);
+    }
+
+    function deleteLoudSourcing(loudsourcing_no) {
+        let data = {"loudsourcing_no": loudsourcing_no};
+        $.ajax({
+            type: 'POST',
+            url: '/admin/delete_loudsourcing.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            console.log(result);
+            if (result === 0) {
+                alert("해당 크라우드를 삭제했습니다.");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error);
+            alert(error);
+            window.location.reload();
+        })
     }
 </script>
 </html>

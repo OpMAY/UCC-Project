@@ -27,6 +27,7 @@ public class Inquiry {
     private String file;
 
     private String user_name;
+    private String reported_user_name;
 
     private Map<String, Object> files;
 }

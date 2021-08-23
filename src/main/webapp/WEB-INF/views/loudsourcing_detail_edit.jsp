@@ -354,6 +354,19 @@
     </script>
     <script>
         function editLoudSourcing() {
+            if (!inspection("loudsourcing-name", "loudsourcing_name")) {
+                return false;
+            } else if (!inspection("loudsourcing-host", "host_name")){
+                return false;
+            } else if (!inspection("loudsourcing-reward", "reward")){
+                return false;
+            } else if(!inspection("total-recruit-number", "total_recruit_number")){
+                return false;
+            } else if (!inspection("loudsourcing-content", "loudsourcing_content")){
+                return false;
+            } else if (!inspection("loudsourcing-warning", "warning")){
+                return false;
+            }
             let form = $("#loudsourcingEditForm")[0];
             let formData = new FormData(form);
             console.log("existed_file url : " + $("#existed_file1").attr("href"));

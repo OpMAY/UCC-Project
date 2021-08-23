@@ -15,11 +15,18 @@ public class Spon {
     private int artist_no;
     private String spon_date;
     private int price;
-    private String status;
+    private boolean status;
     private String type;
     private int board_no;
     private String purchase_unique;
     private String receipt_id;
     private String purchase_data;
-    private String purchase_status;
+    private boolean purchase_status;
+    private String apply_date;
+    private String send_date;
+
+    private int price_send;
+    private String user_name;
+    private String artist_name;
+
 }

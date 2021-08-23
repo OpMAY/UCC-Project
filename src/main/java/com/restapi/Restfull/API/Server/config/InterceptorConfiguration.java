@@ -39,7 +39,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         List<String> admin_excludeList = new ArrayList<>();
 
         admin_excludeList.add("/admin/login.do");
-        admin_excludeList.add("/admin/login");
+        admin_excludeList.add("/admin/login_post.do");
         /**Auth Directory excluded /auth/* */
         registry.addInterceptor(authInterceptor).addPathPatterns("/api/**").excludePathPatterns(auth_excludeList);
         registry.addInterceptor(directoryInterceptor).addPathPatterns("/**").excludePathPatterns(directory_excludeList);

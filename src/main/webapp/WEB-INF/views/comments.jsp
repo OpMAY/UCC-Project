@@ -80,7 +80,7 @@
                                                 <c:when test="${commentList[i-1]._private == false}">
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="if(confirm('정말 비공개 처리하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
+                                                            onclick="if(confirm('댓글내용 : ${commentList[i-1].content}\n${i}번째 댓글을 비공개 처리하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
                                                         <i class="btn-icon-prepend" data-feather="trash"></i>
                                                         비공개
                                                     </button>
@@ -88,7 +88,7 @@
                                                 <c:when test="${commentList[i-1]._private == true}">
                                                     <button type="button"
                                                             class="btn btn-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="if(confirm('정말 비공개 해제 처리하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
+                                                            onclick="if(confirm('댓글내용 : ${commentList[i-1].content}\n${i}번째 댓글을 비공개 해제하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
                                                         <i class="btn-icon-prepend" data-feather="trash"></i>
                                                         비공개 해제
                                                     </button>
@@ -98,7 +98,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="if(confirm('정말 삭제하시겠습니까?')){deleteComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
+                                                    onclick="if(confirm('댓글내용 : ${commentList[i-1].content}\n${i}번째 댓글을 삭제합니다.\n삭제 후 복구는 불가능합니다.\n해당 댓글을 정말 삭제하시겠습니까?')){deleteComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
                                                 <i class="btn-icon-prepend" data-feather="trash"></i>
                                                 삭제
                                             </button>
@@ -106,6 +106,13 @@
                                     </tr>
                                     </c:forEach>
                                 </table>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href=document.referrer">
+                                        뒤로가기
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -79,11 +79,9 @@ public class InquiryController {
 
     @RequestMapping(value = "/api/inquiry/upload", method = RequestMethod.POST) // CHECK
     public ResponseEntity UploadInquiry(@RequestParam("inquiry") String body,
-                                        @RequestParam(value = "files", required = false) MultipartFile[] files,
-                                        @RequestParam(value = "name", required = false) String name) {
+                                        @RequestParam(value = "files", required = false) MultipartFile[] files) {
 
         try {
-            log.info(name);
             Inquiry inquiry = new Gson().fromJson(body, Inquiry.class);
             Message message = new Message();
             ArrayList<Upload> uploads = new ArrayList<>();
@@ -142,7 +140,7 @@ public class InquiryController {
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
         FileConverter fileConverter = new FileConverter();
-        File file = fileConverter.convert(mfile);
+        File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
         CDNService cdnService = new CDNService();
         cdnService.upload("api/files/inquiry/" + inquiry_info + savedName, file);
         Files.deleteIfExists(file.toPath());

@@ -16,4 +16,12 @@ public interface SponMapper {
     List<Spon> getSponListByBoardNo(int board_no);
 
     List<Spon> getSponAfterSpon(int user_no, int artist_no);
+
+    Spon getSponBySponNo(int spon_no);
+
+    void updateSponByApply(Spon spon);
+
+    void updateSponBySend(Spon spon);
+
+    void deleteSpon(int spon_no);
 }

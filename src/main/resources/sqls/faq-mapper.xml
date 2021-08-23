@@ -23,6 +23,6 @@
         WHERE faq_no=#{faq_no}
     </update>
     <select id="getFAQForCDN" resultType="FAQ">
-        select * from faq
+        select * from faq ORDER BY reg_date DESC
     </select>
 </mapper>

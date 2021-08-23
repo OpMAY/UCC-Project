@@ -50,4 +50,29 @@ public class LoudSourcingApplyDao {
         LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
         return loudSourcingApplyMapper.getEntryNum(loudsourcing_no);
     }
+
+    public void updateApplyForJudge(LoudSourcingApply apply) {
+        LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
+        loudSourcingApplyMapper.updateApplyForJudge(apply);
+    }
+
+    public void updateApplyForEnd(LoudSourcingApply apply){
+        LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
+        loudSourcingApplyMapper.updateApplyForEnd(apply);
+    }
+
+    public List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNoPreSelected(int loudsourcing_no) {
+        LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
+        return loudSourcingApplyMapper.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudsourcing_no);
+    }
+
+    public List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(int loudsourcing_no){
+        LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
+        return loudSourcingApplyMapper.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudsourcing_no);
+    }
+
+    public List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNoSelected(int loudsourcing_no) {
+        LoudSourcingApplyMapper loudSourcingApplyMapper = sqlSession.getMapper(LoudSourcingApplyMapper.class);
+        return loudSourcingApplyMapper.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no);
+    }
 }

@@ -15,6 +15,7 @@ public class Penalty {
     private int artist_no;
     private String penalty_start_date;
     private String penalty_end_date;
+    private String reg_date;
     private int penalty_days;
     private String penalty_reason;
 }

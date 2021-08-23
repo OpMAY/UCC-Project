@@ -54,12 +54,29 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large"><a
-                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${portfolioList[0].artist_no}&type=all"> 포트폴리오 </a><a
-                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${portfolioList[0].artist_no}&type=vod"> VOD </a><a
-                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${portfolioList[0].artist_no}&type=image"> 이미지 </a><a
-                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${portfolioList[0].artist_no}&type=text"> 텍스트 </a><a
-                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${portfolioList[0].artist_no}&type=file"> 파일 </a></h6>
+                            <h6 class="card-title" style="font-size: x-large"><c:choose><c:when
+                                    test="${type == 'all'}">포트폴리오 <a href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=vod">VOD </a><a href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=image">이미지 </a><a href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=file">파일 </a>
+                            </c:when><c:when test="${type == 'vod'}"><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=all">
+                                포트폴리오 </a>VOD <a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=image">
+                                이미지 </a><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=file">
+                                파일 </a></c:when><c:when
+                                    test="${type == 'image'}"><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=all">
+                                포트폴리오 </a><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=vod">
+                                VOD </a>이미지 </a><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=file">
+                                파일 </a></c:when><c:when
+                                    test="${type == 'file'}"><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=all">
+                                포트폴리오 </a><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=vod">
+                                VOD </a><a
+                                    href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=image">
+                                이미지 </a>파일 </c:when></c:choose></h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table">
                                     <thead>
@@ -81,7 +98,7 @@
                                     <c:forEach var="i" begin="1" end="${portfolioList.size()}">
                                     <tr>
                                         <td>
-                                            ${i}
+                                                ${i}
                                         </td>
                                         <td>
                                             <c:choose>
@@ -92,45 +109,48 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                                            ${portfolioList[i-1].artist_name}
+                                                ${portfolioList[i-1].artist_name}
                                         </td>
                                         <td>
-                                            ${portfolioList[i-1].title}
+                                                ${portfolioList[i-1].title}
                                         </td>
                                         <td>
                                             <div style="width: 320px; height: 240px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
                                                  class="d-flex justify-content-center">
-                                                <img class="img" src="${portfolioList[i-1].thumbnail}" onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
+                                                <img class="img" src="${portfolioList[i-1].thumbnail}"
+                                                     onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
                                                      style="width: 100%; height: 100%; border-radius: 0%">
                                             </div>
                                         </td>
                                         <td>
-                                            ${portfolioList[i-1].comment_number}
+                                                ${portfolioList[i-1].comment_number}
                                         </td>
                                         <td>
-                                            ${portfolioList[i-1].like_number}
+                                                ${portfolioList[i-1].like_number}
                                         </td>
                                         <td>
-                                            ${portfolioList[i-1].visit_number}
+                                                ${portfolioList[i-1].visit_number}
                                         </td>
                                         <td>
-                                            ${portfolioList[i-1].revise_date}
+                                                ${portfolioList[i-1].revise_date}
                                         </td>
                                         <td>
                                             <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                    onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="if(confirm('정말 삭제 하시겠습니까?')){DeletePortfolio(${portfolioList[i-1].portfolio_no});} else {return false;}">
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                    onclick="if(confirm('${i}번째 포트폴리오를 삭제합니다.\n삭제 후 복구는 불가능합니다.\n정말 삭제 하시겠습니까?')){DeletePortfolio(${portfolioList[i-1].portfolio_no});} else {return false;}">
                                                 <i class="btn-icon-prepend" data-feather="trash"></i>
                                                 삭제
                                             </button>
                                         </td>
-                                    </c:forEach>
+                                        </c:forEach>
                                     </tr>
                                     </tbody>
                                 </table>

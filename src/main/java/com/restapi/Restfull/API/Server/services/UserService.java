@@ -59,7 +59,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity loginUser(User user) {
         try {
-            String basic_profile_img = "http://www.mvsolutions.co.kr/static/image/profile_img_basic.png";
+            String basic_profile_img = "http://www.weart-page.com/static/image/profile_img_basic.png";
             Message message = new Message();
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
@@ -112,6 +112,13 @@ public class UserService {
         userDao.setSession(sqlSession);
         loudSourcingEntryDao.setSession(sqlSession);
         artistDao.setSession(sqlSession);
+        boardDao.setSession(sqlSession);
+        boardCommentDao.setSession(sqlSession);
+        portfolioDao.setSession(sqlSession);
+        portfolioCommentDao.setSession(sqlSession);
+        loudSourcingEntryDao.setSession(sqlSession);
+        entryCommentDao.setSession(sqlSession);
+
         Artist artist = artistDao.getArtistByUserNo(user_no);
         if (userDao.selectUserByUserNo(user_no) != null) {
             if(artist != null){
@@ -119,12 +126,28 @@ public class UserService {
                 if(!loudSourcingEntryList.isEmpty()){
                     for(LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList){
                         loudSourcingEntry.setArtist_name("탈퇴한 유저");
-                        loudSourcingEntry.setArtist_profile_img("http://www.mvsolutions.co.kr/static/image/profile_img_basic.png");
+                        loudSourcingEntry.setArtist_profile_img("http://www.weart-page.com/static/image/profile_img_basic.png");
                         loudSourcingEntryDao.updateEntry(loudSourcingEntry);
                     }
                 }
             }
             userDao.deleteUser(user_no);
+            List<Board> boardList = boardDao.getBoardForCDN();
+            List<Portfolio> portfolioList = portfolioDao.getPortfolioForCDN();
+            List<LoudSourcingEntry> entryList = loudSourcingEntryDao.getEntryForCDN();
+            for(Board board : boardList){
+                int comment_number = boardCommentDao.getCommentNumberByBoardNo(board.getBoard_no()).size();
+                boardDao.updateBoardByComment(board.getBoard_no(), comment_number);
+            }
+            for(Portfolio portfolio : portfolioList){
+                int comment_number = portfolioCommentDao.getCommentNumberByPortfolioNo(portfolio.getPortfolio_no()).size();
+                portfolioDao.updatePortfolioByComment(portfolio.getPortfolio_no(), comment_number);
+            }
+            for(LoudSourcingEntry entry : entryList){
+                int comment_number = entryCommentDao.getCommentNumberByEntryNo(entry.getEntry_no()).size();
+                entry.setComment_number(comment_number);
+                loudSourcingEntryDao.updateEntryByComment(entry);
+            }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.WITHDRAW_SUCCESS), HttpStatus.OK);
         } else {
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.NO_USER_DETECTED), HttpStatus.OK);

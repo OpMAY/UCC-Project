@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Log4j2
 @Service
@@ -319,7 +321,7 @@ public class MainService {
             /** DELETE FILES IN CDN **/
             log.info("Deleting File in CDN...");
             log.info("Deleting " + allFileList.size() + " files..");
-            if(allFileList != null && !allFileList.isEmpty()) {
+            if(!allFileList.isEmpty()) {
                 for(String url : allFileList){
                     log.info("Deleting file : " + url);
                     if(url != null)
@@ -339,18 +341,11 @@ public class MainService {
     private List<String> getBoardFiles(String content) {
         try {
             List<String> url = new ArrayList<>();
-            int index;
-            while (true) {
-                index = content.indexOf("<img src=");
-                if (index < 0)
-                    break;
-                int next_multi_index = content.substring(index).indexOf(">");
-                String substring = content.substring(index + 10, index + next_multi_index - 1);
-                if (substring.contains("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api")) {
-                    log.info("Substring-ed url : " + substring);
-                    url.add(substring);
-                }
-                content = content.substring(index).substring(next_multi_index + 1);
+            Pattern p = Pattern.compile("src=\"(.*?)\"");
+            Matcher m = p.matcher(content);
+            while (m.find()) {
+                log.info("Url : " + m.group(1));
+                url.add(m.group(1));
             }
             if (url.size() > 0)
                 return url;

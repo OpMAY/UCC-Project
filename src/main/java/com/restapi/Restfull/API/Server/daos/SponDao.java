@@ -46,5 +46,23 @@ public class SponDao {
         return sponMapper.getSponAfterSpon(user_no, artist_no);
     }
 
+    public Spon getSponBySponNo(int spon_no) {
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponBySponNo(spon_no);
+    }
 
+    public void updateSponByApply(Spon spon){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        sponMapper.updateSponByApply(spon);
+    }
+
+    public void updateSponBySend(Spon spon){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        sponMapper.updateSponBySend(spon);
+    }
+
+    public void deleteSpon(int spon_no){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        sponMapper.deleteSpon(spon_no);
+    }
 }

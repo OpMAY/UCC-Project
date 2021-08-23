@@ -71,6 +71,14 @@
                 </ol>
             </nav>
 
+            <div class="alert alert-primary" style="white-space: pre-wrap;" role="alert">
+                - 자동 선정 기준 -&#10;
+                &#10;
+                1. 총 출품작의 투표 수 상위 약 15%의 출품작을 자동 1차 선정합니다. (투표 수가 0인 출품작은 자동 선정되지 않습니다)&#10;
+                2. 공정성을 위해 선정되지 않은 작품 중, 1차 선정작 리스트에서 가장 적은 투표 수와 같은 투표 수의 작품이 있다면 해당 작품도 2차 선정되어집니다.&#10;
+                3. 2차 선정 이후 종료 전까지 관리자와 광고주가 관리하시면 됩니다.&#10;
+                4. 종료 일자에 자동으로 크라우드는 종료되고 선정 및 탈락된 참여자에겐 자동으로 알림 메세지가 전송됩니다.
+            </div>
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
@@ -87,45 +95,53 @@
                                     <thead>
                                     <tr>
                                         <th width="30px">#</th>
-                                        <th width="150px">공모전 이름</th>
+                                        <th width="100px">공모전 이름</th>
                                         <th width="50px">상태</th>
                                         <th width="80px">자동 선정 인원</th>
                                         <th width="150px">총 기간</th>
                                         <th width="150px">진행 기간</th>
                                         <th width="80px">심사 시작 일자</th>
-                                        <th width="80px">참여 인원 리스트</th>
+                                        <th width="80px">선정 인원 리스트</th>
+                                        <th width="80px">탈락 인원 리스트</th>
                                         <th width="80px">자세히 보기</th>
-                                        <th width="80px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach var="i" begin="1" end="${loudsourcingList.size()}">
                                         <tr>
                                             <td>
-                                                ${i}
+                                                    ${i}
                                             </td>
                                             <td class="overflow-hidden" style="text-overflow: ellipsis">
-                                                ${loudsourcingList[i-1].name}
+                                                    ${loudsourcingList[i-1].name}
                                             </td>
                                             <td>
                                                 심사 중
                                             </td>
                                             <td>
-                                                ${loudsourcingList[i-1].selected_artist_num}
+                                                    ${loudsourcingList[i-1].selected_artist_num}명
                                             </td>
                                             <td>
-                                                ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].end_date}
+                                                    ${loudsourcingList[i-1].start_date}~${loudsourcingList[i-1].end_date}
                                             </td>
                                             <td>
-                                                ${loudsourcingList[i-1].process_start_date}~${loudsourcingList[i-1].process_end_date}
+                                                    ${loudsourcingList[i-1].process_start_date}~${loudsourcingList[i-1].process_end_date}
                                             </td>
                                             <td>
-                                                ${loudsourcingList[i-1].judge_date}
+                                                    ${loudsourcingList[i-1].judge_date}
                                             </td>
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
+                                                        onclick="location.href='/admin/selected_entry.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                    <i class="btn-icon-prepend" data-feather="search"></i>
+                                                    보기
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                        class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                        onclick="location.href='/admin/unselected_entry.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -136,13 +152,6 @@
                                                         onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button type="button"
-                                                        class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="if(confirm('정말 삭제 하시겠습니까?')){DeletePortfolio(${portfolioList[i-1].portfolio_no});} else {return false;}">
-                                                    <i class="btn-icon-prepend" data-feather="trash"></i>
-                                                    삭제
                                                 </button>
                                             </td>
                                         </tr>

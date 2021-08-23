@@ -18,7 +18,7 @@ public class BannerAdDao {
 
     public List<BannerAd> getBannerList() {
         BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
-        return bannerAdMapper.getBannerList(false);
+        return bannerAdMapper.getBannerList(true);
     }
 
     public List<BannerAd> getBannerForCDN() {
@@ -26,4 +26,33 @@ public class BannerAdDao {
         return bannerAdMapper.getBannerForCDN();
     }
 
+    public List<BannerAd> getActiveBannerList() {
+        BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
+        return bannerAdMapper.getActiveBannerList();
+    }
+
+    public List<BannerAd> getDisableBannerList() {
+        BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
+        return bannerAdMapper.getDisableBannerList();
+    }
+
+    public void deleteBanner(int banner_ad_no) {
+        BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
+        bannerAdMapper.deleteBanner(banner_ad_no);
+    }
+
+    public BannerAd getBannerAdByBannerAdNo(int banner_ad_no) {
+        BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
+        return bannerAdMapper.getBannerAdByBannerAdNo(banner_ad_no);
+    }
+
+    public void updateBanner(BannerAd bannerAd) {
+        BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
+        bannerAdMapper.updateBanner(bannerAd);
+    }
+
+    public void insertBanner(BannerAd bannerAd) {
+        BannerAdMapper bannerAdMapper = sqlSession.getMapper(BannerAdMapper.class);
+        bannerAdMapper.insertBanner(bannerAd);
+    }
 }

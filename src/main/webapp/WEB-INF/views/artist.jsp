@@ -90,7 +90,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/artist_loudsourcing.do?artist_no=${artistList[i-1].artist_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -108,7 +108,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="openWindowPopBan('/admin/penalty.do?user_no=${artistList[i-1].user_no}','회원 정지')">
                                                     <i class="btn-icon-prepend" data-feather="x-square"></i>
                                                     정지
                                                 </button>
@@ -150,5 +150,11 @@
 <script src="../assets/js/datepicker.js"></script>
 <script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
+<script>
+    function openWindowPopBan(url, name){
+        let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+        window.open(url, name, options);
+    }
+</script>
 </body>
 </html>

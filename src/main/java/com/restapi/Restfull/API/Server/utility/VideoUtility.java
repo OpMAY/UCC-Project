@@ -24,7 +24,7 @@ public class VideoUtility {
         VideoThread[] videoThread = new VideoThread[threadSize];
 
         for (int i = 0; i < videoThread.length; i++) {
-            videoThread[i] = new VideoThread(source, threadSize, i, plusSize, "/www/mvsolutions_co_kr/www/api/temp");
+            videoThread[i] = new VideoThread(source, threadSize, i, plusSize, "/www/weart-page_com/www/api/temp");
             videoThread[i].start();
         }
 

@@ -59,7 +59,7 @@
                                     <button type="button"
                                             class="btn btn-outline-primary btn-icon-text"
                                             style="float: right"
-                                            onclick="SendMessageToAll(${artistList[0].loudsourcing_no})">
+                                            onclick="if(confirm('해당 크라우드에 참여한 아티스트 전원에게\n진행 시작 알림 메세지를 전송합니다\n\n이미 출품작을 제출한 아티스트에게도 메세지가 전송됩니다.\n\n메세지를 전송하시겠습니까?')){SendProcessMessageToAll(${artistList[0].loudsourcing_no});} else {return false;}">
                                         <i class="btn-icon-prepend" data-feather="send"></i>
                                         진행 시작 알림 전체 전송
                                     </button>
@@ -78,7 +78,6 @@
                                         <th>투표 갯수</th>
                                         <th>자세히 보기</th>
                                         <th>진행 시작 알림 보내기</th>
-                                        <th>탈락 알림 보내기</th>
                                         <th>삭제</th>
                                     </tr>
                                     </thead>
@@ -95,7 +94,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="location.href='/admin/entry_detail.do?entry_no=${artistList[i-1].entry_no}'">
+                                                    onclick="location.href='/admin/entry_detail.do?loudsourcing_no=${artistList[i-1].loudsourcing_no}&artist_no=${artistList[i-1].artist_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>
@@ -103,22 +102,15 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="sendProcessAlarm(${artistList[i-1].artist_no})">
-                                                <i class="btn-icon-prepend" data-feather="search"></i>
+                                                    onclick="if(confirm('아티스트 명 : ${artistList[i-1].artist_name}\n\n해당 유저에게 진행 시작 알림을 보내시겠습니까?')){sendProcessAlarm(${artistList[i-1].loudsourcing_no}, ${artistList[i-1].artist_no});} else {return false}">
+                                                <i class="btn-icon-prepend" data-feather="send"></i>
                                                 보내기
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="sendFailAlarm(${artistList[i-1].artist_no})">
-                                                <i class="btn-icon-prepend" data-feather="search"></i>
-                                                보내기
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                    onclick="if(confirm('아티스트 명 : ${artistList[i-1].artist_name}\n\n${i}번째 아티스트의 참가를 취소합니다.\n현재 진행 중인 크라우드는 다시 신청이 불가합니다.\n그래도 참가 취소처리 하시겠습니까?')){deleteArtistFromLoudSourcing(${artistList[i-1].loudsourcing_no}, ${artistList[i-1].artist_no});} else {return false;}">
                                                 <i class="btn-icon-prepend" data-feather="x-square"></i>
                                                 삭제
                                             </button>
@@ -126,6 +118,13 @@
                                     </tr>
                                     </c:forEach>
                                 </table>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/loudsourcing_process.do'">
+                                        뒤로가기
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -160,18 +159,18 @@
 <script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function sendFailAlarm(artist_no) {
-        let data = {"artist_no" : artist_no};
+    function deleteArtistFromLoudSourcing(loudsourcing_no, artist_no) {
+        let data = {"loudsourcing_no": loudsourcing_no, "artist_no": artist_no};
         $.ajax({
             type: 'POST',
-            url: '/admin/recruit_alarm.do',
+            url: '/admin/apply_delete.do',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function (result) {
             console.log(result);
             if (result === 0) {
-                alert("탈락 알림 전송 완료");
+                alert("참가 취소 완료되었습니다.");
                 window.location.reload();
             } else {
                 alert("알 수 없는 오류 발생");
@@ -182,11 +181,12 @@
             window.location.reload();
         })
     }
-    function sendProcessAlarm(artist_no) {
-        let data = {"artist_no" : artist_no};
+
+    function sendProcessAlarm(loudsourcing_no, artist_no) {
+        let data = {"loudsourcing_no": loudsourcing_no, "artist_no": artist_no};
         $.ajax({
             type: 'POST',
-            url: '/admin/recruit_alarm.do',
+            url: '/admin/send_process_start_message.do',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -204,6 +204,7 @@
             window.location.reload();
         })
     }
+
     function SendProcessMessageToAll(loudsourcing_no) {
         const data = {"loudsourcing_no": loudsourcing_no};
         $.ajax({

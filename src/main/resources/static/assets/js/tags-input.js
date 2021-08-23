@@ -14,7 +14,7 @@ $(function() {
   $('#loudsourcing-hashtag').tagsInput({
     'width': '100%',
     'height': '65px',
-    'interactive': true,
+    'interactive': false,
     'defaultText': '',
     'removeWithBackspace': true,
     'minChars': 0,

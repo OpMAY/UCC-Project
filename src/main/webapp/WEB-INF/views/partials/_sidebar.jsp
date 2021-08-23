@@ -2,7 +2,7 @@
          pageEncoding="UTF-8" %>
 <nav class="sidebar">
   <div class="sidebar-header">
-    <a href="#" class="sidebar-brand">
+    <a href="/admin/main.do" class="sidebar-brand">
       <span>UCC</span> 관리자
     </a>
     <div class="sidebar-toggler not-active">
@@ -60,67 +60,53 @@
       </li>
       <li class="nav-item nav-category">고객 센터</li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="collapse" href="#general-pages" role="button" aria-expanded="false"
-           aria-controls="general-pages">
+        <a class="nav-link" href="/admin/notices.do">
           <i class="link-icon" data-feather="help-circle"></i>
-          <span class="link-title">FAQ</span>
+          <span class="link-title">공지 사항</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="collapse" href="#authPages" role="button" aria-expanded="false"
-           aria-controls="authPages">
+        <a class="nav-link" href="/admin/faqs.do">
           <i class="link-icon" data-feather="bell"></i>
-          <span class="link-title">공지 사항</span>
+          <span class="link-title">FAQ</span>
         </a>
       </li>
       <li class="nav-item nav-category">문의</li>
       <li class="nav-item">
-        <a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">
+        <a href="/admin/inquiry_loudsourcing.do" class="nav-link">
           <i class="link-icon" data-feather="cloud"></i>
           <span class="link-title">크라우드 문의</span>
         </a>
       </li>
       <li class="nav-item">
-        <a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">
+        <a href="/admin/inquiry_report.do" class="nav-link">
           <i class="link-icon" data-feather="flag"></i>
           <span class="link-title">신고 문의</span>
         </a>
       </li>
       <li class="nav-item">
-        <a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">
+        <a href="/admin/inquiry_normal.do" class="nav-link">
           <i class="link-icon" data-feather="file"></i>
           <span class="link-title">기타 문의</span>
         </a>
       </li>
       <li class="nav-item nav-category">검색어</li>
       <li class="nav-item">
-        <a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">
+        <a href="/admin/hashtag.do" class="nav-link">
           <i class="link-icon" data-feather="hash"></i>
           <span class="link-title">검색 해시태그</span>
         </a>
       </li>
       <li class="nav-item nav-category">후원</li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="collapse" href="#spontypes" role="button" aria-expanded="false"
-           aria-controls="spontypes">
+        <a href="/admin/spon.do" class="nav-link">
           <i class="link-icon" data-feather="dollar-sign"></i>
           <span class="link-title">후원 관리</span>
-          <i class="link-arrow" data-feather="chevron-down"></i>
         </a>
-        <div class="collapse" id="spontypes">
-          <ul class="nav sub-menu">
-            <li class="nav-item">
-              <a href="pages/ui-components/alerts.html" class="nav-link">아티스트 후원</a>
-            </li>
-            <li class="nav-item">
-              <a href="pages/ui-components/badges.html" class="nav-link">게시글 후원</a>
-            </li>
-          </ul>
-        </div>
       </li>
       <li class="nav-item nav-category">배너 광고</li>
       <li class="nav-item">
-        <a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">
+        <a href="/admin/banners.do" class="nav-link">
           <i class="link-icon" data-feather="film"></i>
           <span class="link-title">배너 관리</span>
         </a>

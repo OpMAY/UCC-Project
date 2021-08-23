@@ -14,4 +14,10 @@ public interface BannerAdMapper {
     void deleteBanner(int banner_ad_no);
 
     List<BannerAd> getBannerForCDN();
+
+    List<BannerAd> getActiveBannerList();
+
+    List<BannerAd> getDisableBannerList();
+
+    BannerAd getBannerAdByBannerAdNo(int banner_ad_no);
 }

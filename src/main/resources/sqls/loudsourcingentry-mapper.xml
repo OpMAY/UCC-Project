@@ -53,4 +53,7 @@
     <select id="getEntryForCDN" resultType="LoudSourcingEntry">
         select * from loudsourcingentry
     </select>
+    <select id="getEntryListByLoudSourcingNoAdminSortByVoteNumber" resultType="LoudSourcingEntry">
+        select * from loudsourcingentry WHERE loudsourcing_no=#{loudsourcing_no} ORDER BY vote_number DESC
+    </select>
 </mapper>

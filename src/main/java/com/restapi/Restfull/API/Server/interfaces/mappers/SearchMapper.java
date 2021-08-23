@@ -7,5 +7,7 @@ import java.util.List;
 public interface SearchMapper {
     List<Search> getKeywords();
 
-    void insertKeywords(int admin_no, String word);
+    void deleteByWord(String originalWord);
+
+    void insertKeyword(Search search);
 }

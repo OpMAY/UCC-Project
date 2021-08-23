@@ -5,30 +5,62 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.InquiryMapper">
     <insert id="insertInquiry" useGeneratedKeys="true" keyProperty="inquiry_no">
         insert into inquiry(user_no, reported_user_no, title, content, type, phone, email, is_answered, reg_date, file)
-        VALUES (#{user_no}, #{reported_user_no}, #{title}, #{content}, #{type}, #{phone}, #{email}, #{is_answered}, #{reg_date}, #{file})
+        VALUES (#{user_no}, #{reported_user_no}, #{title}, #{content}, #{type}, #{phone}, #{email}, #{is_answered},
+                #{reg_date}, #{file})
     </insert>
     <delete id="deleteInquiry">
-        delete from inquiry WHERE inquiry_no=#{inquiry_no}
+        delete
+        from inquiry
+        WHERE inquiry_no = #{inquiry_no}
     </delete>
     <update id="answerInquiry">
-        update inquiry SET answer_content=#{answer_content}, answer_date=#{answer_date}, is_answered=#{is_answered}
-        WHERE inquiry_no=#{inquiry_no}
+        update inquiry
+        SET answer_content=#{answer_content},
+            answer_date=#{answer_date},
+            is_answered=#{is_answered}
+        WHERE inquiry_no = #{inquiry_no}
     </update>
     <select id="getInquiryListByUserNoRefresh" resultType="Inquiry">
-        select * from inquiry WHERE user_no=#{user_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (inquiry_no <![CDATA[<]]> #{inquiry_no} AND reg_date <![CDATA[=]]> #{reg_date})) order by reg_date DESC, inquiry_no DESC
+        select *
+        from inquiry
+        WHERE user_no = #{user_no}
+          AND (reg_date <![CDATA[<]]> #{reg_date} OR (inquiry_no <![CDATA[<]]> #{inquiry_no} AND reg_date <![CDATA[=]]> #{reg_date}))
+        order by reg_date DESC, inquiry_no DESC
         LIMIT 10
     </select>
     <select id="getInquiryListByUserNo" resultType="Inquiry">
-        select * from inquiry WHERE user_no=#{user_no} order by reg_date DESC, inquiry_no DESC
+        select *
+        from inquiry
+        WHERE user_no = #{user_no}
+        order by reg_date DESC, inquiry_no DESC
         LIMIT 10
     </select>
     <select id="getInquiryListByAnswerStatus" resultType="Inquiry">
-        select * from inquiry WHERE is_answered=#{is_answered}
+        select *
+        from inquiry
+        WHERE is_answered = #{is_answered}
     </select>
     <select id="getInquiryByInquiryNo" resultType="Inquiry">
-        select * from inquiry WHERE inquiry_no=#{inquiry_no}
+        select *
+        from inquiry
+        WHERE inquiry_no = #{inquiry_no}
     </select>
     <select id="getInquiryForCDN" resultType="Inquiry">
-        select * from inquiry
+        select *
+        from inquiry
+    </select>
+    <select id="getInquiryAnsweredListByType" resultType="Inquiry">
+        select *
+        from inquiry
+        WHERE is_answered = true
+          AND type = #{type}
+        ORDER BY answer_date DESC
+    </select>
+    <select id="getInquiryNotAnsweredListByType" resultType="Inquiry">
+        select *
+        from inquiry
+        WHERE is_answered = false
+          AND type = #{type}
+        ORDER BY reg_date DESC
     </select>
 </mapper>

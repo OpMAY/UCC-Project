@@ -29,6 +29,36 @@
     <link rel="stylesheet" href="../assets/css/demo_1/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../assets/images/favicon.png"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul {
+            padding: 16px 0;
+        }
+
+        ul li {
+            display: inline-block;
+            margin: 0 5px;
+            font-size: 20px;
+            letter-spacing: -.5px;
+        }
+
+        form {
+            padding-top: 16px;
+        }
+
+        ul li.tag-item {
+            padding: 4px 8px;
+            background-color: #98B6FF;
+            color: #000;
+            opacity: 80%;
+            border-radius: 20px;
+        }
+    </style>
 </head>
 <body>
 <div class="main-wrapper">
@@ -166,11 +196,10 @@
                                         </div>
                                         <div class="row mt-3 justify-content-center">
                                             <div class="col-md-11">
-                                                <label class="label d-flex" for="hashtags" style="font-size: large">
+                                                <label class="label d-flex" for="tag-list" style="font-size: large">
                                                     해시태그
                                                 </label>
-                                                <textarea class="form-control" id="hashtags" rows="3"
-                                                          style="line-height: 150%; font-size: large;" disabled><c:forEach var="i" begin="1" end="${Artist.hashtag_list.size()}">${Artist.hashtag_list[i-1]}  </c:forEach></textarea>
+                                                <ul id="tag-list"></ul>
                                             </div>
                                         </div>
                                         <div class="row mt-3 justify-content-around">
@@ -184,11 +213,11 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="label d-flex" for="ban-number" style="font-size: large">
-                                                    경고 횟수
+                                                    누적 정지 횟수
                                                 </label>
                                                 <textarea class="form-control" id="ban-number" rows="1"
                                                           style="line-height: 150%; font-size: large"
-                                                          disabled>0</textarea>
+                                                          disabled>${penalty_num}</textarea>
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="label d-flex" for="ban-date"
@@ -197,12 +226,14 @@
                                                 </label>
                                                 <textarea class="form-control" id="ban-date" rows="1"
                                                           style="line-height: 150%; font-size: large"
-                                                          disabled>-</textarea>
+                                                          disabled><c:choose><c:when
+                                                        test="${penalty == null}">-</c:when><c:when
+                                                        test="${penalty != null}">${penalty.penalty_start_date}~${penalty.penalty_end_date}</c:when></c:choose></textarea>
                                             </div>
                                         </div>
                                         <div class="row mt-4 mb-3 justify-content-around">
                                             <div class="col-md-6 justify-content-center d-flex">
-                                                <button class="btn btn-outline-primary">
+                                                <button type="button" class="btn btn-outline-primary" onclick="openWindowPopBan('/admin/penalty.do?user_no=${Artist.user_no}','회원 정지')">
                                                     사용 정지
                                                 </button>
                                             </div>
@@ -247,5 +278,32 @@
     <script src="../assets/js/datepicker.js"></script>
     <script src="../assets/js/data-table.js"></script>
     <!-- end custom js for this page -->
+    <script>
+        function openWindowPopBan(url, name){
+            let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+            window.open(url, name, options);
+        }
+
+        function replaceAll(str, searchStr, replaceStr) {
+            return str.split(searchStr).join(replaceStr);
+        }
+
+        $(document).ready(function () {
+            let tag = {};
+            let counter = 0;
+
+            // 서버 기본 해시태그 리스트를 가져온다.
+            let hashtagList = '<c:out value="${Artist.hashtag}"/>';
+            let edit = replaceAll(hashtagList, '&#034;', '"');
+            let obj = JSON.parse(edit);
+            for (let i = 0; i < obj.length; i++) {
+                console.log(obj[i]);
+                tag[counter] = obj[i];
+                console.log(counter);
+                $("#tag-list").append("<li class='tag-item'>#" + obj[i] + "</li>");
+                counter++;
+            }
+        });
+    </script>
 </body>
 </html>

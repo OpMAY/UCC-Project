@@ -138,15 +138,17 @@ public class LoudSourcingController {
 
                 /** VOD THUMBNAIL LOGIC **/
                 VideoUtility videoUtility = new VideoUtility();
+                UUID uid = UUID.randomUUID();
+                String temp_fileName = uid.toString().substring(0, 8) + "test" + vod_decoded_file_name.substring(vod_decoded_file_name.lastIndexOf(".")).toLowerCase();
                 FileConverter fileConverter = new FileConverter();
-                File file = fileConverter.convert(vod);
+                File file = fileConverter.convert(vod, temp_fileName);
                 String video_length = videoUtility.getDuration(file);
 
                 URLConverter urlConverter = new URLConverter();
 
                 /** File Upload Logic */
-                String file_name = uploadFile(vod_decoded_file_name, vod, entry_info);
-                String thumbnail_name = uploadFile(thumbnail_decoded_file_name, thumbnail, entry_info);
+                String file_name = uploadFile(vod_decoded_file_name, vod, entry_info, temp_fileName);
+                String thumbnail_name = uploadFile(thumbnail_decoded_file_name, thumbnail, entry_info, null);
 
                 loudSourcingEntry.setFile(urlConverter.convertSpecialLetter(cdn_path + "videos/loudsourcing/" + entry_info + file_name));
                 loudSourcingEntry.setThumbnail(urlConverter.convertSpecialLetter(cdn_path + "images/loudsourcing/" + entry_info + thumbnail_name));
@@ -233,7 +235,7 @@ public class LoudSourcingController {
         return loudSourcingService.deleteEntry(entry_no);
     }
 
-    private String uploadFile(String originalName, MultipartFile mfile, String entry_info) throws IOException {
+    private String uploadFile(String originalName, MultipartFile mfile, String entry_info, String vod_tmp) throws IOException {
         UUID uid = UUID.randomUUID();
         String mOriginalName = originalName;
         originalName = originalName.replace(" ", "");
@@ -241,11 +243,11 @@ public class LoudSourcingController {
         CDNService cdnService = new CDNService();
         if (Format.CheckIMGFile(originalName)) {
             FileConverter fileConverter = new FileConverter();
-            File file = fileConverter.convert(mfile);
+            File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
             cdnService.upload("api/images/loudsourcing/" + entry_info + savedName, file);
             Files.deleteIfExists(file.toPath());
         } else if (Format.CheckVODFile(originalName)) {
-            File file = new File(upload_path, "test" + mfile.getOriginalFilename().substring(mfile.getOriginalFilename().lastIndexOf(".")).toLowerCase());
+            File file = new File(upload_path, vod_tmp);
             cdnService.upload("api/videos/loudsourcing/" + entry_info + savedName, file);
             Files.deleteIfExists(file.toPath());
         } else {

@@ -13,17 +13,17 @@
         select * from notice WHERE notice_no=#{notice_no}
     </select>
     <insert id="insertNotice" useGeneratedKeys="true" keyProperty="notice_no">
-        insert into notice(admin_no, title, content, reg_date, revise_date, img)
-        VALUES (#{admin_no}, #{title}, #{content}, #{reg_date}, #{revise_date}, #{img})
+        insert into notice(title, content, reg_date, revise_date, img)
+        VALUES (#{title}, #{content}, #{reg_date}, #{revise_date}, #{img})
     </insert>
     <update id="updateNotice">
-        update notice SET admin_no=#{admin_no}, title=#{title}, content=#{content}, revise_date=#{revise_date}, img=#{img}
+        update notice SET title=#{title}, content=#{content}, revise_date=#{revise_date}, img=#{img}
         WHERE notice_no=#{notice_no}
     </update>
     <delete id="deleteNotice">
         delete from notice WHERE notice_no=#{notice_no}
     </delete>
     <select id="getNoticeForCDN" resultType="Notice">
-        select * from notice
+        select * from notice ORDER BY reg_date DESC
     </select>
 </mapper>

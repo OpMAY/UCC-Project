@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,11 +80,11 @@ public class LoudSourcingService {
                     }
                 }
                 message.put("loudsourcing", loudSourcingList);
-                if(loudSourcingList.size() > 0)
+                if (loudSourcingList.size() > 0)
                     message.put("last_index", loudSourcingList.get(loudSourcingList.size() - 1).getLoudsourcing_no());
             } else {
                 LoudSourcing loudSourcing1 = loudSourcingDao.getLoudSourcingByLoudsourcingNo(last_index);
-                if(loudSourcing1 == null){
+                if (loudSourcing1 == null) {
                     return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
                 }
                 List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusRefresh(sort, loudSourcing1);
@@ -95,7 +96,7 @@ public class LoudSourcingService {
                     }
                 }
                 message.put("loudsourcing", loudSourcingList);
-                if(loudSourcingList.size() > 0)
+                if (loudSourcingList.size() > 0)
                     message.put("last_index", loudSourcingList.get(loudSourcingList.size() - 1).getLoudsourcing_no());
             }
             message.put("sort", sort);
@@ -278,7 +279,7 @@ public class LoudSourcingService {
                 }
             }
 
-            if(last_index == 0){
+            if (last_index == 0) {
                 List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByLoudSourcingNo(loudsourcing_no, sort);
 
                 log.info(loudSourcingEntryList.size());
@@ -298,11 +299,11 @@ public class LoudSourcingService {
 
                 message.put("entry_num", entry_num);
                 message.put("entry_list", loudSourcingEntryList);
-                if(loudSourcingEntryList.size() > 0)
+                if (loudSourcingEntryList.size() > 0)
                     message.put("last_index", loudSourcingEntryList.get(loudSourcingEntryList.size() - 1).getEntry_no());
             } else {
                 LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(last_index);
-                if(entry == null){
+                if (entry == null) {
                     return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
                 }
                 List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByLoudSourcingNoRefresh(loudsourcing_no, sort, entry);
@@ -324,7 +325,7 @@ public class LoudSourcingService {
 
                 message.put("entry_num", entry_num);
                 message.put("entry_list", loudSourcingEntryList);
-                if(loudSourcingEntryList.size() > 0)
+                if (loudSourcingEntryList.size() > 0)
                     message.put("last_index", loudSourcingEntryList.get(loudSourcingEntryList.size() - 1).getEntry_no());
             }
             message.put("sort", sort);
@@ -371,19 +372,19 @@ public class LoudSourcingService {
         try {
             loudSourcingDao.setSession(sqlSession);
             Message message = new Message();
-            if(last_index == 0){
+            if (last_index == 0) {
                 List<LoudSourcing> searchedLoudSourcingList = loudSourcingDao.searchLoudSourcing(sort, query);
                 message.put("result", searchedLoudSourcingList);
-                if(searchedLoudSourcingList.size() > 0)
+                if (searchedLoudSourcingList.size() > 0)
                     message.put("last_index", searchedLoudSourcingList.get(searchedLoudSourcingList.size() - 1).getLoudsourcing_no());
             } else {
                 LoudSourcing loudsourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(last_index);
-                if(loudsourcing == null){
+                if (loudsourcing == null) {
                     return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
                 }
                 List<LoudSourcing> searchedLoudSourcingList = loudSourcingDao.searchLoudSourcingRefresh(sort, query, loudsourcing);
                 message.put("result", searchedLoudSourcingList);
-                if(searchedLoudSourcingList.size() > 0)
+                if (searchedLoudSourcingList.size() > 0)
                     message.put("last_index", searchedLoudSourcingList.get(searchedLoudSourcingList.size() - 1).getLoudsourcing_no());
             }
             message.put("query", query);
@@ -441,7 +442,7 @@ public class LoudSourcingService {
             }
             int artist_no = loudSourcingEntry.getArtist_no();
 
-            if(last_index == 0){
+            if (last_index == 0) {
                 List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNo(entry_no);
                 List<EntryComment> resEntryComments = new ArrayList<>();
 
@@ -454,13 +455,19 @@ public class LoudSourcingService {
                         resEntryComments.add(entryComment);
                     }
                     message.put("comments", resEntryComments);
+                    if(resEntryComments.size() > 0){
+                        message.put("last_index", resEntryComments.get(resEntryComments.size() - 1).getEntry_comment_no());
+                    }
                 } else {
                     message.put("comments", entryCommentList);
+                    if(entryCommentList.size() > 0){
+                        message.put("last_index", entryCommentList.get(entryCommentList.size() - 1).getEntry_comment_no());
+                    }
                 }
                 message.put("comment_number", loudSourcingEntry.getComment_number());
             } else {
                 EntryComment entryComment1 = entryCommentDao.getEntryCommentByCommentNo(last_index);
-                if(entryComment1 == null)
+                if (entryComment1 == null)
                     return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
                 List<EntryComment> entryCommentList = entryCommentDao.getCommentListByEntryNoRefresh(entry_no, entryComment1);
                 List<EntryComment> resEntryComments = new ArrayList<>();
@@ -474,12 +481,17 @@ public class LoudSourcingService {
                         resEntryComments.add(entryComment);
                     }
                     message.put("comments", resEntryComments);
+                    if(resEntryComments.size() > 0){
+                        message.put("last_index", resEntryComments.get(resEntryComments.size() - 1).getEntry_comment_no());
+                    }
                 } else {
                     message.put("comments", entryCommentList);
+                    if(entryCommentList.size() > 0){
+                        message.put("last_index", entryCommentList.get(entryCommentList.size() - 1).getEntry_comment_no());
+                    }
                 }
                 message.put("comment_number", loudSourcingEntry.getComment_number());
             }
-
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_ENTRY_COMMENTS_SUCCESS, message.getHashMap("GetEntryComment()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -579,8 +591,14 @@ public class LoudSourcingService {
                     resCommentList.add(comment);
                 }
                 message.put("comments", resCommentList);
+                if(resCommentList.size() > 0){
+                    message.put("last_index", resCommentList.get(resCommentList.size() - 1).getEntry_comment_no());
+                }
             } else {
                 message.put("comments", entryCommentList);
+                if(entryCommentList.size() > 0){
+                    message.put("last_index", entryCommentList.get(entryCommentList.size() - 1).getEntry_comment_no());
+                }
             }
             message.put("comment_number", thisEntry.getComment_number());
 
@@ -691,8 +709,14 @@ public class LoudSourcingService {
                     resCommentList.add(comment);
                 }
                 message.put("comments", resCommentList);
+                if(resCommentList.size() > 0){
+                    message.put("last_index", resCommentList.get(resCommentList.size() - 1).getEntry_comment_no());
+                }
             } else {
                 message.put("comments", entryCommentList);
+                if(entryCommentList.size() > 0){
+                    message.put("last_index", entryCommentList.get(entryCommentList.size() - 1).getEntry_comment_no());
+                }
             }
             message.put("comment_number", entry.getComment_number());
 
@@ -772,7 +796,7 @@ public class LoudSourcingService {
 
                 List<MyLoudSourcingResponse> indexList = new ArrayList<>();
                 int index = 0;
-                if(last_index != 0) {
+                if (last_index != 0) {
                     for (MyLoudSourcingResponse myLoudSourcingResponse : myLoudsourcingList) {
                         if (myLoudSourcingResponse.getLoudSourcing().getLoudsourcing_no() == last_index) {
                             index++;
@@ -787,12 +811,189 @@ public class LoudSourcingService {
                     indexList.add(myLoudsourcingList.get(i));
                 }
                 message.put("loudsourcing_list", indexList);
-                if(indexList.size() > 0) {
+                if (indexList.size() > 0) {
                     message.put("last_index", indexList.get(indexList.size() - 1).getLoudSourcing().getLoudsourcing_no());
                 }
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_MY_LOUDSOURCING_LIST, message.getHashMap("GetMyLoudsourcingList()")), HttpStatus.OK);
         } catch (JSONException e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void setLoudSourcingProcessToJudge() {
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("process");
+            Date now = new Date();
+            log.info("진행 기간이 종료된 크라우드를 심사 상태로 변경합니다.");
+            for (LoudSourcing loudSourcing : loudSourcingList) {
+                Date process_end_date = Time.StringToDateFormat(loudSourcing.getProcess_end_date());
+                log.info("현재 날짜 : " + Time.TimeFormatter(now) + ", 진행 종료 날짜 : " + loudSourcing.getProcess_end_date());
+                // 현재 날짜가 진행 종료 기간 이후면 진행 -> 심사로 변경
+                int entrySize = loudSourcingEntryDao.getEntryListNumByLoudsourcingNo(loudSourcing.getLoudsourcing_no());
+                System.out.println("EntrySize : " + entrySize);
+                if (entrySize > 0) {
+                    if (now.after(process_end_date)) {
+                        if (loudSourcing.getStatus().equals("process")) {
+                            log.info("loudsourcing_no : " + loudSourcing.getLoudsourcing_no() + " - 해당 크라우드를 진행에서 심사로 변경합니다.");
+                            loudSourcing.setStatus("judge");
+                            loudSourcing.setRevise_date(Time.TimeFormatHMS());
+                            loudSourcingDao.updateLoudSourcing(loudSourcing);
+
+                            // 진행으로 변경 시 투표 수 상위 15%로 뽑아옴
+                            log.info("Pre-Organizing entries for judge : 투표 수를 기반으로 심사를 위한 출품작 리스트를 자동으로 선정합니다.");
+                            // 투표 수 순으로 출품작 리스트 받아옴
+                            List<LoudSourcingEntry> entryList = loudSourcingEntryDao.getEntryListByLoudSourcingNoAdminSortByVoteNumber(loudSourcing.getLoudsourcing_no());
+                            BigDecimal entrySizeDecimal = new BigDecimal(Integer.toString(entryList.size()));
+                            BigDecimal divisionSize = new BigDecimal(Integer.toString(100));
+                            BigDecimal multipleSize = new BigDecimal(Integer.toString(15));
+                            BigDecimal result = entrySizeDecimal.multiply(multipleSize).divide(divisionSize, 0, BigDecimal.ROUND_UP);
+                            // 출품작 전체의 투표 수 상위 15% 선정 (소수점 올림 -> 정수), 만약 투표 수가 0개인 경우 부터는 선정 X
+                            int index = result.intValue();
+                            List<LoudSourcingEntry> selectedEntryList = new ArrayList<>();
+                            for (int i = 0; i < index; i++) {
+                                LoudSourcingEntry entry = entryList.get(i);
+                                if (entry.getVote_number() != 0) {
+                                    selectedEntryList.add(entry);
+                                } else {
+                                    break;
+                                }
+                            }
+                            // 선정 리스트에서 가장 적은 투표 수와 같은 출품작도 같이 선정 (공정성 부여)
+                            if (selectedEntryList.size() > 0) {
+                                LoudSourcingEntry last_entry = selectedEntryList.get(selectedEntryList.size() - 1);
+                                for (int j = index + 1; j < entryList.size(); j++) {
+                                    LoudSourcingEntry entry = entryList.get(j);
+                                    if (entry.getVote_number() == last_entry.getVote_number()) {
+                                        selectedEntryList.add(entry);
+                                    } else if (entry.getVote_number() < last_entry.getVote_number()) {
+                                        break;
+                                    }
+                                }
+                                System.out.println("SelectedEntryList size : " + selectedEntryList.size());
+                                // 해당 출품작 심사를 위한 선정 처리 -> 이후 관리자 및 광고주가 추가로 선정
+                                for (LoudSourcingEntry entry : selectedEntryList) {
+                                    LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(entry.getArtist_no(), entry.getLoudsourcing_no());
+                                    apply.set_pre_selected(true);
+                                    loudSourcingApplyDao.updateApplyForJudge(apply);
+                                }
+                            }
+                            log.info("Pre-Organized entries for judge : 투표 수를 기반으로 심사를 위한 출품작 리스트가 자동으로 선정되었습니다.");
+                            log.info("크라우드를 참여한 아티스트에게 진행 종료 알림을 전송합니다.");
+                            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no());
+                            for (LoudSourcingApply apply : applyList) {
+                                Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
+                                User user = userDao.selectUserByUserNo(artist.getUser_no());
+                                if (user.getFcm_token() != null && artist.isLoudsourcing_push()) {
+                                    NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                                    firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.LOUDSOURCING_NOTIFICATION_FCM, "[" + loudSourcing.getName() + "] 아티스트님이 신청하신 크라우드 공고의 진행이 종료되었습니다.", new Gson().toJson(notificationNext));
+                                } else {
+                                    log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+                                }
+                                Notification notification = new Notification();
+                                notification.setUser_no(user.getUser_no());
+                                notification.setType(NotificationType.LOUDSOURCING_NOTIFICATION);
+                                notification.setContent("[" + loudSourcing.getName() + "] 아티스트님이 신청하신 크라우드 공고의 진행이 종료되었습니다.");
+                                notification.setReg_date(Time.TimeFormatHMS());
+                                NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                                notification.setNext(new Gson().toJson(notificationNext));
+                                notificationDao.insertNotification(notification);
+                            }
+                            log.info("loudsourcing_no : " + loudSourcing.getLoudsourcing_no() + " - 해당 크라우드를 진행에서 심사로 변경 하였습니다.");
+                            log.info("loudsourcing_no : " + loudSourcing.getLoudsourcing_no() + " - Process to Judge Changed.");
+                        }
+                    }
+                } else {
+                    log.info("No Entry For this loudsourcing");
+                    log.info("출품작 리스트가 0개입니다. 관리자의 확인이 필요합니다.");
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void setLoudSourcingJudgeToEnd() {
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("judge");
+            Date now = new Date();
+            log.info("기간이 종료된 크라우드를 종료 상태로 변경합니다.");
+            for (LoudSourcing loudSourcing : loudSourcingList) {
+                Date end_Date = Time.StringToDateFormat(loudSourcing.getEnd_date());
+                log.info("현재 날짜 : " + Time.TimeFormatter(now) + ", 종료 날짜 : " + loudSourcing.getEnd_date());
+                if (now.after(end_Date)) {
+                    if (loudSourcing.getStatus().equals("judge")) {
+                        log.info("loudsourcing_no : " + loudSourcing.getLoudsourcing_no() + " - 해당 크라우드를 심사에서 종료로 변경합니다.");
+                        loudSourcing.setStatus("end");
+                        loudSourcing.setRevise_date(Time.TimeFormatHMS());
+                        loudSourcingDao.updateLoudSourcing(loudSourcing);
+                        log.info("선정된 아티스트에게 종료와 선정 알림을 전송합니다.");
+                        List<LoudSourcingApply> applySelectedList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudSourcing.getLoudsourcing_no());
+                        for(LoudSourcingApply apply : applySelectedList){
+                            apply.set_selected(true);
+                            loudSourcingApplyDao.updateApplyForEnd(apply);
+                            Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
+                            User user = userDao.selectUserByUserNo(artist.getUser_no());
+                            if (user.getFcm_token() != null && artist.isLoudsourcing_push()) {
+                                NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.LOUDSOURCING_NOTIFICATION_FCM, "[" + loudSourcing.getName() + "] 아티스트님이 출품하신 작품이 투표를 통해 순위권에 들어갔습니다. 확인 부탁드립니다.", new Gson().toJson(notificationNext));
+                            } else {
+                                log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+                            }
+                            Notification notification = new Notification();
+                            notification.setUser_no(user.getUser_no());
+                            notification.setType(NotificationType.LOUDSOURCING_NOTIFICATION);
+                            notification.setContent("[" + loudSourcing.getName() + "] 아티스트님이 출품하신 작품이 투표를 통해 순위권에 들어갔습니다. 확인 부탁드립니다.");
+                            notification.setReg_date(Time.TimeFormatHMS());
+                            NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                            notification.setNext(new Gson().toJson(notificationNext));
+                            notificationDao.insertNotification(notification);
+                        }
+                        log.info("선정된 아티스트에게 종료와 선정 알림을 전송했습니다.");
+                        log.info("선정되지 못한 아티스트에게 종료와 탈락 알림을 전송합니다.");
+                        List<LoudSourcingApply> applyUnSelectedList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudSourcing.getLoudsourcing_no());
+                        for(LoudSourcingApply apply : applyUnSelectedList){
+                            Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
+                            User user = userDao.selectUserByUserNo(artist.getUser_no());
+                            if (user.getFcm_token() != null && artist.isLoudsourcing_push()) {
+                                NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.LOUDSOURCING_NOTIFICATION_FCM, "[" + loudSourcing.getName() + "] 아티스트님이 출품하신 작품은 투표 순위에 들어가지 못 했습니다. 순위에 들어가지 못 하셨지만 앞으로도 많은 참여 부탁드립니다.", new Gson().toJson(notificationNext));
+                            } else {
+                                log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+                            }
+                            Notification notification = new Notification();
+                            notification.setUser_no(user.getUser_no());
+                            notification.setType(NotificationType.LOUDSOURCING_NOTIFICATION);
+                            notification.setContent("[" + loudSourcing.getName() + "] 아티스트님이 출품하신 작품은 투표 순위에 들어가지 못 했습니다. 순위에 들어가지 못 하셨지만 앞으로도 많은 참여 부탁드립니다.");
+                            notification.setReg_date(Time.TimeFormatHMS());
+                            NotificationNext notificationNext = new NotificationNext(NotificationType.LOUDSOURCING_NOTIFICATION, null, null, 0, NotificationType.LOUDSOURCING_NOTIFICATION, 0);
+                            notification.setNext(new Gson().toJson(notificationNext));
+                            notificationDao.insertNotification(notification);
+                        }
+                        log.info("선정되지 못한 아티스트에게 종료와 탈락 알림을 전송했습니다.");
+                        log.info("loudsourcing_no : " + loudSourcing.getLoudsourcing_no() + " - 해당 크라우드를 심사에서 종료로 변경 하였습니다.");
+                        log.info("loudsourcing_no : " + loudSourcing.getLoudsourcing_no() + " - Judge to End Changed.");
+                    }
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
             throw new BusinessException(e);
         }
     }

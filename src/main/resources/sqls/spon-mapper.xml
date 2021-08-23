@@ -4,22 +4,57 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper">
     <insert id="insertSpon" useGeneratedKeys="true" keyProperty="spon_no">
-        insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_unique, receipt_id, purchase_data, purchase_status)
-        VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{purchase_unique}, #{receipt_id}, #{purchase_data}, #{purchase_status})
+        insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_unique, receipt_id,
+                         purchase_data, purchase_status)
+        VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{purchase_unique},
+                #{receipt_id}, #{purchase_data}, #{purchase_status})
     </insert>
     <select id="getSponList" resultType="Spon">
-        select * from spon
+        select *
+        from spon
+        order by spon_date DESC
     </select>
     <select id="getSponListByArtistNo" resultType="Spon">
-        select * from spon WHERE artist_no=#{artist_no}
+        select *
+        from spon
+        WHERE artist_no = #{artist_no}
     </select>
     <select id="getSponListByUserNo" resultType="Spon">
-        select * from spon WHERE user_no=#{user_no}
+        select *
+        from spon
+        WHERE user_no = #{user_no}
     </select>
     <select id="getSponListByBoardNo" resultType="Spon">
-        select * from spon WHERE board_no=#{board_no}
+        select *
+        from spon
+        WHERE board_no = #{board_no}
     </select>
     <select id="getSponAfterSpon" resultType="Spon">
-        select * from spon WHERE user_no=#{user_no} AND artist_no=#{artist_no}
+        select *
+        from spon
+        WHERE user_no = #{user_no}
+          AND artist_no = #{artist_no}
     </select>
+    <select id="getSponBySponNo" resultType="Spon">
+        select *
+        from spon
+        WHERE spon_no = #{spon_no}
+    </select>
+    <update id="updateSponByApply">
+        UPDATE spon
+        SET status= true,
+            apply_date=#{apply_date}
+        WHERE spon_no = #{spon_no}
+    </update>
+    <update id="updateSponBySend">
+        UPDATE spon
+        SET purchase_status= true,
+            send_date=#{send_date}
+        WHERE spon_no = #{spon_no}
+    </update>
+    <delete id="deleteSpon">
+        delete
+        from spon
+        WHERE spon_no = #{spon_no}
+    </delete>
 </mapper>

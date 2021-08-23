@@ -186,7 +186,7 @@ public class UserController {
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
         FileConverter fileConverter = new FileConverter();
-        File file = fileConverter.convert(mfile);
+        File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
         log.info(file_path);
         CDNService cdnService = new CDNService();
         cdnService.upload(file_path + savedName, file);

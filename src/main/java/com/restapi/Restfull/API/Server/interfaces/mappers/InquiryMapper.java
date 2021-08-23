@@ -20,4 +20,8 @@ public interface InquiryMapper {
     Inquiry getInquiryByInquiryNo(int inquiry_no);
 
     List<Inquiry> getInquiryForCDN();
+
+    List<Inquiry> getInquiryAnsweredListByType(String type);
+
+    List<Inquiry> getInquiryNotAnsweredListByType(String type);
 }

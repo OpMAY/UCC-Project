@@ -77,7 +77,8 @@
                                                 <td>${InquiryList[i-1].reg_date}</td>
                                                 <td>
                                                     <button type="button"
-                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0">
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                            onclick="location.href='/admin/inquiry_detail.do?inquiry_no=${InquiryList[i-1].inquiry_no}'">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>

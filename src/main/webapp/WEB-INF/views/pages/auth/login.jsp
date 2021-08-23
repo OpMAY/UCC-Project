@@ -78,7 +78,7 @@
         const data = {"id": id, "password": pw}
         $.ajax({
             type: 'POST',
-            url: '/admin/login',
+            url: '/admin/login_post.do',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)

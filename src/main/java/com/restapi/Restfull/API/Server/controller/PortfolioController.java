@@ -133,22 +133,24 @@ public class PortfolioController {
                         /** IOS EUC-KR Name Converter **/
                         String vod_decoded_file_name = vod_file.getOriginalFilename();
 
-                        if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
+                        if (!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
                             vod_decoded_file_name = Normalizer.normalize(vod_file.getOriginalFilename(), Normalizer.Form.NFC);
                             log.info(vod_decoded_file_name);
                         }
 
                         String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
 
-                        if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
+                        if (!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
                             thumbnail_decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
                             log.info(thumbnail_decoded_file_name);
                         }
 
                         /** VOD THUMBNAIL LOGIC - NOT WORKING IN LARGE FILES - JAVA HEAP SPACE**/
                         VideoUtility videoUtility = new VideoUtility();
+                        UUID uid = UUID.randomUUID();
+                        String temp_fileName = uid.toString().substring(0, 8) + "test" + vod_decoded_file_name.substring(vod_decoded_file_name.lastIndexOf(".")).toLowerCase();
                         FileConverter fileConverter = new FileConverter();
-                        File file = fileConverter.convert(vod_file);
+                        File file = fileConverter.convert(vod_file, temp_fileName);
 
 
                         /** VOD FILE DURATION LOGIC **/
@@ -156,8 +158,8 @@ public class PortfolioController {
                         log.info(duration);
 
                         /** File Upload Logic */
-                        String file_name = uploadFile(vod_decoded_file_name, vod_file, portfolio_info.toString());
-                        String thumbnail_name = uploadFile(thumbnail_decoded_file_name, thumbnail, portfolio_info.toString());
+                        String file_name = uploadFile(vod_decoded_file_name, vod_file, portfolio_info.toString(), temp_fileName);
+                        String thumbnail_name = uploadFile(thumbnail_decoded_file_name, thumbnail, portfolio_info.toString(), null);
                         uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "videos/portfolio/" + portfolio_info.toString() + file_name)));
                         uploads.add(new Upload(thumbnail_name, urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + thumbnail_name)));
                         portfolio.setFile(urlConverter.convertSpecialLetter(cdn_path + "videos/portfolio/" + portfolio_info.toString() + file_name));
@@ -168,7 +170,7 @@ public class PortfolioController {
                 case PortfolioType.IMAGE: { /** IMAGE PORTFOLIO **/
                     /**Test Parsing Logic*/
 
-                    if(portfolio.getFile().isEmpty()){
+                    if (portfolio.getFile().isEmpty()) {
                         return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
                     } else {
                         if (img_files.length <= 0)
@@ -193,13 +195,13 @@ public class PortfolioController {
                                 /** IOS EUC-KR Name Converter **/
                                 String decoded_file_name = multipartFile.getOriginalFilename();
 
-                                if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                                if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                     decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
                                     log.info(decoded_file_name);
                                 }
 
                                 /** File Upload Logic */
-                                String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString());
+                                String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString(), null);
                                 uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + file_name)));
 
                                 portfolio.setFile(portfolio.getFile().replace(multipartFile.getOriginalFilename(), urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + file_name)));
@@ -228,17 +230,18 @@ public class PortfolioController {
                             log.info("originalName:" + multipartFile.getOriginalFilename());
                             log.info("size:" + multipartFile.getSize());
                             log.info("ContentType:" + multipartFile.getContentType());
+                            log.info("nameLength:" + multipartFile.getOriginalFilename().length());
 
                             /** IOS EUC-KR Name Converter **/
                             String decoded_file_name = multipartFile.getOriginalFilename();
 
-                            if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                            if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                 decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
                                 log.info(decoded_file_name);
                             }
 
                             /** File Upload Logic */
-                            String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString());
+                            String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString(), null);
                             if (Format.CheckIMGFile(multipartFile.getOriginalFilename())) {
                                 uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + file_name)));
                             } else {
@@ -340,30 +343,32 @@ public class PortfolioController {
                             /** IOS EUC-KR Name Converter **/
                             String vod_decoded_file_name = vod_file.getOriginalFilename();
 
-                            if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
+                            if (!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
                                 vod_decoded_file_name = Normalizer.normalize(vod_file.getOriginalFilename(), Normalizer.Form.NFC);
                                 log.info(vod_decoded_file_name);
                             }
 
                             String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
 
-                            if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
+                            if (!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
                                 thumbnail_decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
                                 log.info(thumbnail_decoded_file_name);
                             }
 
                             /** VOD THUMBNAIL LOGIC - NOT WORKING IN LARGE FILES - JAVA HEAP SPACE**/
                             VideoUtility videoUtility = new VideoUtility();
+                            UUID uid = UUID.randomUUID();
+                            String temp_fileName = uid.toString().substring(0, 8) + "test" + vod_decoded_file_name.substring(vod_decoded_file_name.lastIndexOf(".")).toLowerCase();
                             FileConverter fileConverter = new FileConverter();
-                            File file = fileConverter.convert(vod_file);
+                            File file = fileConverter.convert(vod_file, temp_fileName);
 
                             /** VOD FILE DURATION LOGIC **/
                             String duration = videoUtility.getDuration(file);
                             log.info(duration);
 
                             /** File Upload Logic */
-                            String file_name = uploadFile(vod_decoded_file_name, vod_file, portfolio_info.toString());
-                            String thumbnail_name = uploadFile(thumbnail_decoded_file_name, thumbnail, portfolio_info.toString());
+                            String file_name = uploadFile(vod_decoded_file_name, vod_file, portfolio_info.toString(), temp_fileName);
+                            String thumbnail_name = uploadFile(thumbnail_decoded_file_name, thumbnail, portfolio_info.toString(), null);
                             uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "videos/portfolio/" + portfolio_info.toString() + file_name)));
                             uploads.add(new Upload(thumbnail_name, urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + thumbnail_name)));
                             portfolio.setFile(urlConverter.convertSpecialLetter(cdn_path + "videos/portfolio/" + portfolio_info.toString() + file_name));
@@ -403,13 +408,13 @@ public class PortfolioController {
                                     /** IOS EUC-KR Name Converter **/
                                     String decoded_file_name = multipartFile.getOriginalFilename();
 
-                                    if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                                    if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                         decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
                                         log.info(decoded_file_name);
                                     }
 
                                     /** File Upload Logic */
-                                    String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString());
+                                    String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString(), null);
                                     uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + file_name)));
 
                                     portfolio.setFile(portfolio.getFile().replace(multipartFile.getOriginalFilename(), urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + file_name)));
@@ -421,45 +426,45 @@ public class PortfolioController {
                 break;
                 case PortfolioType.FILE: { /** FILE PORTFOLIO **/
                     /**Test Parsing Logic*/
-                        if (portfolio_files == null || portfolio_files.length <= 0) {
-                            if (!portfolio.getFile().equals(original_portfolio.getFile()))
-                                log.info("File is only deleted");
-                        } else {
-                            Map<String, MultipartFile> multipartFileMap = new HashMap<>();
-                            for (int i = 0; i < portfolio_files.length; i++) {
-                                multipartFileMap.put("files-" + i, portfolio_files[i]);
-                            }
-                            /** Multiple File Upload Logic*/
-                            for (Map.Entry<String, MultipartFile> entry : multipartFileMap.entrySet()) {
-                                MultipartFile multipartFile = entry.getValue();
-                                if (multipartFile.isEmpty()) {
-                                    return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("EditPortfolio()")), HttpStatus.OK);
-                                } else if (!Format.CheckFile(multipartFile.getOriginalFilename())) {
-                                    return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_MISMATCH, message.getHashMap("EditPortfolio()")), HttpStatus.OK);
+                    if (portfolio_files == null || portfolio_files.length <= 0) {
+                        if (!portfolio.getFile().equals(original_portfolio.getFile()))
+                            log.info("File is only deleted");
+                    } else {
+                        Map<String, MultipartFile> multipartFileMap = new HashMap<>();
+                        for (int i = 0; i < portfolio_files.length; i++) {
+                            multipartFileMap.put("files-" + i, portfolio_files[i]);
+                        }
+                        /** Multiple File Upload Logic*/
+                        for (Map.Entry<String, MultipartFile> entry : multipartFileMap.entrySet()) {
+                            MultipartFile multipartFile = entry.getValue();
+                            if (multipartFile.isEmpty()) {
+                                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("EditPortfolio()")), HttpStatus.OK);
+                            } else if (!Format.CheckFile(multipartFile.getOriginalFilename())) {
+                                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_MISMATCH, message.getHashMap("EditPortfolio()")), HttpStatus.OK);
+                            } else {
+                                /** File Upload Log Logic*/
+                                log.info("originalName:" + multipartFile.getOriginalFilename());
+                                log.info("size:" + multipartFile.getSize());
+                                log.info("ContentType:" + multipartFile.getContentType());
+
+                                /** IOS EUC-KR Name Converter **/
+                                String decoded_file_name = multipartFile.getOriginalFilename();
+
+                                if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                                    decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
+                                    log.info(decoded_file_name);
+                                }
+
+                                /** File Upload Logic */
+                                String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString(), null);
+                                if (Format.CheckIMGFile(multipartFile.getOriginalFilename())) {
+                                    uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + file_name)));
                                 } else {
-                                    /** File Upload Log Logic*/
-                                    log.info("originalName:" + multipartFile.getOriginalFilename());
-                                    log.info("size:" + multipartFile.getSize());
-                                    log.info("ContentType:" + multipartFile.getContentType());
-
-                                    /** IOS EUC-KR Name Converter **/
-                                    String decoded_file_name = multipartFile.getOriginalFilename();
-
-                                    if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
-                                        decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
-                                        log.info(decoded_file_name);
-                                    }
-
-                                    /** File Upload Logic */
-                                    String file_name = uploadFile(decoded_file_name, multipartFile, portfolio_info.toString());
-                                    if(Format.CheckIMGFile(multipartFile.getOriginalFilename())){
-                                        uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/portfolio/" + portfolio_info.toString() + file_name)));
-                                    }else {
-                                        uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "files/portfolio/" + portfolio_info.toString() + file_name)));
-                                    }
+                                    uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "files/portfolio/" + portfolio_info.toString() + file_name)));
                                 }
                             }
                         }
+                    }
                     break;
                 }
                 default:
@@ -471,8 +476,8 @@ public class PortfolioController {
                 portfolio.setFile(portfolio.getFile().replace("[", "").replace("]", "").replace("\"", ""));
                 ArrayList<String> urls = new ArrayList<>(Arrays.asList(portfolio.getFile().split(",")));
                 ArrayList<String> final_url = new ArrayList<>();
-                for(String string : urls){
-                    if(!string.contains("vodappserver")){
+                for (String string : urls) {
+                    if (!string.contains("vodappserver")) {
                         log.info("String change Failed");
                         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.PORTFOLIO_TYPE_ERROR, message.getHashMap("EditPortfolio()")), HttpStatus.OK);
                     } else {
@@ -485,7 +490,7 @@ public class PortfolioController {
             } else if (portfolio.getType().equals(PortfolioType.FILE)) {
                 List<String> file_msgList = new ArrayList<>();
                 FileJson[] fileJsons = new Gson().fromJson(portfolio.getFile(), FileJson[].class);
-                if(fileJsons != null) {
+                if (fileJsons != null) {
                     for (FileJson fileJson : fileJsons) {
                         String jsonString = new Gson().toJson(fileJson);
                         file_msgList.add(jsonString);
@@ -567,34 +572,34 @@ public class PortfolioController {
     }
 
     @RequestMapping(value = "/api/artist/portfolioList/{sort}/{last_index}", method = RequestMethod.POST)
-    public ResponseEntity GetPortfolioList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("last_index") int last_index){
+    public ResponseEntity GetPortfolioList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("last_index") int last_index) {
         PortfolioEditRequest portfolioRequest = new Gson().fromJson(body, PortfolioEditRequest.class);
         return portfolioService.getPortfolioList(portfolioRequest.getArtist_no(), sort, last_index);
     }
 
 
-    private String uploadFile(String originalName, MultipartFile mfile, String portfolio_info) throws IOException {
+    private String uploadFile(String originalName, MultipartFile mfile, String portfolio_info, String vod_tmp) throws IOException {
         UUID uid = UUID.randomUUID();
-        String mOriginalName = originalName;
         originalName = originalName.replace(" ", "");
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
         CDNService cdnService = new CDNService();
+        String temp_fileName = uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase();
         if (Format.CheckIMGFile(originalName)) {
             FileConverter fileConverter = new FileConverter();
-            File file = fileConverter.convert(mfile);
+            File file = fileConverter.convert(mfile, temp_fileName);
             cdnService.upload("api/images/portfolio/" + portfolio_info + savedName, file);
             Files.deleteIfExists(file.toPath());
         } else if (Format.CheckFile(originalName)) {
             FileConverter fileConverter = new FileConverter();
-            File file = fileConverter.convert(mfile);
+            File file = fileConverter.convert(mfile, temp_fileName);
             cdnService.upload("api/files/portfolio/" + portfolio_info + savedName, file);
             Files.deleteIfExists(file.toPath());
         } else if (Format.CheckVODFile(originalName)) {
-            File file = new File(upload_path, "test" + mfile.getOriginalFilename().substring(mfile.getOriginalFilename().lastIndexOf(".")).toLowerCase());
+            File file = new File(upload_path, vod_tmp);
             cdnService.upload("api/videos/portfolio/" + portfolio_info + savedName, file);
             Files.deleteIfExists(file.toPath());
         } else {
-            throw new BusinessException(new Exception());
+            throw new BusinessException(new Exception("File Format is not valid"));
         }
 
         return savedName;

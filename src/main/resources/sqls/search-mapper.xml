@@ -4,6 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SearchMapper">
     <select id="getKeywords" resultType="Search">
-        select * from search
+        select *
+        from search
     </select>
+    <delete id="deleteByWord">
+        delete
+        from search
+        WHERE word = #{originalWord}
+    </delete>
+    <insert id="insertKeyword" useGeneratedKeys="true" keyProperty="search_no">
+        insert into search(admin_no, word, reg_date)
+        VALUES (#{admin_no}, #{word}, #{reg_date})
+    </insert>
 </mapper>

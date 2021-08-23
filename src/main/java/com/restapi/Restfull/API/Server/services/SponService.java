@@ -74,7 +74,8 @@ public class SponService {
             // Spon Data Set
 
             spon.setSpon_date(d);
-            spon.setStatus(SponStatus.NOT_CONFIRMED);
+            spon.setStatus(false);
+            spon.setPurchase_status(false);
             if (spon.getBoard_no() != 0) {
                 spon.setType(SponType.BOARD_SPON);
                 // DB Set

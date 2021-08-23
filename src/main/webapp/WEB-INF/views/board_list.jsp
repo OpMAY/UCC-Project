@@ -116,7 +116,7 @@
                                         </td>
                                         <td>
                                             <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="if(confirm('정말 삭제 하시겠습니까?')){DeleteBoard(${boardList[i-1].board_no});} else {return false;}">
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="if(confirm('${i}번째 게시글을 삭제합니다.\n삭제 후 복구는 불가능합니다.\n그래도 정말 삭제 하시겠습니까?')){DeleteBoard(${boardList[i-1].board_no});} else {return false;}">
                                                 <i class="btn-icon-prepend" data-feather="trash"></i>
                                                 삭제
                                             </button>

@@ -55,4 +55,13 @@ public class InquiryDao {
         InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
         return inquiryMapper.getInquiryForCDN();
     }
+
+    public List<Inquiry> getInquiryListByAnswerStatusAndType(boolean answer_state, String type) {
+        InquiryMapper inquiryMapper = sqlSession.getMapper(InquiryMapper.class);
+        if (answer_state) {
+            return inquiryMapper.getInquiryAnsweredListByType(type);
+        } else {
+            return inquiryMapper.getInquiryNotAnsweredListByType(type);
+        }
+    }
 }

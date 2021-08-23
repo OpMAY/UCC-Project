@@ -21,4 +21,13 @@ public class SearchDao {
         return searchMapper.getKeywords();
     }
 
+    public void deleteByWord(String originalWord) {
+        SearchMapper searchMapper = sqlSession.getMapper(SearchMapper.class);
+        searchMapper.deleteByWord(originalWord);
+    }
+
+    public void insertKeyword(Search search) {
+        SearchMapper searchMapper = sqlSession.getMapper(SearchMapper.class);
+        searchMapper.insertKeyword(search);
+    }
 }

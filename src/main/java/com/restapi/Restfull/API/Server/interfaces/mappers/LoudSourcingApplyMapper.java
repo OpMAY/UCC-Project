@@ -18,4 +18,14 @@ public interface LoudSourcingApplyMapper {
     void updateApply(LoudSourcingApply loudSourcingApply);
 
     List<LoudSourcingApply> getEntryNum(int loudsourcing_no);
+
+    void updateApplyForJudge(LoudSourcingApply apply);
+
+    void updateApplyForEnd(LoudSourcingApply apply);
+
+    List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNoPreSelected(int loudsourcing_no);
+
+    List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(int loudsourcing_no);
+
+    List<LoudSourcingApply> getLoudSourcingApplyListByLoudSourcingNoSelected(int loudsourcing_no);
 }
