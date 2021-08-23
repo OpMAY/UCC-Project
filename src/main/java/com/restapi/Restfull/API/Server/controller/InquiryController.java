@@ -116,7 +116,7 @@ public class InquiryController {
                             }
 
                             /** File Upload Logic */
-                            String file_name = uploadFile(decoded_file_name, multipartFile, inquiry_info);
+                            String file_name = uploadFile(multipartFile.getOriginalFilename(), multipartFile, inquiry_info);
                             /**
                              * 1. Garbage Collector 시행
                              * 2. MultipartFile -> File 바꾸기
