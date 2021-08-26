@@ -31,6 +31,36 @@
     <link rel="stylesheet" href="../assets/css/demo_1/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../assets/images/favicon.png"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul {
+            padding: 16px 0;
+        }
+
+        ul li {
+            display: inline-block;
+            margin: 0 5px;
+            font-size: 20px;
+            letter-spacing: -.5px;
+        }
+
+        form {
+            padding-top: 16px;
+        }
+
+        ul li.tag-item {
+            padding: 4px 8px;
+            background-color: #ffffff;
+            color: #727cf5;
+            border-radius: 20px;
+            border: 1px solid #727cf5;
+        }
+    </style>
 </head>
 <body>
 <div class="main-wrapper">
@@ -111,14 +141,12 @@
                                                           style="line-height: 150%; font-size: large; text-align: center"
                                                           disabled><fmt:formatNumber value="${Loudsourcing.reward}"
                                                                                      type="number"/>원</textarea>
-                                                <label class="label d-flex" for="loudsourcing-hashtag"
+                                                <label class="label d-flex"
                                                        style="font-size: larger">
                                                     해시태그
                                                 </label>
                                                 <div>
-                                                    <input hidden="hidden"/>
-                                                    <input name="tags" id="loudsourcing-hashtag"
-                                                           value="${Loudsourcing.hashtag}" disabled/>
+                                                    <ul id="tag-list"></ul>
                                                 </div>
                                                 <label class="label d-flex" for="total-recruit-number"
                                                        style="font-size: larger">
@@ -319,5 +347,24 @@
             window.location.reload();
         })
     }
+    function replaceAll(str, searchStr, replaceStr) {
+        return str.split(searchStr).join(replaceStr);
+    }
+    $(document).ready(function () {
+        let tag = {};
+        let counter = 0;
+
+        // 서버 기본 해시태그 리스트를 가져온다.
+        let hashtagList = '<c:out value="${Loudsourcing.hashtag}"/>';
+        let edit = replaceAll(hashtagList, '&#034;', '"');
+        let obj = JSON.parse(edit);
+        for (let i = 0; i < obj.length; i++) {
+            console.log(obj[i]);
+            tag[counter] = obj[i];
+            console.log(counter);
+            $("#tag-list").append("<li class='tag-item'>#" + obj[i] + "</li>");
+            counter++;
+        }
+    });
 </script>
 </html>

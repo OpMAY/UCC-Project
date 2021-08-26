@@ -17,6 +17,8 @@ public interface UserMapper {
 
     List<User> selectUserBySNS(String sns);
 
+    List<User> selectUserBySNSAndRegDate(String sns, String date);
+
     List<User> getAllUserList();
 
     List<User> getUserForCDN();

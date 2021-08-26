@@ -48,6 +48,15 @@
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large">문의 관리</h6>
                             <c:set var="inquiry" value="${inquiry}"/>
+                            <c:if test="${inquiry.type == 'loudsourcing'}">
+                                <div class="d-flex justify-content-center mb-2" style="color: #5a6780; font-size: large">
+                                    크라우드 문의의 경우 개별 연락 후 답변하기를 누르면 해당 유저에게 문의 답변이 자동으로 전송됩니다.<br>
+                                    기본 답변 내용 : 크라우드 문의 보내주신 "사용자/아티스트 명"님께 감사드립니다.<br>
+                                    보내주신 문의 내용과 첨부파일을 확인했습니다.<br>
+                                    몇 일 안으로 입력하신 연락처 혹은 이메일로 연락드리겠습니다.<br>
+                                    앞으로도 많은 문의 보내주세요.<br>
+                                </div>
+                            </c:if>
                             <div class="row justify-content-center">
                                 <div class="col-md-10">
                                     <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">

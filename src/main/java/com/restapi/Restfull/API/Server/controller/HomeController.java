@@ -115,7 +115,7 @@ public class HomeController {
         try {
             Message message = new Message();
             log.info("OriginalName : " + file.getOriginalFilename());
-            log.info("name : " + file.getName());
+            log.info("Decoded FileName : " + URLDecoder.decode(file.getOriginalFilename(), "UTF-8"));
             message.put("name", file.getOriginalFilename());
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS, message.getHashMap("TestEncode()")), HttpStatus.OK);
         } catch (Exception e) {

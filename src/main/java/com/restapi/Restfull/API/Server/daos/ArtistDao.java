@@ -4,6 +4,7 @@ import com.restapi.Restfull.API.Server.interfaces.mappers.ArtistMapper;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,6 +13,9 @@ import java.util.List;
 @Repository
 public class ArtistDao {
     private SqlSession sqlSession;
+
+    @Autowired
+    private SqlSession ROSqlSession;
 
     public void setSession(SqlSession sqlSession) {
         if (this.sqlSession == null)
@@ -111,7 +115,7 @@ public class ArtistDao {
     }
 
     public List<Artist> getAllArtistForCDN(){
-        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        ArtistMapper artistMapper = ROSqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getAllArtistForCDN();
     }
 }

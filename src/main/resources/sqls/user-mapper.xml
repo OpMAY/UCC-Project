@@ -29,4 +29,7 @@
     <select id="getUserForCDN" resultType="User">
         select * from user
     </select>
+    <select id="selectUserBySNSAndRegDate" resultType="User">
+        select * from user WHERE sns=#{sns} AND reg_date <![CDATA[=]]> #{date}
+    </select>
 </mapper>

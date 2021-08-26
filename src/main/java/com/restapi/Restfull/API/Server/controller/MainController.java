@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.controller;
 
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
+import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.MainService;
@@ -49,5 +50,16 @@ public class MainController {
         return mainService.GetMain();
     }
 
+    @RequestMapping(value = "/api/cdn/delete", method = RequestMethod.GET)
+    public ResponseEntity DeleteCDNManual(){
+        try {
+            Message message = new Message();
+            mainService.deleteCDNFiles();
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.MANUALLY_DELETE_CDN, message.getHashMap("DeleteCDNManual()")), HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
 
 }

@@ -53,10 +53,10 @@
 
         ul li.tag-item {
             padding: 4px 8px;
-            background-color: #98B6FF;
-            color: #000;
-            opacity: 80%;
+            background-color: #ffffff;
+            color: #727cf5;
             border-radius: 20px;
+            border: 1px solid #727cf5;
         }
     </style>
 </head>

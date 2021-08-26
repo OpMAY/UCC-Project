@@ -71,7 +71,7 @@
                                         <th>승인 여부</th>
                                         <th>금액</th>
                                         <th>자세히 보기</th>
-                                        <th>금액 보내기</th>
+                                        <th>송금 처리</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -126,7 +126,7 @@
                                                     onclick="if(confirm('${sponList[i-1].artist_name}님께 후원 금액을 송금 처리하시겠습니까?')){sendSpon(${sponList[i-1].spon_no});} else {return false;}"
                                                     <c:if test="${sponList[i-1].purchase_status == true}">disabled</c:if>>
                                                 <i class="btn-icon-prepend" data-feather="send"></i>
-                                                보내기
+                                                처리하기
                                             </button>
                                         </td>
                                     </tr>

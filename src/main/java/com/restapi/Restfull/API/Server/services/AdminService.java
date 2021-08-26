@@ -8,6 +8,7 @@ import com.restapi.Restfull.API.Server.response.NotificationType;
 import com.restapi.Restfull.API.Server.response.PortfolioType;
 import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
 import com.restapi.Restfull.API.Server.utility.Time;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,12 +106,15 @@ public class AdminService {
         for (Inquiry inquiry : notAnsweredInquiryList) {
             User user = userDao.selectUserByUserNo(inquiry.getUser_no());
             inquiry.setUser_name(user.getName());
+            inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
         }
 
-        List<User> kakaoUserList = userDao.selectUserBySNS("KAKAO");
-        List<User> naverUserList = userDao.selectUserBySNS("NAVER");
-        List<User> googleUserList = userDao.selectUserBySNS("GOOGLE");
-        List<User> appleUserList = userDao.selectUserBySNS("APPLE");
+        String date = Time.TimeFormatDay();
+
+        List<User> kakaoUserList = userDao.selectUserBySNSAndRegDate("KAKAO", date);
+        List<User> naverUserList = userDao.selectUserBySNSAndRegDate("NAVER", date);
+        List<User> googleUserList = userDao.selectUserBySNSAndRegDate("GOOGLE", date);
+        List<User> appleUserList = userDao.selectUserBySNSAndRegDate("APPLE", date);
 
         List<LoudSourcing> loudSourcingList = loudSourcingDao.getRecentLSAdminMain();
         for (LoudSourcing loudSourcing : loudSourcingList) {
@@ -126,6 +130,38 @@ public class AdminService {
         modelAndView.addObject("LoudsourcingList", loudSourcingList);
 
         return modelAndView;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public String getUserSNSByDate(String date){
+        try {
+            if(date == null){
+                log.info("No Date Error");
+                throw new BusinessException(new Exception());
+            }
+            userDao.setSession(sqlSession);
+            List<User> kakaoUserList = userDao.selectUserBySNSAndRegDate("KAKAO", date);
+            List<User> naverUserList = userDao.selectUserBySNSAndRegDate("NAVER", date);
+            List<User> googleUserList = userDao.selectUserBySNSAndRegDate("GOOGLE", date);
+            List<User> appleUserList = userDao.selectUserBySNSAndRegDate("APPLE", date);
+            SnsUser snsUser = new SnsUser();
+            snsUser.setKakaoUser(kakaoUserList.size());
+            snsUser.setNaverUser(naverUserList.size());
+            snsUser.setAppleUser(appleUserList.size());
+            snsUser.setGoogleUser(googleUserList.size());
+            return new Gson().toJson(snsUser);
+        } catch (Exception e){
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Data
+    class SnsUser{
+        private int kakaoUser;
+        private int naverUser;
+        private int googleUser;
+        private int appleUser;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -346,7 +382,8 @@ public class AdminService {
             ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
             ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
             artist.setHashtag(new Gson().toJson(modified_HashtagList));
-            log.info(hashtagList);
+            log.info(modified_HashtagList);
+            System.out.println(modified_HashtagList);
         }
 
         modelAndView.addObject("penalty_num", penaltyList.size());
@@ -695,11 +732,21 @@ public class AdminService {
         Gson gson = new Gson();
         FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
         ArrayList<Upload> uploads = new ArrayList<>();
-        for (FileJson json : fileJson) {
-            uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+        if(fileJson != null) {
+            for (FileJson json : fileJson) {
+                uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+            }
+        }
+        modelAndView.addObject("files", uploads);
+        if(loudSourcing.getHashtag() != null){
+            ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(",")));
+            ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
+            loudSourcing.setHashtag(new Gson().toJson(modified_HashtagList));
+            log.info(modified_HashtagList);
+            System.out.println(modified_HashtagList);
         }
         modelAndView.addObject("Loudsourcing", loudSourcing);
-        modelAndView.addObject("files", uploads);
+
 
         return modelAndView;
     }
@@ -1671,6 +1718,7 @@ public class AdminService {
                 modelAndView.addObject("inquiryList", inquiryList);
                 break;
         }
+        modelAndView.addObject("type", type);
         return modelAndView;
     }
 

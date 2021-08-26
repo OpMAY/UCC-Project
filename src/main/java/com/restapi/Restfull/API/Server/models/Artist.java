@@ -1,16 +1,10 @@
 package com.restapi.Restfull.API.Server.models;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 
 @Data
-@Getter
-@Setter
-@ToString
 public class Artist {
     private int artist_no;
     private int user_no;

@@ -4,6 +4,7 @@ import com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingMapper;
 import com.restapi.Restfull.API.Server.models.LoudSourcing;
 import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
 @Repository
 public class LoudSourcingDao {
     private SqlSession sqlSession;
+
+    @Autowired
+    private SqlSession ROSqlSession;
 
     public void setSession(SqlSession sqlSession) {
         if (this.sqlSession == null)
@@ -101,7 +105,7 @@ public class LoudSourcingDao {
     }
 
     public List<LoudSourcing> getLoudsourcingForCDN() {
-        LoudSourcingMapper loudSourcingMapper = sqlSession.getMapper(LoudSourcingMapper.class);
+        LoudSourcingMapper loudSourcingMapper = ROSqlSession.getMapper(LoudSourcingMapper.class);
         return loudSourcingMapper.getLoudsourcingForCDN();
     }
 

@@ -12,9 +12,7 @@ import com.restapi.Restfull.API.Server.services.ArtistService;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.RequestChangeService;
 import com.restapi.Restfull.API.Server.services.UserService;
-import com.restapi.Restfull.API.Server.utility.FileConverter;
-import com.restapi.Restfull.API.Server.utility.Format;
-import com.restapi.Restfull.API.Server.utility.URLConverter;
+import com.restapi.Restfull.API.Server.utility.*;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
@@ -30,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.Normalizer;
@@ -136,16 +135,30 @@ public class RequestChangeController {
                 /** IOS EUC-KR Name Converter **/
                 String profile_img_decoded_file_name = profile_img_file.getOriginalFilename();
 
+                // CHECK UTF-8 ENCODING
+                if(EncodeChecker.encodeCheck(profile_img_decoded_file_name)){
+                    profile_img_decoded_file_name = URLDecoder.decode(profile_img_decoded_file_name, "UTF-8");
+                    log.info("File Name URL Encoded - Decoded File : " + profile_img_decoded_file_name);
+                }
+
+                // CHECK NFD ENCODING - For IOS Korean
                 if(!Normalizer.isNormalized(profile_img_decoded_file_name, Normalizer.Form.NFC)) {
-                    profile_img_decoded_file_name = Normalizer.normalize(profile_img_file.getOriginalFilename(), Normalizer.Form.NFC);
-                    log.info(profile_img_decoded_file_name);
+                    profile_img_decoded_file_name = Normalizer.normalize(profile_img_decoded_file_name, Normalizer.Form.NFC);
+                    log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + profile_img_decoded_file_name);
                 }
 
                 String fan_main_img_decoded_file_name = fan_main_img_file.getOriginalFilename();
 
+                // CHECK UTF-8 ENCODING
+                if(EncodeChecker.encodeCheck(fan_main_img_decoded_file_name)){
+                    fan_main_img_decoded_file_name = URLDecoder.decode(fan_main_img_decoded_file_name, "UTF-8");
+                    log.info("File Name URL Encoded - Decoded File : " + fan_main_img_decoded_file_name);
+                }
+
+                // CHECK NFD ENCODING - For IOS Korean
                 if(!Normalizer.isNormalized(fan_main_img_decoded_file_name, Normalizer.Form.NFC)) {
-                    fan_main_img_decoded_file_name = Normalizer.normalize(fan_main_img_file.getOriginalFilename(), Normalizer.Form.NFC);
-                    log.info(fan_main_img_decoded_file_name);
+                    fan_main_img_decoded_file_name = Normalizer.normalize(fan_main_img_decoded_file_name, Normalizer.Form.NFC);
+                    log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + fan_main_img_decoded_file_name);
                 }
 
                 /** RequestChange Set **/
@@ -199,9 +212,12 @@ public class RequestChangeController {
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
         FileConverter fileConverter = new FileConverter();
         File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
+        ImageConverter imageConverter = new ImageConverter();
+        File imgFile = imageConverter.convert64to32(file);
         CDNService cdnService = new CDNService();
-        cdnService.upload("api/images/" + artist_info + savedName, file);
+        cdnService.upload("api/images/" + artist_info + savedName, imgFile);
         Files.deleteIfExists(file.toPath());
+        Files.deleteIfExists(imgFile.toPath());
         return savedName;
     }
 

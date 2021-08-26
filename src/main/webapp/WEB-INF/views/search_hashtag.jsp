@@ -54,10 +54,11 @@
 
         ul li.tag-item {
             padding: 4px 8px;
-            background-color: #98B6FF;
-            color: #000;
+            background-color: #000000;
+            color: #ffffff;
             opacity: 80%;
             border-radius: 20px;
+            border : 1px solid #ffffff;
         }
 
         .tag-item:hover {
@@ -255,8 +256,12 @@
             $("#tag").on("keypress", function (e) {
                 let self = $(this);
 
+                if(e.keyCode === 32){
+                    e.preventDefault();
+                }
+
                 //엔터나 스페이스바 눌렀을때 실행
-                if (e.key === "Enter" || e.keyCode === 32) {
+                if (e.key === "Enter") {
 
                     let tagValue = self.val(); // 값 가져오기
 

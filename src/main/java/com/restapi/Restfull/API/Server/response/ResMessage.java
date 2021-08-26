@@ -83,4 +83,5 @@ public class ResMessage {
     public static final String BANNED_ARTIST = "Wrong Access By Banned Artist";
     public static final String UPDATE_PUSH_SETTING = "Push Setting updated";
     public static final String NOT_RIGHT_SORT = "sort is null";
+    public static final String MANUALLY_DELETE_CDN = "CDN Deleted Manually";
 }

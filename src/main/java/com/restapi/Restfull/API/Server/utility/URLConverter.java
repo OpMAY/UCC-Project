@@ -13,5 +13,13 @@ public class URLConverter {
         return url;
     }
 
+    public String DecodeFileName(String url) throws UnsupportedEncodingException {
+        String fileName = url.substring(url.lastIndexOf("/") + 1);
+        while (EncodeChecker.encodeCheck(fileName)){
+            fileName = URLDecoder.decode(fileName, "UTF-8");
+        }
+        url = url.substring(0, url.lastIndexOf("/") + 1) + fileName;
+        return url;
+    }
 
 }

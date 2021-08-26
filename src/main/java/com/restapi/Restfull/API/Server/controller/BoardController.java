@@ -5,7 +5,6 @@ import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.Artist;
 import com.restapi.Restfull.API.Server.models.Board;
 import com.restapi.Restfull.API.Server.models.BoardComment;
-import com.restapi.Restfull.API.Server.models.Upload;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
@@ -116,46 +115,22 @@ public class BoardController {
      * 파일 업로드 여부 : thumbnail
      **/
     @RequestMapping(value = "/api/board/upload", method = RequestMethod.POST) //CHECK
-    public ResponseEntity UploadBoard(@RequestParam(value = "board") String body,
-                                      @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
+    public ResponseEntity UploadBoard(@RequestParam(value = "board") String body) {
         try {
-
             Board board = new Gson().fromJson(body, Board.class);
-            StringBuilder board_info = new StringBuilder();
-            board_info.append(board.getArtist_no());
-            board_info.append("/");
-
-            log.info(thumbnail);
 
             String content = board.getContent();
 
-            String revisedContent = moveBoardsFile(content, board_info.toString());
+            String board_info = board.getArtist_no() + "/";
+
+            String revisedContent = moveBoardsFile(content, board_info);
+
+            String thumbnailURL = extractThumbnail(revisedContent);
 
             board.setContent(revisedContent);
+            board.setThumbnail(thumbnailURL);
 
             Message message = new Message();
-            if (thumbnail != null) {
-                if (!thumbnail.isEmpty()) {
-                    if (!Format.CheckIMGFile(thumbnail.getOriginalFilename())) {
-                        return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
-                    }
-                    /** File Upload Log Logic*/
-                    log.info("originalName:" + thumbnail.getOriginalFilename());
-                    log.info("size:" + thumbnail.getSize());
-                    log.info("ContentType:" + thumbnail.getContentType());
-
-
-                    /** File Upload Logic */
-                    String file_name = uploadFile(thumbnail.getOriginalFilename(), thumbnail, board_info.toString());
-
-                    URLConverter urlConverter = new URLConverter();
-                    /** Board Set **/
-                    board.setThumbnail(urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name));
-
-                    /** Response Json Logic*/
-                    message.put("files", new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name)));
-                }
-            }
 
             Artist artist = artistService.getArtistByArtistNo(board.getArtist_no());
             board.setArtist_name(artist.getArtist_name());
@@ -164,21 +139,12 @@ public class BoardController {
             board.setReg_date(d);
             board.setRevise_date(d);
             boardService.insertBoard(board);
-
-
-            Board board1 = boardService.getBoard(board.getBoard_no());
-            board1.setUser_no(artist.getUser_no());
-            message.put("board", board1);
-
+            board.setUser_no(artist.getUser_no());
+            message.put("board", board);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPLOAD_BOARD_SUCCESS, message.getHashMap("UploadBoard()")), HttpStatus.OK);
-        } catch (
-                JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -189,48 +155,16 @@ public class BoardController {
      * 파일 업로드 여부 :
      **/
     @RequestMapping(value = "/api/board/edit", method = RequestMethod.POST) //CHECK
-    public ResponseEntity EditBoard(@RequestParam("board") String body,
-                                    @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
+    public ResponseEntity EditBoard(@RequestParam("board") String body)  {
         Board board = new Gson().fromJson(body, Board.class);
-        Message message = new Message();
-        StringBuilder board_info = new StringBuilder();
-        board_info.append(board.getArtist_no());
-        board_info.append("/");
 
         String board_content = board.getContent();
-        String revised_content = moveBoardsFile(board_content, board_info.toString());
+        String board_info = board.getArtist_no() + "/";
+        String revised_content = moveBoardsFile(board_content, board_info);
+        String thumbnailURL = extractThumbnail(revised_content);
         board.setContent(revised_content);
-
-        if (thumbnail != null) {
-            if (!thumbnail.isEmpty()) {
-                if (!Format.CheckIMGFile(thumbnail.getOriginalFilename())) {
-                    return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_TYPE_UNSUPPORTED), HttpStatus.OK);
-                }
-                /** File Upload Log Logic*/
-                log.info("originalName:" + thumbnail.getOriginalFilename());
-                log.info("size:" + thumbnail.getSize());
-                log.info("ContentType:" + thumbnail.getContentType());
-
-                String decoded_file_name = thumbnail.getOriginalFilename();
-
-                if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
-                    decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
-                    log.info(decoded_file_name);
-                }
-
-                /** File Upload Logic */
-                String file_name = uploadFile(decoded_file_name, thumbnail, board_info.toString());
-
-                /** Board Set **/
-                URLConverter urlConverter = new URLConverter();
-                board.setThumbnail(urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name));
-
-                /** Response Json Logic*/
-                message.put("name", file_name);
-                message.put("url", urlConverter.convertSpecialLetter(cdn_path + "images/board/thumbnail/" + board_info.toString() + file_name));
-            }
-        }
-        return boardService.updateBoard(board, message);
+        board.setThumbnail(thumbnailURL);
+        return boardService.updateBoard(board);
     }
 
     @RequestMapping(value = "/api/board/delete/{board_no}", method = RequestMethod.POST) //CHECK
@@ -346,6 +280,18 @@ public class BoardController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException(e);
+        }
+    }
+
+    private String extractThumbnail(String content) {
+        Pattern p = Pattern.compile("src=\"(.*?)\"");
+        Matcher m = p.matcher(content);
+        if (m.find()) {
+            log.info("Thumbnail URL : " + m.group(1));
+            return m.group(1);
+        } else {
+            log.info("No Image in content");
+            return null;
         }
     }
 

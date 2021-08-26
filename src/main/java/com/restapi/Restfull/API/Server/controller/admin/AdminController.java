@@ -421,6 +421,7 @@ public class AdminController implements ControllerInitialize {
             loudSourcing.setFiles(file_msgList.toString());
             return adminService.uploadLoudSourcing(loudSourcing);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new BusinessException(e);
         }
     }

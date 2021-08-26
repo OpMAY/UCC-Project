@@ -12,10 +12,7 @@ import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.BannerAdService;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.LoudSourcingService;
-import com.restapi.Restfull.API.Server.utility.FileConverter;
-import com.restapi.Restfull.API.Server.utility.Format;
-import com.restapi.Restfull.API.Server.utility.URLConverter;
-import com.restapi.Restfull.API.Server.utility.VideoUtility;
+import com.restapi.Restfull.API.Server.utility.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.Normalizer;
@@ -123,17 +121,29 @@ public class LoudSourcingController {
                 log.info("ContentType:" + thumbnail.getContentType());
 
                 String vod_decoded_file_name = vod.getOriginalFilename();
+                // CHECK UTF-8 ENCODING
+                if(EncodeChecker.encodeCheck(vod_decoded_file_name)){
+                    vod_decoded_file_name = URLDecoder.decode(vod_decoded_file_name, "UTF-8");
+                    log.info("VOD File Name URL ENCODED - Decoded File : " + vod_decoded_file_name);
+                }
 
+                // CHECK NFD ENCODING - For IOS Korean
                 if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
-                    vod_decoded_file_name = Normalizer.normalize(vod.getOriginalFilename(), Normalizer.Form.NFC);
-                    log.info(vod_decoded_file_name);
+                    vod_decoded_file_name = Normalizer.normalize(vod_decoded_file_name, Normalizer.Form.NFC);
+                    log.info("VOD File is NFD Encoded - Decoded File : " + vod_decoded_file_name);
                 }
 
                 String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
+                // CHECK UTF-8 ENCODING
+                if(EncodeChecker.encodeCheck(thumbnail_decoded_file_name)){
+                    thumbnail_decoded_file_name = URLDecoder.decode(thumbnail_decoded_file_name, "UTF-8");
+                    log.info("Thumbnail File Name URL ENCODED - Decoded File : " + thumbnail_decoded_file_name);
+                }
 
+                // CHECK NFD ENCODING - For IOS Korean
                 if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
-                    thumbnail_decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
-                    log.info(thumbnail_decoded_file_name);
+                    thumbnail_decoded_file_name = Normalizer.normalize(thumbnail_decoded_file_name, Normalizer.Form.NFC);
+                    log.info("Thumbnail File is NFD Encoded - Decoded File : " + thumbnail_decoded_file_name);
                 }
 
                 /** VOD THUMBNAIL LOGIC **/

@@ -28,7 +28,7 @@
                                  process_end_date, end_date, total_recruitment_number, judge_date)
         VALUES (#{name}, #{status}, #{host}, #{type}, #{reward}, #{warning}, #{reg_date}, #{revise_date}, #{files},
                 #{img}, #{content}, #{host_profile_img}, #{hashtag}, #{start_date}, #{recruitment_end_date},
-                #{process_end_date}, #{process_start_date}, #{end_date}, #{total_recruitment_number}, #{judge_date})
+                #{process_start_date}, #{process_end_date}, #{end_date}, #{total_recruitment_number}, #{judge_date})
     </insert>
     <delete id="deleteLoudSourcing">
         delete

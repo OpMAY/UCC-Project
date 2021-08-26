@@ -279,7 +279,7 @@ public class BoardService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity updateBoard(Board board, Message file_msg) {
+    public ResponseEntity updateBoard(Board board) {
         try {
             boardDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
@@ -293,9 +293,6 @@ public class BoardService {
             }
             Artist artist = artistDao.getArtistByArtistNo(origin_board.getArtist_no());
 
-            if(file_msg.getMap().get("name") == null){
-                board.setThumbnail(origin_board.getThumbnail());
-            }
             // Update Method
             board.setArtist_name(artist.getArtist_name());
             board.setArtist_profile_img(artist.getArtist_profile_img());
@@ -308,7 +305,6 @@ public class BoardService {
             artist.setRecent_act_date(Time.TimeFormatHMS());
             artistDao.updateArtist(artist);
 
-            message.put("files", file_msg.getMap());
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.EDIT_BOARD_SUCCESS, message.getHashMap("EditBoard()")), HttpStatus.OK);
         } catch (JSONException e) {
             throw new BusinessException(e);

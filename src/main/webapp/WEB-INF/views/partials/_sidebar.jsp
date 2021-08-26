@@ -87,7 +87,7 @@
       <li class="nav-item">
         <a href="/admin/inquiry_normal.do" class="nav-link">
           <i class="link-icon" data-feather="file"></i>
-          <span class="link-title">기타 문의</span>
+          <span class="link-title">일반 문의</span>
         </a>
       </li>
       <li class="nav-item nav-category">검색어</li>

@@ -6,6 +6,7 @@ import com.restapi.Restfull.API.Server.models.Portfolio;
 import com.restapi.Restfull.API.Server.response.DataListSortType;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +15,9 @@ import java.util.List;
 @Repository
 public class PortfolioDao {
     private SqlSession sqlSession;
+
+    @Autowired
+    private SqlSession ROSqlSession;
 
     public void setSession(SqlSession sqlSession) {
         if (this.sqlSession == null)
@@ -144,7 +148,7 @@ public class PortfolioDao {
     }
 
     public List<Portfolio> getPortfolioForCDN() {
-        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        PortfolioMapper portfolioMapper = ROSqlSession.getMapper(PortfolioMapper.class);
         return portfolioMapper.getPortfolioForCDN();
     }
 }

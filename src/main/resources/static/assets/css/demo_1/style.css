@@ -24562,8 +24562,7 @@ select {
           text-align: center; }
           .datepicker.datepicker-dropdown .datepicker-days table.table-condensed tbody td.day {
             font-size: 0.9375rem;
-            padding: 0.5rem 0;
-            color: #000; }
+            padding: 0.5rem 0; }
             .datepicker.datepicker-dropdown .datepicker-days table.table-condensed tbody td.day:hover {
               background: #ffffff; }
             .datepicker.datepicker-dropdown .datepicker-days table.table-condensed tbody td.day.active {

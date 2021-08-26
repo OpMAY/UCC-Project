@@ -3,6 +3,7 @@ package com.restapi.Restfull.API.Server.daos;
 import com.restapi.Restfull.API.Server.interfaces.mappers.FAQMapper;
 import com.restapi.Restfull.API.Server.models.FAQ;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,6 +11,9 @@ import java.util.List;
 @Repository
 public class FAQDao {
     private SqlSession sqlSession;
+
+    @Autowired
+    private SqlSession ROSqlSession;
 
     public void setSession(SqlSession sqlSession) {
         if (this.sqlSession == null)
@@ -47,7 +51,7 @@ public class FAQDao {
     }
 
     public List<FAQ> getFAQForCDN() {
-        FAQMapper faqMapper = sqlSession.getMapper(FAQMapper.class);
+        FAQMapper faqMapper = ROSqlSession.getMapper(FAQMapper.class);
         return faqMapper.getFAQForCDN();
     }
 }

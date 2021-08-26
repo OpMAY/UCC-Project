@@ -258,6 +258,7 @@ public class PortfolioService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void insertPortfolio(Portfolio portfolio) {
         portfolioDao.setSession(sqlSession);
+        userdao.setSession(sqlSession);
         artistDao.setSession(sqlSession);
         notificationDao.setSession(sqlSession);
         subscribeDao.setSession(sqlSession);

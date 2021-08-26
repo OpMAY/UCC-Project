@@ -10,9 +10,7 @@ import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.UserService;
-import com.restapi.Restfull.API.Server.utility.FileConverter;
-import com.restapi.Restfull.API.Server.utility.Format;
-import com.restapi.Restfull.API.Server.utility.URLConverter;
+import com.restapi.Restfull.API.Server.utility.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.Normalizer;
@@ -113,9 +112,16 @@ public class UserController {
                     /** IOS EUC-KR Name Converter **/
                     String profile_img_decoded_file_name = profile_img.getOriginalFilename();
 
+                    // CHECK UTF-8 ENCODING
+                    if(EncodeChecker.encodeCheck(profile_img_decoded_file_name)){
+                        profile_img_decoded_file_name = URLDecoder.decode(profile_img_decoded_file_name, "UTF-8");
+                        log.info("File Name URL Encoded - Decoded File : " + profile_img_decoded_file_name);
+                    }
+
+                    // CHECK NFD ENCODING - For IOS Korean
                     if(!Normalizer.isNormalized(profile_img_decoded_file_name, Normalizer.Form.NFC)) {
-                        profile_img_decoded_file_name = Normalizer.normalize(profile_img.getOriginalFilename(), Normalizer.Form.NFC);
-                        log.info(profile_img_decoded_file_name);
+                        profile_img_decoded_file_name = Normalizer.normalize(profile_img_decoded_file_name, Normalizer.Form.NFC);
+                        log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + profile_img_decoded_file_name);
                     }
 
                     /** File Upload Logic */
@@ -144,9 +150,16 @@ public class UserController {
                     /** IOS EUC-KR Name Converter **/
                     String main_img_decoded_file_name = fan_main_img.getOriginalFilename();
 
+                    // CHECK UTF-8 ENCODING
+                    if(EncodeChecker.encodeCheck(main_img_decoded_file_name)){
+                        main_img_decoded_file_name = URLDecoder.decode(main_img_decoded_file_name, "UTF-8");
+                        log.info("File Name URL Encoded - Decoded File : " + main_img_decoded_file_name);
+                    }
+
+                    // CHECK NFD ENCODING - For IOS Korean
                     if(!Normalizer.isNormalized(main_img_decoded_file_name, Normalizer.Form.NFC)) {
-                        main_img_decoded_file_name = Normalizer.normalize(fan_main_img.getOriginalFilename(), Normalizer.Form.NFC);
-                        log.info(main_img_decoded_file_name);
+                        main_img_decoded_file_name = Normalizer.normalize(main_img_decoded_file_name, Normalizer.Form.NFC);
+                        log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + main_img_decoded_file_name);
                     }
 
                     /** File Upload Logic */
@@ -187,10 +200,13 @@ public class UserController {
         String savedName = uid.toString().substring(0, 8) + "_" + originalName;
         FileConverter fileConverter = new FileConverter();
         File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
+        ImageConverter imageConverter = new ImageConverter();
+        File imgFile = imageConverter.convert64to32(file);
         log.info(file_path);
         CDNService cdnService = new CDNService();
-        cdnService.upload(file_path + savedName, file);
+        cdnService.upload(file_path + savedName, imgFile);
         Files.deleteIfExists(file.toPath());
+        Files.deleteIfExists(imgFile.toPath());
         return savedName;
     }
 

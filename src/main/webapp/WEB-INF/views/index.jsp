@@ -13,6 +13,7 @@
     <!-- endinject -->
     <!-- plugin css for this page -->
     <link rel="stylesheet" href="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <!-- end plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="../assets/fonts/feather-font/css/iconfont.css">
@@ -52,18 +53,19 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h6 class="card-title mb-3">미답변 문의</h6>
+                                <h6 class="card-title mb-3">미답변 문의 <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="미답변 문의 중 가장 오래된 순으로 표시됩니다."></i></h6>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0">
+                                <table class="table table-hover mb-0" id="inquiry-table">
                                     <thead>
                                     <tr>
-                                        <th class="pt-0">#</th>
-                                        <th class="pt-0">작성자 명</th>
-                                        <th class="pt-0">제목</th>
-                                        <th class="pt-0">답변 상태</th>
-                                        <th class="pt-0">생성일자</th>
-                                        <th class="pt-0">자세히 보기</th>
+                                        <th class="pt-0" style="width: 10px">#</th>
+                                        <th class="pt-0" style="width: 30px">작성자 명</th>
+                                        <th class="pt-0" style="width: 30px">제목</th>
+                                        <th class="pt-0" style="width: 30px">답변 상태</th>
+                                        <th class="pt-0" style="width: 30px">생성일자</th>
+                                        <th class="pt-0" style="width: 30px">문의 종류</th>
+                                        <th class="pt-0" style="width: 30px">자세히 보기</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -71,11 +73,25 @@
                                         <c:if test="${i<=6}">
                                             <tr>
                                                 <td>${i}</td>
-                                                <td>${InquiryList[i-1].user_name}</td>
-                                                <td>${InquiryList[i-1].title}</td>
-                                                <td>미답변</td>
-                                                <td>${InquiryList[i-1].reg_date}</td>
-                                                <td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${InquiryList[i-1].user_name}</td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${InquiryList[i-1].title}</td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">미답변
+                                                </td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">${InquiryList[i-1].reg_date}</td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">
+                                                    <c:choose>
+                                                        <c:when test="${InquiryList[i-1].type == 'loudsourcing'}">크라우드 문의</c:when>
+                                                        <c:when test="${InquiryList[i-1].type == 'report'}">신고 문의</c:when>
+                                                        <c:when test="${InquiryList[i-1].type == 'normal'}">일반 문의</c:when>
+                                                    </c:choose>
+                                                </td>
+                                                <td class="overflow-hidden"
+                                                    style="text-overflow: ellipsis">
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
                                                             onclick="location.href='/admin/inquiry_detail.do?inquiry_no=${InquiryList[i-1].inquiry_no}'">
@@ -95,17 +111,17 @@
                 <div class="col-lg-5 col-xl-4 stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h6 class="card-title mb-auto">가입 SNS</h6>
-                                <div class="input-group date datepicker dashboard-date mr-2 mb-4 mb-md-0 d-md-none d-xl-flex"
-                                     id="dashboardDate">
-                                    <span class="input-group-addon bg-transparent"><i data-feather="calendar"
-                                                                                      class="text-primary"></i></span>
-                                    <input type="text" class="form-control">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h6 class="card-title">가입 SNS <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="설정한 날짜의 SNS 회원가입 인원 수가 표시됩니다."></i></h6>
+                                <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
+                                     id="index-date">
+                                    <input type="text" class="form-control" name="sns-date" id="sns-date"><span
+                                        class="input-group-addon bg-transparent"><i
+                                        data-feather="calendar"></i></span>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
+                            <div class="table-responsive my-auto">
+                                <table class="table table-hover mb-0" id="sns-table">
                                     <thead>
                                     <tr>
                                         <th class="pt-0">가입 방식</th>
@@ -142,7 +158,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h6 class="card-title mb-4">최신 크라우드 현황</h6>
+                                <h6 class="card-title mb-4">최신 크라우드 현황 <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="모집 상태의 크라우드가 최신 순으로 표시됩니다."></i></h6>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0" style="table-layout: fixed">
@@ -189,7 +205,7 @@
                                                 <td>
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="location.href='/admin/recruitment_apply_list.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
+                                                            onclick="location.href='/admin/recruitment_apply_list.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>
@@ -257,8 +273,16 @@
 <script src="../assets/js/datepicker.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function DeleteLoudSourcing(loudsourcing_no){
-        let data = {"loudsourcing_no" : loudsourcing_no};
+    $(document).ready(function() {
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    })
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    function DeleteLoudSourcing(loudsourcing_no) {
+        let data = {"loudsourcing_no": loudsourcing_no};
         $.ajax({
             type: 'POST',
             url: '/admin/delete_loudsourcing.do',
@@ -273,6 +297,42 @@
             } else {
                 alert("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
                 window.location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error);
+            alert(error);
+            window.location.reload();
+        })
+    }
+
+    $("#sns-date").on("change", function () {
+        console.log("value : " + $("#sns-date").val());
+        GetSnsInfo($("#sns-date").val());
+    })
+
+    function GetSnsInfo(date) {
+        let data = {"date": date};
+        $.ajax({
+            type: 'POST',
+            url: '/admin/main_sns.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            console.log("result : " + result);
+            if (result === 'Error') {
+                alert("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            } else {
+                console.log("naverUser : " + result.naverUser);
+                console.log("kakaoUser : " + result.kakaoUser);
+                console.log("googleUser : " + result.googleUser);
+                console.log("appleUser : " + result.appleUser);
+                let sns_table = document.getElementById('sns-table');
+                sns_table.rows[1].cells[1].innerHTML = result.naverUser + " 회";
+                sns_table.rows[2].cells[1].innerHTML = result.kakaoUser + " 회";
+                sns_table.rows[3].cells[1].innerHTML = result.googleUser + " 회";
+                sns_table.rows[4].cells[1].innerHTML = result.appleUser + " 회";
             }
         }).fail(function (error) {
             console.log(error);

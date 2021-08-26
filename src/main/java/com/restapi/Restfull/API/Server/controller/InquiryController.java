@@ -11,6 +11,7 @@ import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.InquiryService;
+import com.restapi.Restfull.API.Server.utility.EncodeChecker;
 import com.restapi.Restfull.API.Server.utility.FileConverter;
 import com.restapi.Restfull.API.Server.utility.Time;
 import com.restapi.Restfull.API.Server.utility.URLConverter;
@@ -108,15 +109,23 @@ public class InquiryController {
                             log.info("originalName:" + multipartFile.getOriginalFilename());
                             log.info("size:" + multipartFile.getSize());
                             log.info("ContentType:" + multipartFile.getContentType());
+
                             String decoded_file_name = multipartFile.getOriginalFilename();
 
+                            // CHECK UTF-8 ENCODING
+                            if(EncodeChecker.encodeCheck(decoded_file_name)){
+                                decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
+                                log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
+                            }
+
+                            // CHECK NFD ENCODING - For IOS Korean
                             if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
-                                decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
-                                log.info(decoded_file_name);
+                                decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
+                                log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                             }
 
                             /** File Upload Logic */
-                            String file_name = uploadFile(multipartFile.getOriginalFilename(), multipartFile, inquiry_info);
+                            String file_name = uploadFile(decoded_file_name, multipartFile, inquiry_info);
                             /**
                              * 1. Garbage Collector 시행
                              * 2. MultipartFile -> File 바꾸기

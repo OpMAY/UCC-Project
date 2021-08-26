@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.Normalizer;
@@ -133,16 +134,30 @@ public class PortfolioController {
                         /** IOS EUC-KR Name Converter **/
                         String vod_decoded_file_name = vod_file.getOriginalFilename();
 
-                        if (!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
-                            vod_decoded_file_name = Normalizer.normalize(vod_file.getOriginalFilename(), Normalizer.Form.NFC);
-                            log.info(vod_decoded_file_name);
+                        // CHECK UTF-8 ENCODING
+                        if(EncodeChecker.encodeCheck(vod_decoded_file_name)){
+                            vod_decoded_file_name = URLDecoder.decode(vod_decoded_file_name, "UTF-8");
+                            log.info("VOD File Name URL Encoded - Decoded File : " + vod_decoded_file_name);
+                        }
+
+                        // CHECK NFD ENCODING - For IOS Korean
+                        if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
+                            vod_decoded_file_name = Normalizer.normalize(vod_decoded_file_name, Normalizer.Form.NFC);
+                            log.info("(IOS Kor File) VOD File is NFD Encoded - Decoded File : " + vod_decoded_file_name);
                         }
 
                         String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
 
-                        if (!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
-                            thumbnail_decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
-                            log.info(thumbnail_decoded_file_name);
+                        // CHECK UTF-8 ENCODING
+                        if(EncodeChecker.encodeCheck(thumbnail_decoded_file_name)){
+                            thumbnail_decoded_file_name = URLDecoder.decode(thumbnail_decoded_file_name, "UTF-8");
+                            log.info("Thumbnail File Name URL Encoded - Decoded File : " + thumbnail_decoded_file_name);
+                        }
+
+                        // CHECK NFD ENCODING - For IOS Korean
+                        if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
+                            thumbnail_decoded_file_name = Normalizer.normalize(thumbnail_decoded_file_name, Normalizer.Form.NFC);
+                            log.info("(IOS Kor File) Thumbnail File is NFD Encoded - Decoded File : " + thumbnail_decoded_file_name);
                         }
 
                         /** VOD THUMBNAIL LOGIC - NOT WORKING IN LARGE FILES - JAVA HEAP SPACE**/
@@ -195,9 +210,16 @@ public class PortfolioController {
                                 /** IOS EUC-KR Name Converter **/
                                 String decoded_file_name = multipartFile.getOriginalFilename();
 
-                                if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
-                                    decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
-                                    log.info(decoded_file_name);
+                                // CHECK UTF-8 ENCODING
+                                if(EncodeChecker.encodeCheck(decoded_file_name)){
+                                    decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
+                                    log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
+                                }
+
+                                // CHECK NFD ENCODING - For IOS Korean
+                                if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                                    decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
+                                    log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                                 }
 
                                 /** File Upload Logic */
@@ -230,14 +252,20 @@ public class PortfolioController {
                             log.info("originalName:" + multipartFile.getOriginalFilename());
                             log.info("size:" + multipartFile.getSize());
                             log.info("ContentType:" + multipartFile.getContentType());
-                            log.info("nameLength:" + multipartFile.getOriginalFilename().length());
 
                             /** IOS EUC-KR Name Converter **/
                             String decoded_file_name = multipartFile.getOriginalFilename();
 
-                            if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
-                                decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
-                                log.info(decoded_file_name);
+                            // CHECK UTF-8 ENCODING
+                            if(EncodeChecker.encodeCheck(decoded_file_name)){
+                                decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
+                                log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
+                            }
+
+                            // CHECK NFD ENCODING - For IOS Korean
+                            if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                                decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
+                                log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                             }
 
                             /** File Upload Logic */
@@ -343,16 +371,30 @@ public class PortfolioController {
                             /** IOS EUC-KR Name Converter **/
                             String vod_decoded_file_name = vod_file.getOriginalFilename();
 
-                            if (!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
-                                vod_decoded_file_name = Normalizer.normalize(vod_file.getOriginalFilename(), Normalizer.Form.NFC);
-                                log.info(vod_decoded_file_name);
+                            // CHECK UTF-8 ENCODING
+                            if(EncodeChecker.encodeCheck(vod_decoded_file_name)){
+                                vod_decoded_file_name = URLDecoder.decode(vod_decoded_file_name, "UTF-8");
+                                log.info("VOD File Name URL Encoded - Decoded File : " + vod_decoded_file_name);
+                            }
+
+                            // CHECK NFD ENCODING - For IOS Korean
+                            if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
+                                vod_decoded_file_name = Normalizer.normalize(vod_decoded_file_name, Normalizer.Form.NFC);
+                                log.info("(IOS Kor File) VOD File is NFD Encoded - Decoded File : " + vod_decoded_file_name);
                             }
 
                             String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
 
-                            if (!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
-                                thumbnail_decoded_file_name = Normalizer.normalize(thumbnail.getOriginalFilename(), Normalizer.Form.NFC);
-                                log.info(thumbnail_decoded_file_name);
+                            // CHECK UTF-8 ENCODING
+                            if(EncodeChecker.encodeCheck(thumbnail_decoded_file_name)){
+                                thumbnail_decoded_file_name = URLDecoder.decode(thumbnail_decoded_file_name, "UTF-8");
+                                log.info("Thumbnail File Name URL Encoded - Decoded File : " + thumbnail_decoded_file_name);
+                            }
+
+                            // CHECK NFD ENCODING - For IOS Korean
+                            if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
+                                thumbnail_decoded_file_name = Normalizer.normalize(thumbnail_decoded_file_name, Normalizer.Form.NFC);
+                                log.info("(IOS Kor File) Thumbnail File is NFD Encoded - Decoded File : " + thumbnail_decoded_file_name);
                             }
 
                             /** VOD THUMBNAIL LOGIC - NOT WORKING IN LARGE FILES - JAVA HEAP SPACE**/
@@ -408,9 +450,16 @@ public class PortfolioController {
                                     /** IOS EUC-KR Name Converter **/
                                     String decoded_file_name = multipartFile.getOriginalFilename();
 
-                                    if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
-                                        decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
-                                        log.info(decoded_file_name);
+                                    // CHECK UTF-8 ENCODING
+                                    if(EncodeChecker.encodeCheck(decoded_file_name)){
+                                        decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
+                                        log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
+                                    }
+
+                                    // CHECK NFD ENCODING - For IOS Korean
+                                    if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                                        decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
+                                        log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                                     }
 
                                     /** File Upload Logic */
@@ -450,9 +499,16 @@ public class PortfolioController {
                                 /** IOS EUC-KR Name Converter **/
                                 String decoded_file_name = multipartFile.getOriginalFilename();
 
-                                if (!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
-                                    decoded_file_name = Normalizer.normalize(multipartFile.getOriginalFilename(), Normalizer.Form.NFC);
-                                    log.info(decoded_file_name);
+                                // CHECK UTF-8 ENCODING
+                                if(EncodeChecker.encodeCheck(decoded_file_name)){
+                                    decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
+                                    log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
+                                }
+
+                                // CHECK NFD ENCODING - For IOS Korean
+                                if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
+                                    decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
+                                    log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                                 }
 
                                 /** File Upload Logic */

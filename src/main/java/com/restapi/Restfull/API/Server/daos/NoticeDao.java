@@ -3,6 +3,7 @@ package com.restapi.Restfull.API.Server.daos;
 import com.restapi.Restfull.API.Server.interfaces.mappers.NoticeMapper;
 import com.restapi.Restfull.API.Server.models.Notice;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,6 +11,9 @@ import java.util.List;
 @Repository
 public class NoticeDao {
     private SqlSession sqlSession;
+
+    @Autowired
+    private SqlSession ROSqlSession;
 
     public void setSession(SqlSession sqlSession) {
         if (this.sqlSession == null)
@@ -47,7 +51,7 @@ public class NoticeDao {
     }
 
     public List<Notice> getNoticeForCDN() {
-        NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+        NoticeMapper noticeMapper = ROSqlSession.getMapper(NoticeMapper.class);
         return noticeMapper.getNoticeForCDN();
     }
 }

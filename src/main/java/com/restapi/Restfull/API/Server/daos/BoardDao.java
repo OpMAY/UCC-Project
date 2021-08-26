@@ -4,6 +4,7 @@ import com.restapi.Restfull.API.Server.interfaces.mappers.BoardMapper;
 import com.restapi.Restfull.API.Server.models.Board;
 import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
 @Repository
 public class BoardDao {
     private SqlSession sqlSession;
+
+    @Autowired
+    private SqlSession ROSqlSession;
 
     public void setSession(SqlSession sqlSession) {
         if (this.sqlSession == null)
@@ -124,7 +128,7 @@ public class BoardDao {
     }
 
     public List<Board> getBoardForCDN() {
-        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        BoardMapper boardMapper = ROSqlSession.getMapper(BoardMapper.class);
         return boardMapper.getBoardForCDN();
     }
 }

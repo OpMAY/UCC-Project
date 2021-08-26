@@ -27,6 +27,8 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession(false);
 
+        log.info(request.getRequestURL());
+
 
         if (session != null) {
             Object admin = session.getAttribute("adminLogin");
@@ -34,9 +36,9 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
             if (admin != null) {
                 log.info("adminLogin is not null");
                 Admin admin1 = (Admin) admin;
-
-                if (adminService.loginAdmin(admin1.getId(), admin1.getPw()) != null)
+                if (adminService.loginAdmin(admin1.getId(), admin1.getPw()) != null) {
                     return true;
+                }
             } else {
                 log.info("adminLogin is null");
             }

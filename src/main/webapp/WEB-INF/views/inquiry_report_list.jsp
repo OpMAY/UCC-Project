@@ -54,7 +54,7 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large"><<a
+                            <h6 class="card-title" style="font-size: x-large"><a
                                     href="${pageContext.request.contextPath}/admin/inquiry_loudsourcing.do">크라우드</a> 신고
                                 <a href="${pageContext.request.contextPath}/admin/inquiry_normal.do">
                                     기타 </a>

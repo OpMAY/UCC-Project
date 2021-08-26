@@ -5,6 +5,7 @@ import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
+import com.restapi.Restfull.API.Server.utility.URLConverter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONException;
@@ -114,24 +115,25 @@ public class MainService {
      * 특이 사항 : 스케쥴링
      * 파일 업로드 여부 : X
      **/
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public void deleteCDNFiles() {
         try {
             /** SQL SESSION SET **/
-            artistDao.setSession(sqlSession);
-            bannerAdDao.setSession(sqlSession);
-            boardDao.setSession(sqlSession);
-            faqDao.setSession(sqlSession);
-            inquiryDao.setSession(sqlSession);
-            loudSourcingDao.setSession(sqlSession);
-            loudSourcingEntryDao.setSession(sqlSession);
-            noticeDao.setSession(sqlSession);
-            portfolioDao.setSession(sqlSession);
-            requestChangeDao.setSession(sqlSession);
-            userDao.setSession(sqlSession);
+            List<Artist> artistList = artistDao.getAllArtistForCDN();
+            List<BannerAd> bannerAdList = bannerAdDao.getBannerForCDN();
+            List<Board> boardList = boardDao.getBoardForCDN();
+            List<FAQ> faqList = faqDao.getFAQForCDN();
+            List<Inquiry> inquiryList = inquiryDao.getInquiryForCDN();
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudsourcingForCDN();
+            List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryForCDN();
+            List<Notice> noticeList = noticeDao.getNoticeForCDN();
+            List<Portfolio> portfolioList = portfolioDao.getPortfolioForCDN();
+            List<User> userList = userDao.getUserForCDN();
+
             /** Setting OBJECTS **/
             CDNService cdnService = new CDNService();
             Gson gson = new Gson();
+            URLConverter urlConverter = new URLConverter();
             List<String> allFileList = cdnService.finds();
 
             /** Prevent Delete Folder **/
@@ -148,39 +150,39 @@ public class MainService {
             log.info("CDN FILE ARRANGE START");
             /** Artist **/
             log.info("Removing Unnecessary files : Artist");
-            List<Artist> artistList = artistDao.getAllArtistForCDN();
+
             for (Artist artist : artistList) {
                 String profile_img_link = artist.getArtist_profile_img();
                 String main_img_link = artist.getMain_img();
-                if (profile_img_link != null)
-                    allFileList.remove(getPath(profile_img_link));
+                if (profile_img_link != null) {
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(profile_img_link)));
+                }
                 if (main_img_link != null)
-                    allFileList.remove(getPath(main_img_link));
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(main_img_link)));
             }
             artistList.clear();
 
             /** Banner **/
             log.info("Removing Unnecessary files : Banner");
-            List<BannerAd> bannerAdList = bannerAdDao.getBannerForCDN();
             for (BannerAd bannerAd : bannerAdList) {
                 String img_link = bannerAd.getImg();
                 if (img_link != null)
-                    allFileList.remove(getPath(img_link));
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(img_link)));
             }
             bannerAdList.clear();
 
             /** Board **/
             log.info("Removing Unnecessary files : Board");
-            List<Board> boardList = boardDao.getBoardForCDN();
+
             for (Board board : boardList) {
                 String thumbnail_link = board.getThumbnail();
                 if (thumbnail_link != null)
-                    allFileList.remove(getPath(thumbnail_link));
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(thumbnail_link)));
                 List<String> html_img_links = getBoardFiles(board.getContent());
                 if (html_img_links != null) {
                     for (String url : html_img_links) {
                         if (url != null)
-                            allFileList.remove(getPath(url));
+                            allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                     }
                     html_img_links.clear();
                 }
@@ -189,14 +191,12 @@ public class MainService {
 
             /** FAQ **/
             log.info("Removing Unnecessary files : FAQ");
-            List<FAQ> faqList = faqDao.getFAQForCDN();
             for (FAQ faq : faqList) {
                 if (faq.getImg() != null) {
                     ArrayList<String> imgList = new ArrayList<>(Arrays.asList(faq.getImg().split(", ")));
                     faq.setImgList(imgList);
-                    log.info(imgList);
                     for (String url : imgList) {
-                        allFileList.remove(getPath(url));
+                        allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                     }
                     imgList.clear();
                 }
@@ -205,7 +205,6 @@ public class MainService {
 
             /** Inquiry **/
             log.info("Removing Unnecessary files : Inquiry");
-            List<Inquiry> inquiryList = inquiryDao.getInquiryForCDN();
             for (Inquiry inquiry : inquiryList) {
                 if (inquiry.getFile() != null && !inquiry.getFile().isEmpty()) {
                     String jsonString = inquiry.getFile();
@@ -214,7 +213,7 @@ public class MainService {
                         for (FileJson fileJson1 : fileJson) {
                             String fileUrl = fileJson1.getUrl();
                             if (fileUrl != null)
-                                allFileList.remove(getPath(fileUrl));
+                                allFileList.remove(urlConverter.DecodeFileName(getPath(fileUrl)));
                         }
                     }
                 }
@@ -223,18 +222,18 @@ public class MainService {
 
             /** LoudSourcing **/
             log.info("Removing Unnecessary files : LoudSourcing");
-            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudsourcingForCDN();
+
             for (LoudSourcing loudSourcing : loudSourcingList) {
                 String img_link = loudSourcing.getImg();
                 if (img_link != null)
-                    allFileList.remove(getPath(img_link));
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(img_link)));
                 String jsonString = loudSourcing.getFiles();
                 FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
                 if(fileJson != null && fileJson.length > 0) {
                     for (FileJson fileJson1 : fileJson) {
                         String fileUrl = fileJson1.getUrl();
                         if (fileUrl != null)
-                            allFileList.remove(getPath(fileUrl));
+                            allFileList.remove(urlConverter.DecodeFileName(getPath(fileUrl)));
                     }
                 }
             }
@@ -242,27 +241,27 @@ public class MainService {
 
             /** Entry **/
             log.info("Removing Unnecessary files : Entry");
-            List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryForCDN();
+
             for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
                 String vod_link = loudSourcingEntry.getFile();
                 String thumbnail_link = loudSourcingEntry.getThumbnail();
                 if (vod_link != null)
-                    allFileList.remove(getPath(vod_link));
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(vod_link)));
                 if (thumbnail_link != null)
-                    allFileList.remove(getPath(thumbnail_link));
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(thumbnail_link)));
             }
             loudSourcingEntryList.clear();
 
             /** Notice **/
             log.info("Removing Unnecessary files : Notice");
-            List<Notice> noticeList = noticeDao.getNoticeForCDN();
+
             for (Notice notice : noticeList) {
                 String img = notice.getImg();
                 if (img != null) {
                     ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
                     for (String url : imgList) {
                         if (url != null)
-                            allFileList.remove(getPath(url));
+                            allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                     }
                     imgList.clear();
                 }
@@ -271,35 +270,36 @@ public class MainService {
 
             /** Portfolio **/
             log.info("Removing Unnecessary files : Portfolio");
-            List<Portfolio> portfolioList = portfolioDao.getPortfolioForCDN();
+
             for (Portfolio portfolio : portfolioList) {
                 String file = portfolio.getFile();
                 String thumbnail_link = portfolio.getThumbnail();
                 switch (portfolio.getType()) {
                     case PortfolioType.VOD:
                         if (file != null)
-                            allFileList.remove(getPath(file));
+                            allFileList.remove(urlConverter.DecodeFileName(getPath(file)));
                         if (thumbnail_link != null)
-                            allFileList.remove(getPath(thumbnail_link));
+                            allFileList.remove(urlConverter.DecodeFileName(getPath(thumbnail_link)));
                         break;
                     case PortfolioType.FILE:
                         FileJson[] fileJson = gson.fromJson(file, FileJson[].class);
                         if(fileJson != null && fileJson.length > 0) {
                             for (FileJson fileJson1 : fileJson) {
                                 String url = fileJson1.getUrl();
-                                if (url != null)
-                                    allFileList.remove(getPath(url));
+                                if (url != null) {
+                                    allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
+                                }
                             }
                         }
                         break;
                     case PortfolioType.IMAGE:
                         if (thumbnail_link != null)
-                            allFileList.remove(getPath(thumbnail_link));
+                            allFileList.remove(urlConverter.DecodeFileName(getPath(thumbnail_link)));
                         if (file != null) {
                             ArrayList<String> img_links = new ArrayList<>(Arrays.asList(file.split(", ")));
                             for (String url : img_links) {
                                 if (url != null)
-                                    allFileList.remove(getPath(url));
+                                    allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                             }
                             img_links.clear();
                         }
@@ -310,13 +310,14 @@ public class MainService {
 
             /** User **/
             log.info("Removing Unnecessary files : User");
-            List<User> userList = userDao.getUserForCDN();
+
             for (User user : userList) {
                 String profile_img = user.getProfile_img();
                 if (profile_img != null)
-                    allFileList.remove(getPath(profile_img));
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(profile_img)));
             }
             userList.clear();
+
 
             /** DELETE FILES IN CDN **/
             log.info("Deleting File in CDN...");
@@ -338,13 +339,15 @@ public class MainService {
         }
     }
 
+
+
     private List<String> getBoardFiles(String content) {
         try {
             List<String> url = new ArrayList<>();
             Pattern p = Pattern.compile("src=\"(.*?)\"");
             Matcher m = p.matcher(content);
             while (m.find()) {
-                log.info("Url : " + m.group(1));
+                log.info("Board Image Url : " + m.group(1));
                 url.add(m.group(1));
             }
             if (url.size() > 0)

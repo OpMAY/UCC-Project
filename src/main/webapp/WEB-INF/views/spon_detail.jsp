@@ -52,7 +52,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-md-10">
                                     <div class="card mb-3" style="background-color: #FFFFFf; border-radius: 1.5%">
-                                        <h6 class="card-title mt-3" style="font-size: x-large">후원 내역</h6>
+                                        <h6 class="card-title mt-3 ml-3" style="font-size: x-large">후원 내역</h6>
                                         <div class="row mt-3 justify-content-center">
                                             <div class="col-md-10">
                                                 <label class="label d-flex" for="receipt-id" style="font-size: large">
@@ -136,7 +136,7 @@
                                             </div>
                                         </div>
                                         <c:if test="${spon.status == true}">
-                                            <div class="row mt-3 justify-content-around">
+                                            <div class="row mt-3 mb-3 justify-content-around">
                                                 <div class="col-md-5">
                                                     <label class="label d-flex" for="apply-date" style="font-size: large">
                                                         승인 일자
@@ -159,7 +159,7 @@
                                         </c:if>
                                     </div>
                                     <div class="card mb-3" style="background-color: #FFFFFf; border-radius: 1.5%">
-                                        <h6 class="card-title mt-3" style="font-size: x-large">구매자 정보</h6>
+                                        <h6 class="card-title ml-3 mt-3" style="font-size: x-large">구매자 정보</h6>
                                         <div class="row mt-3 mb-3 justify-content-around">
                                             <div class="col-md-5">
                                                 <label class="label d-flex" for="spon-user-name" style="font-size: large">
@@ -180,7 +180,7 @@
                                         </div>
                                     </div>
                                     <div class="card mb-3" style="background-color: #FFFFFf; border-radius: 1.5%">
-                                        <h6 class="card-title mt-3" style="font-size: x-large">아티스트 정보</h6>
+                                        <h6 class="card-title ml-3 mt-3" style="font-size: x-large">아티스트 정보</h6>
                                         <div class="row mt-3 justify-content-around">
                                             <div class="col-md-5">
                                                 <label class="label d-flex" for="artist-name" style="font-size: large">
@@ -217,7 +217,7 @@
                                                           disabled>${artist.bank_owner}</textarea>
                                             </div>
                                         </div>
-                                        <div class="row mt-3 mb-3 justify-content-center">
+                                        <div class="row mt-3 mb-3 justify-content-around">
                                             <div class="col-md-5">
                                                 <label class="label d-flex" for="artist-email" style="font-size: large">
                                                     이메일
@@ -241,10 +241,20 @@
                             </div>
                             <div class="row mt-3 mb-3 justify-content-around">
                                 <div class="col-md-3 justify-content-center d-flex">
-                                    <button class="btn btn-outline-primary"
-                                            onclick="if(confirm('이 후원 내역의 결제정보를 승인하시겠습니까?')){applySpon(${spon.spon_no});} else {return false;}">
-                                        승인하기
-                                    </button>
+                                    <c:choose>
+                                        <c:when test="${spon.status == true}">
+                                            <button class="btn btn-outline-primary" disabled
+                                                    onclick="if(confirm('이 후원 내역의 결제정보를 승인하시겠습니까?')){applySpon(${spon.spon_no});} else {return false;}">
+                                                승인하기
+                                            </button>
+                                        </c:when>
+                                        <c:when test="${spon.status == false}">
+                                            <button class="btn btn-outline-primary"
+                                                    onclick="if(confirm('이 후원 내역의 결제정보를 승인하시겠습니까?')){applySpon(${spon.spon_no});} else {return false;}">
+                                                승인하기
+                                            </button>
+                                        </c:when>
+                                    </c:choose>
                                 </div>
                                 <div class="col-md-3 justify-content-center d-flex">
                                     <button class="btn btn-outline-primary"

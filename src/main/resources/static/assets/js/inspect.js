@@ -39,18 +39,19 @@ function inspection(inputId, what) {
 
     const inspect_loudsourcing_name = /^.{2,30}$/;
     const inspect_host_name = /^.{2,30}$/;
-    const reward = /^\d+(?:[.]?[\d]?[\d])?$/;;
+    const reward = /^\d+(?:[.]?[\d]?[\d])?$/;
     const total_recruit_number = /^[0-9]/g;
-    const loudsourcing_content = /^.{10,2000}$/;
-    const warning = /^.{10,2000}$/;
+    const loudsourcing_content = /^.{10,2000}$/gs;
+    const warning = /^.{10,2000}$/gs;
 
     const inspect_notice_title = /^.{2,20}$/;
     const inspect_notice_content = /^.{2,2000}$/;
     const inspect_faq_question = /^.{2,40}$/;
-    const inspect_faq_answer = /^.{2,1000}$/;
-    const inspect_penalty_reason = /^.{10,100}$/;
+    const inspect_faq_answer = /^.{2,1000}$/gs;
+    const inspect_penalty_reason = /^.{10,100}$/gs;
 
 
+    const inspect_date = /^(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$/;
 
     const inspect_text30 = /^.{1,30}/g;
     const inspect_text60 = /^.{1,60}/g;
@@ -210,70 +211,100 @@ function inspection(inputId, what) {
             break;
         case 'loudsourcing_name':
             let loudsourcing_name = document.getElementById(inputId);
-            if(!check(inspect_loudsourcing_name, loudsourcing_name, "크라우드 이름은 2~30자로 입력해주세요.")){
+            if (!check(inspect_loudsourcing_name, loudsourcing_name, "크라우드 이름은 2~30자로 입력해주세요.")) {
                 return false;
             }
             break;
         case 'host_name':
             let host_name = document.getElementById(inputId);
-            if(!check(inspect_host_name, host_name, "주최자 명칭은 2~30자로 입력해주세요.")){
+            if (!check(inspect_host_name, host_name, "주최자 명칭은 2~30자로 입력해주세요.")) {
                 return false;
             }
             break;
         case 'reward':
             let rewards = document.getElementById(inputId);
-            if(!check(reward, rewards, "올바른 금액을 입력해주세요.")){
+            console.log(rewards.value);
+            if(rewards.value < 100 || rewards.value > 100000000){
+                alert("금액은 최소 100원, 최대 1억원까지 가능합니다.");
+                rewards.focus();
+                return false;
+            }
+            if (!check(reward, rewards, "올바른 금액을 입력해주세요.")) {
                 return false;
             }
             break;
         case 'total_recruit_number':
             let r_number = document.getElementById(inputId);
-            if(!check(total_recruit_number, r_number, "상금 금액은 숫자만 입력가능합니다.")){
+            if(r_number.value <= 0 || r_number.value >= 10000){
+                alert("참여 인원은 최소 1명, 최대 9999명까지 가능합니다.");
+                r_number.focus();
+                return false;
+            }
+            if (!check(total_recruit_number, r_number, "참여 인원은 숫자만 입력가능합니다.")) {
                 return false;
             }
             break;
         case 'loudsourcing_content':
             let l_content = document.getElementById(inputId);
-            if(!check(loudsourcing_content, l_content, "출품 안내는 최소 10자, 최대 2000자까지 입력해주세요.")){
+            if (!check(loudsourcing_content, l_content, "출품 안내는 최소 10자, 최대 2000자까지 입력해주세요.")) {
                 return false;
             }
             break;
         case 'warning':
             let l_warning = document.getElementById(inputId);
-            if(!check(warning, l_warning, "주의 사항은 최소 10자, 최대 2000자까지 입력해주세요.")){
+            if (!check(warning, l_warning, "주의 사항은 최소 10자, 최대 2000자까지 입력해주세요.")) {
                 return false;
             }
             break;
         case 'notice_title':
             let notice_title = document.getElementById(inputId);
-            if(!check(inspect_notice_title, notice_title, "공지사항 제목은 최소 2자, 최대 20자까지 입력해주세요.")){
+            if (!check(inspect_notice_title, notice_title, "공지사항 제목은 최소 2자, 최대 20자까지 입력해주세요.")) {
                 return false;
             }
             break;
         case 'notice_content':
             let notice_content = document.getElementById(inputId);
-            if(!check(inspect_notice_content, notice_content, "공지사항 내용은 최소 2자, 최대 2000자까지 입력해주세요.")){
+            if (!check(inspect_notice_content, notice_content, "공지사항 내용은 최소 2자, 최대 2000자까지 입력해주세요.")) {
                 return false;
             }
             break;
         case 'faq_question':
             let faq_question = document.getElementById(inputId);
-            if(!check(inspect_faq_question, faq_question, "FAQ 질문은 최소 2자, 최대 40자까지 입력해주세요.")){
+            if (!check(inspect_faq_question, faq_question, "FAQ 질문은 최소 2자, 최대 40자까지 입력해주세요.")) {
                 return false;
             }
             break;
         case 'faq_answer':
             let faq_answer = document.getElementById(inputId);
-            if(!check(inspect_faq_answer, faq_answer, "FAQ 답변은 최소 2자, 최대 1000자까지 입력해주세요.")){
+            if (!check(inspect_faq_answer, faq_answer, "FAQ 답변은 최소 2자, 최대 1000자까지 입력해주세요.")) {
                 return false;
             }
             break;
         case 'penalty_reason':
             let penalty_reason = document.getElementById(inputId);
-            if(!check(inspect_penalty_reason, penalty_reason, "정지 사유는 최소 10자, 최대 100자까지 입력해주세요.")){
+            if (!check(inspect_penalty_reason, penalty_reason, "정지 사유는 최소 10자, 최대 100자까지 입력해주세요.")) {
                 return false;
             }
             break;
+        case 'date':
+            let date = document.getElementById(inputId);
+            let message = "";
+            if (inputId === "loudsourcing-start-date") {
+                message = "올바른 크라우드 시작 일자를 입력해주세요.";
+            } else if (inputId === "loudsourcing-end-date") {
+                message = "올바른 크라우드 종료 일자를 입력해주세요.";
+            } else if (inputId === "loudsourcing-recruitment-end-date") {
+                message = "올바른 크라우드 모집 종료 일자를 입력해주세요.";
+            } else if (inputId === "loudsourcing-process-start-date") {
+                message = "올바른 크라우드 진행 시작 일자를 입력해주세요.";
+            } else if (inputId === "loudsourcing-process-end-date") {
+                message = "올바른 크라우드 진행 종료 일자를 입력해주세요.";
+            } else if (inputId === "loudsourcing-judge-start-date") {
+                message = "올바른 크라우드 심사 일자를 입력해주세요.";
+            }
+            if (!check(inspect_date, date, message)) {
+                return false;
+            }
     }
     return true;
 }
