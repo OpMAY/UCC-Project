@@ -145,6 +145,7 @@ public class MainService {
                 }
             }
             allFileList.remove("api/images/default/fan_main_img_basic.png");
+            allFileList.remove("api/images/default/profile_img_basic.png");
 
             /**------------------------------------------------------------------   DB FILE LINK COLLECT  ------------------------------------------------------------------ **/
             log.info("CDN FILE ARRANGE START");

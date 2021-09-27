@@ -59,7 +59,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity loginUser(User user) {
         try {
-            String basic_profile_img = "http://www.weart-page.com/static/image/profile_img_basic.png";
+            String basic_profile_img = "https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png";
             Message message = new Message();
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);

@@ -46,68 +46,66 @@
 
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">공지사항 제작
-                            </h6>
-                            <div class="row justify-content-center">
-                                <div class="col-md-10">
-                                    <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
-                                        <div class="col-md-10 mt-3 justify-content-center">
-                                            <label class="label" style="font-size: larger"
-                                                   for="notice-make-title">
-                                                제목
+                    <div class="row justify-content-center">
+                        <div class="col-md-10">
+                            <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
+                                <div class="card-body">
+                                    <h6 class="card-title" style="font-size: x-large">공지사항 제작</h6>
+                                    <div class="col-md-10 mt-3 justify-content-center">
+                                        <label class="label" style="font-size: larger"
+                                               for="notice-make-title">
+                                            제목
+                                        </label>
+                                        <textarea class="form-control" id="notice-make-title" rows="1"
+                                                  style="line-height: 150%; font-size: large"
+                                        ></textarea>
+                                    </div>
+                                    <div class="col-md-10 mt-3 justify-content-around">
+                                        <label class="label" style="font-size: larger" for="notice-make-content">
+                                            공지 내용
+                                        </label>
+                                        <textarea class="form-control" id="notice-make-content" rows="5"
+                                                  style="line-height: 150%; font-size: large"
+                                        ></textarea>
+                                    </div>
+                                    <form id="notice-makeForm">
+                                        <div class="col-md-10">
+                                            <label class="label" style="font-size: larger">
+                                                공지사항 사진 - [사진을 추가 및 변경하려면 사진을 클릭하세요.]
                                             </label>
-                                            <textarea class="form-control" id="notice-make-title" rows="1"
-                                                      style="line-height: 150%; font-size: large"
-                                            ></textarea>
-                                        </div>
-                                        <div class="col-md-10 mt-3 justify-content-around">
-                                            <label class="label" style="font-size: larger" for="notice-make-content">
-                                                공지 내용
-                                            </label>
-                                            <textarea class="form-control" id="notice-make-content" rows="5"
-                                                      style="line-height: 150%; font-size: large"
-                                            ></textarea>
-                                        </div>
-                                        <form id="notice-makeForm">
-                                            <div class="col-md-10">
-                                                <label class="label" style="font-size: larger">
-                                                    공지사항 사진 - [사진을 추가 및 변경하려면 사진을 클릭하세요.]
-                                                </label>
-                                                <input type="file" id="notice-make-img" name="img" accept="image/*"
-                                                       hidden/>
-                                                <div style="height: 400px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
-                                                     class="d-flex justify-content-center " id="notice-make-image-container">
-                                                    <img class="img-fluid" src=""
-                                                         onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
-                                                         onclick="$('#notice-make-img').click()"
-                                                         style="height: 100%; object-fit: contain; cursor: pointer">
-                                                </div>
-                                                <script>
-                                                    $("#notice-make-img").change(function () {
-                                                        if (this.files && this.files[0]) {
-                                                            const reader = new FileReader;
-                                                            reader.onload = function (data) {
-                                                                console.log(data);
-                                                                $("#notice-make-image-container img").attr("src", data.target.result);
-                                                            }
-                                                            reader.readAsDataURL(this.files[0]);
-                                                        }
-                                                    })
-                                                </script>
+                                            <input type="file" id="notice-make-img" name="img" accept="image/*"
+                                                   hidden/>
+                                            <div style="height: 400px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
+                                                 class="d-flex justify-content-center "
+                                                 id="notice-make-image-container">
+                                                <img class="img-fluid" src=""
+                                                     onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
+                                                     onclick="$('#notice-make-img').click()"
+                                                     style="height: 100%; object-fit: contain; cursor: pointer">
                                             </div>
-                                        </form>
-                                        <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
-                                            <button type="button" class="btn btn-outline-primary" style="float: right"
-                                                    onclick="if(confirm('공지사항을 제작하시겠습니까?')){makeNotice()}else {return false;}">
-                                                제작
-                                            </button>
-                                            <button type="button" class="btn btn-secondary" style="float: right"
-                                                    onclick="window.close()">
-                                                닫기
-                                            </button>
+                                            <script>
+                                                $("#notice-make-img").change(function () {
+                                                    if (this.files && this.files[0]) {
+                                                        const reader = new FileReader;
+                                                        reader.onload = function (data) {
+                                                            console.log(data);
+                                                            $("#notice-make-image-container img").attr("src", data.target.result);
+                                                        }
+                                                        reader.readAsDataURL(this.files[0]);
+                                                    }
+                                                })
+                                            </script>
                                         </div>
+                                    </form>
+                                    <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
+                                        <button type="button" class="btn btn-outline-primary" style="float: right; width: 25%; height: 150%"
+                                                onclick="if(confirm('공지사항을 제작하시겠습니까?')){makeNotice()}else {return false;}">
+                                            제작
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" style="float: right; width: 25%; height: 150%"
+                                                onclick="window.close()">
+                                            닫기
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -145,9 +143,9 @@
 <!-- end custom js for this page -->
 <script>
     function makeNotice() {
-        if(!inspection("notice-make-title", "notice_title")){
+        if (!inspection("notice-make-title", "notice_title")) {
             return false;
-        } else if(!inspection("notice-make-content", "notice_content")){
+        } else if (!inspection("notice-make-content", "notice_content")) {
             return false;
         }
         let form = $("#notice-editForm")[0];
@@ -179,6 +177,7 @@
             window.location.reload();
         })
     }
+
     function refreshParent() {
         window.opener.location.reload();
     }

@@ -46,57 +46,55 @@
 
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">배너 광고 상세보기
-                            </h6>
-                            <div class="row justify-content-center">
-                                <div class="col-md-10">
-                                    <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
-                                        <form id="banner-editForm">
-                                            <div class="col-md-10">
-                                                <label class="label" style="font-size: larger">
-                                                    배너 사진 - [사진을 추가 및 변경하려면 사진을 클릭하세요.]
-                                                </label>
-                                                <input type="file" id="banner-img" name="img" accept="image/*"
-                                                       hidden/>
-                                                <div style="height: 400px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
-                                                     class="d-flex justify-content-center " id="banner-image-container">
-                                                    <img class="img-fluid" src="${banner.img}"
-                                                         onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
-                                                         onclick="$('#banner-img').click()"
-                                                         style="height: 100%; object-fit: contain; cursor: pointer">
-                                                </div>
-                                                <script>
-
-                                                    $("#banner-img").change(function () {
-                                                        if (this.files && this.files[0]) {
-                                                            const reader = new FileReader;
-                                                            reader.onload = function (data) {
-                                                                console.log(data);
-                                                                $("#banner-image-container img").attr("src", data.target.result);
-                                                            }
-                                                            reader.readAsDataURL(this.files[0]);
-                                                        }
-                                                    })
-                                                </script>
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
+                                <div class="card-body">
+                                    <h6 class="card-title" style="font-size: x-large">배너 광고 상세보기
+                                    </h6>
+                                    <form id="banner-editForm">
+                                        <div class="col-md-12">
+                                            <label class="label" style="font-size: larger">
+                                                배너 사진 - [사진을 추가 및 변경하려면 사진을 클릭하세요.]
+                                            </label>
+                                            <input type="file" id="banner-img" name="img" accept="image/*"
+                                                   hidden/>
+                                            <div style="height: 400px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
+                                                 class="d-flex justify-content-center " id="banner-image-container">
+                                                <img class="img-fluid" src="${banner.img}"
+                                                     onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
+                                                     onclick="$('#banner-img').click()"
+                                                     style="height: 100%; object-fit: contain; cursor: pointer">
                                             </div>
-                                        </form>
-                                        <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
-                                            <button type="button" class="btn btn-outline-primary" style="float: right"
-                                                    onclick="if(confirm('배너 광고를 수정하시겠습니까?')){editBanner(${banner.banner_ad_no})}else {return false;}">
-                                                수정
-                                            </button>
-                                            <button type="button" class="btn btn-secondary" style="float: right"
-                                                    onclick="window.close()">
-                                                닫기
-                                            </button>
+                                            <script>
+                                                $("#banner-img").change(function () {
+                                                    if (this.files && this.files[0]) {
+                                                        const reader = new FileReader;
+                                                        reader.onload = function (data) {
+                                                            console.log(data);
+                                                            $("#banner-image-container img").attr("src", data.target.result);
+                                                        }
+                                                        reader.readAsDataURL(this.files[0]);
+                                                    }
+                                                })
+                                            </script>
                                         </div>
+                                    </form>
+                                    <div class="col-md-12 mt-4 mb-3 justify-content-around d-flex">
+                                        <button type="button" class="btn btn-outline-primary" style="float: right;width : 25%; height: 150%"
+                                                onclick="if(confirm('배너 광고를 수정하시겠습니까?')){editBanner(${banner.banner_ad_no})}else {return false;}">
+                                            수정
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" style="float: right;width : 25%; height: 150%"
+                                                onclick="window.close()">
+                                            닫기
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -132,10 +130,10 @@
         let form = $("#banner-editForm")[0];
         let formData = new FormData(form);
         let bannerData = {
-            "banner_ad_no" : banner_ad_no
+            "banner_ad_no": banner_ad_no
         };
         formData.append("banner", JSON.stringify(bannerData));
-        if($("#banner-img").value != null){
+        if ($("#banner-img").value != null) {
             $.ajax({
                 type: 'POST',
                 enctype: 'multipart/form-data',
@@ -162,6 +160,7 @@
         }
 
     }
+
     function refreshParent() {
         window.opener.location.reload();
     }

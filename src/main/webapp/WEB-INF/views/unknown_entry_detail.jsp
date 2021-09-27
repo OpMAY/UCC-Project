@@ -41,100 +41,97 @@
         <jsp:include page="partials/_navbar.jsp" flush="true"></jsp:include>
         <!-- partial -->
         <div class="page-content">
-
-            </div>
-                <div class="row">
-                    <div class="col-md-8 grid-margin stretch-card offset-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title" style="font-size: x-large">출품작 상세</h6>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row mt-3 justify-content-around">
-                                            <div class="col-md-5">
-                                                <label class="label d-flex" for="entry-reg-date"
-                                                       style="font-size: large">
-                                                    작성 일자
-                                                </label>
-                                                <textarea class="form-control" id="entry-reg-date" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled>${entry.reg_date}</textarea>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <label class="label d-flex" for="entry-status" style="font-size: large">
-                                                    크라우드 상태
-                                                </label>
-                                                <textarea class="form-control" id="entry-status" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled><c:choose><c:when
-                                                        test="${status == 'process'}">진행 중</c:when><c:when
-                                                        test="${status == 'judge'}">심사 중</c:when><c:when
-                                                        test="${status == 'end'}">종료</c:when></c:choose></textarea>
+            <div class="row">
+                <div class="col-md-8 grid-margin stretch-card offset-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title" style="font-size: x-large">탈퇴 회원 출품작 상세</h6>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row mt-3 justify-content-around">
+                                        <div class="col-md-5">
+                                            <label class="label d-flex" for="entry-reg-date"
+                                                   style="font-size: large">
+                                                작성 일자
+                                            </label>
+                                            <textarea class="form-control" id="entry-reg-date" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled>${entry.reg_date}</textarea>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="label d-flex" for="entry-status" style="font-size: large">
+                                                크라우드 상태
+                                            </label>
+                                            <textarea class="form-control" id="entry-status" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled><c:choose><c:when
+                                                    test="${status == 'process'}">진행 중</c:when><c:when
+                                                    test="${status == 'judge'}">심사 중</c:when><c:when
+                                                    test="${status == 'end'}">종료</c:when></c:choose></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <label class="label d-flex" for="entry-vote-number"
+                                                   style="font-size: large">
+                                                투표 수
+                                            </label>
+                                            <textarea class="form-control" id="entry-vote-number" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled>${entry.vote_number}</textarea>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="label d-flex" for="entry-comment-number"
+                                                   style="font-size: large">
+                                                댓글 수
+                                            </label>
+                                            <textarea class="form-control" id="entry-comment-number" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled>${entry.comment_number}</textarea>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="label d-flex" for="entry-visit" style="font-size: large">
+                                                조회수
+                                            </label>
+                                            <textarea class="form-control" id="entry-visit" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled>${entry.visit}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <label class="label" style="font-size: larger">
+                                                동영상
+                                            </label>
+                                            <div style="position: center; border: 1px solid black">
+                                                <video style="width: 100%; height: 424px" width="720"
+                                                       id="entry-vod-video" controls>
+                                                    <source src="${entry.file}" type="video/mp4">
+                                                </video>
                                             </div>
                                         </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-4">
-                                                <label class="label d-flex" for="entry-vote-number"
-                                                       style="font-size: large">
-                                                    투표 수
-                                                </label>
-                                                <textarea class="form-control" id="entry-vote-number" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled>${entry.vote_number}</textarea>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="label d-flex" for="entry-comment-number"
-                                                       style="font-size: large">
-                                                    댓글 수
-                                                </label>
-                                                <textarea class="form-control" id="entry-comment-number" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled>${entry.comment_number}</textarea>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="label d-flex" for="entry-visit" style="font-size: large">
-                                                    조회수
-                                                </label>
-                                                <textarea class="form-control" id="entry-visit" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled>${entry.visit}</textarea>
-                                            </div>
+                                        <div class="col-md-6" id="entry-content-div">
+                                            <label class="label d-flex" for="entry-content-vod"
+                                                   style="font-size: large">
+                                                내용
+                                            </label>
+                                            <textarea class="form-control" id="entry-content-vod" rows="15"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled>${entry.content}</textarea>
                                         </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-6">
-                                                <label class="label" style="font-size: larger">
-                                                    동영상
-                                                </label>
-                                                <div style="position: center">
-                                                    <video style="width: 100%; height: auto" width="720"
-                                                           id="entry-vod-video" controls>
-                                                        <source src="${entry.file}" type="video/mp4">
-                                                    </video>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6" id="entry-content-div">
-                                                <label class="label d-flex" for="entry-content-vod"
-                                                       style="font-size: large">
-                                                    내용
-                                                </label>
-                                                <textarea class="form-control" id="entry-content-vod" rows="10"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled>${entry.content}</textarea>
-                                            </div>
+                                    </div>
+                                    <div class="row mt-4 mb-3 justify-content-around">
+                                        <div class="col-md-5" style="text-align: center">
+                                            <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                    onclick="if(confirm('해당 출품작을 삭제합니다.\n삭제 후 복구는 불가능합니다.\n정말 삭제 하시겠습니까?')){deleteEntry(${entry.entry_no});} else {return false;};">
+                                                삭제
+                                            </button>
                                         </div>
-                                        <div class="row mt-4 mb-3 justify-content-around">
-                                            <div class="col-md-5" style="text-align: center">
-                                                <button class="btn btn-outline-primary"
-                                                        onclick="if(confirm('해당 출품작을 삭제합니다.\n삭제 후 복구는 불가능합니다.\n정말 삭제 하시겠습니까?')){deleteEntry(${entry.entry_no});} else {return false;};">
-                                                    삭제
-                                                </button>
-                                            </div>
-                                            <div class="col-md-5" style="text-align: center">
-                                                <button class="btn btn-secondary"
-                                                        onclick="location.href = '/admin/unknown_entry_list.do?loudsourcing_no=${loudsourcing_no}';">
-                                                    돌아가기
-                                                </button>
-                                            </div>
+                                        <div class="col-md-5" style="text-align: center">
+                                            <button class="btn btn-secondary" style="width : 50%; height: 150%"
+                                                    onclick="location.href = '/admin/unknown_entry_list.do?loudsourcing_no=${loudsourcing_no}';">
+                                                돌아가기
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -142,6 +139,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
         </div>
     </div>
@@ -173,7 +171,7 @@
 <!-- end custom js for this page -->
 <script>
     function deleteEntry(entry_no) {
-        let data = {"entry_no" : entry_no};
+        let data = {"entry_no": entry_no};
         $.ajax({
             type: 'POST',
             url: '/admin/entry_delete.do',

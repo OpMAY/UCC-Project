@@ -89,7 +89,13 @@
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_process.do">
                                 진행 </a>심사 <a
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
-                                종료 </a></h6>
+                                종료 </a><button type="button"
+                                               class="btn btn-outline-primary btn-icon-text"
+                                               style="float: right"
+                                               onclick="setLoudSourcingToEnd()">
+                                <i class="btn-icon-prepend" data-feather="refresh-ccw"></i>
+                                심사 수동 업데이트
+                            </button><span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="기간이 지났음에도 자동으로 종료 업데이트가 되지 않았을 때 클릭하시면 됩니다."><i data-feather="help-circle"></i></span></h6></h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
@@ -168,6 +174,26 @@
     </div>
 </div>
 
-
+<script>
+    function setLoudSourcingToEnd() {
+        $.ajax({
+            type: 'POST',
+            url: '/admin/loudsourcing/set/end.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        }).done(function (result) {
+            if (result === 1) {
+                alert("심사 기간이 지난 크라우드를 종료로 업데이트 하였습니다.");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error);
+            window.location.reload();
+        })
+    }
+</script>
 </body>
 </html>

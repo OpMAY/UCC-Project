@@ -12,4 +12,6 @@ public interface PenaltyMapper {
     List<Penalty> getPenaltyListByArtistNo(int artist_no);
 
     List<Penalty> getPenaltyList();
+
+    void deletePenalty(int penalty_no);
 }

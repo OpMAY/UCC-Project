@@ -1,14 +1,8 @@
 package com.restapi.Restfull.API.Server.services;
 
-import com.restapi.Restfull.API.Server.daos.ArtistDao;
-import com.restapi.Restfull.API.Server.daos.BoardDao;
-import com.restapi.Restfull.API.Server.daos.PenaltyDao;
-import com.restapi.Restfull.API.Server.daos.UserDao;
+import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.Artist;
-import com.restapi.Restfull.API.Server.models.Board;
-import com.restapi.Restfull.API.Server.models.Penalty;
-import com.restapi.Restfull.API.Server.models.User;
+import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
@@ -46,6 +40,15 @@ public class PenaltyService {
 
     @Autowired
     private BoardDao boardDao;
+
+    @Autowired
+    private LoudSourcingDao loudSourcingDao;
+
+    @Autowired
+    private LoudSourcingApplyDao loudSourcingApplyDao;
+
+    @Autowired
+    private LoudSourcingEntryDao loudSourcingEntryDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getPenaltyInfo(int user_no) {
@@ -122,6 +125,34 @@ public class PenaltyService {
                                                 for (Board board : boardList) {
                                                     board.setBoard_private(true);
                                                     boardDao.updateBoardByPenalty(board);
+                                                }
+                                            }
+                                            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByArtistNo(artist.getArtist_no());
+                                            List<LoudSourcing> loudSourcingList = new ArrayList<>();
+                                            for(LoudSourcingApply apply : applyList){
+                                                LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(apply.getLoudsourcing_no());
+                                                loudSourcingList.add(loudSourcing);
+                                            }
+
+                                            for(LoudSourcing loudSourcing : loudSourcingList){
+                                                int loudsourcing_no = loudSourcing.getLoudsourcing_no();
+                                                int artist_no = artist.getArtist_no();
+                                                switch (loudSourcing.getStatus()) {
+                                                    case "recruitment":
+                                                        loudSourcingApplyDao.deleteLoudSourcingApply(artist_no, loudsourcing_no);
+                                                        break;
+                                                    case "process":
+                                                        loudSourcingApplyDao.deleteLoudSourcingApply(artist_no, loudsourcing_no);
+                                                        LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist_no, loudsourcing_no);
+                                                        if (entry != null) {
+                                                            loudSourcingEntryDao.deleteEntry(entry.getEntry_no());
+                                                        }
+                                                        break;
+                                                    case "judge":
+                                                        LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(artist_no, loudsourcing_no);
+                                                        apply.set_pre_selected(false);
+                                                        loudSourcingApplyDao.updateApplyForJudge(apply);
+                                                        break;
                                                 }
                                             }
                                         }

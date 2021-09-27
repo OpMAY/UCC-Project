@@ -6,6 +6,7 @@ import com.restapi.Restfull.API.Server.interfaces.controller.ControllerInitializ
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.services.AdminService;
 import com.restapi.Restfull.API.Server.services.CDNService;
+import com.restapi.Restfull.API.Server.services.LoudSourcingService;
 import com.restapi.Restfull.API.Server.utility.FileConverter;
 import com.restapi.Restfull.API.Server.utility.Time;
 import com.restapi.Restfull.API.Server.utility.URLConverter;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +37,9 @@ public class AdminController implements ControllerInitialize {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private LoudSourcingService loudSourcingService;
 
     @Value("${uploadPath}")
     private String upload_path;
@@ -119,8 +124,9 @@ public class AdminController implements ControllerInitialize {
     }
 
     @GetMapping("/admin/comments.do")
-    public ModelAndView CommentPage(HttpSession session, @RequestParam("user_no") String user_no) {
+    public ModelAndView CommentPage(HttpSession session, @RequestParam("user_no") String user_no, @RequestParam("beforeType") String type) {
         init("GET Comments");
+        session.setAttribute("beforeType", type);
         return adminService.getComments(user_no);
     }
 
@@ -1021,6 +1027,104 @@ public class AdminController implements ControllerInitialize {
     public int EditHashTagPost(@RequestBody String body){
         init("POST EditHashTagPost");
         return adminService.editHashTag(body);
+    }
+
+    @Data
+    class ArtistRequest{
+        private int artist_no;
+    }
+
+    @Data
+    class UserRequest{
+        private int user_no;
+    }
+
+    @PostMapping("/admin/artist_change_name.do")
+    @ResponseBody
+    public int ChangeArtistName(@RequestBody String body){
+        init("POST ChangeArtistName");
+        ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
+        return adminService.changeArtistName(request.getArtist_no());
+    }
+
+    @PostMapping("/admin/artist_change_profile.do")
+    @ResponseBody
+    public int ChangeArtistProfileImg(@RequestBody String body){
+        init("POST ChangeArtistName");
+        ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
+        return adminService.changeArtistProfileImg(request.getArtist_no());
+    }
+
+    @PostMapping("/admin/artist_change_main.do")
+    @ResponseBody
+    public int ChangeArtistMainImg(@RequestBody String body){
+        init("POST ChangeArtistName");
+        ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
+        return adminService.changeArtistMainImg(request.getArtist_no());
+    }
+
+    @PostMapping("/admin/user_change_name.do")
+    @ResponseBody
+    public int ChangeUserName(@RequestBody String body){
+        init("POST ChangeArtistName");
+        UserRequest request = new Gson().fromJson(body, UserRequest.class);
+        return adminService.changeUserName(request.getUser_no());
+    }
+
+    @PostMapping("/admin/user_change_profile.do")
+    @ResponseBody
+    public int ChangeUserProfileImg(@RequestBody String body){
+        init("POST ChangeArtistName");
+        UserRequest request = new Gson().fromJson(body, UserRequest.class);
+        return adminService.changeUserProfileImg(request.getUser_no());
+    }
+
+    @PostMapping("/admin/artist_reset_explain.do")
+    @ResponseBody
+    public int ResetArtistExplain(@RequestBody String body){
+        init("POST ResetArtistExplain");
+        ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
+        return adminService.resetArtistExplain(request.getArtist_no());
+    }
+
+    @PostMapping("/admin/artist_reset_hashtag.do")
+    @ResponseBody
+    public int ResetArtistHashTag(@RequestBody String body){
+        init("POST ResetArtistHashTag");
+        ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
+        return adminService.resetArtistHashTag(request.getArtist_no());
+    }
+
+    @PostMapping("/admin/user_reset_penalty.do")
+    @ResponseBody
+    public int ResetUserPenalty(@RequestBody String body){
+        init("POST ResetArtistPenalty");
+        UserRequest request = new Gson().fromJson(body, UserRequest.class);
+        return adminService.resetUserPenalty(request.getUser_no());
+    }
+
+    @PostMapping("/admin/loudsourcing/set/judge.do")
+    @ResponseBody
+    public int ManualSetLoudSourcingToJudge(){
+        try {
+            init("POST ManualSetLoudSourcingToJudge");
+            loudSourcingService.setLoudSourcingProcessToJudge();
+            return 1;
+        } catch (Exception e){
+            return 0;
+        }
+    }
+
+    @PostMapping("/admin/loudsourcing/set/end.do")
+    @ResponseBody
+    public int ManualSetLoudSourcingToEnd(){
+        try {
+            init("POST ManualSetLoudSourcingToEnd");
+            loudSourcingService.setLoudSourcingJudgeToEnd();
+            return 1;
+        } catch (Exception e){
+            return 0;
+        }
     }
 
     private String uploadFile(String originalName, MultipartFile mfile, String content_info, String type) throws IOException {

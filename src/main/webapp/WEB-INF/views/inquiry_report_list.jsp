@@ -60,17 +60,17 @@
                                     기타 </a>
                             </h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>작성자</th>
-                                        <th>신고 대상</th>
-                                        <th>문의 내용</th>
-                                        <th>답변 상태</th>
-                                        <th>등록 일자</th>
-                                        <th>자세히 보기</th>
-                                        <th>삭제</th>
+                                        <th width="10px">#</th>
+                                        <th width="30px">작성자</th>
+                                        <th width="100px">신고 대상</th>
+                                        <th width="150px">문의 내용</th>
+                                        <th width="30px">답변 상태</th>
+                                        <th width="60px">등록 일자</th>
+                                        <th width="50px">자세히 보기</th>
+                                        <th width="50px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -78,16 +78,30 @@
                                     <c:forEach var="i" begin="1" end="${inquiryList.size()}">
                                     <tr>
                                         <td>${i}</td>
-                                        <td>${inquiryList[i-1].user_name}</td>
-                                        <td>${inquiryList[i-1].reported_user_name}</td>
-                                        <td>${inquiryList[i-1].content}</td>
-                                        <td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${inquiryList[i-1].user_name}</td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">
+                                            <c:choose>
+                                                <c:when test="${inquiryList[i-1].reported_user_name == null}">
+                                                    삭제된 유저
+                                                </c:when>
+                                                <c:when test="${inquiryList[i-1].reported_user_name != null}">
+                                                    ${inquiryList[i-1].reported_user_name}
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${inquiryList[i-1].content}</td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">
                                             <c:choose>
                                                 <c:when test="${inquiryList[i-1]._answered == true}">답변</c:when>
                                                 <c:when test="${inquiryList[i-1]._answered == false}">미답변</c:when>
                                             </c:choose>
                                         </td>
-                                        <td>${inquiryList[i-1].reg_date}</td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${inquiryList[i-1].reg_date}</td>
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
@@ -141,18 +155,18 @@
 <script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function deleteNotice(notice_no) {
-        let data = {"notice_no": notice_no};
+    function deleteInquiry(inquiry_no) {
+        let data = {"inquiry_no": inquiry_no};
         $.ajax({
             type: 'POST',
-            url: '/admin/notice_delete.do',
+            url: '/admin/inquiry_delete.do',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function (result) {
             console.log(result);
             if (result === 0) {
-                alert("공지사항 삭제 완료");
+                alert("문의 삭제 완료");
                 window.location.reload();
             } else {
                 alert("알 수 없는 오류 발생");

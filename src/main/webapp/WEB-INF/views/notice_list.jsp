@@ -64,15 +64,15 @@
                                 </button>
                             </h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>제목</th>
-                                        <th>내용</th>
-                                        <th>등록 일자</th>
-                                        <th>자세히 보기</th>
-                                        <th>삭제</th>
+                                        <th width="10px">#</th>
+                                        <th width="100px">제목</th>
+                                        <th width="130px">내용</th>
+                                        <th width="60px">등록 일자</th>
+                                        <th width="50px">자세히 보기</th>
+                                        <th width="50px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -80,8 +80,10 @@
                                     <c:forEach var="i" begin="1" end="${noticeList.size()}">
                                     <tr>
                                         <td>${i}</td>
-                                        <td>${noticeList[i-1].title}</td>
-                                        <td>${noticeList[i-1].content}</td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${noticeList[i-1].title}</td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${noticeList[i-1].content}</td>
                                         <td>
                                                 ${noticeList[i-1].reg_date}
                                         </td>

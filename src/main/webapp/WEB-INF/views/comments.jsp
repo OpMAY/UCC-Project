@@ -9,10 +9,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
-<%
-    request.setAttribute("status1", request.getHeader("status"));
-    request.setAttribute("status2", response.getHeader("status"));
-%>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -109,9 +106,22 @@
                             </div>
                             <div class="row mt-3 mb-3">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href=document.referrer">
+                                    <%
+                                        String beforeType = session.getAttribute("beforeType").toString();
+                                        if(beforeType.equals("artist")){
+                                    %>
+                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/artists.do'">
                                         뒤로가기
                                     </button>
+                                    <%
+                                        } else {
+                                    %>
+                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/users.do'">
+                                        뒤로가기
+                                    </button>
+                                    <%
+                                        }
+                                    %>
                                 </div>
                             </div>
                         </div>

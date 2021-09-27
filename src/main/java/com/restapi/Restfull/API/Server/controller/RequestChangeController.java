@@ -32,10 +32,7 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Log4j2
 @RestController
@@ -180,6 +177,12 @@ public class RequestChangeController {
                 artist.setArtist_profile_img(urlConverter.convertSpecialLetter(cdn_path + "images/" + artist_info + profile_img_file_name));
                 artist.setMain_img(urlConverter.convertSpecialLetter(cdn_path + "images/" + artist_info + fan_main_img_file_name));
                 artistService.updateArtist(artist);
+
+                if (artist.getHashtag() != null) {
+                    ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                    artist.setHashtag_list(hashtagList);
+                    log.info(hashtagList);
+                }
 
                 /** Response JSON SETTING **/
                 Message message = new Message();

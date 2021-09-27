@@ -245,6 +245,7 @@ public class LoudSourcingController {
         return loudSourcingService.deleteEntry(entry_no);
     }
 
+
     private String uploadFile(String originalName, MultipartFile mfile, String entry_info, String vod_tmp) throws IOException {
         UUID uid = UUID.randomUUID();
         String mOriginalName = originalName;

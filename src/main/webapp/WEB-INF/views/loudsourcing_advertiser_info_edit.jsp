@@ -44,98 +44,97 @@
             </nav>
 
             <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">광고 발주자 상세정보</h6>
-                            <form id="LoudSourcingAdvertiserForm">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-10">
-                                        <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
-                                            <div class="col-md-10 mt-3 justify-content-center">
-                                                <label class="label" style="font-size: larger" for="advertiser-name">
-                                                    광고 발주자 명
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-name" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          >${LoudSourcing.advertiser_name}</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-3 justify-content-center">
-                                                <label class="label" style="font-size: larger">
-                                                    연락처
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-phone" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          >${LoudSourcing.advertiser_phone}</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-3 justify-content-center">
-                                                <label class="label" style="font-size: larger" for="advertiser-email">
-                                                    이메일
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-email" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          >${LoudSourcing.advertiser_email}</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-3 justify-content-around">
-                                                <label class="label" style="font-size: larger"
-                                                       for="advertiser-bank-name">
-                                                    은행 명
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-bank-name" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          >${LoudSourcing.advertiser_bank_name}</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-3 justify-content-center">
-                                                <label class="label" style="font-size: larger"
-                                                       for="advertiser-bank-owner">
-                                                    예금주 명
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-bank-owner" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          >${LoudSourcing.advertiser_bank_owner}</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-3 justify-content-center">
-                                                <label class="label" style="font-size: larger"
-                                                       for="advertiser-bank-account">
-                                                    계좌번호
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-bank-account" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          >${LoudSourcing.advertiser_bank_account}</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-3 justify-content-around">
-                                                <label class="label" style="font-size: larger" for="advertiser-regdate">
-                                                    등록 일자
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-regdate" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled>${LoudSourcing.reg_date}</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-3 justify-content-center">
-                                                <label class="label" style="font-size: larger" for="advertiser-reward">
-                                                    상금
-                                                </label>
-                                                <textarea class="form-control" id="advertiser-reward" rows="1"
-                                                          style="line-height: 150%; font-size: large"
-                                                          disabled><fmt:formatNumber value="${LoudSourcing.reward}"
-                                                                                     type="number"/>원</textarea>
-                                            </div>
-                                            <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
-                                                <button type="button" class="btn btn-outline-primary" style="float: right"
-                                                        onclick="editLoudSourcingAdvertiser()">
-                                                    수정완료
-                                                </button>
-                                                <button type="button" class="btn btn-secondary" style="float: right"
-                                                        onclick="window.close()">
-                                                    닫기
-                                                </button>
-                                            </div>
+                <div class="col-md-12 grid-margin">
+                    <form id="LoudSourcingAdvertiserForm">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10">
+                                <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
+                                    <div class="card-body">
+                                        <h6 class="card-title" style="font-size: x-large">광고 발주자 상세정보</h6>
+                                        <div class="col-md-10 mt-3 justify-content-center">
+                                            <label class="label" style="font-size: larger" for="advertiser-name">
+                                                광고 발주자 명
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-name" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                            >${LoudSourcing.advertiser_name}</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-3 justify-content-center">
+                                            <label class="label" style="font-size: larger">
+                                                연락처
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-phone" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                            >${LoudSourcing.advertiser_phone}</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-3 justify-content-center">
+                                            <label class="label" style="font-size: larger" for="advertiser-email">
+                                                이메일
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-email" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                            >${LoudSourcing.advertiser_email}</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-3 justify-content-around">
+                                            <label class="label" style="font-size: larger"
+                                                   for="advertiser-bank-name">
+                                                은행 명
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-bank-name" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                            >${LoudSourcing.advertiser_bank_name}</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-3 justify-content-center">
+                                            <label class="label" style="font-size: larger"
+                                                   for="advertiser-bank-owner">
+                                                예금주 명
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-bank-owner" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                            >${LoudSourcing.advertiser_bank_owner}</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-3 justify-content-center">
+                                            <label class="label" style="font-size: larger"
+                                                   for="advertiser-bank-account">
+                                                계좌번호
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-bank-account" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                            >${LoudSourcing.advertiser_bank_account}</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-3 justify-content-around">
+                                            <label class="label" style="font-size: larger" for="advertiser-regdate">
+                                                등록 일자
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-regdate" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled>${LoudSourcing.reg_date}</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-3 justify-content-center">
+                                            <label class="label" style="font-size: larger" for="advertiser-reward">
+                                                상금
+                                            </label>
+                                            <textarea class="form-control" id="advertiser-reward" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled><fmt:formatNumber value="${LoudSourcing.reward}"
+                                                                                 type="number"/>원</textarea>
+                                        </div>
+                                        <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
+                                            <button type="button" class="btn btn-outline-primary" style="float: right; width: 25%; height: 150%"
+                                                    onclick="editLoudSourcingAdvertiser()">
+                                                수정완료
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" style="float: right; width: 25%; height: 150%"
+                                                    onclick="window.close()">
+                                                닫기
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                    </form>
+
                 </div>
             </div>
 
@@ -169,13 +168,13 @@
 <script>
     function editLoudSourcingAdvertiser() {
         let advertiserData = {
-            "loudsourcing_no" : ${LoudSourcing.loudsourcing_no},
-            "advertiser_name" : $("#advertiser-name").val(),
-            "advertiser_phone" : $("#advertiser-phone").val(),
-            "advertiser_email" : $("#advertiser-email").val(),
-            "advertiser_bank_name" : $("#advertiser-bank-name").val(),
-            "advertiser_bank_account" : $("#advertiser-bank-account").val(),
-            "advertiser_bank_owner" : $("#advertiser-bank-owner").val()
+            "loudsourcing_no": ${LoudSourcing.loudsourcing_no},
+            "advertiser_name": $("#advertiser-name").val(),
+            "advertiser_phone": $("#advertiser-phone").val(),
+            "advertiser_email": $("#advertiser-email").val(),
+            "advertiser_bank_name": $("#advertiser-bank-name").val(),
+            "advertiser_bank_account": $("#advertiser-bank-account").val(),
+            "advertiser_bank_owner": $("#advertiser-bank-owner").val()
         };
         $.ajax({
             type: 'POST',

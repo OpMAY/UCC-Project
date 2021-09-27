@@ -861,7 +861,8 @@ public class LoudSourcingService {
                             List<LoudSourcingEntry> selectedEntryList = new ArrayList<>();
                             for (int i = 0; i < index; i++) {
                                 LoudSourcingEntry entry = entryList.get(i);
-                                if (entry.getVote_number() != 0) {
+                                // 출품작 투표 수가 없거나 탈퇴한 유저의 출품작의 경우는 선정하지 않음
+                                if (entry.getVote_number() != 0 && entry.getArtist_no() != 0) {
                                     selectedEntryList.add(entry);
                                 } else {
                                     break;
@@ -881,9 +882,11 @@ public class LoudSourcingService {
                                 System.out.println("SelectedEntryList size : " + selectedEntryList.size());
                                 // 해당 출품작 심사를 위한 선정 처리 -> 이후 관리자 및 광고주가 추가로 선정
                                 for (LoudSourcingEntry entry : selectedEntryList) {
-                                    LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(entry.getArtist_no(), entry.getLoudsourcing_no());
-                                    apply.set_pre_selected(true);
-                                    loudSourcingApplyDao.updateApplyForJudge(apply);
+                                    if(entry.getArtist_no() != 0) {
+                                        LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(entry.getArtist_no(), entry.getLoudsourcing_no());
+                                        apply.set_pre_selected(true);
+                                        loudSourcingApplyDao.updateApplyForJudge(apply);
+                                    }
                                 }
                             }
                             log.info("Pre-Organized entries for judge : 투표 수를 기반으로 심사를 위한 출품작 리스트가 자동으로 선정되었습니다.");

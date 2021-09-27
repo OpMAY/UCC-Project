@@ -138,12 +138,12 @@
                             </div>
                             <div class="row mt-4 mb-3 justify-content-around">
                                 <div class="col-md-6 justify-content-center d-flex">
-                                    <button type="button" id="save-button" class="btn btn-outline-primary">
+                                    <button type="button" id="save-button" class="btn btn-outline-primary" style="width : 50%; height: 150%">
                                         저장
                                     </button>
                                 </div>
                                 <div class="col-md-6 justify-content-center d-flex">
-                                    <button class="btn btn-secondary"
+                                    <button class="btn btn-secondary" style="width : 50%; height: 150%"
                                             onclick="location.reload()">
                                         초기화
                                     </button>

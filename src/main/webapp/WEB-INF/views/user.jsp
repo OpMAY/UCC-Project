@@ -86,7 +86,7 @@
                                         <td>${UserList[i-1].reg_date}</td>
                                         <td>
                                             <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/comments.do?user_no=${UserList[i-1].user_no}'">
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/comments.do?user_no=${UserList[i-1].user_no}&beforeType=user'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>
@@ -101,7 +101,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="openWindowPopBan('/admin/penalty.do?user_no=${UserList[i-1].user_no}','회원 정지')">
+                                                    onclick="if(confirm('유저 이름 : ${UserList[i-1].name}\n\n이 유저를 정지하겠습니까?')){openWindowPopBan('/admin/penalty.do?user_no=${UserList[i-1].user_no}','회원 정지', ${UserList[i-1]._user_private})} else {return false;}">
                                                 <i class="btn-icon-prepend" data-feather="x-square"></i>
                                                 정지
                                             </button>
@@ -143,9 +143,15 @@
 <script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function openWindowPopBan(url, name){
-        let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
-        window.open(url, name, options);
+    function openWindowPopBan(url, name, user_private){
+        if(user_private){
+            alert("이미 정지된 유저입니다.");
+            return false;
+        } else {
+            let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+            window.open(url, name, options);
+        }
+
     }
 </script>
 </body>

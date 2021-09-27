@@ -64,15 +64,15 @@
                                 </button>
                             </h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>질문</th>
-                                        <th>답변</th>
-                                        <th>등록 일자</th>
-                                        <th>자세히 보기</th>
-                                        <th>삭제</th>
+                                        <th width="10px">#</th>
+                                        <th width="100px">질문</th>
+                                        <th width="130px">답변</th>
+                                        <th width="60px">등록 일자</th>
+                                        <th width="50px">자세히 보기</th>
+                                        <th width="50px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -80,9 +80,12 @@
                                     <c:forEach var="i" begin="1" end="${faqList.size()}">
                                     <tr>
                                         <td>${i}</td>
-                                        <td>${faqList[i-1].question}</td>
-                                        <td>${faqList[i-1].answer}</td>
-                                        <td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${faqList[i-1].question}</td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${faqList[i-1].answer}</td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">
                                                 ${faqList[i-1].reg_date}
                                         </td>
                                         <td>

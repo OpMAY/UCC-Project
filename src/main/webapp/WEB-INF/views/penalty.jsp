@@ -46,14 +46,14 @@
             </nav>
 
             <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">유저 정지 관리
-                            </h6>
-                            <div class="row justify-content-center">
-                                <div class="col-md-10">
-                                    <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
+                <div class="col-md-12 grid-margin">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
+                                <div class="card-body">
+                                    <h6 class="card-title" style="font-size: x-large">유저 정지 관리
+                                    </h6>
+                                    <div class="row justify-content-around">
                                         <div class="col-md-10 mt-3 justify-content-around">
                                             <label class="label" style="font-size: larger" for="penalty-user-name">
                                                 유저 이름
@@ -161,11 +161,11 @@
                                             ></textarea>
                                         </div>
                                         <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
-                                            <button type="button" class="btn btn-outline-primary" style="float: right"
+                                            <button type="button" class="btn btn-outline-primary" style="float: right; width: 25%; height: 150%"
                                                     onclick="if(confirm('이 유저를 정지하시겠습니까?')){banUser(${user.user_no})} else {return false;}">
                                                 정지
                                             </button>
-                                            <button type="button" class="btn btn-secondary" style="float: right"
+                                            <button type="button" class="btn btn-secondary" style="float: right; width: 25%; height: 150%"
                                                     onclick="window.close()">
                                                 닫기
                                             </button>
@@ -210,29 +210,17 @@
 <script>
     function copyDate() {
         let dateString = $('input[name="penalty-start-date"]').val();
-        console.log(dateString);
         let date = new Date(dateString);
-        console.log(date);
         let checked_value = $('input[name="ban-days"]:checked').val();
-        console.log(checked_value);
         if (checked_value === 'forever') {
-            console.log("forever");
-            console.log(document.getElementById("penalty-end-date"));
             document.getElementById("penalty-end-date").value = '영구 정지';
         } else if (checked_value === undefined) {
-            console.log("undefined");
-            console.log(document.getElementById("penalty-end-date"));
             document.getElementById("penalty-end-date").value = '정지 일수를 선택해주세요.';
         } else {
             let dayChanged = date.getDate() + parseInt(checked_value) + 1;
-            console.log(date.getFullYear());
-            console.log(date.getMonth());
-            console.log(date.getDate());
             let endDate = new Date(date.getFullYear(), date.getMonth(), dayChanged);
             let endDateString = dateFormat(endDate);
-            console.log(checked_value);
             document.getElementById("penalty-end-date").value = endDateString;
-            console.log(endDate);
         }
     }
 
@@ -247,25 +235,28 @@
     }
 
     function banUser(user_no) {
-        if(!inspection("penalty-reason", "penalty_reason")){
+        if (!inspection("penalty-reason", "penalty_reason")) {
+            return false;
+        } else if ($('input[name="ban-days"]:checked').val() == undefined){
+            alert("정지 일수를 선택해주세요.");
             return false;
         }
         let days = $('input[name="ban-days"]:checked').val();
         let penalty_days;
-        if(days === 'forever'){
+        if (days === 'forever') {
             penalty_days = 0;
-        } else if(days === null){
+        } else if (days === null) {
             alert("정지 일수를 선택해주세요.");
-        } else{
+        } else {
             penalty_days = days;
         }
         let penaltyData = {
-            "user_no" : user_no,
-            "penalty_start_date" : $('input[name="penalty-start-date"]').val(),
-            "penalty_end_date" : $("#penalty-end-date").val(),
-            "penalty_days" : penalty_days,
-            "penalty_reason" : $("#penalty-reason").val()
-        }
+            "user_no": user_no,
+            "penalty_start_date": $('input[name="penalty-start-date"]').val(),
+            "penalty_end_date": $("#penalty-end-date").val(),
+            "penalty_days": penalty_days,
+            "penalty_reason": $("#penalty-reason").val()
+        };
         $.ajax({
             type: 'POST',
             url: '/admin/penalty_user.do',
@@ -273,7 +264,6 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(penaltyData)
         }).done(function (result) {
-            console.log(result);
             if (result === 0) {
                 alert("해당 유저를 정지했습니다.");
                 window.close();

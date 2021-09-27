@@ -55,28 +55,32 @@
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><a href="/admin/users.do">사용자</a> 아티스트 </h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="artist-table" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>아티스트 명</th>
-                                        <th>팬콕 수</th>
-                                        <th>전환 일자</th>
-                                        <th>포트폴리오</th>
-                                        <th>게시글</th>
-                                        <th>크라우드</th>
-                                        <th>댓글 내역</th>
-                                        <th>자세히 보기</th>
-                                        <th>사용 정지</th>
+                                        <th width="10px">#</th>
+                                        <th width="90px">아티스트 명</th>
+                                        <th width="25px">팬콕 수</th>
+                                        <th width="130px">전환 일자</th>
+                                        <th width="80px">포트폴리오</th>
+                                        <th width="80px">게시글</th>
+                                        <th width="80px">크라우드</th>
+                                        <th width="80px">댓글 내역</th>
+                                        <th width="80px">자세히 보기</th>
+                                        <th width="80px">사용 정지</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach var="i" begin="1" end="${artistList.size()}">
                                         <tr>
-                                            <td>${i}</td>
-                                            <td>${artistList[i-1].artist_name}</td>
-                                            <td>${artistList[i-1].fan_number}</td>
-                                            <td>${artistList[i-1].reg_date}</td>
+                                            <td class="overflow-hidden"
+                                                style="text-overflow: ellipsis">${i}</td>
+                                            <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">${artistList[i-1].artist_name}</td>
+                                            <td class="overflow-hidden"
+                                                style="text-overflow: ellipsis">${artistList[i-1].fan_number}</td>
+                                            <td class="overflow-hidden"
+                                                style="text-overflow: ellipsis">${artistList[i-1].reg_date}</td>
                                             <td>
                                                 <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/portfolio.do?artist_no=${artistList[i-1].artist_no}&type=all'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
@@ -96,7 +100,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/comments.do?user_no=${artistList[i-1].user_no}'">
+                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/comments.do?user_no=${artistList[i-1].user_no}&beforeType=artist'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -108,7 +112,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="openWindowPopBan('/admin/penalty.do?user_no=${artistList[i-1].user_no}','회원 정지')">
+                                                <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="if(confirm('아티스트 이름 : ${artistList[i-1].artist_name}\n\n위 아티스트를 정지하겠습니까?')){openWindowPopBan('/admin/penalty.do?user_no=${artistList[i-1].user_no}','회원 정지', ${artistList[i-1].artist_private})} else {return false;}">
                                                     <i class="btn-icon-prepend" data-feather="x-square"></i>
                                                     정지
                                                 </button>
@@ -148,13 +152,60 @@
 <!-- custom js for this page -->
 <script src="../assets/js/dashboard.js"></script>
 <script src="../assets/js/datepicker.js"></script>
-<script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function openWindowPopBan(url, name){
-        let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
-        window.open(url, name, options);
+    function openWindowPopBan(url, name, artist_private){
+        if(artist_private){
+            alert("이미 정지된 유저입니다.");
+            return false;
+        }else {
+            let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+            window.open(url, name, options);
+        }
     }
+    $(document).ready(function(){
+        $('#artist-table').DataTable({
+            "aLengthMenu": [
+                [10, 20, 30, 40, 50, -1],
+                [10, 20, 30, 40, 50, "모두"]
+            ],
+            "iDisplayLength": 20,
+            "language": {
+                "decimal" : "",
+                "emptyTable" : "데이터가 없습니다.",
+                "info" : "_START_ 번 부터 _END_ 번까지 표시 중 (총 데이터 _TOTAL_ 개)",
+                "infoEmpty" : "총 데이터 0개",
+                "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
+                "infoPostFix" : "",
+                "thousands" : ",",
+                "lengthMenu" : "_MENU_ 개씩 보기",
+                "loadingRecords" : "로딩중...",
+                "processing" : "처리중...",
+                "search" : "검색  ",
+                "zeroRecords" : "검색된 데이터가 없습니다.",
+                "paginate" : {
+                    "first" : "첫 페이지",
+                    "last" : "마지막 페이지",
+                    "next" : "다음",
+                    "previous" : "이전"
+                },
+                "aria" : {
+                    "sortAscending" : " :  오름차순 정렬",
+                    "sortDescending" : " :  내림차순 정렬"
+                }
+            }
+        });
+        $('#artist-table').each(function() {
+            let datatable = $(this);
+            // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+            let search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+            search_input.attr('placeholder', 'Search');
+            search_input.removeClass('form-control-sm');
+            // LENGTH - Inline-Form control
+            let length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+            length_sel.removeClass('form-control-sm');
+        });
+    })
 </script>
 </body>
 </html>

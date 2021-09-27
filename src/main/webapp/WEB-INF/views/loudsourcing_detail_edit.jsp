@@ -108,6 +108,8 @@
     console.log(input_index);
     let file_number = 0;
 </script>
+<c:set var="Loudsourcing" value="${Loudsourcing}"/>
+<c:set var="files" value="${files}"/>
 <div class="main-wrapper">
     <!-- partial:partials/_sidebar.jsp -->
     <jsp:include page="partials/_sidebar.jsp" flush="true"></jsp:include>
@@ -120,418 +122,418 @@
         <div class="page-content">
 
             <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body" id="main-card">
-                            <h6 class="card-title" style="font-size: x-large">크라우드 상세</h6>
-                            <form id="loudsourcingEditForm">
-                                <c:set var="Loudsourcing" value="${Loudsourcing}"/>
-                                <c:set var="files" value="${files}"/>
-                                <div class="row justify-content-center">
-                                    <div class="col-md-10">
-                                        <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
-                                            <div class="row justify-content-around mt-3">
-                                                <div class="col-md-5">
-                                                    <label class="label d-flex" for="loudsourcing-name"
-                                                           style="font-size: larger">
-                                                        공모전 이름
-                                                    </label>
-                                                    <textarea class="form-control" id="loudsourcing-name" rows="1"
-                                                              style="line-height: 150%; font-size: large; text-align: center"
-                                                    >${Loudsourcing.name}</textarea>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <button type="button" class="btn btn-outline-primary mt-4"
-                                                            style="float:right; font-size: large"
-                                                            onclick="openWindowPopEdit('/admin/advertiser_edit.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}', '광고 발주자 상세정보 수정')">
-                                                        광고 발주자 상세정보 수정
-                                                    </button>
-                                                </div>
+                <div class="col-md-12 grid-margin justify-content-center">
+
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
+                                <div class="card-body">
+                                    <h6 class="card-title" style="font-size: x-large">크라우드 상세</h6>
+                                    <form id="loudsourcingEditForm">
+                                        <div class="row justify-content-around mt-3">
+                                            <div class="col-md-6">
+                                                <label class="label d-flex" for="loudsourcing-name"
+                                                       style="font-size: larger">
+                                                    공모전 이름
+                                                </label>
+                                                <textarea class="form-control" id="loudsourcing-name" rows="1"
+                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                >${Loudsourcing.name}</textarea>
                                             </div>
-                                            <div class="row mt-3 justify-content-around">
-                                                <div class="col-md-5">
-                                                    <label class="label" style="font-size: larger">
-                                                        공모전 사진 - [사진을 변경하려면 사진을 클릭하세요.]
-                                                    </label>
-                                                    <input type="file" id="loudsourcing-img" name="img" accept="image/*"
-                                                           hidden/>
-                                                    <div style="width: 29vw; height: 800px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
-                                                         class="d-flex justify-content-center " id="image-container">
-                                                        <img class="img-fluid" src="${Loudsourcing.img}"
-                                                             onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
-                                                             onclick="$('#loudsourcing-img').click()"
-                                                             style="height: 100%; object-fit: contain; cursor: pointer">
-                                                    </div>
-                                                    <script>
-
-                                                        $("#loudsourcing-img").change(function () {
-                                                            if (this.files && this.files[0]) {
-                                                                const reader = new FileReader;
-                                                                reader.onload = function (data) {
-                                                                    console.log(data);
-                                                                    $("#image-container img").attr("src", data.target.result);
-                                                                }
-                                                                reader.readAsDataURL(this.files[0]);
-                                                            }
-                                                        })
-                                                    </script>
+                                            <div class="col-md-6" style="vertical-align: middle">
+                                                <button type="button" class="btn btn-outline-primary"
+                                                        style="float:right; font-size: large;position: relative; top: 43px;"
+                                                        onclick="openWindowPopEdit('/admin/advertiser_edit.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}', '광고 발주자 상세정보 수정')">
+                                                    광고 발주자 상세정보 수정
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 justify-content-around">
+                                            <div class="col-md-6">
+                                                <label class="label" style="font-size: larger">
+                                                    공모전 사진 - [사진을 변경하려면 사진을 클릭하세요.]
+                                                </label>
+                                                <input type="file" id="loudsourcing-img" name="img" accept="image/*"
+                                                       hidden/>
+                                                <div style="height: 800px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
+                                                     class="d-flex justify-content-center " id="image-container">
+                                                    <img class="img-fluid" src="${Loudsourcing.img}"
+                                                         onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
+                                                         onclick="$('#loudsourcing-img').click()"
+                                                         style="height: 100%; object-fit: contain; cursor: pointer">
                                                 </div>
-                                                <div class="col-md-5">
-                                                    <label class="label d-flex" for="loudsourcing-status"
-                                                           style="font-size: larger">
-                                                        상태
-                                                    </label>
-                                                    <c:choose>
-                                                        <c:when test="${Loudsourcing.status == 'recruitment'}">
-                                                            <select class="form-control" id="loudsourcing-status"
-                                                                    style="font-size: large;text-align: center; text-align-last: center">
-                                                                <option selected>모집</option>
-                                                                <option>진행</option>
-                                                            </select>
-                                                        </c:when>
-                                                        <c:when test="${Loudsourcing.status == 'process'}">
-                                                            <select class="form-control" id="loudsourcing-status"
-                                                                    style="font-size: large;text-align: center; text-align-last: center">
-                                                                <option>모집</option>
-                                                                <option selected>진행</option>
-                                                            </select>
-                                                        </c:when>
-                                                    </c:choose>
+                                                <script>
 
-                                                    <label class="label d-flex" for="loudsourcing-host"
-                                                           style="font-size: larger">
-                                                        주최
-                                                    </label>
-                                                    <textarea class="form-control" id="loudsourcing-host" rows="1"
-                                                              style="line-height: 150%; font-size: large; text-align: center"
-                                                    >${Loudsourcing.host}</textarea>
-                                                    <label class="label d-flex" for="loudsourcing-reward"
-                                                           style="font-size: larger">
-                                                        상금
-                                                    </label>
-                                                    <textarea class="form-control" id="loudsourcing-reward" rows="1"
-                                                              style="line-height: 150%; font-size: large; text-align: center"
-                                                    >${Loudsourcing.reward}</textarea>
-                                                    <label class="label d-flex"
-                                                           style="font-size: larger">
-                                                        해시태그 - (대괄호([]), 쌍따옴표(") 등의 특수문자는 불가능합니다.)
-                                                    </label>
-                                                    <div class="tr_hashTag_area">
-                                                        <div class="form-group">
-                                                            <input type="hidden" value="" name="tag" id="rdTag"/>
-                                                        </div>
+                                                    $("#loudsourcing-img").change(function () {
+                                                        if (this.files && this.files[0]) {
+                                                            const reader = new FileReader;
+                                                            reader.onload = function (data) {
+                                                                console.log(data);
+                                                                $("#image-container img").attr("src", data.target.result);
+                                                            }
+                                                            reader.readAsDataURL(this.files[0]);
+                                                        }
+                                                    })
+                                                </script>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="label d-flex" for="loudsourcing-status"
+                                                       style="font-size: larger">
+                                                    상태
+                                                </label>
+                                                <c:choose>
+                                                    <c:when test="${Loudsourcing.status == 'recruitment'}">
+                                                        <select class="form-control" id="loudsourcing-status"
+                                                                style="font-size: large;text-align: center; text-align-last: center">
+                                                            <option selected>모집</option>
+                                                            <option>진행</option>
+                                                        </select>
+                                                    </c:when>
+                                                    <c:when test="${Loudsourcing.status == 'process'}">
+                                                        <select class="form-control" id="loudsourcing-status"
+                                                                style="font-size: large;text-align: center; text-align-last: center">
+                                                            <option>모집</option>
+                                                            <option selected>진행</option>
+                                                        </select>
+                                                    </c:when>
+                                                </c:choose>
 
-                                                        <ul id="tag-list"></ul>
-
-                                                        <div class="form-group">
-                                                            <input type="text" id="tag" size="7"
-                                                                   placeholder="엔터로 해시태그를 등록해주세요. 최대 5자까지 가능하며 해시태그는 최대 10개 등록 가능합니다."
-                                                                   style="width: 100%;"/>
-                                                        </div>
+                                                <label class="label d-flex" for="loudsourcing-host"
+                                                       style="font-size: larger">
+                                                    주최
+                                                </label>
+                                                <textarea class="form-control" id="loudsourcing-host" rows="1"
+                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                >${Loudsourcing.host}</textarea>
+                                                <label class="label d-flex" for="loudsourcing-reward"
+                                                       style="font-size: larger">
+                                                    상금
+                                                </label>
+                                                <textarea class="form-control" id="loudsourcing-reward" rows="1"
+                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                >${Loudsourcing.reward}</textarea>
+                                                <label class="label d-flex"
+                                                       style="font-size: larger">
+                                                    해시태그 - (대괄호([]), 쌍따옴표(") 등의 특수문자는 불가능합니다.)
+                                                </label>
+                                                <div class="tr_hashTag_area">
+                                                    <div class="form-group">
+                                                        <input type="hidden" value="" name="tag" id="rdTag"/>
                                                     </div>
-                                                    <label class="label d-flex" for="total-recruit-number"
-                                                           style="font-size: larger">
-                                                        총 모집 인원
-                                                    </label>
-                                                    <textarea class="form-control" id="total-recruit-number" rows="1"
-                                                              style="line-height: 150%; font-size: large; text-align: center"
-                                                    >${Loudsourcing.total_recruitment_number}</textarea>
-                                                    <label class="label d-flex" for="total-date"
-                                                           style="font-size: larger">
-                                                        총 기간
-                                                    </label>
-                                                    <c:choose>
-                                                        <c:when test="${Loudsourcing.status == 'recruitment'}">
-                                                            <div class="row justify-content-around" id="total-date">
-                                                                <div class="col-md-5">
-                                                                    <div class="input-group date datepicker"
-                                                                         id="dp-edit-loudsourcing-start-date">
-                                                                        <input type="text" class="form-control"
-                                                                               name="loudsourcing-start-date"
-                                                                               id="loudsourcing-start-date"
-                                                                               onchange="copyStartDate()"
-                                                                               style="font-size: large;line-height: normal;text-align: center"
-                                                                               value="${Loudsourcing.start_date}"><span
-                                                                            class="input-group-addon"><i
-                                                                            data-feather="calendar"></i></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-5">
-                                                                    <div class="input-group date datepicker"
-                                                                         id="dp-edit-loudsourcing-end-date">
-                                                                        <input type="text" class="form-control"
-                                                                               name="loudsourcing-end-date"
-                                                                               id="loudsourcing-end-date"
-                                                                               style="font-size: large;line-height: normal;text-align: center"
-                                                                               value="${Loudsourcing.end_date}"><span
-                                                                            class="input-group-addon" id="click-test"><i
-                                                                            data-feather="calendar"></i></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </c:when>
-                                                        <c:when test="${Loudsourcing.status == 'process'}">
-                                                            <div class="row justify-content-around" id="total-date">
-                                                                <div class="col-md-5">
-                                                                    <div class="input-group date datepicker"
-                                                                         id="dp-edit-loudsourcing-start-date">
-                                                                        <input type="text" class="form-control"
-                                                                               name="loudsourcing-start-date"
-                                                                               id="loudsourcing-start-date"
-                                                                               onchange="copyStartDate()"
-                                                                               style="font-size: large;line-height: normal;text-align: center" disabled
-                                                                               value="${Loudsourcing.start_date}"><span
-                                                                            class="input-group-addon" hidden><i
-                                                                            data-feather="calendar"></i></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-5">
-                                                                    <div class="input-group date datepicker"
-                                                                         id="dp-edit-loudsourcing-end-date">
-                                                                        <input type="text" class="form-control"
-                                                                               name="loudsourcing-end-date"
-                                                                               id="loudsourcing-end-date"
-                                                                               style="font-size: large;line-height: normal;text-align: center"
-                                                                               value="${Loudsourcing.end_date}"><span
-                                                                            class="input-group-addon" id="click-test"><i
-                                                                            data-feather="calendar"></i></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </c:when>
-                                                    </c:choose>
 
-                                                    <label class="label d-flex" for="recruitment-date"
-                                                           style="font-size: larger">
-                                                        모집 기간
-                                                    </label>
-                                                    <div class="row justify-content-around" id="recruitment-date">
-                                                        <div class="col-md-5">
+                                                    <ul id="tag-list"></ul>
+
+                                                    <div class="form-group">
+                                                        <input type="text" id="tag" size="7"
+                                                               placeholder="엔터로 해시태그를 등록해주세요. 최대 5자까지 가능하며 해시태그는 최대 10개 등록 가능합니다."
+                                                               style="width: 100%;"/>
+                                                    </div>
+                                                </div>
+                                                <label class="label d-flex" for="total-recruit-number"
+                                                       style="font-size: larger">
+                                                    총 모집 인원
+                                                </label>
+                                                <textarea class="form-control" id="total-recruit-number" rows="1"
+                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                >${Loudsourcing.total_recruitment_number}</textarea>
+                                                <label class="label d-flex" for="total-date"
+                                                       style="font-size: larger">
+                                                    총 기간
+                                                </label>
+                                                <c:choose>
+                                                    <c:when test="${Loudsourcing.status == 'recruitment'}">
+                                                        <div class="row justify-content-around" id="total-date">
+                                                            <div class="col-md-6">
+                                                                <div class="input-group date datepicker"
+                                                                     id="dp-edit-loudsourcing-start-date">
+                                                                    <input type="text" class="form-control"
+                                                                           name="loudsourcing-start-date"
+                                                                           id="loudsourcing-start-date"
+                                                                           onchange="copyStartDate()"
+                                                                           style="font-size: large;line-height: normal;text-align: center"
+                                                                           value="${Loudsourcing.start_date}"><span
+                                                                        class="input-group-addon"><i
+                                                                        data-feather="calendar"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input-group date datepicker"
+                                                                     id="dp-edit-loudsourcing-end-date">
+                                                                    <input type="text" class="form-control"
+                                                                           name="loudsourcing-end-date"
+                                                                           id="loudsourcing-end-date"
+                                                                           style="font-size: large;line-height: normal;text-align: center"
+                                                                           value="${Loudsourcing.end_date}"><span
+                                                                        class="input-group-addon" id="click-test"><i
+                                                                        data-feather="calendar"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:when test="${Loudsourcing.status == 'process'}">
+                                                        <div class="row justify-content-around" id="total-date">
+                                                            <div class="col-md-6">
+                                                                <div class="input-group date datepicker"
+                                                                     id="dp-edit-loudsourcing-start-date">
+                                                                    <input type="text" class="form-control"
+                                                                           name="loudsourcing-start-date"
+                                                                           id="loudsourcing-start-date"
+                                                                           onchange="copyStartDate()"
+                                                                           style="font-size: large;line-height: normal;text-align: center"
+                                                                           disabled
+                                                                           value="${Loudsourcing.start_date}"><span
+                                                                        class="input-group-addon" hidden><i
+                                                                        data-feather="calendar"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input-group date datepicker"
+                                                                     id="dp-edit-loudsourcing-end-date">
+                                                                    <input type="text" class="form-control"
+                                                                           name="loudsourcing-end-date"
+                                                                           id="loudsourcing-end-date"
+                                                                           style="font-size: large;line-height: normal;text-align: center"
+                                                                           value="${Loudsourcing.end_date}"><span
+                                                                        class="input-group-addon" id="click-test"><i
+                                                                        data-feather="calendar"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </c:when>
+                                                </c:choose>
+
+                                                <label class="label d-flex" for="recruitment-date"
+                                                       style="font-size: larger">
+                                                    모집 기간
+                                                </label>
+                                                <div class="row justify-content-around" id="recruitment-date">
+                                                    <div class="col-md-6">
                                                 <textarea class="form-control" id="recruitment-start-date" rows="1"
                                                           style="line-height: 150%; font-size: large; text-align: center"
                                                           disabled>${Loudsourcing.start_date}</textarea>
-                                                        </div>
-                                                        <div class="col-md-5">
-                                                            <div class="input-group date datepicker"
-                                                                 id="dp-edit-loudsourcing-recruitment-end-date">
-                                                                <input type="text" class="form-control"
-                                                                       name="loudsourcing-recruitment-end-date"
-                                                                       id="loudsourcing-recruitment-end-date"
-                                                                       style="font-size: large;line-height: normal;text-align: center"
-                                                                       onchange="copyProcessStartDate()"
-                                                                       value="${Loudsourcing.recruitment_end_date}"
-                                                                ><span
-                                                                    class="input-group-addon"><i
-                                                                    data-feather="calendar"></i></span>
-                                                            </div>
-                                                        </div>
                                                     </div>
-                                                    <label class="label d-flex" for="process-date"
-                                                           style="font-size: larger">
-                                                        진행 기간
-                                                    </label>
-                                                    <div class="row justify-content-around" id="process-date">
-                                                        <div class="col-md-5">
-                                                            <div class="input-group date datepicker"
-                                                                 id="dp-edit-loudsourcing-process-start-date">
-                                                                <input type="text" class="form-control"
-                                                                       name="loudsourcing-process-start-date"
-                                                                       id="loudsourcing-process-start-date"
-                                                                       style="font-size: large;line-height: normal;text-align: center"
-                                                                       disabled
-                                                                       value="${Loudsourcing.process_start_date}"
-                                                                ><span
-                                                                    class="input-group-addon" hidden><i
-                                                                    data-feather="calendar"></i></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-5">
-                                                            <div class="input-group date datepicker"
-                                                                 id="dp-edit-loudsourcing-process-end-date">
-                                                                <input type="text" class="form-control"
-                                                                       name="loudsourcing-process-end-date"
-                                                                       id="loudsourcing-process-end-date"
-                                                                       style="font-size: large;line-height: normal;text-align: center"
-                                                                       onchange="copyJudgeDate()"
-                                                                       value="${Loudsourcing.process_end_date}"
-                                                                ><span
-                                                                    class="input-group-addon"><i
-                                                                    data-feather="calendar"></i></span>
-                                                            </div>
+                                                    <div class="col-md-6">
+                                                        <div class="input-group date datepicker"
+                                                             id="dp-edit-loudsourcing-recruitment-end-date">
+                                                            <input type="text" class="form-control"
+                                                                   name="loudsourcing-recruitment-end-date"
+                                                                   id="loudsourcing-recruitment-end-date"
+                                                                   style="font-size: large;line-height: normal;text-align: center"
+                                                                   onchange="copyProcessStartDate()"
+                                                                   value="${Loudsourcing.recruitment_end_date}"
+                                                            ><span
+                                                                class="input-group-addon"><i
+                                                                data-feather="calendar"></i></span>
                                                         </div>
                                                     </div>
-                                                    <label class="label d-flex"
-                                                           style="font-size: larger">
-                                                        심사 시작 일자
-                                                    </label>
-                                                    <div class="input-group date datepicker"
-                                                         id="dp-edit-loudsourcing-judge-start-date">
-                                                        <input type="text" class="form-control"
-                                                               name="loudsourcing-judge-start-date"
-                                                               id="loudsourcing-judge-start-date"
-                                                               style="font-size: large;text-align: center" disabled
-                                                               value="${Loudsourcing.judge_date}"
-                                                        ><span
-                                                            class="input-group-addon" hidden><i
-                                                            data-feather="calendar"></i></span>
+                                                </div>
+                                                <label class="label d-flex" for="process-date"
+                                                       style="font-size: larger">
+                                                    진행 기간
+                                                </label>
+                                                <div class="row justify-content-around" id="process-date">
+                                                    <div class="col-md-6">
+                                                        <div class="input-group date datepicker"
+                                                             id="dp-edit-loudsourcing-process-start-date">
+                                                            <input type="text" class="form-control"
+                                                                   name="loudsourcing-process-start-date"
+                                                                   id="loudsourcing-process-start-date"
+                                                                   style="font-size: large;line-height: normal;text-align: center"
+                                                                   disabled
+                                                                   value="${Loudsourcing.process_start_date}"
+                                                            ><span
+                                                                class="input-group-addon" hidden><i
+                                                                data-feather="calendar"></i></span>
+                                                        </div>
                                                     </div>
-                                                    <label class="label d-flex"
-                                                           style="font-size: larger">
-                                                        파일
-                                                    </label>
-                                                    <div style="background-color: #d9dadb" id="file-list">
-                                                        <c:forEach var="i" begin="1" end="${files.size()}">
-                                                            <div class="mt-1 d-flex align-items-center justify-content-between">
-                                                                <a style="font-size: 15px; font-weight: bold; color: #6A6A6A; text-decoration: underline"
-                                                                   class="d-inline"
-                                                                   id="existed_file${i}"
-                                                                   onmouseover="this.style.color='#6FAAF2'"
-                                                                   onmouseout="this.style.color='#6A6A6A'"
-                                                                   href="${files[i-1].url}"><i
-                                                                        data-feather="file"></i>${files[i-1].name}</a>
-                                                                <button class="btn btn-outline-primary" type="button"
-                                                                        onclick="DeleteElement(this, null)"
-                                                                        style="float: right">X
-                                                                </button>
-                                                            </div>
-                                                            <script>
-                                                                file_number++;
-                                                            </script>
-                                                        </c:forEach>
-                                                        <input type="file" id="file-add-input-1" name="files"
-                                                               hidden/>
+                                                    <div class="col-md-6">
+                                                        <div class="input-group date datepicker"
+                                                             id="dp-edit-loudsourcing-process-end-date">
+                                                            <input type="text" class="form-control"
+                                                                   name="loudsourcing-process-end-date"
+                                                                   id="loudsourcing-process-end-date"
+                                                                   style="font-size: large;line-height: normal;text-align: center"
+                                                                   onchange="copyJudgeDate()"
+                                                                   value="${Loudsourcing.process_end_date}"
+                                                            ><span
+                                                                class="input-group-addon"><i
+                                                                data-feather="calendar"></i></span>
+                                                        </div>
                                                     </div>
-                                                    <script>
-                                                        function DeleteElement(elem, id) {
-                                                            elem.parentElement.remove();
-                                                            console.log(id);
-                                                            if(id != null){
-                                                                $(id).val('');
-                                                            }
-                                                            file_number--;
-                                                        }
-                                                    </script>
-                                                    <div class="col-md-4 mt-3"
-                                                         style="left: 50%; transform: translateX(-50%)">
-                                                        <button class="btn btn-block btn-outline-primary"
-                                                                id="file-add-btn"
-                                                                type="button"
-                                                                style="align-content: center">파일 추가
-                                                        </button>
+                                                </div>
+                                                <label class="label d-flex"
+                                                       style="font-size: larger">
+                                                    심사 시작 일자
+                                                </label>
+                                                <div class="input-group date datepicker"
+                                                     id="dp-edit-loudsourcing-judge-start-date">
+                                                    <input type="text" class="form-control"
+                                                           name="loudsourcing-judge-start-date"
+                                                           id="loudsourcing-judge-start-date"
+                                                           style="font-size: large;text-align: center" disabled
+                                                           value="${Loudsourcing.judge_date}"
+                                                    ><span
+                                                        class="input-group-addon" hidden><i
+                                                        data-feather="calendar"></i></span>
+                                                </div>
+                                                <label class="label d-flex"
+                                                       style="font-size: larger">
+                                                    파일 - [파일은 최대 3개까지 업로드 가능하며 파일 용량은 하나당 10MB를 넘을 수 없습니다.]
+                                                </label>
+                                                <div style="background-color: #ffffff; border: 1px solid black; line-height: 150%" id="file-list">
+                                                    <c:forEach var="i" begin="1" end="${files.size()}">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <a style="font-size: 15px; font-weight: bold; color: #6A6A6A; text-decoration: underline"
+                                                               class="d-inline"
+                                                               id="existed_file${i}"
+                                                               onmouseover="this.style.color='#6FAAF2'"
+                                                               onmouseout="this.style.color='#6A6A6A'"
+                                                               href="${files[i-1].url}"><i
+                                                                    data-feather="file"></i>${files[i-1].name}</a>
+                                                            <button class="btn btn-outline-primary" type="button"
+                                                                    onclick="DeleteElement(this, null)"
+                                                                    style="float: right; height: 35px">X
+                                                            </button>
+                                                        </div>
                                                         <script>
-                                                            $('#file-add-btn').click(function () {
-                                                                if (file_number >= 3) {
-                                                                    alert("파일은 최대 3개까지 업로드 가능합니다.");
-                                                                } else {
-                                                                    $('#file-add-input-' + input_index).click();
-                                                                    console.log(input_index);
-                                                                    $("#file-add-input-" + input_index).change(function () {
-                                                                        console.log("Before" + input_index);
-                                                                        if (this.files && this.files[0]) {
-                                                                            const reader = new FileReader;
-                                                                            reader.onload = function (data) {
-                                                                                console.log(data);
-                                                                                if(data.total > 10 * 1024 * 1024){
-                                                                                    alert("파일용량은 10MB를 넘길 수 없습니다.");
-                                                                                    $("#file-add-input-" + input_index).val('');
-                                                                                    return false;
-                                                                                } else {
-                                                                                    console.log("In " + input_index);
-                                                                                    console.log($('#file-add-input-' + input_index).val());
-                                                                                    const fileValue = $('#file-add-input-' + input_index).val().split("\\");
-                                                                                    const fileName = fileValue[fileValue.length - 1];
-                                                                                    input_index++;
-                                                                                    file_number++;
-                                                                                    console.log("After" + input_index);
-                                                                                    const now_index = input_index - 1;
-                                                                                    $("#file-list").append("<div class=\"mt-1 d-flex align-items-center justify-content-between\"><a style=\"font-size: 15px; font-weight: bold; color: #6A6A6A; text-decoration: underline\" class=\"d-inline\" onmouseover=\"this.style.color='#6FAAF2'\" onmouseout=\"this.style.color='#6A6A6A'\" href=\"javascript: void(0)\"><i data-feather=\"file\"></i>" + fileName + "</a><button class=\"btn btn-outline-primary\" type='button' style=\"float: right\" onclick=\"DeleteElement(this, '#file-add-input-" + now_index + "')\">X</button></div><input type=\"file\" id=\"file-add-input-" + input_index + "\" name=\"files\" hidden/>");
-                                                                                }
-                                                                            };
-                                                                            reader.readAsDataURL(this.files[0]);
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
+                                                            file_number++;
                                                         </script>
-                                                    </div>
+                                                    </c:forEach>
+                                                    <input type="file" id="file-add-input-1" name="files"
+                                                           hidden/>
+                                                </div>
+                                                <script>
+                                                    function DeleteElement(elem, id) {
+                                                        elem.parentElement.remove();
+                                                        console.log(id);
+                                                        if (id != null) {
+                                                            $(id).val('');
+                                                        }
+                                                        file_number--;
+                                                    }
+                                                </script>
+                                                <div class="col-md-4 mt-3"
+                                                     style="left: 50%; transform: translateX(-50%)">
+                                                    <button class="btn btn-block btn-outline-primary"
+                                                            id="file-add-btn"
+                                                            type="button"
+                                                            style="align-content: center">파일 추가
+                                                    </button>
                                                     <script>
-
+                                                        $('#file-add-btn').click(function () {
+                                                            if (file_number >= 3) {
+                                                                alert("파일은 최대 3개까지 업로드 가능합니다.");
+                                                            } else {
+                                                                $('#file-add-input-' + input_index).click();
+                                                                console.log(input_index);
+                                                                $("#file-add-input-" + input_index).change(function () {
+                                                                    console.log("Before" + input_index);
+                                                                    if (this.files && this.files[0]) {
+                                                                        const reader = new FileReader;
+                                                                        reader.onload = function (data) {
+                                                                            console.log(data);
+                                                                            if (data.total > 10 * 1024 * 1024) {
+                                                                                alert("파일용량은 10MB를 넘길 수 없습니다.");
+                                                                                $("#file-add-input-" + input_index).val('');
+                                                                                return false;
+                                                                            } else {
+                                                                                console.log("In " + input_index);
+                                                                                console.log($('#file-add-input-' + input_index).val());
+                                                                                const fileValue = $('#file-add-input-' + input_index).val().split("\\");
+                                                                                const fileName = fileValue[fileValue.length - 1];
+                                                                                input_index++;
+                                                                                file_number++;
+                                                                                console.log("After" + input_index);
+                                                                                const now_index = input_index - 1;
+                                                                                $("#file-list").append("<div class=\"d-flex align-items-center justify-content-between\"><a style=\"font-size: 15px; font-weight: bold; color: #6A6A6A; text-decoration: underline\" class=\"d-inline\" onmouseover=\"this.style.color='#6FAAF2'\" onmouseout=\"this.style.color='#6A6A6A'\" href=\"javascript: void(0)\"><i data-feather=\"file\"></i>" + fileName + "</a><button class=\"btn btn-outline-primary\" type='button' style=\"float: right; height: 35px\" onclick=\"DeleteElement(this, '#file-add-input-" + now_index + "')\">X</button></div><input type=\"file\" id=\"file-add-input-" + input_index + "\" name=\"files\" hidden/>");
+                                                                            }
+                                                                        };
+                                                                        reader.readAsDataURL(this.files[0]);
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
                                                     </script>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-3 justify-content-around">
-                                                <div class="col-md-11">
-                                                    <label class="label d-flex" for="loudsourcing-content"
-                                                           style="font-size: large">
-                                                        출품 안내
-                                                    </label>
-                                                    <textarea class="form-control" id="loudsourcing-content" rows="10"
-                                                              style="line-height: 150%; font-size: large"
-                                                    >${Loudsourcing.content}</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3 justify-content-around">
-                                                <div class="col-md-11">
-                                                    <label class="label d-flex" for="loudsourcing-warning"
-                                                           style="font-size: large">
-                                                        주의 사항
-                                                    </label>
-                                                    <textarea class="form-control" id="loudsourcing-warning" rows="10"
-                                                              style="line-height: 150%; font-size: large"
-                                                    >${Loudsourcing.warning}</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-4 mb-3 justify-content-around">
-                                                <div class="col-md-6 justify-content-center d-flex">
-                                                    <button type="button" class="btn btn-outline-primary"
-                                                            id="editButton">
-                                                        수정
-                                                    </button>
-                                                </div>
-                                                <div class="col-md-6 justify-content-center d-flex">
-                                                    <button type="button" class="btn btn-secondary"
-                                                            onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'">
-                                                        취소
-                                                    </button>
-                                                </div>
+                                                <script>
+
+                                                </script>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="row mt-3 justify-content-around">
+                                            <div class="col-md-12">
+                                                <label class="label d-flex" for="loudsourcing-content"
+                                                       style="font-size: large">
+                                                    출품 안내
+                                                </label>
+                                                <textarea class="form-control" id="loudsourcing-content" rows="10"
+                                                          style="line-height: 150%; font-size: large"
+                                                >${Loudsourcing.content}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 justify-content-around">
+                                            <div class="col-md-12">
+                                                <label class="label d-flex" for="loudsourcing-warning"
+                                                       style="font-size: large">
+                                                    주의 사항
+                                                </label>
+                                                <textarea class="form-control" id="loudsourcing-warning" rows="10"
+                                                          style="line-height: 150%; font-size: large"
+                                                >${Loudsourcing.warning}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4 mb-3 justify-content-around">
+                                            <div class="col-md-6 justify-content-center d-flex">
+                                                <button type="button" class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                        id="editButton">
+                                                    수정
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6 justify-content-center d-flex">
+                                                <button type="button" class="btn btn-secondary" style="width : 50%; height: 150%"
+                                                        onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'">
+                                                    취소
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- core:js -->
-    <script src="../assets/vendors/core/core.js"></script>
-    <!-- endinject -->
-    <!-- plugin js for this page -->
-    <script src="../assets/vendors/chartjs/Chart.min.js"></script>
-    <script src="../assets/vendors/jquery.flot/jquery.flot.js"></script>
-    <script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
-    <script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <script src="../assets/vendors/jquery-tags-input/jquery.tagsinput.min.js"></script>
-    <script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
-    <script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
-    <script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-    <script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <!-- end plugin js for this page -->
-    <!-- inject:js -->
-    <script src="../assets/vendors/feather-icons/feather.min.js"></script>
-    <script src="../assets/js/template.js"></script>
-    <script src="../assets/js/inspect.js"></script>
-    <script src="../assets/js/tags-input.js"></script>
-    <!-- endinject -->
-    <!-- custom js for this page -->
-    <script src="../assets/js/dashboard.js"></script>
-    <script src="../assets/js/datepicker.js"></script>
-    <script src="../assets/js/data-table.js"></script>
-    <!-- end custom js for this page -->
+<!-- core:js -->
+<script src="../assets/vendors/core/core.js"></script>
+<!-- endinject -->
+<!-- plugin js for this page -->
+<script src="../assets/vendors/chartjs/Chart.min.js"></script>
+<script src="../assets/vendors/jquery.flot/jquery.flot.js"></script>
+<script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
+<script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="../assets/vendors/jquery-tags-input/jquery.tagsinput.min.js"></script>
+<script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<!-- end plugin js for this page -->
+<!-- inject:js -->
+<script src="../assets/vendors/feather-icons/feather.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/inspect.js"></script>
+<script src="../assets/js/tags-input.js"></script>
+<!-- endinject -->
+<!-- custom js for this page -->
+<script src="../assets/js/dashboard.js"></script>
+<script src="../assets/js/datepicker.js"></script>
+<script src="../assets/js/data-table.js"></script>
+<!-- end custom js for this page -->
 
 </body>
 </html>

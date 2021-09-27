@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>VOD APP ADMIN</title>
+    <title>UCC 관리자 페이지</title>
     <!-- core:css -->
     <link rel="stylesheet" href="../assets/vendors/core/core.css">
     <!-- endinject -->
@@ -32,7 +32,7 @@
                         <div class="row">
                             <div class="col-md-8 pl-md-0">
                                 <div class="auth-form-wrapper px-4 py-5">
-                                    <a href="#" class="noble-ui-logo d-block mb-2"><span>VOD 앱</span></a>
+                                    <a href="#" class="noble-ui-logo d-block mb-2"><span>UCC 앱</span></a>
                                     <h5 class="text-muted font-weight-normal mb-4">관리자 페이지</h5>
                                     <form class="forms-sample" name="login-form">
                                         <div class="form-group">

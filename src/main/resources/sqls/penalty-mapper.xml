@@ -16,4 +16,7 @@
     <select id="getPenaltyList" resultType="Penalty">
         select * from penalty order by reg_date DESC
     </select>
+    <delete id="deletePenalty">
+        delete from penalty WHERE penalty_no=#{penalty_no}
+    </delete>
 </mapper>

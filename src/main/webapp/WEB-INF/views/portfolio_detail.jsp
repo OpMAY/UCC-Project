@@ -124,8 +124,8 @@
                                                     <label class="label" style="font-size: larger">
                                                         동영상
                                                     </label>
-                                                    <div style="position: center">
-                                                        <video style="width: 100%; height: auto" width="720"
+                                                    <div style="position: center; border: 1px solid black">
+                                                        <video style="width: 100%; height: 520px" width="720"
                                                                id="vod-video" controls>
                                                             <source src="${portfolio.file}" type="video/mp4">
                                                         </video>
@@ -143,7 +143,7 @@
                                                            style="font-size: large">
                                                         내용
                                                     </label>
-                                                    <textarea class="form-control" id="content-vod" rows="10"
+                                                    <textarea class="form-control" id="content-vod" rows="15"
                                                               style="line-height: 150%; font-size: large"
                                                               disabled>${portfolio.content}</textarea>
                                                 </div>
@@ -242,14 +242,14 @@
                                     </c:if>
                                     <div class="row mt-4 mb-3 justify-content-around">
                                         <div class="col-md-6 justify-content-center d-flex">
-                                            <button class="btn btn-outline-primary"
+                                            <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
                                                     onclick="if(confirm('포트폴리오를 삭제합니다.\n삭제 후 복구는 불가능합니다\n정말 삭제 하시겠습니까?')){DeletePortfolio(${portfolio.portfolio_no});} else {return false;}">
                                                 >
                                                 삭제
                                             </button>
                                         </div>
                                         <div class="col-md-6 justify-content-center d-flex">
-                                            <button class="btn btn-secondary"
+                                            <button class="btn btn-secondary" style="width : 50%; height: 150%"
                                                     onclick="window.location = document.referrer;">
                                                 돌아가기
                                             </button>

@@ -18,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -133,9 +130,9 @@ public class AdminService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public String getUserSNSByDate(String date){
+    public String getUserSNSByDate(String date) {
         try {
-            if(date == null){
+            if (date == null) {
                 log.info("No Date Error");
                 throw new BusinessException(new Exception());
             }
@@ -150,14 +147,429 @@ public class AdminService {
             snsUser.setAppleUser(appleUserList.size());
             snsUser.setGoogleUser(googleUserList.size());
             return new Gson().toJson(snsUser);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error";
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int changeArtistName(int artist_no) {
+        try {
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            boardDao.setSession(sqlSession);
+            portfolioDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            entryCommentDao.setSession(sqlSession);
+            boardCommentDao.setSession(sqlSession);
+            portfolioCommentDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            UUID uid = UUID.randomUUID();
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            artist.setArtist_name("부적절한 사용자" + uid.toString().substring(0,8));
+            artistDao.updateArtist(artist);
+            User user = userDao.selectUserByUserNo(artist.getUser_no());
+            List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user.getUser_no());
+            List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user.getUser_no());
+            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user.getUser_no());
+            List<Board> boardList = boardDao.getBoardListByArtistNo(artist.getArtist_no());
+            List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist.getArtist_no());
+            List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByArtistNo(artist.getArtist_no());
+            for (Board board : boardList) {
+                board.setArtist_profile_img(artist.getArtist_profile_img());
+                board.setArtist_name(artist.getArtist_name());
+                boardDao.updateBoard(board);
+            }
+
+            for (Portfolio portfolio : portfolioList) {
+                portfolio.setArtist_profile_img(artist.getArtist_profile_img());
+                portfolio.setArtist_name(artist.getArtist_name());
+                portfolioDao.updatePortfolio(portfolio);
+            }
+
+            for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
+                loudSourcingEntry.setArtist_profile_img(artist.getArtist_profile_img());
+                loudSourcingEntry.setArtist_name(artist.getArtist_name());
+                loudSourcingEntryDao.updateEntry(loudSourcingEntry);
+            }
+
+            for (BoardComment boardComment : boardCommentList) {
+                boardComment.setCommenter_name(artist.getArtist_name());
+                boardComment.setProfile_img(artist.getArtist_profile_img());
+                boardCommentDao.updateComment(boardComment);
+            }
+
+            for (PortfolioComment portfolioComment : portfolioCommentList) {
+                portfolioComment.setCommenter_name(artist.getArtist_name());
+                portfolioComment.setProfile_img(artist.getArtist_profile_img());
+                portfolioCommentDao.updateComment(portfolioComment);
+            }
+
+            for (EntryComment entryComment : entryCommentList) {
+                entryComment.setCommenter_name(artist.getArtist_name());
+                entryComment.setProfile_img(artist.getArtist_profile_img());
+                entryCommentDao.updateComment(entryComment);
+            }
+
+
+            if (user.getFcm_token() != null && user.isPush()) {
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.ADMIN_FCM, "아티스트님의 닉네임이 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 이름을 기본 이름으로 변경하였습니다.", new Gson().toJson(notificationNext));
+            } else {
+                log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+            }
+            //NOTIFICATION SET
+            Notification notification = new Notification();
+            notification.setUser_no(user.getUser_no());
+            notification.setType(NotificationType.ADMIN);
+            notification.setContent("아티스트님의 닉네임이 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 이름을 기본 이름으로 변경하였습니다.");
+            notification.setReg_date(Time.TimeFormatHMS());
+            NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+            notification.setNext(new Gson().toJson(notificationNext));
+            notificationDao.insertNotification(notification);
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int changeArtistProfileImg(int artist_no) {
+        try {
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            boardDao.setSession(sqlSession);
+            portfolioDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            entryCommentDao.setSession(sqlSession);
+            boardCommentDao.setSession(sqlSession);
+            portfolioCommentDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
+            artistDao.updateArtist(artist);
+            User user = userDao.selectUserByUserNo(artist.getUser_no());
+
+            List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user.getUser_no());
+            List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user.getUser_no());
+            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user.getUser_no());
+            List<Board> boardList = boardDao.getBoardListByArtistNo(artist.getArtist_no());
+            List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist.getArtist_no());
+            List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByArtistNo(artist.getArtist_no());
+            for (Board board : boardList) {
+                board.setArtist_profile_img(artist.getArtist_profile_img());
+                board.setArtist_name(artist.getArtist_name());
+                boardDao.updateBoard(board);
+            }
+
+            for (Portfolio portfolio : portfolioList) {
+                portfolio.setArtist_profile_img(artist.getArtist_profile_img());
+                portfolio.setArtist_name(artist.getArtist_name());
+                portfolioDao.updatePortfolio(portfolio);
+            }
+
+            for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
+                loudSourcingEntry.setArtist_profile_img(artist.getArtist_profile_img());
+                loudSourcingEntry.setArtist_name(artist.getArtist_name());
+                loudSourcingEntryDao.updateEntry(loudSourcingEntry);
+            }
+
+            for (BoardComment boardComment : boardCommentList) {
+                boardComment.setCommenter_name(artist.getArtist_name());
+                boardComment.setProfile_img(artist.getArtist_profile_img());
+                boardCommentDao.updateComment(boardComment);
+            }
+
+            for (PortfolioComment portfolioComment : portfolioCommentList) {
+                portfolioComment.setCommenter_name(artist.getArtist_name());
+                portfolioComment.setProfile_img(artist.getArtist_profile_img());
+                portfolioCommentDao.updateComment(portfolioComment);
+            }
+
+            for (EntryComment entryComment : entryCommentList) {
+                entryComment.setCommenter_name(artist.getArtist_name());
+                entryComment.setProfile_img(artist.getArtist_profile_img());
+                entryCommentDao.updateComment(entryComment);
+            }
+
+
+            if (user.getFcm_token() != null && user.isPush()) {
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.ADMIN_FCM, "아티스트님의 프로필 이미지가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 프로필 이미지를 기본 이미지로 변경하였습니다.", new Gson().toJson(notificationNext));
+            } else {
+                log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+            }
+            //NOTIFICATION SET
+            Notification notification = new Notification();
+            notification.setUser_no(user.getUser_no());
+            notification.setType(NotificationType.ADMIN);
+            notification.setContent("아티스트님의 프로필 이미지가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 프로필 이미지를 기본 이미지로 변경하였습니다.");
+            notification.setReg_date(Time.TimeFormatHMS());
+            NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+            notification.setNext(new Gson().toJson(notificationNext));
+            notificationDao.insertNotification(notification);
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int changeUserProfileImg(int user_no) {
+        try {
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            entryCommentDao.setSession(sqlSession);
+            boardCommentDao.setSession(sqlSession);
+            portfolioCommentDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            User user = userDao.selectUserByUserNo(user_no);
+            user.setProfile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
+            userDao.updateUser(user);
+            Artist artist = artistDao.getArtistByUserNo(user_no);
+
+            if (artist == null) {
+                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user_no);
+                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user_no);
+                List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user_no);
+
+                for (BoardComment boardComment : boardCommentList) {
+                    boardComment.setCommenter_name(user.getName());
+                    boardComment.setProfile_img(user.getProfile_img());
+                    boardCommentDao.updateComment(boardComment);
+                }
+
+                for (PortfolioComment portfolioComment : portfolioCommentList) {
+                    portfolioComment.setCommenter_name(user.getName());
+                    portfolioComment.setProfile_img(user.getProfile_img());
+                    portfolioCommentDao.updateComment(portfolioComment);
+                }
+
+                for (EntryComment entryComment : entryCommentList) {
+                    entryComment.setCommenter_name(user.getName());
+                    entryComment.setProfile_img(user.getProfile_img());
+                    entryCommentDao.updateComment(entryComment);
+                }
+
+                if (user.getFcm_token() != null && user.isPush()) {
+                    NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                    firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.ADMIN_FCM, "회원의 프로필 이미지가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 회원님의 유저 프로필 이미지를 기본 이미지로 변경하였습니다.", new Gson().toJson(notificationNext));
+                } else {
+                    log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+                }
+                //NOTIFICATION SET
+                Notification notification = new Notification();
+                notification.setUser_no(user.getUser_no());
+                notification.setType(NotificationType.ADMIN);
+                notification.setContent("회원님의 프로필 이미지가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 회원님의 유저 프로필 이미지를 기본 이미지로 변경하였습니다.");
+                notification.setReg_date(Time.TimeFormatHMS());
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                notification.setNext(new Gson().toJson(notificationNext));
+                notificationDao.insertNotification(notification);
+            }
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int changeUserName(int user_no) {
+        try {
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            entryCommentDao.setSession(sqlSession);
+            boardCommentDao.setSession(sqlSession);
+            portfolioCommentDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            UUID uid = UUID.randomUUID();
+            User user = userDao.selectUserByUserNo(user_no);
+            user.setName("부적절한 사용자" + uid.toString().substring(0,8));
+            userDao.updateUser(user);
+            Artist artist = artistDao.getArtistByUserNo(user_no);
+
+            if (artist == null) {
+                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user_no);
+                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user_no);
+                List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user_no);
+
+                for (BoardComment boardComment : boardCommentList) {
+                    boardComment.setCommenter_name(user.getName());
+                    boardComment.setProfile_img(user.getProfile_img());
+                    boardCommentDao.updateComment(boardComment);
+                }
+
+                for (PortfolioComment portfolioComment : portfolioCommentList) {
+                    portfolioComment.setCommenter_name(user.getName());
+                    portfolioComment.setProfile_img(user.getProfile_img());
+                    portfolioCommentDao.updateComment(portfolioComment);
+                }
+
+                for (EntryComment entryComment : entryCommentList) {
+                    entryComment.setCommenter_name(user.getName());
+                    entryComment.setProfile_img(user.getProfile_img());
+                    entryCommentDao.updateComment(entryComment);
+                }
+
+                if (user.getFcm_token() != null && user.isPush()) {
+                    NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                    firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.ADMIN_FCM, "회원님의 닉네임이 부적절한 내용이 포함되어 있다고 판단하여 관리자가 회원님의 닉네임을 기본 이름으로 변경하였습니다.", new Gson().toJson(notificationNext));
+                } else {
+                    log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+                }
+                //NOTIFICATION SET
+                Notification notification = new Notification();
+                notification.setUser_no(user.getUser_no());
+                notification.setType(NotificationType.ADMIN);
+                notification.setContent("회원님의 닉네임이 부적절한 내용이 포함되어 있다고 판단하여 관리자가 회원님의 닉네임을 기본 이름으로 변경하였습니다.");
+                notification.setReg_date(Time.TimeFormatHMS());
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                notification.setNext(new Gson().toJson(notificationNext));
+                notificationDao.insertNotification(notification);
+            }
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int changeArtistMainImg(int artist_no) {
+        try {
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
+            artistDao.updateArtist(artist);
+            User user = userDao.selectUserByUserNo(artist.getUser_no());
+            if (user.getFcm_token() != null && user.isPush()) {
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.ADMIN_FCM, "아티스트님의 메인 이미지가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 메인 이미지를 기본 이미지로 변경하였습니다.", new Gson().toJson(notificationNext));
+            } else {
+                log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+            }
+            //NOTIFICATION SET
+            Notification notification = new Notification();
+            notification.setUser_no(user.getUser_no());
+            notification.setType(NotificationType.ADMIN);
+            notification.setContent("아티스트님의 메인 이미지가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 메인 이미지를 기본 이미지로 변경하였습니다.");
+            notification.setReg_date(Time.TimeFormatHMS());
+            NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+            notification.setNext(new Gson().toJson(notificationNext));
+            notificationDao.insertNotification(notification);
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int resetArtistExplain(int artist_no) {
+        try{
+            artistDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            artist.setExplain("");
+            artistDao.updateArtist(artist);
+            User user = userDao.selectUserByUserNo(artist.getUser_no());
+            if (user.getFcm_token() != null && user.isPush()) {
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.ADMIN_FCM, "아티스트님의 아티스트 설명이 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 아티스트 설명을 초기화하였습니다.", new Gson().toJson(notificationNext));
+            } else {
+                log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+            }
+            //NOTIFICATION SET
+            Notification notification = new Notification();
+            notification.setUser_no(user.getUser_no());
+            notification.setType(NotificationType.ADMIN);
+            notification.setContent("아티스트님의 아티스트 설명에 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 아티스트 설명을 초기화하였습니다.");
+            notification.setReg_date(Time.TimeFormatHMS());
+            NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+            notification.setNext(new Gson().toJson(notificationNext));
+            notificationDao.insertNotification(notification);
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int resetArtistHashTag(int artist_no) {
+        try{
+            artistDao.setSession(sqlSession);
+            notificationDao.setSession(sqlSession);
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            artist.setHashtag(null);
+            artistDao.updateArtist(artist);
+            User user = userDao.selectUserByUserNo(artist.getUser_no());
+            if (user.getFcm_token() != null && user.isPush()) {
+                NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.ADMIN_FCM, "아티스트님의 해시태그가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 해시태그를 초기화하였습니다.", new Gson().toJson(notificationNext));
+            } else {
+                log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+            }
+            //NOTIFICATION SET
+            Notification notification = new Notification();
+            notification.setUser_no(user.getUser_no());
+            notification.setType(NotificationType.ADMIN);
+            notification.setContent("아티스트님의 해시태그가 부적절한 내용이 포함되어 있다고 판단하여 관리자가 아티스트님의 해시태그를 초기화하였습니다.");
+            notification.setReg_date(Time.TimeFormatHMS());
+            NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+            notification.setNext(new Gson().toJson(notificationNext));
+            notificationDao.insertNotification(notification);
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int resetUserPenalty(int user_no) {
+        try{
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            penaltyDao.setSession(sqlSession);
+            boardDao.setSession(sqlSession);
+            User user = userDao.selectUserByUserNo(user_no);
+            Artist artist = artistDao.getArtistByUserNo(user_no);
+            List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
+            user.set_user_private(false);
+            if(artist != null){
+                artist.setArtist_private(false);
+                artistDao.updateArtist(artist);
+                List<Board> boardList = boardDao.getBoardListByArtistNo(artist.getArtist_no());
+                for(Board board : boardList){
+                    board.setBoard_private(false);
+                    boardDao.updateBoardByPenalty(board);
+                }
+            }
+            Penalty penalty = penaltyList.get(0);
+            penaltyDao.deletePenalty(penalty.getPenalty_no());
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
     @Data
-    class SnsUser{
+    class SnsUser {
         private int kakaoUser;
         private int naverUser;
         private int googleUser;
@@ -211,7 +623,7 @@ public class AdminService {
             adminComment.setType("게시글");
             adminComment.setContent(boardComment.getContent());
             adminComment.setWriter_name(boardComment.getCommenter_name());
-            adminComment.setReg_date(Time.MsToSecond(boardComment.getReg_date()));
+            adminComment.setReg_date(Time.MsToSecond(boardComment.getReg_date().substring(0, boardComment.getReg_date().lastIndexOf("."))));
             adminCommentList.add(adminComment);
         }
         for (PortfolioComment portfolioComment : portfolioCommentList) {
@@ -222,7 +634,7 @@ public class AdminService {
             adminComment.setType("포트폴리오");
             adminComment.setContent(portfolioComment.getContent());
             adminComment.setWriter_name(portfolioComment.getCommenter_name());
-            adminComment.setReg_date(portfolioComment.getReg_date());
+            adminComment.setReg_date(portfolioComment.getReg_date().substring(0, portfolioComment.getReg_date().lastIndexOf(".")));
             adminCommentList.add(adminComment);
         }
         for (EntryComment entryComment : entryCommentList) {
@@ -233,7 +645,7 @@ public class AdminService {
             adminComment.setType("크라우드");
             adminComment.setContent(entryComment.getContent());
             adminComment.setWriter_name(entryComment.getCommenter_name());
-            adminComment.setReg_date(entryComment.getReg_date());
+            adminComment.setReg_date(entryComment.getReg_date().substring(0, entryComment.getReg_date().lastIndexOf(".")));
             adminCommentList.add(adminComment);
         }
 
@@ -506,7 +918,7 @@ public class AdminService {
                 log.info(filelist);
             }
         }
-
+        portfolio.setRevise_date(portfolio.getRevise_date().substring(0, portfolio.getRevise_date().lastIndexOf(".")));
 
         modelAndView.addObject("portfolio", portfolio);
 
@@ -537,6 +949,7 @@ public class AdminService {
         for (Spon spon : sponList) {
             board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
         }
+        board.setRevise_date(board.getRevise_date().substring(0, board.getRevise_date().lastIndexOf(".")));
 
         modelAndView.addObject("board", board);
 
@@ -732,13 +1145,13 @@ public class AdminService {
         Gson gson = new Gson();
         FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
         ArrayList<Upload> uploads = new ArrayList<>();
-        if(fileJson != null) {
+        if (fileJson != null) {
             for (FileJson json : fileJson) {
                 uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
             }
         }
         modelAndView.addObject("files", uploads);
-        if(loudSourcing.getHashtag() != null){
+        if (loudSourcing.getHashtag() != null) {
             ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(",")));
             ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
             loudSourcing.setHashtag(new Gson().toJson(modified_HashtagList));
@@ -746,6 +1159,16 @@ public class AdminService {
             System.out.println(modified_HashtagList);
         }
         modelAndView.addObject("Loudsourcing", loudSourcing);
+        if(loudSourcing.getStatus().equals("judge")){
+            int preSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudsourcing_no).size();
+            int unPreSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudsourcing_no).size();
+            modelAndView.addObject("preSelectedNum", preSize);
+            modelAndView.addObject("unPreSelectedNum", unPreSize);
+
+        } else if(loudSourcing.getStatus().equals("end")){
+            int finalSelected = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no).size();
+            modelAndView.addObject("final_selected_num", finalSelected);
+        }
 
 
         return modelAndView;
@@ -773,7 +1196,7 @@ public class AdminService {
             if (loudSourcing.getImg() == null)
                 loudSourcing.setImg(original_loudsourcing.getImg());
             log.info(4);
-            if(loudSourcing.getHashtag() != null) {
+            if (loudSourcing.getHashtag() != null) {
                 loudSourcing.setHashtag(loudSourcing.getHashtag().replace("[", "").replace("]", "").replace("\"", ""));
             }
             loudSourcing.setType(original_loudsourcing.getType());
@@ -800,7 +1223,7 @@ public class AdminService {
         try {
             loudSourcingDao.setSession(sqlSession);
             String time = Time.TimeFormatHMS();
-            if(loudSourcing.getHashtag() != null) {
+            if (loudSourcing.getHashtag() != null) {
                 loudSourcing.setHashtag(loudSourcing.getHashtag().replace("[", "").replace("]", "").replace("\"", ""));
             }
             loudSourcing.setReg_date(time);
@@ -926,6 +1349,7 @@ public class AdminService {
         loudSourcingApplyDao.setSession(sqlSession);
         userDao.setSession(sqlSession);
         artistDao.setSession(sqlSession);
+        penaltyDao.setSession(sqlSession);
         modelAndView = new ModelAndView("entry_detail");
         LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(artist_no, loudsourcing_no);
         if (apply == null) {
@@ -934,17 +1358,20 @@ public class AdminService {
         Artist artist = artistDao.getArtistByArtistNo(artist_no);
         if (artist.getHashtag() != null) {
             ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
-            ArrayList<String> modified_HashtagList = new ArrayList<>();
-            for (String str : hashtagList) {
-                modified_HashtagList.add("#" + str);
-            }
-            artist.setHashtag_list(modified_HashtagList);
-            log.info(hashtagList);
+            ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
+            artist.setHashtag(new Gson().toJson(modified_HashtagList));
+            log.info(modified_HashtagList);
+            System.out.println(modified_HashtagList);
         }
         User user = userDao.selectUserByUserNo(artist.getUser_no());
         LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist_no, loudsourcing_no);
         LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+        List<Penalty> penaltyList = penaltyDao.getPenaltyListByArtistNo(artist_no);
+        if (artist.isArtist_private() && penaltyList.size() > 0) {
+            modelAndView.addObject("penalty", penaltyList.get(0));
+        }
         modelAndView.addObject("status", loudSourcing.getStatus());
+        modelAndView.addObject("penalty_num", penaltyList.size());
         modelAndView.addObject("Artist", artist);
         modelAndView.addObject("loudsourcing_no", loudsourcing_no);
         modelAndView.addObject("preSelected", apply.is_pre_selected());
@@ -1855,6 +2282,9 @@ public class AdminService {
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             boardDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
             String now = Time.TimeFormatDay();
             Date nowDate = Time.StringToDateFormat(now);
             Date penalty_start_date = Time.StringToDateFormat(penalty.getPenalty_start_date());
@@ -1880,6 +2310,34 @@ public class AdminService {
                     for (Board board : boardList) {
                         board.setBoard_private(true);
                         boardDao.updateBoardByPenalty(board);
+                    }
+                    List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByArtistNo(artist.getArtist_no());
+                    List<LoudSourcing> loudSourcingList = new ArrayList<>();
+                    for(LoudSourcingApply apply : applyList){
+                        LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(apply.getLoudsourcing_no());
+                        loudSourcingList.add(loudSourcing);
+                    }
+
+                    for(LoudSourcing loudSourcing : loudSourcingList){
+                        int loudsourcing_no = loudSourcing.getLoudsourcing_no();
+                        int artist_no = artist.getArtist_no();
+                        switch (loudSourcing.getStatus()) {
+                            case "recruitment":
+                                loudSourcingApplyDao.deleteLoudSourcingApply(artist_no, loudsourcing_no);
+                                break;
+                            case "process":
+                                loudSourcingApplyDao.deleteLoudSourcingApply(artist_no, loudsourcing_no);
+                                LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist_no, loudsourcing_no);
+                                if (entry != null) {
+                                    loudSourcingEntryDao.deleteEntry(entry.getEntry_no());
+                                }
+                                break;
+                            case "judge":
+                                LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(artist_no, loudsourcing_no);
+                                apply.set_pre_selected(false);
+                                loudSourcingApplyDao.updateApplyForJudge(apply);
+                                break;
+                        }
                     }
                 }
             }

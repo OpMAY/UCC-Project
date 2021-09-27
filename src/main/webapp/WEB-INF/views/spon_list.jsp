@@ -60,18 +60,18 @@
                             <h6 class="card-title" style="font-size: x-large">후원 관리
                             </h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>후원한 사용자</th>
-                                        <th>후원받은 사용자</th>
-                                        <th>후원 종류</th>
-                                        <th>후원 일자</th>
-                                        <th>승인 여부</th>
-                                        <th>금액</th>
-                                        <th>자세히 보기</th>
-                                        <th>송금 처리</th>
+                                        <th width="10px">#</th>
+                                        <th width="30px">후원한 사용자</th>
+                                        <th width="30px">후원받은 사용자</th>
+                                        <th width="30px">후원 종류</th>
+                                        <th width="60px">후원 일자</th>
+                                        <th width="30px">승인 여부</th>
+                                        <th width="70px">금액</th>
+                                        <th width="40px">자세히 보기</th>
+                                        <th width="50px">송금 처리</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -79,10 +79,12 @@
                                     <c:forEach var="i" begin="1" end="${sponList.size()}">
                                     <tr>
                                         <td>${i}</td>
-                                        <td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">
                                             ${sponList[i-1].user_name}
                                         </td>
-                                        <td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">
                                                 ${sponList[i-1].artist_name}
                                         </td>
                                         <td>
@@ -95,7 +97,8 @@
                                                 </c:when>
                                             </c:choose>
                                         </td>
-                                        <td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">
                                                 ${sponList[i-1].spon_date}
                                         </td>
                                         <td>
@@ -108,7 +111,8 @@
                                                 </c:when>
                                             </c:choose>
                                         </td>
-                                        <td>
+                                        <td class="overflow-hidden"
+                                            style="text-overflow: ellipsis">
                                             ${sponList[i-1].price}원
                                         </td>
                                         <td>

@@ -35,4 +35,9 @@ public class PenaltyDao {
         PenaltyMapper penaltyMapper = sqlSession.getMapper(PenaltyMapper.class);
         return penaltyMapper.getPenaltyList();
     }
+
+    public void deletePenalty(int penalty_no){
+        PenaltyMapper penaltyMapper = sqlSession.getMapper(PenaltyMapper.class);
+        penaltyMapper.deletePenalty(penalty_no);
+    }
 }

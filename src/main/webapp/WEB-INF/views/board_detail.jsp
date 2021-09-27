@@ -129,14 +129,14 @@
                                     </div>
                                     <div class="row mt-4 mb-3 justify-content-around">
                                         <div class="col-md-6 justify-content-center d-flex">
-                                            <button class="btn btn-outline-primary"
+                                            <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
                                                     onclick="if(confirm('정말 삭제 하시겠습니까?')){DeleteBoard(${board.board_no});} else {return false;}">
                                                 >
                                                 삭제
                                             </button>
                                         </div>
                                         <div class="col-md-6 justify-content-center d-flex">
-                                            <button class="btn btn-secondary" onclick="window.location = document.referrer;">
+                                            <button class="btn btn-secondary" style="width : 50%; height: 150%" onclick="window.location = document.referrer;">
                                                 돌아가기
                                             </button>
                                         </div>

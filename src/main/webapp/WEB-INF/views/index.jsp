@@ -23,9 +23,6 @@
     <link rel="stylesheet" href="../assets/css/demo_1/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../assets/images/favicon.png"/>
-    <script>
-
-    </script>
 </head>
 <body>
 <div class="main-wrapper">
@@ -56,16 +53,16 @@
                                 <h6 class="card-title mb-3">미답변 문의 <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="미답변 문의 중 가장 오래된 순으로 표시됩니다."></i></h6>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0" id="inquiry-table">
+                                <table id="index-inquiry-table" class="table table-hover mb-0" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th class="pt-0" style="width: 10px">#</th>
-                                        <th class="pt-0" style="width: 30px">작성자 명</th>
-                                        <th class="pt-0" style="width: 30px">제목</th>
-                                        <th class="pt-0" style="width: 30px">답변 상태</th>
-                                        <th class="pt-0" style="width: 30px">생성일자</th>
-                                        <th class="pt-0" style="width: 30px">문의 종류</th>
-                                        <th class="pt-0" style="width: 30px">자세히 보기</th>
+                                        <th style="width: 0.625rem">#</th>
+                                        <th style="width: 2.5rem">작성자 명</th>
+                                        <th style="width: 6.25rem">제목</th>
+                                        <th style="width: 2.188rem">답변 상태</th>
+                                        <th style="width: 5.625rem">생성일자</th>
+                                        <th style="width: 3.438rem">문의 종류</th>
+                                        <th style="width: 3.0rem">자세히 보기</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -115,13 +112,13 @@
                                 <h6 class="card-title">가입 SNS <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="설정한 날짜의 SNS 회원가입 인원 수가 표시됩니다."></i></h6>
                                 <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
                                      id="index-date">
-                                    <input type="text" class="form-control" name="sns-date" id="sns-date"><span
+                                    <input type="text" class="form-control" name="index-sns-date" id="index-sns-date"><span
                                         class="input-group-addon bg-transparent"><i
                                         data-feather="calendar"></i></span>
                                 </div>
                             </div>
                             <div class="table-responsive my-auto">
-                                <table class="table table-hover mb-0" id="sns-table">
+                                <table class="table table-hover mb-0" id="index-sns-table">
                                     <thead>
                                     <tr>
                                         <th class="pt-0">가입 방식</th>
@@ -161,19 +158,19 @@
                                 <h6 class="card-title mb-4">최신 크라우드 현황 <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="모집 상태의 크라우드가 최신 순으로 표시됩니다."></i></h6>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0" style="table-layout: fixed">
+                                <table class="table table-hover mb-0" id="index-loudsourcing-table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th class="pt-0" width="30px">#</th>
-                                        <th class="pt-0" width="150px">공모전 이름</th>
-                                        <th class="pt-0" width="50px">상태</th>
-                                        <th class="pt-0" width="50px">참여인원</th>
-                                        <th class="pt-0" width="150px">총 기간</th>
-                                        <th class="pt-0" width="150px">모집 기간</th>
-                                        <th class="pt-0" width="150px">진행 기간</th>
-                                        <th class="pt-0" width="80px">참여 인원 리스트</th>
-                                        <th class="pt-0" width="80px">자세히 보기</th>
-                                        <th class="pt-0" width="80px">삭제</th>
+                                        <th class="pt-0" style="width: 0.625rem" >#</th>
+                                        <th class="pt-0" style="width: 9.375rem">공모전 이름</th>
+                                        <th class="pt-0" style="width: 3.125rem">상태</th>
+                                        <th class="pt-0" style="width: 3.125rem">참여인원</th>
+                                        <th class="pt-0" style="width: 9.375rem">총 기간</th>
+                                        <th class="pt-0" style="width: 9.375rem">모집 기간</th>
+                                        <th class="pt-0" style="width: 9.375rem">진행 기간</th>
+                                        <th class="pt-0" style="width: 4rem">참여 인원 리스트</th>
+                                        <th class="pt-0" style="width: 4rem">자세히 보기</th>
+                                        <th class="pt-0" style="width: 4rem">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -261,7 +258,9 @@
 <script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
 <script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <!-- end plugin js for this page -->
 <!-- inject:js -->
 <script src="../assets/vendors/feather-icons/feather.min.js"></script>
@@ -276,11 +275,36 @@
     $(document).ready(function() {
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-        })
-    })
+        });
+        $('#index-inquiry-table').DataTable({
+            "paging" : false,
+            "ordering" : false,
+            "lengthChange" : false,
+            "searching" : false,
+            "scrollX" : false,
+            "info" : false
+        });
+        $('#index-sns-table').DataTable({
+            "paging" : false,
+            "ordering" : false,
+            "lengthChange" : false,
+            "searching" : false,
+            "scrollX" : false,
+            "info" : false
+        });
+        $('#index-loudsourcing-table').DataTable({
+            "paging" : false,
+            "ordering" : false,
+            "lengthChange" : false,
+            "searching" : false,
+            "scrollX" : false,
+            "info" : false
+        });
+    });
+
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-    })
+    });
     function DeleteLoudSourcing(loudsourcing_no) {
         let data = {"loudsourcing_no": loudsourcing_no};
         $.ajax({
@@ -305,10 +329,10 @@
         })
     }
 
-    $("#sns-date").on("change", function () {
-        console.log("value : " + $("#sns-date").val());
-        GetSnsInfo($("#sns-date").val());
-    })
+    $("#index-sns-date").on("change", function () {
+        console.log("value : " + $("#index-sns-date").val());
+        GetSnsInfo($("#index-sns-date").val());
+    });
 
     function GetSnsInfo(date) {
         let data = {"date": date};
@@ -328,7 +352,7 @@
                 console.log("kakaoUser : " + result.kakaoUser);
                 console.log("googleUser : " + result.googleUser);
                 console.log("appleUser : " + result.appleUser);
-                let sns_table = document.getElementById('sns-table');
+                let sns_table = document.getElementById('index-sns-table');
                 sns_table.rows[1].cells[1].innerHTML = result.naverUser + " 회";
                 sns_table.rows[2].cells[1].innerHTML = result.kakaoUser + " 회";
                 sns_table.rows[3].cells[1].innerHTML = result.googleUser + " 회";

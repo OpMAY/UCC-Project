@@ -67,16 +67,16 @@
                                 </button>
                             </h6>
                             <div class="table-responsive">
-                                <table id="dataTableExample" class="table">
+                                <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>배너이미지</th>
-                                        <th>등록 일자</th>
-                                        <th>상태 변경 하기</th>
-                                        <th>변동 일자</th>
-                                        <th>자세히 보기</th>
-                                        <th>삭제</th>
+                                        <th width="10px">#</th>
+                                        <th width="180px">배너이미지</th>
+                                        <th width="70px">등록 일자</th>
+                                        <th width="60px">상태 변경 하기</th>
+                                        <th width="70px">변동 일자</th>
+                                        <th width="50px">자세히 보기</th>
+                                        <th width="50px">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>

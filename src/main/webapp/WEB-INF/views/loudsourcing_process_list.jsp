@@ -58,7 +58,13 @@
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_judge.do">
                                 심사 </a><a
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
-                                종료 </a></h6>
+                                종료 </a><button type="button"
+                                               class="btn btn-outline-primary btn-icon-text"
+                                               style="float: right"
+                                               onclick="setLoudSourcingToJudge()">
+                                <i class="btn-icon-prepend" data-feather="refresh-ccw"></i>
+                                심사 수동 업데이트
+                            </button><span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="자동으로 심사 업데이트가 되지 않았을 때 클릭하면 됩니다. &#13; 단, 출품작이 하나도 등록되지 않았을 경우 심사로 업데이트 되지 않습니다."><i data-feather="help-circle"></i></span></h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
@@ -160,5 +166,26 @@
 <script src="../assets/js/datepicker.js"></script>
 <script src="../assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
+<script>
+    function setLoudSourcingToJudge(){
+        $.ajax({
+            type: 'POST',
+            url: '/admin/loudsourcing/set/judge.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        }).done(function (result) {
+            if (result === 1) {
+                alert("진행 기간이 지난 크라우드를 심사로 업데이트 하였습니다.");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error);
+            window.location.reload();
+        })
+    }
+</script>
 </body>
 </html>
