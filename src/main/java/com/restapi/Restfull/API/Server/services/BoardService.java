@@ -433,7 +433,9 @@ public class BoardService {
                     for (BoardComment boardComment1 : boardCommentList1) {
                         if (boardComment1.getUser_no() != board_artist_user.getUser_no()) {
                             User user1 = userDao.selectUserByUserNo(boardComment1.getUser_no());
-                            userList.add(user1);
+                            if(!userList.contains(user1)) {
+                                userList.add(user1);
+                            }
                         }
                     }
 

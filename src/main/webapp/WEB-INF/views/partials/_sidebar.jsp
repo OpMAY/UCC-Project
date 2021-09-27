@@ -111,6 +111,13 @@
           <span class="link-title">배너 관리</span>
         </a>
       </li>
+      <li class="nav-item nav-category">커스텀 알림</li>
+      <li class="nav-item">
+        <a href="/admin/messages.do" class="nav-link">
+          <i class="link-icon" data-feather="edit"></i>
+          <span class="link-title">알림 제작 및 전송</span>
+        </a>
+      </li>
     </ul>
   </div>
 </nav>

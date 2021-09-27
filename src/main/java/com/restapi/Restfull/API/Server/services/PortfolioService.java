@@ -467,7 +467,9 @@ public class PortfolioService {
                         for (PortfolioComment portfolioComment1 : portfolioCommentList1) {
                             if (portfolioComment1.getUser_no() != portfolio_artist_user.getUser_no()) {
                                 User user1 = userDao.selectUserByUserNo(portfolioComment1.getUser_no());
-                                userList.add(user1);
+                                if(!userList.contains(user1)) {
+                                    userList.add(user1);
+                                }
                             }
                         }
 

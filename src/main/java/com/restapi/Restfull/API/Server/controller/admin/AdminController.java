@@ -1127,6 +1127,12 @@ public class AdminController implements ControllerInitialize {
         }
     }
 
+    @GetMapping("/admin/messages.do")
+    public ModelAndView CustomMessagePage(){
+        init("GET CustomMessagePage");
+        return adminService.customMessagePage();
+    }
+
     private String uploadFile(String originalName, MultipartFile mfile, String content_info, String type) throws IOException {
         UUID uid = UUID.randomUUID();
         originalName = originalName.replace(" ", "");

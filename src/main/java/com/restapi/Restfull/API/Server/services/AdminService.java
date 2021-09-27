@@ -568,6 +568,13 @@ public class AdminService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView customMessagePage() {
+        modelAndView = new ModelAndView("");
+
+        return modelAndView;
+    }
+
     @Data
     class SnsUser {
         private int kakaoUser;
