@@ -113,11 +113,17 @@
       </li>
       <li class="nav-item nav-category">커스텀 알림</li>
       <li class="nav-item">
-        <a href="/admin/messages.do" class="nav-link">
+        <a style="cursor: pointer" onclick="openWindowPopPush('/admin/messages.do', 'Push 알림 전송하기')" class="nav-link">
           <i class="link-icon" data-feather="edit"></i>
           <span class="link-title">알림 제작 및 전송</span>
         </a>
       </li>
+      <script>
+        function openWindowPopPush(url, name){
+          let options = 'top=10, left=10, width=720, height=680, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+          window.open(url, name, options);
+        }
+      </script>
     </ul>
   </div>
 </nav>

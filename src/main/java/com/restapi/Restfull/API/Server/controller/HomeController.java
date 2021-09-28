@@ -12,7 +12,9 @@ import com.restapi.Restfull.API.Server.services.CDNService;
 import com.restapi.Restfull.API.Server.services.SecurityService;
 import com.restapi.Restfull.API.Server.services.TestService;
 import com.restapi.Restfull.API.Server.services.UserService;
+import com.restapi.Restfull.API.Server.utility.FileConverter;
 import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
+import com.restapi.Restfull.API.Server.utility.ImageConverter;
 import com.restapi.Restfull.API.Server.utility.VideoUtility;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -213,6 +215,22 @@ public class HomeController {
         } catch (JSONException e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.TEST_FAILED), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/api/image/blur", method = RequestMethod.POST)
+    public ResponseEntity MakeImageBlur(@RequestParam("img") MultipartFile img){
+        try{
+            FileConverter fileConverter = new FileConverter();
+            ImageConverter imageConverter = new ImageConverter();
+            File imgFile = fileConverter.convert(img, "temp" + img.getOriginalFilename());
+            File blurredFile = imageConverter.blurImage(imgFile);
+            log.info("imgFile Path : " + imgFile.getAbsolutePath());
+            log.info("Blurred File Path : " + blurredFile.getAbsolutePath());
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS), HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.TEST_FAILED), HttpStatus.OK);
         }
     }
 

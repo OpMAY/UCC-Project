@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
@@ -168,7 +169,7 @@ public class AdminService {
             FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
             UUID uid = UUID.randomUUID();
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            artist.setArtist_name("부적절한 사용자" + uid.toString().substring(0,8));
+            artist.setArtist_name("부적절한 사용자" + uid.toString().substring(0, 8));
             artistDao.updateArtist(artist);
             User user = userDao.selectUserByUserNo(artist.getUser_no());
             List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user.getUser_no());
@@ -392,7 +393,7 @@ public class AdminService {
             FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
             UUID uid = UUID.randomUUID();
             User user = userDao.selectUserByUserNo(user_no);
-            user.setName("부적절한 사용자" + uid.toString().substring(0,8));
+            user.setName("부적절한 사용자" + uid.toString().substring(0, 8));
             userDao.updateUser(user);
             Artist artist = artistDao.getArtistByUserNo(user_no);
 
@@ -477,7 +478,7 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public int resetArtistExplain(int artist_no) {
-        try{
+        try {
             artistDao.setSession(sqlSession);
             notificationDao.setSession(sqlSession);
             FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
@@ -501,7 +502,7 @@ public class AdminService {
             notification.setNext(new Gson().toJson(notificationNext));
             notificationDao.insertNotification(notification);
             return 0;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
@@ -509,7 +510,7 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public int resetArtistHashTag(int artist_no) {
-        try{
+        try {
             artistDao.setSession(sqlSession);
             notificationDao.setSession(sqlSession);
             FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
@@ -533,7 +534,7 @@ public class AdminService {
             notification.setNext(new Gson().toJson(notificationNext));
             notificationDao.insertNotification(notification);
             return 0;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
@@ -541,7 +542,7 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public int resetUserPenalty(int user_no) {
-        try{
+        try {
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             penaltyDao.setSession(sqlSession);
@@ -550,11 +551,11 @@ public class AdminService {
             Artist artist = artistDao.getArtistByUserNo(user_no);
             List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
             user.set_user_private(false);
-            if(artist != null){
+            if (artist != null) {
                 artist.setArtist_private(false);
                 artistDao.updateArtist(artist);
                 List<Board> boardList = boardDao.getBoardListByArtistNo(artist.getArtist_no());
-                for(Board board : boardList){
+                for (Board board : boardList) {
                     board.setBoard_private(false);
                     boardDao.updateBoardByPenalty(board);
                 }
@@ -562,7 +563,7 @@ public class AdminService {
             Penalty penalty = penaltyList.get(0);
             penaltyDao.deletePenalty(penalty.getPenalty_no());
             return 0;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
@@ -570,9 +571,45 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView customMessagePage() {
-        modelAndView = new ModelAndView("");
-
+        modelAndView = new ModelAndView("push_message");
         return modelAndView;
+    }
+
+    @Transactional(readOnly = true)
+    public int sendCustomMessage(String title, String content, String send_to) {
+        try {
+            FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            List<User> userList = new ArrayList<>();
+            if(send_to.equals("user")){
+                userList = userDao.getAllUserList();
+            } else if (send_to.equals("artist")){
+                List<Artist> artistList = artistDao.getAllArtists();
+                for(Artist artist : artistList){
+                    int user_no = artist.getUser_no();
+                    User user = userDao.selectUserByUserNo(user_no);
+                    userList.add(user);
+                }
+            } else {
+                throw new Exception("wrong send_to");
+            }
+            NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
+            for(User user : userList){
+                if (user.getFcm_token() != null && user.isPush()) {
+                    log.info("Sending Message To user_no : " + user.getUser_no());
+                    firebaseMessagingSnippets.push(user.getFcm_token(), title, content, new Gson().toJson(notificationNext));
+                } else if(user.getFcm_token() == null) {
+                    log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
+                } else {
+                    log.info("User Push Setting is OFF");
+                }
+            }
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
     }
 
     @Data
@@ -1166,13 +1203,13 @@ public class AdminService {
             System.out.println(modified_HashtagList);
         }
         modelAndView.addObject("Loudsourcing", loudSourcing);
-        if(loudSourcing.getStatus().equals("judge")){
+        if (loudSourcing.getStatus().equals("judge")) {
             int preSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudsourcing_no).size();
             int unPreSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudsourcing_no).size();
             modelAndView.addObject("preSelectedNum", preSize);
             modelAndView.addObject("unPreSelectedNum", unPreSize);
 
-        } else if(loudSourcing.getStatus().equals("end")){
+        } else if (loudSourcing.getStatus().equals("end")) {
             int finalSelected = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no).size();
             modelAndView.addObject("final_selected_num", finalSelected);
         }
@@ -2320,12 +2357,12 @@ public class AdminService {
                     }
                     List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByArtistNo(artist.getArtist_no());
                     List<LoudSourcing> loudSourcingList = new ArrayList<>();
-                    for(LoudSourcingApply apply : applyList){
+                    for (LoudSourcingApply apply : applyList) {
                         LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(apply.getLoudsourcing_no());
                         loudSourcingList.add(loudSourcing);
                     }
 
-                    for(LoudSourcing loudSourcing : loudSourcingList){
+                    for (LoudSourcing loudSourcing : loudSourcingList) {
                         int loudsourcing_no = loudSourcing.getLoudsourcing_no();
                         int artist_no = artist.getArtist_no();
                         switch (loudSourcing.getStatus()) {

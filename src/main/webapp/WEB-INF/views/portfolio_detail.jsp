@@ -244,7 +244,6 @@
                                         <div class="col-md-6 justify-content-center d-flex">
                                             <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
                                                     onclick="if(confirm('포트폴리오를 삭제합니다.\n삭제 후 복구는 불가능합니다\n정말 삭제 하시겠습니까?')){DeletePortfolio(${portfolio.portfolio_no});} else {return false;}">
-                                                >
                                                 삭제
                                             </button>
                                         </div>

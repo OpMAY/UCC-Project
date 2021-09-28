@@ -59,7 +59,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity loginUser(User user) {
         try {
-            String basic_profile_img = "https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png";
+            String basic_profile_img = "default";
             Message message = new Message();
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
@@ -126,7 +126,7 @@ public class UserService {
                 if(!loudSourcingEntryList.isEmpty()){
                     for(LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList){
                         loudSourcingEntry.setArtist_name("탈퇴한 유저");
-                        loudSourcingEntry.setArtist_profile_img("http://www.weart-page.com/static/image/profile_img_basic.png");
+                        loudSourcingEntry.setArtist_profile_img("default");
                         loudSourcingEntryDao.updateEntry(loudSourcingEntry);
                     }
                 }

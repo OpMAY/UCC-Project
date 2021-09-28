@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -109,7 +108,7 @@ public class AdminController implements ControllerInitialize {
     }
 
     @GetMapping("/admin/penalty.do")
-    public ModelAndView GetPenalty(@RequestParam("user_no") String param){
+    public ModelAndView GetPenalty(@RequestParam("user_no") String param) {
         init("GET GetPenalty");
         int user_no = Integer.parseInt(param);
         return adminService.getPenalty(user_no);
@@ -117,7 +116,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/penalty_user.do")
     @ResponseBody
-    public int PenaltyUser(@RequestBody String body){
+    public int PenaltyUser(@RequestBody String body) {
         init("POST PenaltyUser");
         Penalty penalty = new Gson().fromJson(body, Penalty.class);
         return adminService.penaltyUser(penalty);
@@ -722,7 +721,7 @@ public class AdminController implements ControllerInitialize {
     }
 
     @GetMapping("/admin/faq_make.do")
-    public ModelAndView GetFAQMake(){
+    public ModelAndView GetFAQMake() {
         init("GET GetFAQMake");
         return adminService.getFAQMake();
     }
@@ -807,19 +806,19 @@ public class AdminController implements ControllerInitialize {
     }
 
     @GetMapping("/admin/banners.do")
-    public ModelAndView GetBannerList(){
+    public ModelAndView GetBannerList() {
         init("GET GetBannerList");
         return adminService.getBannerList();
     }
 
     @GetMapping("/admin/banner_make.do")
-    public ModelAndView GetBannerMake(){
+    public ModelAndView GetBannerMake() {
         init("GET GetBannerMake");
         return adminService.getBannerMake();
     }
 
     @GetMapping("/admin/banner_detail.do")
-    public ModelAndView GetBannerDetail(@RequestParam("banner_no") String param){
+    public ModelAndView GetBannerDetail(@RequestParam("banner_no") String param) {
         init("GET GetBannerDetail");
         int banner_ad_no = Integer.parseInt(param);
         return adminService.getBannerDetail(banner_ad_no);
@@ -828,13 +827,13 @@ public class AdminController implements ControllerInitialize {
     @Getter
     @Setter
     @Data
-    class BannerRequest{
+    class BannerRequest {
         private int banner_ad_no;
     }
 
     @PostMapping("/admin/banner_delete.do")
     @ResponseBody
-    public int DeleteBanner(@RequestBody String body){
+    public int DeleteBanner(@RequestBody String body) {
         init("POST DeleteBanner");
         BannerRequest request = new Gson().fromJson(body, BannerRequest.class);
         return adminService.deleteBanner(request.getBanner_ad_no());
@@ -842,7 +841,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/banner_active.do")
     @ResponseBody
-    public int ActiveBanner(@RequestBody String body){
+    public int ActiveBanner(@RequestBody String body) {
         init("POST ActiveBanner");
         BannerRequest request = new Gson().fromJson(body, BannerRequest.class);
         return adminService.activeBanner(request.getBanner_ad_no());
@@ -850,7 +849,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/banner_disable.do")
     @ResponseBody
-    public int DisableBanner(@RequestBody String body){
+    public int DisableBanner(@RequestBody String body) {
         init("POST DisableBanner");
         BannerRequest request = new Gson().fromJson(body, BannerRequest.class);
         return adminService.disableBanner(request.getBanner_ad_no());
@@ -858,7 +857,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/banner_make_post.do")
     @ResponseBody
-    public int MakeBanner(@RequestParam("img") MultipartFile img){
+    public int MakeBanner(@RequestParam("img") MultipartFile img) {
         try {
             init("POST MakeBanner");
             URLConverter urlConverter = new URLConverter();
@@ -886,15 +885,15 @@ public class AdminController implements ControllerInitialize {
                 throw new BusinessException(new Exception("No Image. Invalid Access"));
             }
             return adminService.makeBanner(bannerAd);
-            } catch (Exception e){
-                e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new BusinessException(e);
         }
     }
 
     @PostMapping("/admin/banner_edit_post.do")
     @ResponseBody
-    public int EditBanner(@RequestParam("banner") String body, @RequestParam("img") MultipartFile img){
+    public int EditBanner(@RequestParam("banner") String body, @RequestParam("img") MultipartFile img) {
         try {
             init("POST EditBanner");
             URLConverter urlConverter = new URLConverter();
@@ -918,32 +917,32 @@ public class AdminController implements ControllerInitialize {
                 throw new BusinessException(new Exception("No Image. Invalid Access"));
             }
             return adminService.editBanner(bannerAd);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException(e);
         }
     }
 
     @GetMapping("/admin/inquiry_loudsourcing.do")
-    public ModelAndView GetInquiryLoudsourcingList(){
+    public ModelAndView GetInquiryLoudsourcingList() {
         init("GET GetInquiryLoudsourcingList");
         return adminService.getInquiryList("loudsourcing");
     }
 
     @GetMapping("/admin/inquiry_report.do")
-    public ModelAndView GetInquiryReportList(){
+    public ModelAndView GetInquiryReportList() {
         init("GET GetInquiryReportList");
         return adminService.getInquiryList("report");
     }
 
     @GetMapping("/admin/inquiry_normal.do")
-    public ModelAndView GetInquiryNormalList(){
+    public ModelAndView GetInquiryNormalList() {
         init("GET GetInquiryNormalList");
         return adminService.getInquiryList("normal");
     }
 
     @GetMapping("/admin/inquiry_detail.do")
-    public ModelAndView GetInquiryDetail(@RequestParam("inquiry_no") String param){
+    public ModelAndView GetInquiryDetail(@RequestParam("inquiry_no") String param) {
         init("GET GetInquiryDetail");
         int inquiry_no = Integer.parseInt(param);
         return adminService.getInquiryDetail(inquiry_no);
@@ -952,13 +951,13 @@ public class AdminController implements ControllerInitialize {
     @Getter
     @Setter
     @Data
-    class InquiryRequest{
+    class InquiryRequest {
         private int inquiry_no;
     }
 
     @PostMapping("/admin/inquiry_delete.do")
     @ResponseBody
-    public int DeleteInquiry(@RequestBody String body){
+    public int DeleteInquiry(@RequestBody String body) {
         init("POST DeleteInquiry");
         InquiryRequest request = new Gson().fromJson(body, InquiryRequest.class);
         return adminService.deleteInquiry(request.getInquiry_no());
@@ -966,20 +965,20 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/inquiry_answer.do")
     @ResponseBody
-    public int AnswerInquiry(@RequestBody String body){
+    public int AnswerInquiry(@RequestBody String body) {
         init("POST AnswerInquiry");
         Inquiry inquiry = new Gson().fromJson(body, Inquiry.class);
         return adminService.answerInquiry(inquiry);
     }
 
     @GetMapping("/admin/spon.do")
-    public ModelAndView GetSponList(){
+    public ModelAndView GetSponList() {
         init("GET GetSponList");
         return adminService.getSponList();
     }
 
     @GetMapping("/admin/spon_detail.do")
-    public ModelAndView GetSponDetail(@RequestParam("spon_no") String param){
+    public ModelAndView GetSponDetail(@RequestParam("spon_no") String param) {
         init("GET GetSponDetail");
         int spon_no = Integer.parseInt(param);
         return adminService.getSponDetail(spon_no);
@@ -988,13 +987,13 @@ public class AdminController implements ControllerInitialize {
     @Getter
     @Setter
     @Data
-    class SponRequest{
+    class SponRequest {
         private int spon_no;
     }
 
     @PostMapping("/admin/spon_apply.do")
     @ResponseBody
-    public int ApplySpon(@RequestBody String body){
+    public int ApplySpon(@RequestBody String body) {
         init("POST ApplySpon");
         SponRequest request = new Gson().fromJson(body, SponRequest.class);
         return adminService.applySpon(request.getSpon_no());
@@ -1002,7 +1001,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/spon_send.do")
     @ResponseBody
-    public int SendSpon(@RequestBody String body){
+    public int SendSpon(@RequestBody String body) {
         init("POST SendSpon");
         SponRequest request = new Gson().fromJson(body, SponRequest.class);
         return adminService.sendSpon(request.getSpon_no());
@@ -1010,38 +1009,38 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/spon_delete.do")
     @ResponseBody
-    public int DeleteSpon(@RequestBody String body){
+    public int DeleteSpon(@RequestBody String body) {
         init("POST DeleteSpon");
         SponRequest request = new Gson().fromJson(body, SponRequest.class);
         return adminService.deleteSpon(request.getSpon_no());
     }
 
     @GetMapping("/admin/hashtag.do")
-    public ModelAndView HashTagEdit(){
+    public ModelAndView HashTagEdit() {
         init("GET HashTagEdit");
         return adminService.getHashTagEdit();
     }
 
     @PostMapping("/admin/hashtag_edit.do")
     @ResponseBody
-    public int EditHashTagPost(@RequestBody String body){
+    public int EditHashTagPost(@RequestBody String body) {
         init("POST EditHashTagPost");
         return adminService.editHashTag(body);
     }
 
     @Data
-    class ArtistRequest{
+    class ArtistRequest {
         private int artist_no;
     }
 
     @Data
-    class UserRequest{
+    class UserRequest {
         private int user_no;
     }
 
     @PostMapping("/admin/artist_change_name.do")
     @ResponseBody
-    public int ChangeArtistName(@RequestBody String body){
+    public int ChangeArtistName(@RequestBody String body) {
         init("POST ChangeArtistName");
         ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
         return adminService.changeArtistName(request.getArtist_no());
@@ -1049,7 +1048,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/artist_change_profile.do")
     @ResponseBody
-    public int ChangeArtistProfileImg(@RequestBody String body){
+    public int ChangeArtistProfileImg(@RequestBody String body) {
         init("POST ChangeArtistName");
         ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
         return adminService.changeArtistProfileImg(request.getArtist_no());
@@ -1057,7 +1056,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/artist_change_main.do")
     @ResponseBody
-    public int ChangeArtistMainImg(@RequestBody String body){
+    public int ChangeArtistMainImg(@RequestBody String body) {
         init("POST ChangeArtistName");
         ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
         return adminService.changeArtistMainImg(request.getArtist_no());
@@ -1065,7 +1064,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/user_change_name.do")
     @ResponseBody
-    public int ChangeUserName(@RequestBody String body){
+    public int ChangeUserName(@RequestBody String body) {
         init("POST ChangeArtistName");
         UserRequest request = new Gson().fromJson(body, UserRequest.class);
         return adminService.changeUserName(request.getUser_no());
@@ -1073,7 +1072,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/user_change_profile.do")
     @ResponseBody
-    public int ChangeUserProfileImg(@RequestBody String body){
+    public int ChangeUserProfileImg(@RequestBody String body) {
         init("POST ChangeArtistName");
         UserRequest request = new Gson().fromJson(body, UserRequest.class);
         return adminService.changeUserProfileImg(request.getUser_no());
@@ -1081,7 +1080,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/artist_reset_explain.do")
     @ResponseBody
-    public int ResetArtistExplain(@RequestBody String body){
+    public int ResetArtistExplain(@RequestBody String body) {
         init("POST ResetArtistExplain");
         ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
         return adminService.resetArtistExplain(request.getArtist_no());
@@ -1089,7 +1088,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/artist_reset_hashtag.do")
     @ResponseBody
-    public int ResetArtistHashTag(@RequestBody String body){
+    public int ResetArtistHashTag(@RequestBody String body) {
         init("POST ResetArtistHashTag");
         ArtistRequest request = new Gson().fromJson(body, ArtistRequest.class);
         return adminService.resetArtistHashTag(request.getArtist_no());
@@ -1097,7 +1096,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/user_reset_penalty.do")
     @ResponseBody
-    public int ResetUserPenalty(@RequestBody String body){
+    public int ResetUserPenalty(@RequestBody String body) {
         init("POST ResetArtistPenalty");
         UserRequest request = new Gson().fromJson(body, UserRequest.class);
         return adminService.resetUserPenalty(request.getUser_no());
@@ -1105,32 +1104,47 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/loudsourcing/set/judge.do")
     @ResponseBody
-    public int ManualSetLoudSourcingToJudge(){
+    public int ManualSetLoudSourcingToJudge() {
         try {
             init("POST ManualSetLoudSourcingToJudge");
             loudSourcingService.setLoudSourcingProcessToJudge();
             return 1;
-        } catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
     @PostMapping("/admin/loudsourcing/set/end.do")
     @ResponseBody
-    public int ManualSetLoudSourcingToEnd(){
+    public int ManualSetLoudSourcingToEnd() {
         try {
             init("POST ManualSetLoudSourcingToEnd");
             loudSourcingService.setLoudSourcingJudgeToEnd();
             return 1;
-        } catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
     @GetMapping("/admin/messages.do")
-    public ModelAndView CustomMessagePage(){
+    public ModelAndView CustomMessagePage() {
         init("GET CustomMessagePage");
         return adminService.customMessagePage();
+    }
+
+    @Data
+    class CustomMessage {
+        private String title;
+        private String content;
+        private String send_to;
+    }
+
+    @PostMapping("/admin/push_send_post.do")
+    @ResponseBody
+    public int SendCustomMessage(@RequestBody String body) {
+        init("POST SendCustomMessage");
+        CustomMessage customMessage = new Gson().fromJson(body, CustomMessage.class);
+        return adminService.sendCustomMessage(customMessage.getTitle(), customMessage.getContent(), customMessage.getSend_to());
     }
 
     private String uploadFile(String originalName, MultipartFile mfile, String content_info, String type) throws IOException {
@@ -1146,7 +1160,7 @@ public class AdminController implements ControllerInitialize {
             cdnService.upload("api/files/loudsourcing/" + content_info + savedName, file);
         } else if (type.equals("faq")) {
             cdnService.upload("api/images/faq/" + content_info + savedName, file);
-        } else if (type.equals("banner")){
+        } else if (type.equals("banner")) {
             cdnService.upload("api/images/banner/" + content_info + savedName, file);
         }
         Files.deleteIfExists(file.toPath());

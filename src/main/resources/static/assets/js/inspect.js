@@ -50,6 +50,9 @@ function inspection(inputId, what) {
     const inspect_faq_answer = /^.{2,1000}$/gs;
     const inspect_penalty_reason = /^.{10,100}$/gs;
 
+    const inspect_push_title = /^.{2,30}$/;
+    const inspect_push_content = /^.{10,80}$/gs;
+
 
     const inspect_date = /^(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$/;
 
@@ -224,7 +227,7 @@ function inspection(inputId, what) {
         case 'reward':
             let rewards = document.getElementById(inputId);
             console.log(rewards.value);
-            if(rewards.value < 100 || rewards.value > 100000000){
+            if (rewards.value < 100 || rewards.value > 100000000) {
                 alert("금액은 최소 100원, 최대 1억원까지 가능합니다.");
                 rewards.focus();
                 return false;
@@ -235,7 +238,7 @@ function inspection(inputId, what) {
             break;
         case 'total_recruit_number':
             let r_number = document.getElementById(inputId);
-            if(r_number.value <= 0 || r_number.value >= 10000){
+            if (r_number.value <= 0 || r_number.value >= 10000) {
                 alert("참여 인원은 최소 1명, 최대 9999명까지 가능합니다.");
                 r_number.focus();
                 return false;
@@ -305,6 +308,19 @@ function inspection(inputId, what) {
             if (!check(inspect_date, date, message)) {
                 return false;
             }
+            break;
+        case 'push_title':
+            let push_title = document.getElementById(inputId);
+            if (!check(inspect_push_title, push_title, "Push 알림 제목은 최소 2자, 최대 30자까지 가능합니다.")){
+                return false;
+            }
+            break;
+        case 'push_content':
+            let push_content = document.getElementById(inputId);
+            if (!check(inspect_push_content, push_content, "Push 알림 내용은 최소 10자, 최대 80자까지 가능합니다.")){
+                return false;
+            }
+            break;
     }
     return true;
 }

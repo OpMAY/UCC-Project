@@ -148,7 +148,7 @@
         } else if (!inspection("notice-make-content", "notice_content")) {
             return false;
         }
-        let form = $("#notice-editForm")[0];
+        let form = $("#notice-makeForm")[0];
         let formData = new FormData(form);
         let noticeData = {
             "title": $("#notice-make-title").val(),

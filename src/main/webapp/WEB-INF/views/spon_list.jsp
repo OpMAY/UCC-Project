@@ -50,7 +50,7 @@
             </nav>
 
             <div class="alert alert-primary" style="white-space: pre-wrap;" role="alert">
-                후원에 관련된 안내 메세지 정해주세요.
+                모든 후원은 송금처리 후
             </div>
 
             <div class="row">

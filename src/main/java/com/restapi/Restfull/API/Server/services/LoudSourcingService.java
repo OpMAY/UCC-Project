@@ -626,7 +626,9 @@ public class LoudSourcingService {
                     for (EntryComment comment : entryCommentList1) {
                         if (comment.getUser_no() != entry_artist_user.getUser_no()) {
                             User user1 = userDao.selectUserByUserNo(comment.getUser_no());
-                            userList.add(user1);
+                            if(!userList.contains(user1)) {
+                                userList.add(user1);
+                            }
                         }
                     }
 
