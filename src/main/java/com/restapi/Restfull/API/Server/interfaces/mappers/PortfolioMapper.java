@@ -58,4 +58,6 @@ public interface PortfolioMapper {
     List<Portfolio> getPortfolioListSortFanNumber(int artist_no);
 
     List<Portfolio> getPortfolioForCDN();
+
+    void updateContentProfile(int artist_no, String artist_name, String artist_profile_img);
 }

@@ -7,17 +7,22 @@ import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.NotificationType;
 import com.restapi.Restfull.API.Server.response.PortfolioType;
 import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
+import com.restapi.Restfull.API.Server.utility.ImageConverter;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
 
@@ -172,48 +177,13 @@ public class AdminService {
             artist.setArtist_name("부적절한 사용자" + uid.toString().substring(0, 8));
             artistDao.updateArtist(artist);
             User user = userDao.selectUserByUserNo(artist.getUser_no());
-            List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<Board> boardList = boardDao.getBoardListByArtistNo(artist.getArtist_no());
-            List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist.getArtist_no());
-            List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByArtistNo(artist.getArtist_no());
-            for (Board board : boardList) {
-                board.setArtist_profile_img(artist.getArtist_profile_img());
-                board.setArtist_name(artist.getArtist_name());
-                boardDao.updateBoard(board);
-            }
 
-            for (Portfolio portfolio : portfolioList) {
-                portfolio.setArtist_profile_img(artist.getArtist_profile_img());
-                portfolio.setArtist_name(artist.getArtist_name());
-                portfolioDao.updatePortfolio(portfolio);
-            }
-
-            for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
-                loudSourcingEntry.setArtist_profile_img(artist.getArtist_profile_img());
-                loudSourcingEntry.setArtist_name(artist.getArtist_name());
-                loudSourcingEntryDao.updateEntry(loudSourcingEntry);
-            }
-
-            for (BoardComment boardComment : boardCommentList) {
-                boardComment.setCommenter_name(artist.getArtist_name());
-                boardComment.setProfile_img(artist.getArtist_profile_img());
-                boardCommentDao.updateComment(boardComment);
-            }
-
-            for (PortfolioComment portfolioComment : portfolioCommentList) {
-                portfolioComment.setCommenter_name(artist.getArtist_name());
-                portfolioComment.setProfile_img(artist.getArtist_profile_img());
-                portfolioCommentDao.updateComment(portfolioComment);
-            }
-
-            for (EntryComment entryComment : entryCommentList) {
-                entryComment.setCommenter_name(artist.getArtist_name());
-                entryComment.setProfile_img(artist.getArtist_profile_img());
-                entryCommentDao.updateComment(entryComment);
-            }
-
+            boardDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            portfolioDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            loudSourcingEntryDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            boardCommentDao.updateAllCommentUserInfo(user.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            portfolioCommentDao.updateAllCommentUserInfo(user.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            entryCommentDao.updateAllCommentUserInfo(user.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
 
             if (user.getFcm_token() != null && user.isPush()) {
                 NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
@@ -250,53 +220,19 @@ public class AdminService {
             boardCommentDao.setSession(sqlSession);
             portfolioCommentDao.setSession(sqlSession);
             FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+            String basic_profile_img_link = "https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png";
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
+            artist.setArtist_profile_img(basic_profile_img_link);
+            artist.setProfile_blur_img(basic_profile_img_link);
             artistDao.updateArtist(artist);
             User user = userDao.selectUserByUserNo(artist.getUser_no());
 
-            List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<Board> boardList = boardDao.getBoardListByArtistNo(artist.getArtist_no());
-            List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist.getArtist_no());
-            List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByArtistNo(artist.getArtist_no());
-            for (Board board : boardList) {
-                board.setArtist_profile_img(artist.getArtist_profile_img());
-                board.setArtist_name(artist.getArtist_name());
-                boardDao.updateBoard(board);
-            }
-
-            for (Portfolio portfolio : portfolioList) {
-                portfolio.setArtist_profile_img(artist.getArtist_profile_img());
-                portfolio.setArtist_name(artist.getArtist_name());
-                portfolioDao.updatePortfolio(portfolio);
-            }
-
-            for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
-                loudSourcingEntry.setArtist_profile_img(artist.getArtist_profile_img());
-                loudSourcingEntry.setArtist_name(artist.getArtist_name());
-                loudSourcingEntryDao.updateEntry(loudSourcingEntry);
-            }
-
-            for (BoardComment boardComment : boardCommentList) {
-                boardComment.setCommenter_name(artist.getArtist_name());
-                boardComment.setProfile_img(artist.getArtist_profile_img());
-                boardCommentDao.updateComment(boardComment);
-            }
-
-            for (PortfolioComment portfolioComment : portfolioCommentList) {
-                portfolioComment.setCommenter_name(artist.getArtist_name());
-                portfolioComment.setProfile_img(artist.getArtist_profile_img());
-                portfolioCommentDao.updateComment(portfolioComment);
-            }
-
-            for (EntryComment entryComment : entryCommentList) {
-                entryComment.setCommenter_name(artist.getArtist_name());
-                entryComment.setProfile_img(artist.getArtist_profile_img());
-                entryCommentDao.updateComment(entryComment);
-            }
-
+            boardDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            portfolioDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            loudSourcingEntryDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            boardCommentDao.updateAllCommentUserInfo(user.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            portfolioCommentDao.updateAllCommentUserInfo(user.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+            entryCommentDao.updateAllCommentUserInfo(user.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
 
             if (user.getFcm_token() != null && user.isPush()) {
                 NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
@@ -336,27 +272,9 @@ public class AdminService {
             Artist artist = artistDao.getArtistByUserNo(user_no);
 
             if (artist == null) {
-                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user_no);
-                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user_no);
-                List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user_no);
-
-                for (BoardComment boardComment : boardCommentList) {
-                    boardComment.setCommenter_name(user.getName());
-                    boardComment.setProfile_img(user.getProfile_img());
-                    boardCommentDao.updateComment(boardComment);
-                }
-
-                for (PortfolioComment portfolioComment : portfolioCommentList) {
-                    portfolioComment.setCommenter_name(user.getName());
-                    portfolioComment.setProfile_img(user.getProfile_img());
-                    portfolioCommentDao.updateComment(portfolioComment);
-                }
-
-                for (EntryComment entryComment : entryCommentList) {
-                    entryComment.setCommenter_name(user.getName());
-                    entryComment.setProfile_img(user.getProfile_img());
-                    entryCommentDao.updateComment(entryComment);
-                }
+                boardCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
+                portfolioCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
+                entryCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
 
                 if (user.getFcm_token() != null && user.isPush()) {
                     NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
@@ -398,27 +316,9 @@ public class AdminService {
             Artist artist = artistDao.getArtistByUserNo(user_no);
 
             if (artist == null) {
-                List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user_no);
-                List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user_no);
-                List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user_no);
-
-                for (BoardComment boardComment : boardCommentList) {
-                    boardComment.setCommenter_name(user.getName());
-                    boardComment.setProfile_img(user.getProfile_img());
-                    boardCommentDao.updateComment(boardComment);
-                }
-
-                for (PortfolioComment portfolioComment : portfolioCommentList) {
-                    portfolioComment.setCommenter_name(user.getName());
-                    portfolioComment.setProfile_img(user.getProfile_img());
-                    portfolioCommentDao.updateComment(portfolioComment);
-                }
-
-                for (EntryComment entryComment : entryCommentList) {
-                    entryComment.setCommenter_name(user.getName());
-                    entryComment.setProfile_img(user.getProfile_img());
-                    entryCommentDao.updateComment(entryComment);
-                }
+                boardCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
+                portfolioCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
+                entryCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
 
                 if (user.getFcm_token() != null && user.isPush()) {
                     NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
@@ -451,7 +351,9 @@ public class AdminService {
             notificationDao.setSession(sqlSession);
             FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
+            String main_img_url = "https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png";
+            artist.setMain_img(main_img_url);
+            artist.setMain_blur_img(main_img_url);
             artistDao.updateArtist(artist);
             User user = userDao.selectUserByUserNo(artist.getUser_no());
             if (user.getFcm_token() != null && user.isPush()) {
@@ -667,7 +569,7 @@ public class AdminService {
             adminComment.setType("게시글");
             adminComment.setContent(boardComment.getContent());
             adminComment.setWriter_name(boardComment.getCommenter_name());
-            adminComment.setReg_date(Time.MsToSecond(boardComment.getReg_date().substring(0, boardComment.getReg_date().lastIndexOf("."))));
+            adminComment.setReg_date(boardComment.getReg_date().substring(0, boardComment.getReg_date().lastIndexOf(".")));
             adminCommentList.add(adminComment);
         }
         for (PortfolioComment portfolioComment : portfolioCommentList) {
@@ -2247,6 +2149,9 @@ public class AdminService {
                 inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
                 break;
         }
+        if(inquiry.is_answered()){
+            inquiry.setAnswer_date(inquiry.getAnswer_date().substring(0, inquiry.getAnswer_date().lastIndexOf(".")));
+        }
         modelAndView.addObject("inquiry", inquiry);
         return modelAndView;
     }
@@ -2276,7 +2181,7 @@ public class AdminService {
             if (inquiry.getType().equals("loudsourcing")) {
                 inquiry.setAnswer_content("크라우드 문의 보내주신 \"사용자/아티스트 명\"님께 감사드립니다.\n" +
                         "보내주신 문의 내용과 첨부파일을 확인했습니다.\n" +
-                        "몇 일 안으로 입력하신 연락처 혹은 이메일로 연락드리겠습니다.\n" +
+                        "며칠 안으로 입력하신 연락처 혹은 이메일로 연락드리겠습니다.\n" +
                         "앞으로도 많은 문의 보내주세요.");
             }
             inquiryDao.answerInquiry(inquiry);

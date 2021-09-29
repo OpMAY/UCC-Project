@@ -41,7 +41,9 @@
             artist_profile_img=#{artist_profile_img},
             fan_number=#{fan_number},
             visit_today=#{visit_today},
-            recent_act_date=#{recent_act_date}
+            recent_act_date=#{recent_act_date},
+            profile_blur_img=#{profile_blur_img},
+            main_blur_img=#{main_blur_img}
         WHERE artist_no = #{artist_no}
     </update>
     <delete id="deleteArtist">

@@ -50,4 +50,6 @@ public interface BoardMapper {
     List<Board> getBoardForCDN();
 
     void updateBoardByPenalty(Board board);
+
+    void updateContentProfile(int artist_no, String artist_name, String artist_profile_img);
 }

@@ -750,6 +750,7 @@
             let index = $(this).attr("idx");
             tag[index] = "";
             $(this).parent().remove();
+            counter--;
         });
 
         let placeholderTarget = $('.tr_hashTag_area input[type="text"]');

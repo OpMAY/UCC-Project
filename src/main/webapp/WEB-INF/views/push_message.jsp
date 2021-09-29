@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-md-12 grid-margin">
                     <div class="row justify-content-center">
-                        <div class="col-md-10">
+                        <div class="col-md-12">
                             <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
                                 <div class="card-body">
                                     <h6 class="card-title" style="font-size: x-large">Push 알림 제작
@@ -62,7 +62,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-10 mt-3 justify-content-center">
+                                    <div class="col-md-12 mt-3 justify-content-center">
                                         <label class="label" style="font-size: larger"
                                                for="push-make-title">
                                             Push 알림 제목
@@ -71,7 +71,7 @@
                                                   style="line-height: 150%; font-size: large" placeholder="알림 제목을 입력하세요."
                                         ></textarea>
                                     </div>
-                                    <div class="col-md-10 mt-3 justify-content-around">
+                                    <div class="col-md-12 mt-3 justify-content-around">
                                         <label class="label" style="font-size: larger" for="push-make-content">
                                             Push 알림 내용
                                         </label>
@@ -79,7 +79,7 @@
                                                   style="line-height: 150%; font-size: large" placeholder="알림 내용을 입력하세요."
                                         ></textarea>
                                     </div>
-                                    <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
+                                    <div class="col-md-12 mt-4 mb-3 justify-content-around d-flex">
                                         <button type="button" class="btn btn-outline-primary"
                                                 style="float: right; width: 25%; height: 150%"
                                                 onclick="sendPush()">

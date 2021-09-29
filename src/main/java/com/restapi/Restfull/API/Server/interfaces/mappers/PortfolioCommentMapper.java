@@ -21,4 +21,6 @@ public interface PortfolioCommentMapper {
     List<PortfolioComment> getCommentNumberByPortfolioNo(int portfolio_no);
 
     List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no);
+
+    void updateAllCommentUserInfo(int user_no, String commenter_name, String profile_img);
 }

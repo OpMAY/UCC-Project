@@ -47,11 +47,11 @@
                 <div class="col-md-12 grid-margin">
                     <form id="LoudSourcingAdvertiserForm">
                         <div class="row justify-content-center">
-                            <div class="col-md-10">
+                            <div class="col-md-12">
                                 <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
                                     <div class="card-body">
                                         <h6 class="card-title" style="font-size: x-large">광고 발주자 상세정보</h6>
-                                        <div class="col-md-10 mt-3 justify-content-center">
+                                        <div class="col-md-12 mt-3 justify-content-center">
                                             <label class="label" style="font-size: larger" for="advertiser-name">
                                                 광고 발주자 명
                                             </label>
@@ -59,7 +59,7 @@
                                                       style="line-height: 150%; font-size: large"
                                             >${LoudSourcing.advertiser_name}</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-3 justify-content-center">
+                                        <div class="col-md-12 mt-3 justify-content-center">
                                             <label class="label" style="font-size: larger">
                                                 연락처
                                             </label>
@@ -67,7 +67,7 @@
                                                       style="line-height: 150%; font-size: large"
                                             >${LoudSourcing.advertiser_phone}</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-3 justify-content-center">
+                                        <div class="col-md-12 mt-3 justify-content-center">
                                             <label class="label" style="font-size: larger" for="advertiser-email">
                                                 이메일
                                             </label>
@@ -75,7 +75,7 @@
                                                       style="line-height: 150%; font-size: large"
                                             >${LoudSourcing.advertiser_email}</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-3 justify-content-around">
+                                        <div class="col-md-12 mt-3 justify-content-around">
                                             <label class="label" style="font-size: larger"
                                                    for="advertiser-bank-name">
                                                 은행 명
@@ -84,7 +84,7 @@
                                                       style="line-height: 150%; font-size: large"
                                             >${LoudSourcing.advertiser_bank_name}</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-3 justify-content-center">
+                                        <div class="col-md-12 mt-3 justify-content-center">
                                             <label class="label" style="font-size: larger"
                                                    for="advertiser-bank-owner">
                                                 예금주 명
@@ -93,7 +93,7 @@
                                                       style="line-height: 150%; font-size: large"
                                             >${LoudSourcing.advertiser_bank_owner}</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-3 justify-content-center">
+                                        <div class="col-md-12 mt-3 justify-content-center">
                                             <label class="label" style="font-size: larger"
                                                    for="advertiser-bank-account">
                                                 계좌번호
@@ -102,7 +102,7 @@
                                                       style="line-height: 150%; font-size: large"
                                             >${LoudSourcing.advertiser_bank_account}</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-3 justify-content-around">
+                                        <div class="col-md-12 mt-3 justify-content-around">
                                             <label class="label" style="font-size: larger" for="advertiser-regdate">
                                                 등록 일자
                                             </label>
@@ -110,7 +110,7 @@
                                                       style="line-height: 150%; font-size: large"
                                                       disabled>${LoudSourcing.reg_date}</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-3 justify-content-center">
+                                        <div class="col-md-12 mt-3 justify-content-center">
                                             <label class="label" style="font-size: larger" for="advertiser-reward">
                                                 상금
                                             </label>
@@ -119,7 +119,7 @@
                                                       disabled><fmt:formatNumber value="${LoudSourcing.reward}"
                                                                                  type="number"/>원</textarea>
                                         </div>
-                                        <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
+                                        <div class="col-md-12 mt-4 mb-3 justify-content-around d-flex">
                                             <button type="button" class="btn btn-outline-primary" style="float: right; width: 25%; height: 150%"
                                                     onclick="editLoudSourcingAdvertiser()">
                                                 수정완료

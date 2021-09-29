@@ -241,8 +241,14 @@ public class UserService {
                 if(artist.getArtist_profile_img() == null) {
                     artist.setArtist_profile_img(origin_artist.getArtist_profile_img());
                 }
+                if(artist.getProfile_blur_img() == null){
+                    artist.setProfile_blur_img(origin_artist.getProfile_blur_img());
+                }
                 if(artist.getMain_img() == null) {
                     artist.setMain_img(origin_artist.getMain_img());
+                }
+                if(artist.getMain_blur_img() == null){
+                    artist.setMain_blur_img(origin_artist.getMain_blur_img());
                 }
                 artist.setFan_number(origin_artist.getFan_number());
                 artist.setVisit_today(origin_artist.getVisit_today());
@@ -256,27 +262,9 @@ public class UserService {
                     log.info(hashtagList);
                 }
                 message.put("artist", resArtist);
-
-                List<Board> boardList = boardDao.getBoardListByArtistNo(artist.getArtist_no());
-                List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist.getArtist_no());
-                List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByArtistNo(artist.getArtist_no());
-                for(Board board : boardList){
-                    board.setArtist_profile_img(artist.getArtist_profile_img());
-                    board.setArtist_name(artist.getArtist_name());
-                    boardDao.updateBoard(board);
-                }
-
-                for(Portfolio portfolio : portfolioList){
-                    portfolio.setArtist_profile_img(artist.getArtist_profile_img());
-                    portfolio.setArtist_name(artist.getArtist_name());
-                    portfolioDao.updatePortfolio(portfolio);
-                }
-
-                for(LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList){
-                    loudSourcingEntry.setArtist_profile_img(artist.getArtist_profile_img());
-                    loudSourcingEntry.setArtist_name(artist.getArtist_name());
-                    loudSourcingEntryDao.updateEntry(loudSourcingEntry);
-                }
+                boardDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+                portfolioDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+                loudSourcingEntryDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
             }
 
             User origin_user = userDao.selectUserByUserNo(user.getUser_no());
@@ -286,47 +274,15 @@ public class UserService {
             userDao.updateUser(user);
             User resUser = userDao.selectUserByUserNo(user.getUser_no());
             message.put("user", resUser);
-            List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user.getUser_no());
-            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user.getUser_no());
             if(artist != null){
-                for(BoardComment boardComment : boardCommentList){
-                    boardComment.setCommenter_name(artist.getArtist_name());
-                    boardComment.setProfile_img(artist.getArtist_profile_img());
-                    boardCommentDao.updateComment(boardComment);
-                }
-
-                for(PortfolioComment portfolioComment : portfolioCommentList){
-                    portfolioComment.setCommenter_name(artist.getArtist_name());
-                    portfolioComment.setProfile_img(artist.getArtist_profile_img());
-                    portfolioCommentDao.updateComment(portfolioComment);
-                }
-
-                for(EntryComment entryComment : entryCommentList){
-                    entryComment.setCommenter_name(artist.getArtist_name());
-                    entryComment.setProfile_img(artist.getArtist_profile_img());
-                    entryCommentDao.updateComment(entryComment);
-                }
+                boardCommentDao.updateAllCommentUserInfo(artist.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+                portfolioCommentDao.updateAllCommentUserInfo(artist.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+                entryCommentDao.updateAllCommentUserInfo(artist.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
             }else {
-                for (BoardComment boardComment : boardCommentList) {
-                    boardComment.setCommenter_name(user.getName());
-                    boardComment.setProfile_img(user.getProfile_img());
-                    boardCommentDao.updateComment(boardComment);
-                }
-
-                for (PortfolioComment portfolioComment : portfolioCommentList) {
-                    portfolioComment.setCommenter_name(user.getName());
-                    portfolioComment.setProfile_img(user.getProfile_img());
-                    portfolioCommentDao.updateComment(portfolioComment);
-                }
-
-                for (EntryComment entryComment : entryCommentList) {
-                    entryComment.setCommenter_name(user.getName());
-                    entryComment.setProfile_img(user.getProfile_img());
-                    entryCommentDao.updateComment(entryComment);
-                }
+                boardCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
+                portfolioCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
+                entryCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
             }
-
 
             if (uploads.size() > 0) {
                 message.put("files", uploads);

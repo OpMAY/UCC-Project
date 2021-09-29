@@ -19,7 +19,7 @@ import java.io.IOException;
 public class ImageConverter {
     // OPEN CV SETTING VALUE
     private int DELAY_BLUR = 100;
-    private int MAX_KERNEL_LENGTH = 15;
+    private int MAX_KERNEL_LENGTH = 25; // Blur 강도
 
 
     @Value("${uploadPath}")
@@ -50,29 +50,40 @@ public class ImageConverter {
     }
 
     public File blurImage(File file){
-        // Load The Native Library
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        try {
+            // Load The Native Library
+            //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        System.load("E:\\vodAppServer\\src\\main\\java\\opencv_java451.dll");
-        System.load("/www/weart-page_com/ROOT/resources/libopencv_java451.so");
+            //System.load("E:\\vodAppServer\\src\\main\\java\\opencv_java451.dll");
+            System.load("/www/weart-page_com/ROOT/resources/libopencv_java320.so");
 
-        // Source Image by creating Matlab object
-        Mat src = new Mat();
+            // Source Image by creating Matlab object
+            Mat src = new Mat();
 
-        // Destination Image by creating Matlab object
-        Mat dst = new Mat();
+            // Destination Image by creating Matlab object
+            Mat dst = new Mat();
 
-        // Taking input image from directory
-        src = Imgcodecs.imread(file.getAbsolutePath(), Imgcodecs.IMREAD_COLOR);
+            // Taking input image from directory
+            src = Imgcodecs.imread(file.getAbsolutePath(), Imgcodecs.IMREAD_COLOR);
 
-        // Blur Image
-        for(int i = 1; i < MAX_KERNEL_LENGTH; i = i + 2){
-            Imgproc.blur(src, dst, new Size(i, i), new Point(-1, -1));
+            // Blur Image
+            for (int i = 1; i < MAX_KERNEL_LENGTH; i = i + 2) {
+                Imgproc.blur(src, dst, new Size(i, i), new Point(-1, -1));
+            }
+
+            // Make Target File & Write Blurred Image
+            File blurredFile = new File(upload_path, "blurred_" + file.getName());
+
+            if (Imgcodecs.imwrite(blurredFile.getName(), dst)) {
+                log.info("Image Blur Success");
+                log.info("Blurred Image PATH : " + blurredFile.getPath());
+            } else {
+                throw new IOException("Image Blur Failed");
+            }
+            return blurredFile;
+        } catch (IOException e){
+            e.printStackTrace();
+            throw new BusinessException(e);
         }
-
-        // Make Target File & Write Blurred Image
-        File blurredFile = new File(upload_path + "blurred_" + file.getName());
-        Imgcodecs.imwrite(blurredFile.getName(), dst);
-        return blurredFile;
     }
 }

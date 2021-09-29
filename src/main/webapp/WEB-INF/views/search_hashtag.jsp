@@ -53,16 +53,14 @@
         }
 
         ul li.tag-item {
-            padding: 4px 8px;
-            background-color: #000000;
-            color: #ffffff;
-            opacity: 80%;
-            border-radius: 20px;
-            border : 1px solid #ffffff;
+            padding: 2px 6px 1px 11px;
+            color: #000000;
+            opacity: 72%;
+            border-radius: 15px;
         }
 
         .tag-item:hover {
-            background-color: #6B5D7E;
+            background-color: #031a61;
             color: #fff;
             opacity: 80%;
         }
@@ -145,7 +143,7 @@
                                 <div class="col-md-6 justify-content-center d-flex">
                                     <button class="btn btn-secondary" style="width : 50%; height: 150%"
                                             onclick="location.reload()">
-                                        초기화
+                                        원래대로
                                     </button>
                                 </div>
                             </div>
@@ -204,7 +202,9 @@
                 console.log(obj[i]);
                 tag[counter] = obj[i];
                 console.log(counter);
-                $("#tag-list").append("<li class='tag-item'>" + obj[i] + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+                $("#tag-list").append("<li class='tag-item' style='text-decoration: underline'>#" + obj[i] + "<span class='del-btn' idx='" + counter + "'><svg style=\"width:16px;height:16px\" viewBox=\"0 0 24 24\">\n" +
+                    "    <path fill=\"currentColor\" d=\"M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z\" />\n" +
+                    "</svg></span></li>");
                 counter++;
             }
 
@@ -278,7 +278,9 @@
                             // 해시태그가 중복되었는지 확인
                             if (result.length === 0) {
                                 if (counter < 10) {
-                                    $("#tag-list").append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+                                    $("#tag-list").append("<li class='tag-item' style='text-decoration: underline'>#" + tagValue + "<span class='del-btn' idx='" + counter + "'><svg style=\"width:16px;height:16px\" viewBox=\"0 0 24 24\">\n" +
+                                        "    <path fill=\"currentColor\" d=\"M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z\" />\n" +
+                                        "</svg></span></li>");
                                     addTag(tagValue);
                                     self.val("");
                                 } else {
@@ -302,6 +304,7 @@
                 let index = $(this).attr("idx");
                 tag[index] = "";
                 $(this).parent().remove();
+                counter--;
             });
 
             let placeholderTarget = $('.tr_hashTag_area input[type="text"]');

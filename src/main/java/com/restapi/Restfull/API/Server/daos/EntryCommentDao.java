@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.daos;
 
+import com.restapi.Restfull.API.Server.interfaces.mappers.BoardCommentMapper;
 import com.restapi.Restfull.API.Server.interfaces.mappers.EntryCommentMapper;
 import com.restapi.Restfull.API.Server.models.EntryComment;
 import org.apache.ibatis.session.SqlSession;
@@ -54,5 +55,10 @@ public class EntryCommentDao {
     public List<EntryComment> getCommentListByEntryNo(int entry_no) {
         EntryCommentMapper entryCommentMapper = sqlSession.getMapper(EntryCommentMapper.class);
         return entryCommentMapper.getCommentListByEntryNo(entry_no);
+    }
+
+    public void updateAllCommentUserInfo(int user_no, String commenter_name, String profile_img){
+        EntryCommentMapper entryCommentMapper = sqlSession.getMapper(EntryCommentMapper.class);
+        entryCommentMapper.updateAllCommentUserInfo(user_no, commenter_name, profile_img);
     }
 }

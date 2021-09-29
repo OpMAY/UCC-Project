@@ -127,11 +127,13 @@ public class UserController {
                     /** File Upload Logic */
 
                     if (artist != null) {
-                        String file_name = uploadFile(profile_img_decoded_file_name, profile_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
+                        String file_name = uploadFile(profile_img_decoded_file_name, profile_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/", false);
+                        String blur_file_name = uploadFile(profile_img_decoded_file_name, profile_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/", true);
                         artist.setArtist_profile_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
+                        artist.setProfile_blur_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + blur_file_name));
                         uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name)));
                     } else {
-                        String file_name = uploadFile(profile_img_decoded_file_name, profile_img, "api/images/user/" + user.getUser_no() + "/");
+                        String file_name = uploadFile(profile_img_decoded_file_name, profile_img, "api/images/user/" + user.getUser_no() + "/", false);
                         user.setProfile_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name));
                         uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/" + file_name)));
                     }
@@ -163,13 +165,13 @@ public class UserController {
                     }
 
                     /** File Upload Logic */
-                    String file_name = uploadFile(main_img_decoded_file_name, fan_main_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/");
-
+                    String file_name = uploadFile(main_img_decoded_file_name, fan_main_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/", false);
+                    String blur_file_name = uploadFile(main_img_decoded_file_name, fan_main_img, "api/images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/", true);
                     artist.setMain_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name));
+                    artist.setMain_blur_img(urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + blur_file_name));
                     uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name)));
                 }
             }
-
             log.info(user);
             log.info(artist);
             return userService.UpdateUserInfo(artist, user, uploads);
@@ -194,19 +196,24 @@ public class UserController {
         return userService.updateUserPush(user_no, "fankok");
     }
 
-    private String uploadFile(String originalName, MultipartFile mfile, String file_path) throws IOException {
+    private String uploadFile(String originalName, MultipartFile mfile, String file_path, boolean isBlur) throws IOException {
         UUID uid = UUID.randomUUID();
         originalName = originalName.replace(" ", "");
-        String savedName = uid.toString().substring(0, 8) + "_" + originalName;
+        String savedName;
         FileConverter fileConverter = new FileConverter();
         File file = fileConverter.convert(mfile, uid.toString().substring(0, 8) + "test" + originalName.substring(originalName.lastIndexOf(".")).toLowerCase());
         ImageConverter imageConverter = new ImageConverter();
-        File imgFile = imageConverter.convert64to32(file);
-        log.info(file_path);
         CDNService cdnService = new CDNService();
-        cdnService.upload(file_path + savedName, imgFile);
-        Files.deleteIfExists(file.toPath());
-        Files.deleteIfExists(imgFile.toPath());
+        if(isBlur){
+            savedName = uid.toString().substring(0, 8) + "_blurred_" + originalName;
+            File imgFile = imageConverter.blurImage(file);
+            cdnService.upload(file_path + savedName, imgFile);
+            Files.deleteIfExists(imgFile.toPath());
+        } else {
+            savedName = uid.toString().substring(0, 8) + "_" + originalName;
+            cdnService.upload(file_path + savedName, file);
+            Files.deleteIfExists(file.toPath());
+        }
         return savedName;
     }
 

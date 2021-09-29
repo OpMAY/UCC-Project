@@ -81,7 +81,7 @@
                                             </script>
                                         </div>
                                     </form>
-                                    <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">
+                                    <div class="col-md-12 mt-4 mb-3 justify-content-around d-flex">
                                         <button type="button" class="btn btn-outline-primary" style="float: right; width: 25%; height: 150%"
                                                 onclick="if(confirm('배너 광고를 제작하시겠습니까?')){makeBanner()}else {return false;}">
                                             제작

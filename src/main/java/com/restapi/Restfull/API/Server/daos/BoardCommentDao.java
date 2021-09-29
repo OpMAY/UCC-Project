@@ -55,4 +55,9 @@ public class BoardCommentDao {
         BoardCommentMapper boardCommentMapper = sqlSession.getMapper(BoardCommentMapper.class);
         return boardCommentMapper.getCommentNumberByBoardNo(board_no);
     }
+
+    public void updateAllCommentUserInfo(int user_no, String commenter_name, String profile_img){
+        BoardCommentMapper boardCommentMapper = sqlSession.getMapper(BoardCommentMapper.class);
+        boardCommentMapper.updateAllCommentUserInfo(user_no, commenter_name, profile_img);
+    }
 }

@@ -4,31 +4,57 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioCommentMapper">
     <select id="getCommentListByPortfolioNoRefresh" resultType="PortfolioComment">
-        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND comment_no <![CDATA[<]]> #{comment_no})) order by reg_date DESC
+        select *
+        from portfoliocomment
+        WHERE portfolio_no = #{portfolio_no}
+          AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND comment_no <![CDATA[<]]> #{comment_no}))
+        order by reg_date DESC
         LIMIT 10
     </select>
     <select id="getCommentListByPortfolioNo" resultType="PortfolioComment">
-        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no} order by reg_date DESC, comment_no DESC
+        select *
+        from portfoliocomment
+        WHERE portfolio_no = #{portfolio_no}
+        order by reg_date DESC, comment_no DESC
         LIMIT 10
     </select>
     <select id="getCommentListByUserNo" resultType="PortfolioComment">
-        select * from portfoliocomment WHERE user_no=#{user_no}
+        select *
+        from portfoliocomment
+        WHERE user_no = #{user_no}
     </select>
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="comment_no">
-        insert into portfoliocomment(user_no, portfolio_no, content, reg_date, comment_private, commenter_name, profile_img)
-        VALUES (#{user_no}, #{portfolio_no}, #{content}, #{reg_date}, #{comment_private}, #{commenter_name}, #{profile_img})
+        insert into portfoliocomment(user_no, portfolio_no, content, reg_date, comment_private, commenter_name,
+                                     profile_img)
+        VALUES (#{user_no}, #{portfolio_no}, #{content}, #{reg_date}, #{comment_private}, #{commenter_name},
+                #{profile_img})
     </insert>
     <delete id="deleteComment">
-        delete from portfoliocomment WHERE comment_no=#{comment_no}
+        delete
+        from portfoliocomment
+        WHERE comment_no = #{comment_no}
     </delete>
     <update id="updateComment">
-        update portfoliocomment SET comment_private=#{comment_private}, commenter_name=#{commenter_name}, profile_img=#{profile_img}
-        WHERE comment_no=#{comment_no}
+        update portfoliocomment
+        SET comment_private=#{comment_private},
+            commenter_name=#{commenter_name},
+            profile_img=#{profile_img}
+        WHERE comment_no = #{comment_no}
     </update>
     <select id="getCommentByCommentNo" resultType="PortfolioComment">
-        select * from portfoliocomment WHERE comment_no=#{comment_no}
+        select *
+        from portfoliocomment
+        WHERE comment_no = #{comment_no}
     </select>
     <select id="getCommentNumberByPortfolioNo" resultType="PortfolioComment">
-        select * from portfoliocomment WHERE portfolio_no=#{portfolio_no}
+        select *
+        from portfoliocomment
+        WHERE portfolio_no = #{portfolio_no}
     </select>
+    <update id="updateAllCommentUserInfo">
+        update portfoliocomment
+        SET commenter_name=#{commenter_name},
+            profile_img=#{profile_img}
+        WHERE user_no = #{user_no}
+    </update>
 </mapper>

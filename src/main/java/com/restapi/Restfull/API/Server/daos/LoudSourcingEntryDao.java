@@ -1,6 +1,7 @@
 package com.restapi.Restfull.API.Server.daos;
 
 import com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingEntryMapper;
+import com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioMapper;
 import com.restapi.Restfull.API.Server.models.LoudSourcingEntry;
 import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
@@ -106,5 +107,10 @@ public class LoudSourcingEntryDao {
     public List<LoudSourcingEntry> getEntryListByLoudSourcingNoAdminSortByVoteNumber(int loudsourcing_no) {
         LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
         return loudSourcingEntryMapper.getEntryListByLoudSourcingNoAdminSortByVoteNumber(loudsourcing_no);
+    }
+
+    public void updateContentProfile(int artist_no, String artist_name, String artist_profile_img){
+        LoudSourcingEntryMapper loudSourcingEntryMapper = sqlSession.getMapper(LoudSourcingEntryMapper.class);
+        loudSourcingEntryMapper.updateContentProfile(artist_no, artist_name, artist_profile_img);
     }
 }

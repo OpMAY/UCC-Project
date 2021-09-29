@@ -24,6 +24,8 @@ public class Artist {
     private String hashtag;
     private String recent_act_date;
     private boolean loudsourcing_push;
+    private String profile_blur_img;
+    private String main_blur_img;
 
     private ArrayList<String> hashtag_list;
 }

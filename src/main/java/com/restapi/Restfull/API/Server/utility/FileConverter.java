@@ -12,8 +12,8 @@ import java.text.Normalizer;
 @Log4j2
 public class FileConverter {
     public File convert(MultipartFile file, String temp_fileName) throws IOException {
-        File convFile = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/", temp_fileName);
-        //File convFile = new File("/www/weart-page_com/www/api/temp/", temp_fileName);
+        //File convFile = new File("E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api/", temp_fileName);
+        File convFile = new File("/www/weart-page_com/www/api/temp/", temp_fileName);
         try (InputStream is = file.getInputStream()) {
             Files.copy(is, convFile.toPath());
         }

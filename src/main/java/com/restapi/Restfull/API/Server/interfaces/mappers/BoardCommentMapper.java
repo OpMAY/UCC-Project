@@ -21,4 +21,6 @@ public interface BoardCommentMapper {
     BoardComment getCommentByCommentNo(int comment_no);
 
     List<BoardComment> getCommentNumberByBoardNo(int board_no);
+
+    void updateAllCommentUserInfo(int user_no, String commenter_name, String profile_img);
 }

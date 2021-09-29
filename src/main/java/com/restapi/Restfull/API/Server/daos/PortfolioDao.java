@@ -1,6 +1,7 @@
 package com.restapi.Restfull.API.Server.daos;
 
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
+import com.restapi.Restfull.API.Server.interfaces.mappers.BoardMapper;
 import com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioMapper;
 import com.restapi.Restfull.API.Server.models.Portfolio;
 import com.restapi.Restfull.API.Server.response.DataListSortType;
@@ -150,5 +151,10 @@ public class PortfolioDao {
     public List<Portfolio> getPortfolioForCDN() {
         PortfolioMapper portfolioMapper = ROSqlSession.getMapper(PortfolioMapper.class);
         return portfolioMapper.getPortfolioForCDN();
+    }
+
+    public void updateContentProfile(int artist_no, String artist_name, String artist_profile_img){
+        PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
+        portfolioMapper.updateContentProfile(artist_no, artist_name, artist_profile_img);
     }
 }

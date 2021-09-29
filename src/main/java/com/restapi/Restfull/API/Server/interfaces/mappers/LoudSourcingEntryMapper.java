@@ -38,4 +38,6 @@ public interface LoudSourcingEntryMapper {
     List<LoudSourcingEntry> getEntryForCDN();
 
     List<LoudSourcingEntry> getEntryListByLoudSourcingNoAdminSortByVoteNumber(int loudsourcing_no);
+
+    void updateContentProfile(int artist_no, String artist_name, String artist_profile_img);
 }

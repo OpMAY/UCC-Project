@@ -21,4 +21,6 @@ public interface EntryCommentMapper {
     List<EntryComment> getCommentNumberByEntryNo(int entry_no);
 
     List<EntryComment> getCommentListByEntryNo(int entry_no);
+
+    void updateAllCommentUserInfo(int user_no, String commenter_name, String profile_img);
 }

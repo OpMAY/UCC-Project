@@ -338,7 +338,6 @@ function check(inspect, what, message) {
     }
 
     alert(message);
-    what.value = '';
     what.focus();
     return false;
 }

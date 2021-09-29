@@ -131,4 +131,9 @@ public class BoardDao {
         BoardMapper boardMapper = ROSqlSession.getMapper(BoardMapper.class);
         return boardMapper.getBoardForCDN();
     }
+
+    public void updateContentProfile(int artist_no, String artist_name, String artist_profile_img){
+        BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
+        boardMapper.updateContentProfile(artist_no, artist_name, artist_profile_img);
+    }
 }
