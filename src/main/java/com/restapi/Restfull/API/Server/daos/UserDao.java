@@ -64,4 +64,9 @@ public class UserDao {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         return userMapper.selectUserBySNSAndRegDate(sns, date);
     }
+
+    public void updateUserFcmToken(int user_no, String fcm_token) {
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        userMapper.updateUserFcmToken(user_no, fcm_token);
+    }
 }

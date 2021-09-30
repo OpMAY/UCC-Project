@@ -76,7 +76,7 @@ public class ImageConverter {
 
             if (Imgcodecs.imwrite(blurredFile.getName(), dst)) {
                 log.info("Image Blur Success");
-                log.info("Blurred Image PATH : " + blurredFile.getPath());
+                log.info("Blurred Image PATH : " + blurredFile.getAbsolutePath());
             } else {
                 throw new IOException("Image Blur Failed");
             }

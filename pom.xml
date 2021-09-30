@@ -180,6 +180,12 @@
 			<artifactId>opencv</artifactId>
 			<version>3.2.0-1</version>
 		</dependency>
+		<!-- Google Play Store Purchase Verification -->
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-androidpublisher</artifactId>
+			<version>v2-rev19-1.20.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -52,6 +52,12 @@ public class Time {
             return date.substring(0, date.lastIndexOf("."));
     }
 
+    public static String TimeMillsToDateString(Long timeMills, String timeFormat){
+        Date timeInDate = new Date(timeMills);
+        DateFormat dateFormat = new SimpleDateFormat(timeFormat);
+        return dateFormat.format(timeInDate);
+    }
+
     public static Date StringToDateTimeFormat(String dateString) throws ParseException {
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return transFormat.parse(dateString);

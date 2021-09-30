@@ -133,7 +133,7 @@
             "banner_ad_no": banner_ad_no
         };
         formData.append("banner", JSON.stringify(bannerData));
-        if ($("#banner-img").value != null) {
+        if (document.getElementById("banner-img").files.length !== 0) {
             $.ajax({
                 type: 'POST',
                 enctype: 'multipart/form-data',

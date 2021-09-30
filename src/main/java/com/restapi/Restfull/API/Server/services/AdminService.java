@@ -2010,6 +2010,8 @@ public class AdminService {
     public int editBanner(BannerAd bannerAd) {
         try {
             bannerAdDao.setSession(sqlSession);
+            BannerAd originalBannerAd = bannerAdDao.getBannerAdByBannerAdNo(bannerAd.getBanner_ad_no());
+            bannerAd.setStatus(originalBannerAd.isStatus());
             String time = Time.TimeFormatHMS();
             bannerAd.setRevise_date(time);
             bannerAdDao.updateBanner(bannerAd);

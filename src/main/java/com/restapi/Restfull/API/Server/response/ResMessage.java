@@ -84,4 +84,5 @@ public class ResMessage {
     public static final String UPDATE_PUSH_SETTING = "Push Setting updated";
     public static final String NOT_RIGHT_SORT = "sort is null";
     public static final String MANUALLY_DELETE_CDN = "CDN Deleted Manually";
+    public static final String FCM_TOKEN_UPDATED = "FCM Token Updated";
 }

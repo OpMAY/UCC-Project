@@ -22,4 +22,6 @@ public interface UserMapper {
     List<User> getAllUserList();
 
     List<User> getUserForCDN();
+
+    void updateUserFcmToken(int user_no, String fcm_token);
 }

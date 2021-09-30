@@ -196,6 +196,11 @@ public class UserController {
         return userService.updateUserPush(user_no, "fankok");
     }
 
+    @RequestMapping(value = "/api/user/update/fcm", method = RequestMethod.POST)
+    public ResponseEntity UpdateUserFcmToken(@RequestBody String body){
+        return userService.updateUserFcmToken(body);
+    }
+
     private String uploadFile(String originalName, MultipartFile mfile, String file_path, boolean isBlur) throws IOException {
         UUID uid = UUID.randomUUID();
         originalName = originalName.replace(" ", "");

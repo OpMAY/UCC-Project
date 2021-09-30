@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.services;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
@@ -8,6 +9,7 @@ import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.utility.Time;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONException;
@@ -274,14 +276,16 @@ public class UserService {
             userDao.updateUser(user);
             User resUser = userDao.selectUserByUserNo(user.getUser_no());
             message.put("user", resUser);
-            if(artist != null){
-                boardCommentDao.updateAllCommentUserInfo(artist.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
-                portfolioCommentDao.updateAllCommentUserInfo(artist.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
-                entryCommentDao.updateAllCommentUserInfo(artist.getUser_no(), artist.getArtist_name(), artist.getArtist_profile_img());
+
+            Artist commentArtist = artistDao.getArtistByUserNo(user.getUser_no());
+            if(commentArtist != null){
+                boardCommentDao.updateAllCommentUserInfo(commentArtist.getUser_no(), commentArtist.getArtist_name(), commentArtist.getArtist_profile_img());
+                portfolioCommentDao.updateAllCommentUserInfo(commentArtist.getUser_no(), commentArtist.getArtist_name(), commentArtist.getArtist_profile_img());
+                entryCommentDao.updateAllCommentUserInfo(commentArtist.getUser_no(), commentArtist.getArtist_name(), commentArtist.getArtist_profile_img());
             }else {
-                boardCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
-                portfolioCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
-                entryCommentDao.updateAllCommentUserInfo(user.getUser_no(), user.getName(), user.getProfile_img());
+                boardCommentDao.updateAllCommentUserInfo(resUser.getUser_no(), resUser.getName(), resUser.getProfile_img());
+                portfolioCommentDao.updateAllCommentUserInfo(resUser.getUser_no(), resUser.getName(), resUser.getProfile_img());
+                entryCommentDao.updateAllCommentUserInfo(resUser.getUser_no(), resUser.getName(), resUser.getProfile_img());
             }
 
             if (uploads.size() > 0) {
@@ -336,6 +340,25 @@ public class UserService {
             userDao.updateUser(user);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPDATE_PUSH_SETTING, message.getHashMap("updateUserPush()")), HttpStatus.OK);
         } catch (JSONException e){
+            throw new BusinessException(e);
+        }
+    }
+
+    @Data
+    private class UserFcmUpdateRequest{
+        private int user_no;
+        private String fcm_token;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity updateUserFcmToken(String body) {
+        try {
+            log.info("Body : " + body);
+            UserFcmUpdateRequest request = new Gson().fromJson(body, UserFcmUpdateRequest.class);
+            userDao.updateUserFcmToken(request.getUser_no(), request.getFcm_token());
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPDATE_PUSH_SETTING), HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
             throw new BusinessException(e);
         }
     }
