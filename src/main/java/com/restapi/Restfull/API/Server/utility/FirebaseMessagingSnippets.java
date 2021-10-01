@@ -31,7 +31,7 @@ public class FirebaseMessagingSnippets {
                 FirebaseApp.initializeApp(options);
             refreshToken.close();
         } catch (Exception e) {
-            System.out.println("notification error: " + e);
+            log.info("notification error: " + e);
             e.printStackTrace();
         }
     }
@@ -61,7 +61,7 @@ public class FirebaseMessagingSnippets {
             // Send a message to the devices subscribed to the provided topic.
             String firbaseResponse = FirebaseMessaging.getInstance().send(msg);
             // Response is a message ID string.
-            System.out.println("Successfully sent message: " + firbaseResponse);
+            log.info("Successfully sent message: " + firbaseResponse);
 
         } catch (Exception e) {
             e.printStackTrace();

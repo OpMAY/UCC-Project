@@ -45,10 +45,8 @@ public class VideoUtility {
         long lengthInSeconds =
                 isoFile.getMovieBox().getMovieHeaderBox().getDuration() /
                         isoFile.getMovieBox().getMovieHeaderBox().getTimescale();
-        System.out.println(lengthInSeconds);
         int minute = (int) (lengthInSeconds / 60);
         int second = (int) (lengthInSeconds % 60);
-        System.out.println("time : " + minute + ":" + second);
         StringBuilder duration = new StringBuilder();
         duration.append(minute);
         duration.append(":");

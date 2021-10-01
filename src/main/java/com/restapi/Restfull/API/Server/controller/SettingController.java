@@ -54,7 +54,6 @@ public class SettingController {
 
     @RequestMapping(value = "/api/user/loudsourcing/{user_no}/last_index/{last_index}", method = RequestMethod.GET)
     public ResponseEntity GetMyLoudsourcingList(@PathVariable("user_no") int user_no, @PathVariable("last_index") int last_index) {
-        log.info("Last_index : " + last_index);
         return loudSourcingService.getMyLoudsourcingList(user_no, last_index);
     }
 

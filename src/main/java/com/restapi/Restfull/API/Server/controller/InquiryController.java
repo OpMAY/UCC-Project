@@ -90,9 +90,6 @@ public class InquiryController {
             String date = Time.TimeFormatHMS();
             String inquiry_info = inquiry.getUser_no() + "/" + d + "/";
 
-            log.info(body);
-            log.info(files);
-
             if(files != null) {
                 if (files.length > 0 && !files[0].isEmpty()) {
                     Map<String, MultipartFile> multipartFileMap = new HashMap<>();
@@ -115,13 +112,11 @@ public class InquiryController {
                             // CHECK UTF-8 ENCODING
                             if(EncodeChecker.encodeCheck(decoded_file_name)){
                                 decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
-                                log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
                             }
 
                             // CHECK NFD ENCODING - For IOS Korean
                             if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                 decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
-                                log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                             }
 
                             /** File Upload Logic */

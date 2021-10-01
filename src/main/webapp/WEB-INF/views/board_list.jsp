@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>회원 관리 - 게시글</title>
+    <title>회원 관리 - 게시방</title>
     <!-- core:css -->
     <link rel="stylesheet" href="../assets/vendors/core/core.css">
     <!-- endinject -->
@@ -46,7 +46,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item" style="color: #baa2fc">회원관리</li>
                     <li class="breadcrumb-item active" aria-current="page">아티스트</li>
-                    <li class="breadcrumb-item active" aria-current="page">게시글</li>
+                    <li class="breadcrumb-item active" aria-current="page">게시방</li>
                 </ol>
             </nav>
 
@@ -54,7 +54,7 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">게시글</h6>
+                            <h6 class="card-title" style="font-size: x-large">게시방</h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table">
                                     <thead>
@@ -62,10 +62,7 @@
                                         <th>#</th>
                                         <th>작성자</th>
                                         <th>제목</th>
-                                        <th>썸네일</th>
-                                        <th>댓글 수</th>
-                                        <th>좋아요 수</th>
-                                        <th>조회 수</th>
+                                        <th width="360px">썸네일</th>
                                         <th>후원 금액</th>
                                         <th>수정 일자</th>
                                         <th>자세히 보기</th>
@@ -85,21 +82,12 @@
                                                 ${boardList[i-1].title}
                                         </td>
                                         <td>
-                                            <div style="width: 320px; height: 240px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
+                                            <div style="width: 360px; height: 100%; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
                                                  class="d-flex justify-content-center">
                                                 <img class="img" src="${boardList[i-1].thumbnail}"
                                                      onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
-                                                     style="width: 100%; height: 100%; border-radius: 0%">
+                                                     style="width: 360px; height: 240px; border-radius: 0%">
                                             </div>
-                                        </td>
-                                        <td>
-                                                ${boardList[i-1].comment_number}
-                                        </td>
-                                        <td>
-                                                ${boardList[i-1].like_number}
-                                        </td>
-                                        <td>
-                                                ${boardList[i-1].visit_number}
                                         </td>
                                         <td>
                                                 ${boardList[i-1].spon_amount}

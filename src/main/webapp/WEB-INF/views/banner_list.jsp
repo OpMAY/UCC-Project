@@ -59,7 +59,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large">배너광고 관리
-                                <button type="button" style="float: right"
+                                <button type="button" style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
                                         onclick="openWindowPopBanner('/admin/banner_make.do', '배너광고 업로드')">
                                     <i class="btn-icon-prepend" data-feather="edit"></i>
@@ -75,7 +75,7 @@
                                         <th width="70px">등록 일자</th>
                                         <th width="60px">상태 변경 하기</th>
                                         <th width="70px">변동 일자</th>
-                                        <th width="50px">자세히 보기</th>
+                                        <th width="50px">이미지 보기</th>
                                         <th width="50px">삭제</th>
                                     </tr>
                                     </thead>
@@ -85,11 +85,11 @@
                                     <tr>
                                         <td>${i}</td>
                                         <td>
-                                            <div style="width: 320px; height: 240px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
+                                            <div style="width: 100%; height: 100%; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
                                                  class="d-flex justify-content-center">
                                                 <img class="img" src="${bannerList[i-1].img}"
                                                      onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
-                                                     style="width: 100%; height: 100%; border-radius: 0%">
+                                                     style="width: 480px; height: 240px; border-radius: 0%">
                                             </div>
                                         </td>
                                         <td>
@@ -172,7 +172,7 @@
 <!-- end custom js for this page -->
 <script>
     function openWindowPopBanner(url, name) {
-        let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+        let options = 'top=10, left=10, width=720, height=820, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
         window.open(url, name, options);
     }
 

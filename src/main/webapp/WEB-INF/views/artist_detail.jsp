@@ -80,7 +80,7 @@
                         <div class="col-md-12">
                             <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
                                 <div class="card-body">
-                                    <h6 class="card-title" style="font-size: x-large">사용자 상세</h6>
+                                    <h6 class="card-title" style="font-size: x-large">아티스트 상세</h6>
                                     <div class="row mt-3 justify-content-around">
                                         <div class="col-md-6">
                                             <label class="label" style="font-size: larger">

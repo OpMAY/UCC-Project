@@ -50,7 +50,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h6 class="card-title mb-3">미답변 문의 <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="미답변 문의 중 가장 오래된 순으로 표시됩니다."></i></h6>
+                                <h6 class="card-title mb-3">미답변 문의 <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="미답변 문의 중 가장 오래된 순으로 표시됩니다."></i></h6>
                             </div>
                             <div class="table-responsive">
                                 <table id="index-inquiry-table" class="table table-hover mb-0" style="table-layout: fixed">
@@ -109,10 +109,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title">가입 SNS <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="설정한 날짜의 SNS 회원가입 인원 수가 표시됩니다."></i></h6>
+                                <h6 class="card-title">가입 SNS <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="설정한 날짜의 SNS 회원가입 인원 수가 표시됩니다."></i></h6>
                                 <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
                                      id="index-date">
-                                    <input type="text" class="form-control" name="index-sns-date" id="index-sns-date"><span
+                                    <input type="text" class="form-control" name="index-sns-date" id="index-sns-date" readonly><span
                                         class="input-group-addon bg-transparent"><i
                                         data-feather="calendar"></i></span>
                                 </div>
@@ -155,7 +155,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h6 class="card-title mb-4">최신 크라우드 현황 <i data-feather="alert-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="모집 상태의 크라우드가 최신 순으로 표시됩니다."></i></h6>
+                                <h6 class="card-title mb-4">최신 크라우드 현황 <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="모집 상태의 크라우드가 최신 순으로 표시됩니다."></i></h6>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0" id="index-loudsourcing-table" style="table-layout: fixed">
@@ -237,13 +237,7 @@
         </div>
 
         <!-- partial:partials/_footer.jsp -->
-        <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
-            <p class="text-muted text-center text-md-left">Copyright © 2020 <a href="https://www.nobleui.com"
-                                                                               target="_blank">NobleUI</a>. All rights
-                reserved</p>
-            <p class="text-muted text-center text-md-left mb-0 d-none d-md-block">Handcrafted With <i
-                    class="mb-1 text-primary ml-1 icon-small" data-feather="heart"></i></p>
-        </footer>
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
         <!-- partial -->
 
     </div>

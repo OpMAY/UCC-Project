@@ -12,10 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminPageInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("AdminPageInterceptor");
         log.info("Request URL : " + request.getRequestURL().toString());
         if(request.getRequestURL().toString().equals("http://weart-page.com") || request.getRequestURL().toString().equals("http://weart-page.com/") || request.getRequestURL().toString().equals("http://www.weart-page.com/") || request.getRequestURL().toString().equals("http://www.weart-page.com") || request.getRequestURL().toString().equals("http://localhost:8080/") || request.getRequestURL().toString().equals("http://localhost:8080")){
-            log.info("Redirecting To Admin..");
             response.sendRedirect("/admin/main.do");
             return false;
         } else {

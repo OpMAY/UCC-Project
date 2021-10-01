@@ -77,7 +77,6 @@ public class LoudSourcingService {
                     if (loudSourcing.getHashtag() != null) {
                         ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(",")));
                         loudSourcing.setHashtag_list(hashtagList);
-                        log.info(hashtagList);
                     }
                 }
                 message.put("loudsourcing", loudSourcingList);
@@ -93,7 +92,6 @@ public class LoudSourcingService {
                     if (loudSourcing.getHashtag() != null) {
                         ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(", ")));
                         loudSourcing.setHashtag_list(hashtagList);
-                        log.info(hashtagList);
                     }
                 }
                 message.put("loudsourcing", loudSourcingList);
@@ -116,7 +114,7 @@ public class LoudSourcingService {
             loudSourcingDao.setSession(sqlSession);
 
             if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
-                log.info(loudsourcing_no);
+                log.info("Deleted Content No : " + loudsourcing_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -174,7 +172,7 @@ public class LoudSourcingService {
             penaltyDao.setSession(sqlSession);
 
             if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudSourcingEntry.getLoudsourcing_no()) == null) {
-                log.info(loudSourcingEntry);
+                log.info("Deleted Content No : " + loudSourcingEntry);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -267,7 +265,7 @@ public class LoudSourcingService {
             Message message = new Message();
 
             if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
-                log.info(loudsourcing_no);
+                log.info("Deleted Content No : " + loudsourcing_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -283,13 +281,10 @@ public class LoudSourcingService {
             if (last_index == 0) {
                 List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByLoudSourcingNo(loudsourcing_no, sort);
 
-                log.info(loudSourcingEntryList.size());
                 if (loudSourcingEntryList.size() > 0) {
                     for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
-                        log.info(loudSourcingEntry);
                         if (loudSourcingEntry.getArtist_no() != 0) {
                             Artist artist = artistDao.getArtistByArtistNo(loudSourcingEntry.getArtist_no());
-                            log.info(artist);
                             loudSourcingEntry.setFan_number(artist.getFan_number());
                             loudSourcingEntry.setUser_no(artist.getUser_no());
                         }
@@ -309,13 +304,10 @@ public class LoudSourcingService {
                 }
                 List<LoudSourcingEntry> loudSourcingEntryList = loudSourcingEntryDao.getEntryListByLoudSourcingNoRefresh(loudsourcing_no, sort, entry);
 
-                log.info(loudSourcingEntryList.size());
                 if (loudSourcingEntryList.size() > 0) {
                     for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
-                        log.info(loudSourcingEntry);
                         if (loudSourcingEntry.getArtist_no() != 0) {
                             Artist artist = artistDao.getArtistByArtistNo(loudSourcingEntry.getArtist_no());
-                            log.info(artist);
                             loudSourcingEntry.setFan_number(artist.getFan_number());
                             loudSourcingEntry.setUser_no(artist.getUser_no());
                         }
@@ -341,17 +333,21 @@ public class LoudSourcingService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity applyLoudSourcing(LoudSourcingApply loudSourcingApply) {
         try {
+            loudSourcingEntryDao.setSession(sqlSession);
             loudSourcingApplyDao.setSession(sqlSession);
             loudSourcingDao.setSession(sqlSession);
             Message message = new Message();
 
             if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudSourcingApply.getLoudsourcing_no()) == null) {
-                log.info(loudSourcingApply);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
             if (loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(loudSourcingApply.getArtist_no(), loudSourcingApply.getLoudsourcing_no()) != null) {
                 loudSourcingApplyDao.deleteLoudSourcingApply(loudSourcingApply.getArtist_no(), loudSourcingApply.getLoudsourcing_no());
+                LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(loudSourcingApply.getArtist_no(), loudSourcingApply.getLoudsourcing_no());
+                if(entry != null){
+                    loudSourcingEntryDao.deleteEntry(entry.getEntry_no());
+                }
                 message.put("status", "cancel");
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.LOUDSOURCING_CANCEL_SUCCESS, message.getHashMap("CancelLoudSourcing()")), HttpStatus.OK);
             } else {
@@ -407,7 +403,7 @@ public class LoudSourcingService {
 
             LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
             if (entry == null || loudSourcingDao.getLoudSourcingByLoudsourcingNo(entry.getLoudsourcing_no()) == null) {
-                log.info(entry_no);
+                log.info("Deleted Content No : " + entry_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
             Artist artist = artistDao.getArtistByArtistNo(entry.getArtist_no());
@@ -438,7 +434,7 @@ public class LoudSourcingService {
             LoudSourcingEntry loudSourcingEntry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
 
             if (loudSourcingEntry == null || loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudSourcingEntry.getLoudsourcing_no()) == null) {
-                log.info(entry_no);
+                log.info("Deleted Content No : " + entry_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
             int artist_no = loudSourcingEntry.getArtist_no();
@@ -465,7 +461,6 @@ public class LoudSourcingService {
                         message.put("last_index", entryCommentList.get(entryCommentList.size() - 1).getEntry_comment_no());
                     }
                 }
-                message.put("comment_number", loudSourcingEntry.getComment_number());
             } else {
                 EntryComment entryComment1 = entryCommentDao.getEntryCommentByCommentNo(last_index);
                 if (entryComment1 == null)
@@ -491,8 +486,8 @@ public class LoudSourcingService {
                         message.put("last_index", entryCommentList.get(entryCommentList.size() - 1).getEntry_comment_no());
                     }
                 }
-                message.put("comment_number", loudSourcingEntry.getComment_number());
             }
+            message.put("comment_number", loudSourcingEntry.getComment_number());
 
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.GET_ENTRY_COMMENTS_SUCCESS, message.getHashMap("GetEntryComment()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -511,7 +506,7 @@ public class LoudSourcingService {
             LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
 
             if (entry == null || loudSourcingDao.getLoudSourcingByLoudsourcingNo(entry.getLoudsourcing_no()) == null) {
-                log.info(entry_no);
+                log.info("Deleted Content No : " + entry_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -555,7 +550,7 @@ public class LoudSourcingService {
             LoudSourcingEntry thisEntry = loudSourcingEntryDao.getEntryByEntryNo(entryComment.getEntry_no());
 
             if (thisEntry == null || loudSourcingDao.getLoudSourcingByLoudsourcingNo(thisEntry.getLoudsourcing_no()) == null) {
-                log.info(entryComment.getEntry_no());
+                log.info("Deleted Content No : " + entryComment.getEntry_no());
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -686,7 +681,7 @@ public class LoudSourcingService {
             LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
 
             if (entry == null || loudSourcingDao.getLoudSourcingByLoudsourcingNo(entry.getLoudsourcing_no()) == null) {
-                log.info(entry_no);
+                log.info("Deleted Content No : " + entry_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -740,7 +735,7 @@ public class LoudSourcingService {
             LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
 
             if (entry == null || loudSourcingDao.getLoudSourcingByLoudsourcingNo(entry.getLoudsourcing_no()) == null) {
-                log.info(entry_no);
+                log.info("Deleted Content No : " + entry_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 

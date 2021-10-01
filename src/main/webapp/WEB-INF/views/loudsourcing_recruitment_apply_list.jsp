@@ -58,7 +58,7 @@
                                 <c:if test="${artistList.size() > 0}">
                                     <button type="button"
                                             class="btn btn-outline-primary btn-icon-text"
-                                            style="float: right"
+                                            style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                             onclick="SendMessageToAll(${artistList[0].loudsourcing_no})">
                                         <i class="btn-icon-prepend" data-feather="send"></i>
                                         알림 전체 전송

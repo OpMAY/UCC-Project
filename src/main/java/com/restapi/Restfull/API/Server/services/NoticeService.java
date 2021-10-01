@@ -39,11 +39,9 @@ public class NoticeService {
                 List<Notice> noticeList = noticeDao.getNotice();
                 for (Notice notice : noticeList) {
                     String img = notice.getImg();
-                    log.info(img);
                     if (img != null) {
                         ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
                         notice.setImgList(imgList);
-                        log.info(imgList);
                     }
                 }
 
@@ -58,11 +56,9 @@ public class NoticeService {
                 List<Notice> noticeList = noticeDao.getNoticeRefresh(notice1);
                 for (Notice notice : noticeList) {
                     String img = notice.getImg();
-                    log.info(img);
                     if (img != null) {
                         ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
                         notice.setImgList(imgList);
-                        log.info(imgList);
                     }
                 }
 

@@ -62,7 +62,6 @@ public class ArtistService {
                 if (artist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                     artist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
                 }
             }
             List<Search> searchList = searchDao.getKeywords();
@@ -90,7 +89,6 @@ public class ArtistService {
             Artist artist = artistDao.getArtistByArtistNo(last_index);
             if (last_index != 0) {
                 if (artist == null) {
-                    log.info(last_index);
                     return new ResponseEntity(DefaultRes.res(StatusCode.RETRY_RELOAD, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
                 }
 
@@ -100,7 +98,6 @@ public class ArtistService {
                     if (artist1.getHashtag() != null) {
                         ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist1.getHashtag().split(", ")));
                         artist1.setHashtag_list(hashtagList);
-                        log.info(hashtagList);
                     }
                 }
 
@@ -118,7 +115,6 @@ public class ArtistService {
                     if (artist1.getHashtag() != null) {
                         ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist1.getHashtag().split(", ")));
                         artist1.setHashtag_list(hashtagList);
-                        log.info(hashtagList);
                     }
                 }
 
@@ -151,12 +147,6 @@ public class ArtistService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void insertArtist(Artist artist) {
-        artistDao.setSession(sqlSession);
-        artistDao.insertArtist(artist);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
     public void updateArtist(Artist artist) {
         artistDao.setSession(sqlSession);
         artistDao.updateArtist(artist);
@@ -181,14 +171,12 @@ public class ArtistService {
 
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
             if (artist == null) {
-                log.info("artist_no : " + artist_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETED_USER, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
             } else {
                 if (last_index == -1) {
                     if (artist.getHashtag() != null) {
                         ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                         artist.setHashtag_list(hashtagList);
-                        log.info(hashtagList);
                     }
                     List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNoLimit(artist_no);
                     List<Portfolio> resPortfolioList = new ArrayList<>();
@@ -207,7 +195,6 @@ public class ArtistService {
                             if (portfolio.getFile() != null) {
                                 ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
                                 portfolio.setImage_list(filelist);
-                                log.info(filelist);
                             }
                         }
                         resPortfolioList.add(portfolio);

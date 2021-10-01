@@ -63,7 +63,6 @@ public class ArtistController {
     **/
     @RequestMapping(value = "/api/artist", method = RequestMethod.POST) //CHECK
     public ResponseEntity GetArtistWithoutBoard(@RequestBody String body) {
-        log.info(body);
         ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
         return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), -1);
     }
@@ -77,7 +76,6 @@ public class ArtistController {
     @RequestMapping(value = "/api/artist/{last_index}", method = RequestMethod.POST) // CHECK
     public ResponseEntity GetArtistBoard(@RequestBody String body, @PathVariable("last_index") int last_index) {
         ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
-        log.info(body);
         return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), last_index);
     }
 
@@ -90,8 +88,6 @@ public class ArtistController {
     @RequestMapping(value = "/api/fankok", method = RequestMethod.POST) //CHECK
     public ResponseEntity Subscribe(@RequestBody String body) {
         ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
-        log.info(body);
-        log.info("fankok");
         return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no(), "");
     }
 

@@ -51,9 +51,6 @@ public class MainService {
     private NoticeDao noticeDao;
 
     @Autowired
-    private RequestChangeDao requestChangeDao;
-
-    @Autowired
     private FAQDao faqDao;
 
     @Autowired
@@ -84,11 +81,9 @@ public class MainService {
             List<Artist> popularArtistList = artistDao.getArtistListByPopular();
             for (Artist artist : popularArtistList) {
                 String hashtag = artist.getHashtag();
-                log.info(hashtag);
                 if (hashtag != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(hashtag.split(", ")));
                     artist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
                 }
             }
 
@@ -137,9 +132,9 @@ public class MainService {
             List<String> allFileList = cdnService.finds();
 
             /** Prevent Delete Folder **/
-            for(Iterator<String> iterator = allFileList.iterator(); iterator.hasNext();){
+            for (Iterator<String> iterator = allFileList.iterator(); iterator.hasNext(); ) {
                 String url = iterator.next();
-                if(url != null && url.substring(url.lastIndexOf("/") + 1).equals("")){
+                if (url != null && url.substring(url.lastIndexOf("/") + 1).equals("")) {
                     log.info("Excepting URL : " + url);
                     iterator.remove();
                 }
@@ -154,12 +149,21 @@ public class MainService {
 
             for (Artist artist : artistList) {
                 String profile_img_link = artist.getArtist_profile_img();
+                String profile_blur_img_link = artist.getProfile_blur_img();
                 String main_img_link = artist.getMain_img();
-                if (profile_img_link != null) {
+                String main_blur_img_link = artist.getMain_blur_img();
+                log.info("Profile Image : " + urlConverter.DecodeFileName(getPath(profile_img_link)));
+                log.info("Profile Blur Image : " + urlConverter.DecodeFileName(getPath(profile_blur_img_link)));
+                log.info("Main Image : " + urlConverter.DecodeFileName(getPath(main_img_link)));
+                log.info("Main Blur Image : " + urlConverter.DecodeFileName(getPath(main_blur_img_link)));
+                if (!profile_img_link.equals("default"))
                     allFileList.remove(urlConverter.DecodeFileName(getPath(profile_img_link)));
-                }
-                if (main_img_link != null)
+                if (!main_img_link.equals("default"))
                     allFileList.remove(urlConverter.DecodeFileName(getPath(main_img_link)));
+                if (!profile_blur_img_link.equals("default"))
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(profile_blur_img_link)));
+                if (!main_blur_img_link.equals("default"))
+                    allFileList.remove(urlConverter.DecodeFileName(getPath(main_blur_img_link)));
             }
             artistList.clear();
 
@@ -167,6 +171,7 @@ public class MainService {
             log.info("Removing Unnecessary files : Banner");
             for (BannerAd bannerAd : bannerAdList) {
                 String img_link = bannerAd.getImg();
+                log.info("Banner Image Link : " + urlConverter.DecodeFileName(getPath(img_link)));
                 if (img_link != null)
                     allFileList.remove(urlConverter.DecodeFileName(getPath(img_link)));
             }
@@ -177,11 +182,13 @@ public class MainService {
 
             for (Board board : boardList) {
                 String thumbnail_link = board.getThumbnail();
+                log.info("Board Thumbnail Link : " + urlConverter.DecodeFileName(getPath(thumbnail_link)));
                 if (thumbnail_link != null)
                     allFileList.remove(urlConverter.DecodeFileName(getPath(thumbnail_link)));
                 List<String> html_img_links = getBoardFiles(board.getContent());
                 if (html_img_links != null) {
                     for (String url : html_img_links) {
+                        log.info("Board HTML Image Link : " + urlConverter.DecodeFileName(getPath(url)));
                         if (url != null)
                             allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                     }
@@ -197,6 +204,7 @@ public class MainService {
                     ArrayList<String> imgList = new ArrayList<>(Arrays.asList(faq.getImg().split(", ")));
                     faq.setImgList(imgList);
                     for (String url : imgList) {
+                        log.info("FAQ Image Link : " + urlConverter.DecodeFileName(getPath(url)));
                         allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                     }
                     imgList.clear();
@@ -210,9 +218,10 @@ public class MainService {
                 if (inquiry.getFile() != null && !inquiry.getFile().isEmpty()) {
                     String jsonString = inquiry.getFile();
                     FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-                    if(fileJson != null && fileJson.length > 0) {
+                    if (fileJson != null && fileJson.length > 0) {
                         for (FileJson fileJson1 : fileJson) {
                             String fileUrl = fileJson1.getUrl();
+                            log.info("Inquiry File Link : " + urlConverter.DecodeFileName(getPath(fileUrl)));
                             if (fileUrl != null)
                                 allFileList.remove(urlConverter.DecodeFileName(getPath(fileUrl)));
                         }
@@ -226,13 +235,15 @@ public class MainService {
 
             for (LoudSourcing loudSourcing : loudSourcingList) {
                 String img_link = loudSourcing.getImg();
+                log.info("LoudSourcing Image Link : " + urlConverter.DecodeFileName(getPath(img_link)));
                 if (img_link != null)
                     allFileList.remove(urlConverter.DecodeFileName(getPath(img_link)));
                 String jsonString = loudSourcing.getFiles();
                 FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-                if(fileJson != null && fileJson.length > 0) {
+                if (fileJson != null && fileJson.length > 0) {
                     for (FileJson fileJson1 : fileJson) {
                         String fileUrl = fileJson1.getUrl();
+                        log.info("LoudSourcing File Link : " + urlConverter.DecodeFileName(getPath(fileUrl)));
                         if (fileUrl != null)
                             allFileList.remove(urlConverter.DecodeFileName(getPath(fileUrl)));
                     }
@@ -246,6 +257,8 @@ public class MainService {
             for (LoudSourcingEntry loudSourcingEntry : loudSourcingEntryList) {
                 String vod_link = loudSourcingEntry.getFile();
                 String thumbnail_link = loudSourcingEntry.getThumbnail();
+                log.info("Entry VOD Link : " + urlConverter.DecodeFileName(getPath(vod_link)));
+                log.info("Entry Thumbnail Link : " + urlConverter.DecodeFileName(getPath(thumbnail_link)));
                 if (vod_link != null)
                     allFileList.remove(urlConverter.DecodeFileName(getPath(vod_link)));
                 if (thumbnail_link != null)
@@ -261,6 +274,7 @@ public class MainService {
                 if (img != null) {
                     ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
                     for (String url : imgList) {
+                        log.info("Notice Image Link : " + urlConverter.DecodeFileName(getPath(url)));
                         if (url != null)
                             allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                     }
@@ -277,16 +291,21 @@ public class MainService {
                 String thumbnail_link = portfolio.getThumbnail();
                 switch (portfolio.getType()) {
                     case PortfolioType.VOD:
+                        log.info("Portfolio Type : VOD");
+                        log.info("Portfolio VOD Link : " + urlConverter.DecodeFileName(getPath(file)));
+                        log.info("Portfolio VOD thumbnail Link : " + urlConverter.DecodeFileName(getPath(thumbnail_link)));
                         if (file != null)
                             allFileList.remove(urlConverter.DecodeFileName(getPath(file)));
                         if (thumbnail_link != null)
                             allFileList.remove(urlConverter.DecodeFileName(getPath(thumbnail_link)));
                         break;
                     case PortfolioType.FILE:
+                        log.info("Portfolio Type : File");
                         FileJson[] fileJson = gson.fromJson(file, FileJson[].class);
-                        if(fileJson != null && fileJson.length > 0) {
+                        if (fileJson != null && fileJson.length > 0) {
                             for (FileJson fileJson1 : fileJson) {
                                 String url = fileJson1.getUrl();
+                                log.info("Portfolio File Link : " + urlConverter.DecodeFileName(getPath(url)));
                                 if (url != null) {
                                     allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                                 }
@@ -294,11 +313,14 @@ public class MainService {
                         }
                         break;
                     case PortfolioType.IMAGE:
+                        log.info("Portfolio Type : File");
+                        log.info("Portfolio Image Thumbnail Link : " + urlConverter.DecodeFileName(getPath(thumbnail_link)));
                         if (thumbnail_link != null)
                             allFileList.remove(urlConverter.DecodeFileName(getPath(thumbnail_link)));
                         if (file != null) {
                             ArrayList<String> img_links = new ArrayList<>(Arrays.asList(file.split(", ")));
                             for (String url : img_links) {
+                                log.info("Portfolio Image Link : " + urlConverter.DecodeFileName(getPath(url)));
                                 if (url != null)
                                     allFileList.remove(urlConverter.DecodeFileName(getPath(url)));
                             }
@@ -314,6 +336,7 @@ public class MainService {
 
             for (User user : userList) {
                 String profile_img = user.getProfile_img();
+                log.info("User Profile Image Link : " + urlConverter.DecodeFileName(getPath(profile_img)));
                 if (profile_img != null)
                     allFileList.remove(urlConverter.DecodeFileName(getPath(profile_img)));
             }
@@ -323,10 +346,10 @@ public class MainService {
             /** DELETE FILES IN CDN **/
             log.info("Deleting File in CDN...");
             log.info("Deleting " + allFileList.size() + " files..");
-            if(!allFileList.isEmpty()) {
-                for(String url : allFileList){
+            if (!allFileList.isEmpty()) {
+                for (String url : allFileList) {
                     log.info("Deleting file : " + url);
-                    if(url != null)
+                    if (url != null)
                         cdnService.delete(url);
                 }
             }
@@ -341,14 +364,13 @@ public class MainService {
     }
 
 
-
     private List<String> getBoardFiles(String content) {
         try {
             List<String> url = new ArrayList<>();
             Pattern p = Pattern.compile("src=\"(.*?)\"");
             Matcher m = p.matcher(content);
             while (m.find()) {
-                log.info("Board Image Url : " + m.group(1));
+                log.info("Pop Board Image Url : " + m.group(1));
                 url.add(m.group(1));
             }
             if (url.size() > 0)
@@ -362,8 +384,9 @@ public class MainService {
         }
     }
 
-    private String getPath(String url){
-        url = url.substring(url.indexOf("com/") + 4);
+    private String getPath(String url) {
+        if (url != null && !url.equals("default"))
+            url = url.substring(url.indexOf("com/") + 4).replace("[", "").replace("]", "");
         return url;
     }
 

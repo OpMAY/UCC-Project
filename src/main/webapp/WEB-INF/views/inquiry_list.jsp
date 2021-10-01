@@ -57,11 +57,11 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><c:choose><c:when
-                                    test="${type == 'loudsourcing'}">크라우드<a
-                                href="${pageContext.request.contextPath}/admin/inquiry_report.do"> 신고 </a><a
+                                    test="${type == 'loudsourcing'}">크라우드<a style="margin-left: 10px"
+                                href="${pageContext.request.contextPath}/admin/inquiry_report.do"> 신고 </a><a style="margin-left: 10px"
                                 href="${pageContext.request.contextPath}/admin/inquiry_normal.do"> 기타 </a></c:when><c:when
-                                    test="${type == 'normal'}"><a
-                                    href="${pageContext.request.contextPath}/admin/inquiry_loudsourcing.do">크라우드</a><a
+                                    test="${type == 'normal'}"><a style="margin-right: 10px"
+                                    href="${pageContext.request.contextPath}/admin/inquiry_loudsourcing.do">크라우드</a><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/inquiry_report.do">
                                 신고 </a> 기타 </c:when></c:choose>
                             </h6>

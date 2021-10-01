@@ -76,7 +76,6 @@ public class UserController {
 
     @RequestMapping(value = "/api/user/valid/{user_no}", method = RequestMethod.GET) // CHECK
     public ResponseEntity CheckUserPrivate(@PathVariable("user_no") int user_no) {
-        log.info(user_no);
         return userService.checkUserPrivate(user_no);
     }
 
@@ -91,12 +90,8 @@ public class UserController {
                                          @RequestParam(value = "profile_img", required = false) MultipartFile profile_img,
                                          @RequestParam(value = "main_img", required = false) MultipartFile fan_main_img) {
         try {
-            log.info(body);
-            log.info(artistBody);
             User user = new Gson().fromJson(body, User.class);
             Artist artist = new Gson().fromJson(artistBody, Artist.class);
-            log.info(user);
-            log.info(artist);
             ArrayList<Upload> uploads = new ArrayList<>();
             URLConverter urlConverter = new URLConverter();
             if(profile_img != null) {
@@ -115,13 +110,11 @@ public class UserController {
                     // CHECK UTF-8 ENCODING
                     if(EncodeChecker.encodeCheck(profile_img_decoded_file_name)){
                         profile_img_decoded_file_name = URLDecoder.decode(profile_img_decoded_file_name, "UTF-8");
-                        log.info("File Name URL Encoded - Decoded File : " + profile_img_decoded_file_name);
                     }
 
                     // CHECK NFD ENCODING - For IOS Korean
                     if(!Normalizer.isNormalized(profile_img_decoded_file_name, Normalizer.Form.NFC)) {
                         profile_img_decoded_file_name = Normalizer.normalize(profile_img_decoded_file_name, Normalizer.Form.NFC);
-                        log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + profile_img_decoded_file_name);
                     }
 
                     /** File Upload Logic */
@@ -155,13 +148,11 @@ public class UserController {
                     // CHECK UTF-8 ENCODING
                     if(EncodeChecker.encodeCheck(main_img_decoded_file_name)){
                         main_img_decoded_file_name = URLDecoder.decode(main_img_decoded_file_name, "UTF-8");
-                        log.info("File Name URL Encoded - Decoded File : " + main_img_decoded_file_name);
                     }
 
                     // CHECK NFD ENCODING - For IOS Korean
                     if(!Normalizer.isNormalized(main_img_decoded_file_name, Normalizer.Form.NFC)) {
                         main_img_decoded_file_name = Normalizer.normalize(main_img_decoded_file_name, Normalizer.Form.NFC);
-                        log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + main_img_decoded_file_name);
                     }
 
                     /** File Upload Logic */
@@ -172,8 +163,6 @@ public class UserController {
                     uploads.add(new Upload(file_name, urlConverter.convertSpecialLetter(cdn_path + "images/user/" + user.getUser_no() + "/artist/" + artist.getArtist_no() + "/" + file_name)));
                 }
             }
-            log.info(user);
-            log.info(artist);
             return userService.UpdateUserInfo(artist, user, uploads);
         } catch (IOException e) {
             e.printStackTrace();
@@ -217,8 +206,8 @@ public class UserController {
         } else {
             savedName = uid.toString().substring(0, 8) + "_" + originalName;
             cdnService.upload(file_path + savedName, file);
-            Files.deleteIfExists(file.toPath());
         }
+        Files.deleteIfExists(file.toPath());
         return savedName;
     }
 

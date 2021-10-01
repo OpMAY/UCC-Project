@@ -55,26 +55,26 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><c:choose><c:when
-                                    test="${type == 'all'}">포트폴리오 <a href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=vod">VOD </a><a href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=image">이미지 </a><a href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=file">파일 </a>
-                            </c:when><c:when test="${type == 'vod'}"><a
+                                    test="${type == 'all'}">포트폴리오 <a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=vod">VOD </a><a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=image">이미지 </a><a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=file">파일 </a>
+                            </c:when><c:when test="${type == 'vod'}"><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=all">
-                                포트폴리오 </a>VOD <a
+                                포트폴리오 </a>VOD <a style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=image">
-                                이미지 </a><a
+                                이미지 </a><a style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=file">
                                 파일 </a></c:when><c:when
-                                    test="${type == 'image'}"><a
+                                    test="${type == 'image'}"><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=all">
-                                포트폴리오 </a><a
+                                포트폴리오 </a><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=vod">
-                                VOD </a>이미지 </a><a
+                                VOD </a>이미지 <a style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=file">
                                 파일 </a></c:when><c:when
-                                    test="${type == 'file'}"><a
+                                    test="${type == 'file'}"><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=all">
-                                포트폴리오 </a><a
+                                포트폴리오 </a><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=vod">
-                                VOD </a><a
+                                VOD </a><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/portfolio.do?artist_no=${artist_no}&type=image">
                                 이미지 </a>파일 </c:when></c:choose></h6>
                             <div class="table-responsive">
@@ -85,10 +85,7 @@
                                         <th>종류</th>
                                         <th>작성자</th>
                                         <th>제목</th>
-                                        <th>썸네일</th>
-                                        <th>댓글 수</th>
-                                        <th>좋아요 수</th>
-                                        <th>조회 수</th>
+                                        <th width="360px">썸네일</th>
                                         <th>수정 일자</th>
                                         <th>자세히 보기</th>
                                         <th>삭제</th>
@@ -115,21 +112,12 @@
                                                 ${portfolioList[i-1].title}
                                         </td>
                                         <td>
-                                            <div style="width: 320px; height: 240px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
-                                                 class="d-flex justify-content-center">
+                                            <div style="width: 360px; height: 100%; overflow: hidden; border: 1px black solid"
+                                                 class="d-flex">
                                                 <img class="img" src="${portfolioList[i-1].thumbnail}"
                                                      onerror="this.src='https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png'"
-                                                     style="width: 100%; height: 100%; border-radius: 0%">
+                                                     style="width: 360px; height: 240px; border-radius: 0%">
                                             </div>
-                                        </td>
-                                        <td>
-                                                ${portfolioList[i-1].comment_number}
-                                        </td>
-                                        <td>
-                                                ${portfolioList[i-1].like_number}
-                                        </td>
-                                        <td>
-                                                ${portfolioList[i-1].visit_number}
                                         </td>
                                         <td>
                                                 ${portfolioList[i-1].revise_date}

@@ -58,7 +58,7 @@
                                 <c:if test="${artistList.size() > 0}">
                                     <button type="button"
                                             class="btn btn-outline-primary btn-icon-text"
-                                            style="float: right"
+                                            style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                             onclick="if(confirm('해당 크라우드에서 선정된 아티스트 전원에게\n선정 알림 메세지를 전송합니다\n\n이미 한번 메세지를 전송했어도 다시 전송됩니다.\n\n메세지를 전송하시겠습니까?')){sendSelectedAlarmToAll(${artistList[0].loudsourcing_no});} else {return false;}">
                                         <i class="btn-icon-prepend" data-feather="send"></i>
                                         선정 알림 전체 전송

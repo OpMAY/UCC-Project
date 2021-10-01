@@ -45,8 +45,6 @@ public class DirectoryInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.info(uploadPath);
-        log.info("interceptor");
         File folder = new File(uploadPath);
         // 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
         if (!folder.exists()) {

@@ -81,8 +81,6 @@ public class PortfolioController {
     @RequestMapping(value = "/api/portfolio/comments/{last_index}", method = RequestMethod.POST) //CHECK
     public ResponseEntity GetPortfolioComment(@RequestBody String body, @PathVariable("last_index") int last_index) {
         PortfolioRequest portfolioRequest = new Gson().fromJson(body, PortfolioRequest.class);
-        log.info("Start_index : " + last_index);
-        log.info("Portfolio_no : " + portfolioRequest.getPortfolio_no());
         return portfolioService.GetPortfolio(portfolioRequest.getUser_no(), portfolioRequest.getPortfolio_no(), last_index);
     }
 
@@ -100,17 +98,12 @@ public class PortfolioController {
              *      savedName = savedName + "png";
              * }
              * **/
-            log.info(1);
             Portfolio portfolio = new Gson().fromJson(body, Portfolio.class);
             Message message = new Message();
-
             ArrayList<Upload> uploads = new ArrayList<>();
 
             String d = Time.TimeFormatHMS();
-
             URLConverter urlConverter = new URLConverter();
-
-            log.info(2);
             StringBuilder portfolio_info = new StringBuilder();
             portfolio_info.append(portfolio.getArtist_no());
             portfolio_info.append("/");
@@ -137,13 +130,11 @@ public class PortfolioController {
                         // CHECK UTF-8 ENCODING
                         if(EncodeChecker.encodeCheck(vod_decoded_file_name)){
                             vod_decoded_file_name = URLDecoder.decode(vod_decoded_file_name, "UTF-8");
-                            log.info("VOD File Name URL Encoded - Decoded File : " + vod_decoded_file_name);
                         }
 
                         // CHECK NFD ENCODING - For IOS Korean
                         if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
                             vod_decoded_file_name = Normalizer.normalize(vod_decoded_file_name, Normalizer.Form.NFC);
-                            log.info("(IOS Kor File) VOD File is NFD Encoded - Decoded File : " + vod_decoded_file_name);
                         }
 
                         String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
@@ -151,13 +142,11 @@ public class PortfolioController {
                         // CHECK UTF-8 ENCODING
                         if(EncodeChecker.encodeCheck(thumbnail_decoded_file_name)){
                             thumbnail_decoded_file_name = URLDecoder.decode(thumbnail_decoded_file_name, "UTF-8");
-                            log.info("Thumbnail File Name URL Encoded - Decoded File : " + thumbnail_decoded_file_name);
                         }
 
                         // CHECK NFD ENCODING - For IOS Korean
                         if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
                             thumbnail_decoded_file_name = Normalizer.normalize(thumbnail_decoded_file_name, Normalizer.Form.NFC);
-                            log.info("(IOS Kor File) Thumbnail File is NFD Encoded - Decoded File : " + thumbnail_decoded_file_name);
                         }
 
                         /** VOD THUMBNAIL LOGIC - NOT WORKING IN LARGE FILES - JAVA HEAP SPACE**/
@@ -170,7 +159,7 @@ public class PortfolioController {
 
                         /** VOD FILE DURATION LOGIC **/
                         String duration = videoUtility.getDuration(file);
-                        log.info(duration);
+                        log.info("Video Time : " + duration);
 
                         /** File Upload Logic */
                         String file_name = uploadFile(vod_decoded_file_name, vod_file, portfolio_info.toString(), temp_fileName);
@@ -213,13 +202,11 @@ public class PortfolioController {
                                 // CHECK UTF-8 ENCODING
                                 if(EncodeChecker.encodeCheck(decoded_file_name)){
                                     decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
-                                    log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
                                 }
 
                                 // CHECK NFD ENCODING - For IOS Korean
                                 if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                     decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
-                                    log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                                 }
 
                                 /** File Upload Logic */
@@ -259,13 +246,11 @@ public class PortfolioController {
                             // CHECK UTF-8 ENCODING
                             if(EncodeChecker.encodeCheck(decoded_file_name)){
                                 decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
-                                log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
                             }
 
                             // CHECK NFD ENCODING - For IOS Korean
                             if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                 decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
-                                log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                             }
 
                             /** File Upload Logic */
@@ -316,7 +301,6 @@ public class PortfolioController {
             Portfolio portfolio1 = portfolioService.getPortfolioByPortfolioNo(portfolio.getPortfolio_no());
             portfolio1.setUser_no(artist.getUser_no());
 
-            log.info(3);
             message.put("portfolio", portfolio1);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPLOAD_PORTFOLIO_SUCCESS, message.getHashMap("UploadPortfolio()")), HttpStatus.OK);
         } catch (JSONException e) {
@@ -335,29 +319,18 @@ public class PortfolioController {
                                         @RequestParam(value = "images", required = false) MultipartFile[] img_files,
                                         @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
         try {
-            log.info("Body : " + body);
-            log.info("File : " + Arrays.toString(portfolio_files));
-            log.info("VOD : " + vod_file);
-            log.info("Images : " + Arrays.toString(img_files));
-            log.info("Thumbnail : " + thumbnail);
-
             Portfolio portfolio = new Gson().fromJson(body, Portfolio.class);
             Message message = new Message();
-
             ArrayList<Upload> uploads = new ArrayList<>();
-
             Portfolio original_portfolio = portfolioService.getPortfolioByPortfolioNo(portfolio.getPortfolio_no());
-
             StringBuilder portfolio_info = new StringBuilder();
             portfolio_info.append(original_portfolio.getArtist_no());
             portfolio_info.append("/");
-
             URLConverter urlConverter = new URLConverter();
 
             switch (portfolio.getType()) {
                 case PortfolioType.VOD: /** VOD PORTFOLIO **/
                     if (portfolio.getFile().equals("") && portfolio.getThumbnail().equals("")) {
-                        log.info("VOD File Edit");
                         if (vod_file == null || vod_file.isEmpty() || thumbnail == null || thumbnail.isEmpty()) {
                             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.FILE_IS_EMPTY, message.getHashMap("EditPortfolio()")), HttpStatus.OK);
                         } else if (!Format.CheckVODFile(vod_file.getOriginalFilename()) || !Format.CheckIMGFile(thumbnail.getOriginalFilename())) {
@@ -374,13 +347,11 @@ public class PortfolioController {
                             // CHECK UTF-8 ENCODING
                             if(EncodeChecker.encodeCheck(vod_decoded_file_name)){
                                 vod_decoded_file_name = URLDecoder.decode(vod_decoded_file_name, "UTF-8");
-                                log.info("VOD File Name URL Encoded - Decoded File : " + vod_decoded_file_name);
                             }
 
                             // CHECK NFD ENCODING - For IOS Korean
                             if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
                                 vod_decoded_file_name = Normalizer.normalize(vod_decoded_file_name, Normalizer.Form.NFC);
-                                log.info("(IOS Kor File) VOD File is NFD Encoded - Decoded File : " + vod_decoded_file_name);
                             }
 
                             String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
@@ -388,13 +359,11 @@ public class PortfolioController {
                             // CHECK UTF-8 ENCODING
                             if(EncodeChecker.encodeCheck(thumbnail_decoded_file_name)){
                                 thumbnail_decoded_file_name = URLDecoder.decode(thumbnail_decoded_file_name, "UTF-8");
-                                log.info("Thumbnail File Name URL Encoded - Decoded File : " + thumbnail_decoded_file_name);
                             }
 
                             // CHECK NFD ENCODING - For IOS Korean
                             if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
                                 thumbnail_decoded_file_name = Normalizer.normalize(thumbnail_decoded_file_name, Normalizer.Form.NFC);
-                                log.info("(IOS Kor File) Thumbnail File is NFD Encoded - Decoded File : " + thumbnail_decoded_file_name);
                             }
 
                             /** VOD THUMBNAIL LOGIC - NOT WORKING IN LARGE FILES - JAVA HEAP SPACE**/
@@ -406,7 +375,7 @@ public class PortfolioController {
 
                             /** VOD FILE DURATION LOGIC **/
                             String duration = videoUtility.getDuration(file);
-                            log.info(duration);
+                            log.info("Video Time : " + duration);
 
                             /** File Upload Logic */
                             String file_name = uploadFile(vod_decoded_file_name, vod_file, portfolio_info.toString(), temp_fileName);
@@ -423,13 +392,10 @@ public class PortfolioController {
                     break;
                 case PortfolioType.IMAGE: { /** IMAGE PORTFOLIO **/
                     if (!portfolio.getFile().equals(original_portfolio.getFile())) {
-                        log.info("Image File is Changed");
                         /**Test Parsing Logic*/
                         if (img_files == null || img_files.length <= 0) {
-                            log.info("Image is deleted Only");
                             break;
                         } else {
-                            log.info("Image File Edited");
                             Map<String, MultipartFile> multipartFileMap = new HashMap<>();
                             for (int i = 0; i < img_files.length; i++) {
                                 multipartFileMap.put("files-" + i, img_files[i]);
@@ -453,13 +419,11 @@ public class PortfolioController {
                                     // CHECK UTF-8 ENCODING
                                     if(EncodeChecker.encodeCheck(decoded_file_name)){
                                         decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
-                                        log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
                                     }
 
                                     // CHECK NFD ENCODING - For IOS Korean
                                     if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                         decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
-                                        log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                                     }
 
                                     /** File Upload Logic */
@@ -475,10 +439,7 @@ public class PortfolioController {
                 break;
                 case PortfolioType.FILE: { /** FILE PORTFOLIO **/
                     /**Test Parsing Logic*/
-                    if (portfolio_files == null || portfolio_files.length <= 0) {
-                        if (!portfolio.getFile().equals(original_portfolio.getFile()))
-                            log.info("File is only deleted");
-                    } else {
+                    if (!(portfolio_files == null || portfolio_files.length <= 0)) {
                         Map<String, MultipartFile> multipartFileMap = new HashMap<>();
                         for (int i = 0; i < portfolio_files.length; i++) {
                             multipartFileMap.put("files-" + i, portfolio_files[i]);
@@ -502,13 +463,11 @@ public class PortfolioController {
                                 // CHECK UTF-8 ENCODING
                                 if(EncodeChecker.encodeCheck(decoded_file_name)){
                                     decoded_file_name = URLDecoder.decode(decoded_file_name, "UTF-8");
-                                    log.info("File Name URL Encoded - Decoded File : " + decoded_file_name);
                                 }
 
                                 // CHECK NFD ENCODING - For IOS Korean
                                 if(!Normalizer.isNormalized(decoded_file_name, Normalizer.Form.NFC)) {
                                     decoded_file_name = Normalizer.normalize(decoded_file_name, Normalizer.Form.NFC);
-                                    log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + decoded_file_name);
                                 }
 
                                 /** File Upload Logic */

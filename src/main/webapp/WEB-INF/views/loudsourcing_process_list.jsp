@@ -52,15 +52,15 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large"><a
+                            <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_recruitment.do">
-                                모집 </a>진행 <a
+                                모집 </a>진행 <a style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_judge.do">
-                                심사 </a><a
+                                심사 </a><a style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
                                 종료 </a><button type="button"
                                                class="btn btn-outline-primary btn-icon-text"
-                                               style="float: right"
+                                               style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                                onclick="setLoudSourcingToJudge()">
                                 <i class="btn-icon-prepend" data-feather="refresh-ccw"></i>
                                 심사 수동 업데이트
@@ -72,7 +72,7 @@
                                         <th width="30px">#</th>
                                         <th width="150px">공모전 이름</th>
                                         <th width="50px">상태</th>
-                                        <th width="110px">참여인원/총 모집인원</th>
+                                        <th width="110px">참여인원/최소 모집인원</th>
                                         <th width="150px">총 기간</th>
                                         <th width="150px">모집 기간</th>
                                         <th width="150px">진행 기간</th>

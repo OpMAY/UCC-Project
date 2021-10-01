@@ -104,7 +104,6 @@ public class BoardController {
     @RequestMapping(value = "/api/board/comments/{last_index}", method = RequestMethod.POST) //CHECK
     public ResponseEntity GetBoardComments(@RequestBody String body, @PathVariable("last_index") int last_index) {
         BoardRequest boardRequest = new Gson().fromJson(body, BoardRequest.class);
-        log.info(last_index);
         return boardService.GetBoard(boardRequest.getUser_no(), boardRequest.getBoard_no(), last_index);
     }
 
@@ -196,7 +195,6 @@ public class BoardController {
 
     @RequestMapping(value = "/api/board/comment/delete", method = RequestMethod.POST) //CHECK
     public ResponseEntity DeleteBoardComment(@RequestBody String body) {
-        log.info(body);
         CommentDeleteRequest commentDeleteRequest = new Gson().fromJson(body, CommentDeleteRequest.class);
         BoardComment boardComment = new BoardComment();
         boardComment.setComment_no(commentDeleteRequest.getComment_no());

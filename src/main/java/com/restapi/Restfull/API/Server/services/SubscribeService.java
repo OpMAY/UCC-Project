@@ -192,12 +192,6 @@ public class SubscribeService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Subscribe> getSubscribeListByArtistNo(int artist_no) {
-        subscribeDao.setSession(sqlSession);
-        return subscribeDao.getSubscribeListByArtistNo(artist_no);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity getSubscribeListByUserNo(int user_no) {
         try {
             subscribeDao.setSession(sqlSession);
@@ -216,7 +210,6 @@ public class SubscribeService {
                 if (artist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                     artist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
                 }
                 artistList.add(artist);
                 /** Portfolio Info **/
@@ -237,7 +230,6 @@ public class SubscribeService {
                         if (portfolio.getFile() != null) {
                             ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
                             portfolio.setImage_list(filelist);
-                            log.info(filelist);
                         }
                     }
                     fankok.setPortfolio(portfolio);
@@ -358,7 +350,6 @@ public class SubscribeService {
                     if (artist.getHashtag() != null) {
                         ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                         artist.setHashtag_list(hashtagList);
-                        log.info(hashtagList);
                     }
                 }
                 if(artists.size() > 0)
@@ -405,7 +396,6 @@ public class SubscribeService {
                         if (artist.getHashtag() != null) {
                             ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                             artist.setHashtag_list(hashtagList);
-                            log.info(hashtagList);
                         }
                         message.put("artist", artist);
                     }

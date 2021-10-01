@@ -54,7 +54,7 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">사용자<a
+                            <h6 class="card-title" style="font-size: x-large">사용자<a style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/artists.do"> 아티스트 </a></h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table">

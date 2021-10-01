@@ -57,6 +57,7 @@
             color: #000000;
             opacity: 72%;
             border-radius: 15px;
+            cursor: pointer;
         }
 
         .tag-item:hover {
@@ -119,18 +120,28 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large">검색 해시태그 관리</h6>
-                            <div class="col-md-10">
+                            <div class="col-md-12">
+                                <div class="row mt-3">
+                                    <div class="col-md-9">
+                                        <label class="label d-flex" for="search-example"
+                                               style="font-size: larger">
+                                            검색창 예시
+                                        </label>
+                                        <textarea class="form-control" id="search-example" rows="1"
+                                                  style="line-height: 150%; font-size: large" placeholder="검색창 입니다."
+                                                  disabled></textarea>
+                                    </div>
+                                </div>
                                 <div class="tr_hashTag_area">
-                                    <p><strong>해시태그 등록</strong></p>
                                     <div class="form-group">
                                         <input type="hidden" value="" name="tag" id="rdTag"/>
                                     </div>
 
                                     <ul id="tag-list"></ul>
 
-                                    <div class="form-group">
+                                    <div class="form-group mt-5">
                                         <input type="text" id="tag" size="7" placeholder="엔터로 해시태그를 등록해주세요. 최대 5자까지 가능하며 해시태그는 최대 10개 등록 가능합니다."
-                                               style="width: 80%;"/>
+                                               style="width: 50%;"/>
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +213,7 @@
                 console.log(obj[i]);
                 tag[counter] = obj[i];
                 console.log(counter);
-                $("#tag-list").append("<li class='tag-item' style='text-decoration: underline'>#" + obj[i] + "<span class='del-btn' idx='" + counter + "'><svg style=\"width:16px;height:16px\" viewBox=\"0 0 24 24\">\n" +
+                $("#tag-list").append("<li class='tag-item' tagId='" + counter + "' style='text-decoration: underline'>#" + obj[i] + "<span class='del-btn' idx='" + counter + "'><svg style=\"width:16px;height:16px\" viewBox=\"0 0 24 24\">\n" +
                     "    <path fill=\"currentColor\" d=\"M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z\" />\n" +
                     "</svg></span></li>");
                 counter++;
@@ -242,7 +253,13 @@
                     alert(error);
                     window.location.reload();
                 });
-            })
+            });
+
+            $("#tag-list li").click(function (e) {
+                let idx = $(this).attr("tagId");
+                let hashtagData = tag[idx];
+                $("#search-example").val(hashtagData);
+            });
 
             // 서버에 제공
             $("#tag-form").on("submit", function (e) {
@@ -278,7 +295,7 @@
                             // 해시태그가 중복되었는지 확인
                             if (result.length === 0) {
                                 if (counter < 10) {
-                                    $("#tag-list").append("<li class='tag-item' style='text-decoration: underline'>#" + tagValue + "<span class='del-btn' idx='" + counter + "'><svg style=\"width:16px;height:16px\" viewBox=\"0 0 24 24\">\n" +
+                                    $("#tag-list").append("<li class='tag-item' tagId='" + counter + "' style='text-decoration: underline'>#" + tagValue + "<span class='del-btn' idx='" + counter + "'><svg style=\"width:16px;height:16px\" viewBox=\"0 0 24 24\">\n" +
                                         "    <path fill=\"currentColor\" d=\"M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z\" />\n" +
                                         "</svg></span></li>");
                                     addTag(tagValue);

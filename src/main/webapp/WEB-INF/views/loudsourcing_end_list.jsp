@@ -52,11 +52,11 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large"><a
+                            <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_recruitment.do">
-                                모집 </a><a
+                                모집 </a><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_process.do">
-                                진행 </a><a
+                                진행 </a><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/loudsourcing_judge.do">
                                 심사 </a>종료 </h6>
                             <div class="table-responsive">

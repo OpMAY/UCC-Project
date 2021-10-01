@@ -78,9 +78,6 @@ public class LoudSourcingController {
 
     @RequestMapping(value = "/api/loudsourcing/{sort}/last_index/{last_index}", method = RequestMethod.GET) // CHECK
     public ResponseEntity GetLoudSourcingList(@PathVariable("sort") String sort, @PathVariable("last_index") int last_index) {
-        /**
-         * 1. LoudSourcingList
-         * **/
         return loudSourcingService.getLoudSourcingList(sort, last_index);
     }
 
@@ -124,26 +121,22 @@ public class LoudSourcingController {
                 // CHECK UTF-8 ENCODING
                 if(EncodeChecker.encodeCheck(vod_decoded_file_name)){
                     vod_decoded_file_name = URLDecoder.decode(vod_decoded_file_name, "UTF-8");
-                    log.info("VOD File Name URL ENCODED - Decoded File : " + vod_decoded_file_name);
                 }
 
                 // CHECK NFD ENCODING - For IOS Korean
                 if(!Normalizer.isNormalized(vod_decoded_file_name, Normalizer.Form.NFC)) {
                     vod_decoded_file_name = Normalizer.normalize(vod_decoded_file_name, Normalizer.Form.NFC);
-                    log.info("VOD File is NFD Encoded - Decoded File : " + vod_decoded_file_name);
                 }
 
                 String thumbnail_decoded_file_name = thumbnail.getOriginalFilename();
                 // CHECK UTF-8 ENCODING
                 if(EncodeChecker.encodeCheck(thumbnail_decoded_file_name)){
                     thumbnail_decoded_file_name = URLDecoder.decode(thumbnail_decoded_file_name, "UTF-8");
-                    log.info("Thumbnail File Name URL ENCODED - Decoded File : " + thumbnail_decoded_file_name);
                 }
 
                 // CHECK NFD ENCODING - For IOS Korean
                 if(!Normalizer.isNormalized(thumbnail_decoded_file_name, Normalizer.Form.NFC)) {
                     thumbnail_decoded_file_name = Normalizer.normalize(thumbnail_decoded_file_name, Normalizer.Form.NFC);
-                    log.info("Thumbnail File is NFD Encoded - Decoded File : " + thumbnail_decoded_file_name);
                 }
 
                 /** VOD THUMBNAIL LOGIC **/
@@ -175,9 +168,6 @@ public class LoudSourcingController {
     @RequestMapping(value = "/api/loudsourcing/entry/list/{sort}/last_index/{last_index}", method = RequestMethod.POST)
     public ResponseEntity GetEntryList(@RequestBody String body, @PathVariable("sort") String sort, @PathVariable("last_index") int last_index) {
         DetailRequest detailRequest = new Gson().fromJson(body, DetailRequest.class);
-        log.info(body);
-        log.info(sort);
-        log.info(last_index);
         return loudSourcingService.getEntryList(detailRequest.getUser_no(), detailRequest.getLoudsourcing_no(), sort, last_index);
     }
 
@@ -235,7 +225,6 @@ public class LoudSourcingController {
 
     @RequestMapping(value = "/api/loudsourcing/entry/comment/delete", method = RequestMethod.POST)
     public ResponseEntity DeleteComment(@RequestBody String body) {
-        log.info(body);
         CommentDeleteRequest commentDeleteRequest = new Gson().fromJson(body, CommentDeleteRequest.class);
         return loudSourcingService.deleteComment(commentDeleteRequest.getEntry_no(), commentDeleteRequest.getComment_no());
     }

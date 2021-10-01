@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>회원 관리 - 게시글
+    <title>회원 관리 - 게시방
     </title>
     <!-- core:css -->
     <link rel="stylesheet" href="../assets/vendors/core/core.css">
@@ -50,7 +50,7 @@
                 <div class="col-md-8 grid-margin stretch-card offset-2">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">게시글</h6>
+                            <h6 class="card-title" style="font-size: x-large">게시방</h6>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="row mt-3">
@@ -131,7 +131,6 @@
                                         <div class="col-md-6 justify-content-center d-flex">
                                             <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
                                                     onclick="if(confirm('정말 삭제 하시겠습니까?')){DeleteBoard(${board.board_no});} else {return false;}">
-                                                >
                                                 삭제
                                             </button>
                                         </div>
@@ -189,7 +188,7 @@
             }).done(function (result) {
                 console.log(result);
                 if (result === 0) {
-                    alert("게시글 삭제 완료");
+                    alert("게시방 삭제 완료");
                     window.location = document.referrer;
                 } else {
                     alert("알 수 없는 오류 발생");

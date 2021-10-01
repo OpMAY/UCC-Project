@@ -159,33 +159,4 @@ public class SponService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<Spon> getSponList() {
-        sponDao.setSession(sqlSession);
-        return sponDao.getSponList();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<Spon> getSponListByArtistNo(int artist_no) {
-        sponDao.setSession(sqlSession);
-        return sponDao.getSponListByArtistNo(artist_no);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<Spon> getSponListByUserNo(int user_no) {
-        sponDao.setSession(sqlSession);
-        return sponDao.getSponListByUserNo(user_no);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<Spon> getSponListByBoardNo(int board_no) {
-        sponDao.setSession(sqlSession);
-        return sponDao.getSponListByBoardNo(board_no);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<Spon> getSponAfterSpon(int user_no, int artist_no) {
-        sponDao.setSession(sqlSession);
-        return sponDao.getSponByArtistNoANDUserNo(user_no, artist_no);
-    }
 }

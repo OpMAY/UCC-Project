@@ -182,7 +182,6 @@ public class UserService {
             userDao.setSession(sqlSession);
             penaltyDao.setSession(sqlSession);
             boolean userCheck = userDao.selectUserByUserNo(user_no).is_user_private();
-            log.info(userCheck);
 
             if(userCheck){
                 Penalty penalty = penaltyDao.getPenaltyListByUserNo(user_no).get(0);
@@ -209,7 +208,6 @@ public class UserService {
                 if (artist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                     artist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
                 }
                 message.put("artist", artist);
             }
@@ -235,9 +233,6 @@ public class UserService {
             entryCommentDao.setSession(sqlSession);
             loudSourcingEntryDao.setSession(sqlSession);
 
-            log.info(user);
-            log.info(artist);
-
             if (artist != null) {
                 Artist origin_artist = artistDao.getArtistByArtistNo(artist.getArtist_no());
                 if(artist.getArtist_profile_img() == null) {
@@ -261,7 +256,6 @@ public class UserService {
                 if (resArtist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(resArtist.getHashtag().split(", ")));
                     resArtist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
                 }
                 message.put("artist", resArtist);
                 boardDao.updateContentProfile(artist.getArtist_no(), artist.getArtist_name(), artist.getArtist_profile_img());
@@ -353,7 +347,6 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity updateUserFcmToken(String body) {
         try {
-            log.info("Body : " + body);
             UserFcmUpdateRequest request = new Gson().fromJson(body, UserFcmUpdateRequest.class);
             userDao.updateUserFcmToken(request.getUser_no(), request.getFcm_token());
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.UPDATE_PUSH_SETTING), HttpStatus.OK);

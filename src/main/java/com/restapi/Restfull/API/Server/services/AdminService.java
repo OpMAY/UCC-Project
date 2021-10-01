@@ -2,27 +2,23 @@ package com.restapi.Restfull.API.Server.services;
 
 import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.daos.*;
+import com.restapi.Restfull.API.Server.exceptions.AdminException;
+import com.restapi.Restfull.API.Server.exceptions.BadRequestException;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.NotificationType;
 import com.restapi.Restfull.API.Server.response.PortfolioType;
 import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
-import com.restapi.Restfull.API.Server.utility.ImageConverter;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
 
@@ -99,48 +95,55 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getAdminMain() {
-        adminDao.setSession(sqlSession);
-        inquiryDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("index");
-        List<Inquiry> notAnsweredInquiryList = inquiryDao.getInquiryListByAnswerStatus(false);
-        for (Inquiry inquiry : notAnsweredInquiryList) {
-            User user = userDao.selectUserByUserNo(inquiry.getUser_no());
-            inquiry.setUser_name(user.getName());
-            inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
+        try {
+            adminDao.setSession(sqlSession);
+            inquiryDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("index");
+            List<Inquiry> notAnsweredInquiryList = inquiryDao.getInquiryListByAnswerStatus(false);
+            for (Inquiry inquiry : notAnsweredInquiryList) {
+                User user = userDao.selectUserByUserNo(inquiry.getUser_no());
+                inquiry.setUser_name(user.getName());
+                inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
+            }
+
+            String date = Time.TimeFormatDay();
+
+            List<User> kakaoUserList = userDao.selectUserBySNSAndRegDate("KAKAO", date);
+            List<User> naverUserList = userDao.selectUserBySNSAndRegDate("NAVER", date);
+            List<User> googleUserList = userDao.selectUserBySNSAndRegDate("GOOGLE", date);
+            List<User> appleUserList = userDao.selectUserBySNSAndRegDate("APPLE", date);
+
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getRecentLSAdminMain();
+            for (LoudSourcing loudSourcing : loudSourcingList) {
+                int apply_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
+                loudSourcing.setApplied_artist_num(apply_num);
+            }
+
+            modelAndView.addObject("InquiryList", notAnsweredInquiryList);
+            modelAndView.addObject("KakaoUser", kakaoUserList.size());
+            modelAndView.addObject("NaverUser", naverUserList.size());
+            modelAndView.addObject("GoogleUser", googleUserList.size());
+            modelAndView.addObject("AppleUser", appleUserList.size());
+            modelAndView.addObject("LoudsourcingList", loudSourcingList);
+
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-
-        String date = Time.TimeFormatDay();
-
-        List<User> kakaoUserList = userDao.selectUserBySNSAndRegDate("KAKAO", date);
-        List<User> naverUserList = userDao.selectUserBySNSAndRegDate("NAVER", date);
-        List<User> googleUserList = userDao.selectUserBySNSAndRegDate("GOOGLE", date);
-        List<User> appleUserList = userDao.selectUserBySNSAndRegDate("APPLE", date);
-
-        List<LoudSourcing> loudSourcingList = loudSourcingDao.getRecentLSAdminMain();
-        for (LoudSourcing loudSourcing : loudSourcingList) {
-            int apply_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
-            loudSourcing.setApplied_artist_num(apply_num);
-        }
-
-        modelAndView.addObject("InquiryList", notAnsweredInquiryList);
-        modelAndView.addObject("KakaoUser", kakaoUserList.size());
-        modelAndView.addObject("NaverUser", naverUserList.size());
-        modelAndView.addObject("GoogleUser", googleUserList.size());
-        modelAndView.addObject("AppleUser", appleUserList.size());
-        modelAndView.addObject("LoudsourcingList", loudSourcingList);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public String getUserSNSByDate(String date) {
         try {
             if (date == null) {
-                log.info("No Date Error");
-                throw new BusinessException(new Exception());
+                throw new AdminException(new Exception("No Date Error"));
             }
             userDao.setSession(sqlSession);
             List<User> kakaoUserList = userDao.selectUserBySNSAndRegDate("KAKAO", date);
@@ -484,24 +487,24 @@ public class AdminService {
             artistDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
             List<User> userList = new ArrayList<>();
-            if(send_to.equals("user")){
+            if (send_to.equals("user")) {
                 userList = userDao.getAllUserList();
-            } else if (send_to.equals("artist")){
+            } else if (send_to.equals("artist")) {
                 List<Artist> artistList = artistDao.getAllArtists();
-                for(Artist artist : artistList){
+                for (Artist artist : artistList) {
                     int user_no = artist.getUser_no();
                     User user = userDao.selectUserByUserNo(user_no);
                     userList.add(user);
                 }
             } else {
-                throw new Exception("wrong send_to");
+                throw new AdminException(new Exception("wrong send_to"));
             }
             NotificationNext notificationNext = new NotificationNext(NotificationType.ADMIN, null, null, 0, NotificationType.ADMIN, 0);
-            for(User user : userList){
+            for (User user : userList) {
                 if (user.getFcm_token() != null && user.isPush()) {
                     log.info("Sending Message To user_no : " + user.getUser_no());
                     firebaseMessagingSnippets.push(user.getFcm_token(), title, content, new Gson().toJson(notificationNext));
-                } else if(user.getFcm_token() == null) {
+                } else if (user.getFcm_token() == null) {
                     log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
                 } else {
                     log.info("User Push Setting is OFF");
@@ -511,6 +514,40 @@ public class AdminService {
         } catch (Exception e) {
             e.printStackTrace();
             return 1;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ModelAndView getCommentDetail(int comment_no, int type) {
+        try {
+            modelAndView = new ModelAndView("comment_detail");
+
+            if (type == 1) {
+                portfolioCommentDao.setSession(sqlSession);
+                PortfolioComment portfolioComment = portfolioCommentDao.getCommentByCommentNo(comment_no);
+                if(portfolioComment == null) throw new Exception("Bad Request");
+                modelAndView.addObject("comment", portfolioComment);
+            } else if (type == 2) {
+                boardCommentDao.setSession(sqlSession);
+                BoardComment boardComment = boardCommentDao.getCommentByCommentNo(comment_no);
+                if(boardComment == null) throw new Exception("Bad Request");
+                modelAndView.addObject("comment", boardComment);
+            } else if (type == 3) {
+                entryCommentDao.setSession(sqlSession);
+                EntryComment entryComment = entryCommentDao.getEntryCommentByCommentNo(comment_no);
+                if(entryComment == null) throw new Exception("Bad Request");
+                modelAndView.addObject("comment", entryComment);
+            } else {
+                throw new Exception("Bad Request");
+            }
+
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
     }
 
@@ -524,99 +561,116 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getUser() {
-        userDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("user");
-
-        List<User> userList = userDao.getAllUserList();
-
-        modelAndView.addObject("UserList", userList);
-
-        return modelAndView;
+        try {
+            userDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("user");
+            List<User> userList = userDao.getAllUserList();
+            modelAndView.addObject("UserList", userList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getArtist() {
-        userDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("artist");
-        List<Artist> artistList = artistDao.getAllArtists();
-
-        modelAndView.addObject("artistList", artistList);
-
-        return modelAndView;
+        try {
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("artist");
+            List<Artist> artistList = artistDao.getAllArtists();
+            modelAndView.addObject("artistList", artistList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getComments(String query) {
-        boardCommentDao.setSession(sqlSession);
-        portfolioCommentDao.setSession(sqlSession);
-        entryCommentDao.setSession(sqlSession);
-
-        int user_no = Integer.parseInt(query);
-
-        modelAndView = new ModelAndView("comments");
-
-        List<AdminComment> adminCommentList = new ArrayList<>();
-        List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user_no);
-        List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user_no);
-        List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user_no);
-
-        for (BoardComment boardComment : boardCommentList) {
-            AdminComment adminComment = new AdminComment();
-            adminComment.setUser_no(boardComment.getUser_no());
-            adminComment.setComment_no(boardComment.getComment_no());
-            adminComment.set_private(boardComment.isComment_private());
-            adminComment.setType("게시글");
-            adminComment.setContent(boardComment.getContent());
-            adminComment.setWriter_name(boardComment.getCommenter_name());
-            adminComment.setReg_date(boardComment.getReg_date().substring(0, boardComment.getReg_date().lastIndexOf(".")));
-            adminCommentList.add(adminComment);
-        }
-        for (PortfolioComment portfolioComment : portfolioCommentList) {
-            AdminComment adminComment = new AdminComment();
-            adminComment.setComment_no(portfolioComment.getComment_no());
-            adminComment.setUser_no(portfolioComment.getUser_no());
-            adminComment.set_private(portfolioComment.isComment_private());
-            adminComment.setType("포트폴리오");
-            adminComment.setContent(portfolioComment.getContent());
-            adminComment.setWriter_name(portfolioComment.getCommenter_name());
-            adminComment.setReg_date(portfolioComment.getReg_date().substring(0, portfolioComment.getReg_date().lastIndexOf(".")));
-            adminCommentList.add(adminComment);
-        }
-        for (EntryComment entryComment : entryCommentList) {
-            AdminComment adminComment = new AdminComment();
-            adminComment.setComment_no(entryComment.getEntry_comment_no());
-            adminComment.setUser_no(entryComment.getUser_no());
-            adminComment.set_private(entryComment.isComment_private());
-            adminComment.setType("크라우드");
-            adminComment.setContent(entryComment.getContent());
-            adminComment.setWriter_name(entryComment.getCommenter_name());
-            adminComment.setReg_date(entryComment.getReg_date().substring(0, entryComment.getReg_date().lastIndexOf(".")));
-            adminCommentList.add(adminComment);
-        }
-
-        adminCommentList.sort((o1, o2) -> {
-            String ds1 = o1.getReg_date();
-            String ds2 = o2.getReg_date();
-            Date d1 = new Date();
-            Date d2 = new Date();
-            try {
-                d1 = Time.StringToDateTimeFormat(ds1);
-                d2 = Time.StringToDateTimeFormat(ds2);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        try {
+            boardCommentDao.setSession(sqlSession);
+            portfolioCommentDao.setSession(sqlSession);
+            entryCommentDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            int user_no = Integer.parseInt(query);
+            if(userDao.selectUserByUserNo(user_no) == null){
+                throw new Exception("Bad Request");
             }
-            if (d1.after(d2))
-                return -1;
-            if (d1.before(d2))
-                return 1;
-            else
-                return 0;
-        });
+            modelAndView = new ModelAndView("comments");
+            List<AdminComment> adminCommentList = new ArrayList<>();
+            List<BoardComment> boardCommentList = boardCommentDao.getCommentListByUserNo(user_no);
+            List<PortfolioComment> portfolioCommentList = portfolioCommentDao.getCommentListByUserNo(user_no);
+            List<EntryComment> entryCommentList = entryCommentDao.getCommentListByUserNo(user_no);
+            for (BoardComment boardComment : boardCommentList) {
+                AdminComment adminComment = new AdminComment();
+                adminComment.setUser_no(boardComment.getUser_no());
+                adminComment.setComment_no(boardComment.getComment_no());
+                adminComment.set_private(boardComment.isComment_private());
+                adminComment.setType("게시글");
+                adminComment.setContent(boardComment.getContent());
+                adminComment.setWriter_name(boardComment.getCommenter_name());
+                adminComment.setReg_date(boardComment.getReg_date().substring(0, boardComment.getReg_date().lastIndexOf(".")));
+                adminCommentList.add(adminComment);
+            }
+            for (PortfolioComment portfolioComment : portfolioCommentList) {
+                AdminComment adminComment = new AdminComment();
+                adminComment.setComment_no(portfolioComment.getComment_no());
+                adminComment.setUser_no(portfolioComment.getUser_no());
+                adminComment.set_private(portfolioComment.isComment_private());
+                adminComment.setType("포트폴리오");
+                adminComment.setContent(portfolioComment.getContent());
+                adminComment.setWriter_name(portfolioComment.getCommenter_name());
+                adminComment.setReg_date(portfolioComment.getReg_date().substring(0, portfolioComment.getReg_date().lastIndexOf(".")));
+                adminCommentList.add(adminComment);
+            }
+            for (EntryComment entryComment : entryCommentList) {
+                AdminComment adminComment = new AdminComment();
+                adminComment.setComment_no(entryComment.getEntry_comment_no());
+                adminComment.setUser_no(entryComment.getUser_no());
+                adminComment.set_private(entryComment.isComment_private());
+                adminComment.setType("크라우드");
+                adminComment.setContent(entryComment.getContent());
+                adminComment.setWriter_name(entryComment.getCommenter_name());
+                adminComment.setReg_date(entryComment.getReg_date().substring(0, entryComment.getReg_date().lastIndexOf(".")));
+                adminCommentList.add(adminComment);
+            }
 
-        modelAndView.addObject("commentList", adminCommentList);
-
-        return modelAndView;
+            adminCommentList.sort((o1, o2) -> {
+                String ds1 = o1.getReg_date();
+                String ds2 = o2.getReg_date();
+                Date d1 = new Date();
+                Date d2 = new Date();
+                try {
+                    d1 = Time.StringToDateTimeFormat(ds1);
+                    d2 = Time.StringToDateTimeFormat(ds2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (d1.after(d2))
+                    return -1;
+                if (d1.before(d2))
+                    return 1;
+                else
+                    return 0;
+            });
+            modelAndView.addObject("commentList", adminCommentList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -694,181 +748,213 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getUserDetail(String query) {
-        userDao.setSession(sqlSession);
-        penaltyDao.setSession(sqlSession);
-        sponDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("user_detail");
-        int user_no = Integer.parseInt(query);
-        User user = userDao.selectUserByUserNo(user_no);
-
-        List<Spon> sponList = sponDao.getSponListByUserNo(user_no);
-        int spon_amount = 0;
-        if (sponList.size() > 0) {
-            for (Spon spon : sponList) {
-                int price = spon.getPrice();
-                spon_amount = spon_amount + price;
+        try {
+            userDao.setSession(sqlSession);
+            penaltyDao.setSession(sqlSession);
+            sponDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("user_detail");
+            int user_no = Integer.parseInt(query);
+            User user = userDao.selectUserByUserNo(user_no);
+            if(user == null) throw new Exception("Bad Request");
+            List<Spon> sponList = sponDao.getSponListByUserNo(user_no);
+            int spon_amount = 0;
+            if (sponList.size() > 0) {
+                for (Spon spon : sponList) {
+                    int price = spon.getPrice();
+                    spon_amount = spon_amount + price;
+                }
+            }
+            List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
+            modelAndView.addObject("penalty_num", penaltyList.size());
+            modelAndView.addObject("User", user);
+            if (user.is_user_private() && penaltyList.size() > 0) {
+                modelAndView.addObject("penalty", penaltyList.get(0));
+            }
+            modelAndView.addObject("spon_amount", spon_amount);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
             }
         }
-        List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
-        modelAndView.addObject("penalty_num", penaltyList.size());
-        modelAndView.addObject("User", user);
-        if (user.is_user_private() && penaltyList.size() > 0) {
-            modelAndView.addObject("penalty", penaltyList.get(0));
-        }
-        modelAndView.addObject("spon_amount", spon_amount);
-
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getArtistDetail(String query) {
-        userDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        penaltyDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("artist_detail");
+        try {
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            penaltyDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("artist_detail");
 
-        int artist_no = Integer.parseInt(query);
-        Artist artist = artistDao.getArtistByArtistNo(artist_no);
-        User user = userDao.selectUserByUserNo(artist.getUser_no());
-        List<Penalty> penaltyList = penaltyDao.getPenaltyListByArtistNo(artist_no);
+            int artist_no = Integer.parseInt(query);
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            User user = userDao.selectUserByUserNo(artist.getUser_no());
+            List<Penalty> penaltyList = penaltyDao.getPenaltyListByArtistNo(artist_no);
 
-        if (artist.isArtist_private() && penaltyList.size() > 0) {
-            modelAndView.addObject("penalty", penaltyList.get(0));
+            if (artist.isArtist_private() && penaltyList.size() > 0) {
+                modelAndView.addObject("penalty", penaltyList.get(0));
+            }
+            if (artist.getHashtag() != null) {
+                ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
+                artist.setHashtag(new Gson().toJson(modified_HashtagList));
+                log.info(modified_HashtagList);
+                System.out.println(modified_HashtagList);
+            }
+
+            modelAndView.addObject("penalty_num", penaltyList.size());
+            modelAndView.addObject("User", user);
+            modelAndView.addObject("Artist", artist);
+
+            return modelAndView;
+        } catch (Exception e){
+            throw new AdminException(e);
         }
-        if (artist.getHashtag() != null) {
-            ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
-            ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
-            artist.setHashtag(new Gson().toJson(modified_HashtagList));
-            log.info(modified_HashtagList);
-            System.out.println(modified_HashtagList);
-        }
-
-        modelAndView.addObject("penalty_num", penaltyList.size());
-        modelAndView.addObject("User", user);
-        modelAndView.addObject("Artist", artist);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getPortfolioList(String query, String type) {
-        artistDao.setSession(sqlSession);
-        portfolioDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("portfolio_list");
+        try {
+            artistDao.setSession(sqlSession);
+            portfolioDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("portfolio_list");
 
-        int artist_no = Integer.parseInt(query);
+            int artist_no = Integer.parseInt(query);
+            if(artistDao.getArtistByArtistNo(artist_no) == null){
+                throw new Exception("Bad Request");
+            }
 
-        List<Portfolio> res = new ArrayList<>();
+            List<Portfolio> res = new ArrayList<>();
 
-        switch (type) {
-            case "all":
-                List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist_no);
-                for (Portfolio portfolio : portfolioList) {
-                    portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
-                    portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
-                    res.add(portfolio);
-                }
-                break;
-            case "vod":
-                List<Portfolio> vodPortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "vod");
-                for (Portfolio portfolio : vodPortfolioList) {
-                    portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
-                    portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
-                    res.add(portfolio);
-                }
-                break;
-            case "image":
-                List<Portfolio> imgPortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "image");
-                for (Portfolio portfolio : imgPortfolioList) {
-                    portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
-                    portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
-                    res.add(portfolio);
-                }
-                break;
-            case "text":
-                List<Portfolio> textPortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "text");
-                for (Portfolio portfolio : textPortfolioList) {
-                    portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
-                    portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
-                    res.add(portfolio);
-                }
-                break;
-            case "file":
-                List<Portfolio> filePortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "file");
-                for (Portfolio portfolio : filePortfolioList) {
-                    portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
-                    portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
-                    res.add(portfolio);
-                }
-                break;
-            default:
-                throw new BusinessException(new Exception("Wrong Portfolio Type"));
+            switch (type) {
+                case "all":
+                    List<Portfolio> portfolioList = portfolioDao.getPortfolioListByArtistNo(artist_no);
+                    for (Portfolio portfolio : portfolioList) {
+                        portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
+                        portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
+                        res.add(portfolio);
+                    }
+                    break;
+                case "vod":
+                    List<Portfolio> vodPortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "vod");
+                    for (Portfolio portfolio : vodPortfolioList) {
+                        portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
+                        portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
+                        res.add(portfolio);
+                    }
+                    break;
+                case "image":
+                    List<Portfolio> imgPortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "image");
+                    for (Portfolio portfolio : imgPortfolioList) {
+                        portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
+                        portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
+                        res.add(portfolio);
+                    }
+                    break;
+                case "text":
+                    List<Portfolio> textPortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "text");
+                    for (Portfolio portfolio : textPortfolioList) {
+                        portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
+                        portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
+                        res.add(portfolio);
+                    }
+                    break;
+                case "file":
+                    List<Portfolio> filePortfolioList = portfolioDao.getPortfolioByTypeAdmin(artist_no, "file");
+                    for (Portfolio portfolio : filePortfolioList) {
+                        portfolio.setReg_date(Time.MsToSecond(portfolio.getReg_date()));
+                        portfolio.setRevise_date(Time.MsToSecond(portfolio.getRevise_date()));
+                        res.add(portfolio);
+                    }
+                    break;
+                default:
+                    throw new BadRequestException(new Exception("Wrong Portfolio Type"));
+            }
+
+            modelAndView.addObject("portfolioList", res);
+            modelAndView.addObject("artist_no", artist_no);
+            modelAndView.addObject("type", type);
+
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-
-        modelAndView.addObject("portfolioList", res);
-        modelAndView.addObject("artist_no", artist_no);
-        modelAndView.addObject("type", type);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getBoardList(String query) {
-        boardDao.setSession(sqlSession);
-        sponDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("board_list");
-        int artist_no = Integer.parseInt(query);
+        try {
+            boardDao.setSession(sqlSession);
+            sponDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("board_list");
+            int artist_no = Integer.parseInt(query);
+            if(artistDao.getArtistByArtistNo(artist_no) == null)
+                throw new Exception("Bad Request");
 
-        List<Board> boardList = boardDao.getBoardListByArtistNo(artist_no);
-        for (Board board : boardList) {
-            board.setReg_date(Time.MsToSecond(board.getReg_date()));
-            board.setRevise_date(Time.MsToSecond(board.getRevise_date()));
+            List<Board> boardList = boardDao.getBoardListByArtistNo(artist_no);
+            for (Board board : boardList) {
+                board.setReg_date(Time.MsToSecond(board.getReg_date()));
+                board.setRevise_date(Time.MsToSecond(board.getRevise_date()));
 
-            if (sponDao.getSponListByBoardNo(board.getBoard_no()) != null && sponDao.getSponListByBoardNo(board.getBoard_no()).size() > 0) {
-                List<Spon> sponList = sponDao.getSponListByBoardNo(board.getBoard_no());
-                for (Spon spon : sponList) {
-                    board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
+                if (sponDao.getSponListByBoardNo(board.getBoard_no()) != null && sponDao.getSponListByBoardNo(board.getBoard_no()).size() > 0) {
+                    List<Spon> sponList = sponDao.getSponListByBoardNo(board.getBoard_no());
+                    for (Spon spon : sponList) {
+                        board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
+                    }
                 }
             }
+
+            modelAndView.addObject("boardList", boardList);
+
+            return modelAndView;
+        } catch (Exception e){
+            throw new AdminException(e);
         }
-
-        modelAndView.addObject("boardList", boardList);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getPortfolioDetail(String query) {
-        artistDao.setSession(sqlSession);
-        portfolioDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("portfolio_detail");
+        try {
+            artistDao.setSession(sqlSession);
+            portfolioDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("portfolio_detail");
 
-        int portfolio_no = Integer.parseInt(query);
-        Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolio_no);
-        if (portfolio.getType().equals(PortfolioType.FILE)) {
-            String jsonString = portfolio.getFile();
-            Gson gson = new Gson();
-            FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-            ArrayList<Upload> uploads = new ArrayList<>();
-            for (FileJson json : fileJson) {
-                uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+            int portfolio_no = Integer.parseInt(query);
+            Portfolio portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolio_no);
+            if (portfolio.getType().equals(PortfolioType.FILE)) {
+                String jsonString = portfolio.getFile();
+                Gson gson = new Gson();
+                FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                ArrayList<Upload> uploads = new ArrayList<>();
+                for (FileJson json : fileJson) {
+                    uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                }
+                portfolio.setFile_list(uploads);
+            } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
+                if (portfolio.getFile() != null) {
+                    String images = portfolio.getFile().replace("[", "");
+                    images = images.replace("]", "");
+                    ArrayList<String> filelist = new ArrayList<>(Arrays.asList(images.split(", ")));
+                    portfolio.setImage_list(filelist);
+                    log.info(filelist);
+                }
             }
-            portfolio.setFile_list(uploads);
-        } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
-            if (portfolio.getFile() != null) {
-                String images = portfolio.getFile().replace("[", "");
-                images = images.replace("]", "");
-                ArrayList<String> filelist = new ArrayList<>(Arrays.asList(images.split(", ")));
-                portfolio.setImage_list(filelist);
-                log.info(filelist);
-            }
+            portfolio.setRevise_date(portfolio.getRevise_date().substring(0, portfolio.getRevise_date().lastIndexOf(".")));
+
+            modelAndView.addObject("portfolio", portfolio);
+
+            return modelAndView;
+        } catch (Exception e){
+            throw new AdminException(e);
         }
-        portfolio.setRevise_date(portfolio.getRevise_date().substring(0, portfolio.getRevise_date().lastIndexOf(".")));
-
-        modelAndView.addObject("portfolio", portfolio);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -885,21 +971,32 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getBoardDetail(String query) {
-        boardDao.setSession(sqlSession);
-        sponDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("board_detail");
-        int board_no = Integer.parseInt(query);
+        try {
+            boardDao.setSession(sqlSession);
+            sponDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("board_detail");
+            int board_no = Integer.parseInt(query);
 
-        Board board = boardDao.getBoardByBoardNo(board_no);
-        List<Spon> sponList = sponDao.getSponListByBoardNo(board_no);
-        for (Spon spon : sponList) {
-            board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
+            Board board = boardDao.getBoardByBoardNo(board_no);
+            if(board == null){
+                throw new BadRequestException(new Exception("Bad Request"));
+            }
+            List<Spon> sponList = sponDao.getSponListByBoardNo(board_no);
+            for (Spon spon : sponList) {
+                board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
+            }
+            board.setRevise_date(board.getRevise_date().substring(0, board.getRevise_date().lastIndexOf(".")));
+
+            modelAndView.addObject("board", board);
+
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-        board.setRevise_date(board.getRevise_date().substring(0, board.getRevise_date().lastIndexOf(".")));
-
-        modelAndView.addObject("board", board);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -917,112 +1014,140 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getLoudSourcingRecruitmentPage() {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("loudsourcing_recruitment_list");
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("loudsourcing_recruitment_list");
 
-        List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("recruitment");
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("recruitment");
 
-        for (LoudSourcing loudSourcing : loudSourcingList) {
-            int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
-            loudSourcing.setApplied_artist_num(applied_num);
+            for (LoudSourcing loudSourcing : loudSourcingList) {
+                int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
+                loudSourcing.setApplied_artist_num(applied_num);
+            }
+
+            modelAndView.addObject("loudsourcingList", loudSourcingList);
+
+            return modelAndView;
+        } catch (Exception e){
+            throw new AdminException(e);
         }
-
-        modelAndView.addObject("loudsourcingList", loudSourcingList);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getLoudSourcingProcessPage() {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
 
-        modelAndView = new ModelAndView("loudsourcing_process_list");
+            modelAndView = new ModelAndView("loudsourcing_process_list");
 
-        List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("process");
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("process");
 
-        for (LoudSourcing loudSourcing : loudSourcingList) {
-            int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
-            loudSourcing.setApplied_artist_num(applied_num);
+            for (LoudSourcing loudSourcing : loudSourcingList) {
+                int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
+                loudSourcing.setApplied_artist_num(applied_num);
+            }
+
+            modelAndView.addObject("loudsourcingList", loudSourcingList);
+
+            return modelAndView;
+        } catch (Exception e){
+            throw new AdminException(e);
         }
-
-        modelAndView.addObject("loudsourcingList", loudSourcingList);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ModelAndView getLoudSourcingJudgePage() throws ParseException {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
+    public ModelAndView getLoudSourcingJudgePage() {
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
 
-        modelAndView = new ModelAndView("loudsourcing_judge_list");
+            modelAndView = new ModelAndView("loudsourcing_judge_list");
 
-        List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("judge");
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("judge");
 
-        for (LoudSourcing loudSourcing : loudSourcingList) {
-            List<LoudSourcingApply> loudSourcingApplyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no());
-            for (LoudSourcingApply loudSourcingApply : loudSourcingApplyList) {
-                if (loudSourcingApply.is_pre_selected()) {
-                    loudSourcing.setSelected_artist_num(loudSourcing.getSelected_artist_num() + 1);
+            for (LoudSourcing loudSourcing : loudSourcingList) {
+                List<LoudSourcingApply> loudSourcingApplyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no());
+                for (LoudSourcingApply loudSourcingApply : loudSourcingApplyList) {
+                    if (loudSourcingApply.is_pre_selected()) {
+                        loudSourcing.setSelected_artist_num(loudSourcing.getSelected_artist_num() + 1);
+                    }
                 }
+                loudSourcing.setJudge_date(Time.DatePlusOneDay(loudSourcing.getProcess_end_date()));
             }
-            loudSourcing.setJudge_date(Time.DatePlusOneDay(loudSourcing.getProcess_end_date()));
+
+            modelAndView.addObject("loudsourcingList", loudSourcingList);
+
+            return modelAndView;
+        } catch (Exception e){
+            throw new AdminException(e);
         }
-
-        modelAndView.addObject("loudsourcingList", loudSourcingList);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getLoudSourcingEndPage() {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
 
-        modelAndView = new ModelAndView("loudsourcing_end_list");
+            modelAndView = new ModelAndView("loudsourcing_end_list");
 
-        List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("end");
+            List<LoudSourcing> loudSourcingList = loudSourcingDao.getLoudSourcingListByStatusAdmin("end");
 
-        for (LoudSourcing loudSourcing : loudSourcingList) {
-            int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
-            loudSourcing.setApplied_artist_num(applied_num);
-            int final_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudSourcing.getLoudsourcing_no()).size();
-            loudSourcing.setTotal_selected_artist_num(final_num);
+            for (LoudSourcing loudSourcing : loudSourcingList) {
+                int applied_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudSourcing.getLoudsourcing_no()).size();
+                loudSourcing.setApplied_artist_num(applied_num);
+                int final_num = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudSourcing.getLoudsourcing_no()).size();
+                loudSourcing.setTotal_selected_artist_num(final_num);
+            }
+
+            modelAndView.addObject("loudsourcingList", loudSourcingList);
+
+            return modelAndView;
+        } catch (Exception e){
+            throw new AdminException(e);
         }
-
-        modelAndView.addObject("loudsourcingList", loudSourcingList);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getRecruitmentApplyListPage(String query) {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        int loudsourcing_no = Integer.parseInt(query);
-        modelAndView = new ModelAndView("loudsourcing_recruitment_apply_list");
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            int loudsourcing_no = Integer.parseInt(query);
+            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+                throw new BadRequestException(new Exception("Bad Request"));
+            }
 
-        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
-        List<RecruitArtist> artistList = new ArrayList<>();
-        for (LoudSourcingApply loudSourcingApply : applyList) {
-            int artist_no = loudSourcingApply.getArtist_no();
-            Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            RecruitArtist recruitArtist = new RecruitArtist();
-            recruitArtist.setArtist_no(artist_no);
-            recruitArtist.setLoudsourcing_no(loudsourcing_no);
-            recruitArtist.setArtist_name(artist.getArtist_name());
-            recruitArtist.setEmail(artist.getEmail());
-            recruitArtist.setPhone(artist.getArtist_phone());
-            recruitArtist.setApply_date(loudSourcingApply.getReg_date());
-            artistList.add(recruitArtist);
+            modelAndView = new ModelAndView("loudsourcing_recruitment_apply_list");
+
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
+            List<RecruitArtist> artistList = new ArrayList<>();
+            for (LoudSourcingApply loudSourcingApply : applyList) {
+                int artist_no = loudSourcingApply.getArtist_no();
+                Artist artist = artistDao.getArtistByArtistNo(artist_no);
+                RecruitArtist recruitArtist = new RecruitArtist();
+                recruitArtist.setArtist_no(artist_no);
+                recruitArtist.setLoudsourcing_no(loudsourcing_no);
+                recruitArtist.setArtist_name(artist.getArtist_name());
+                recruitArtist.setEmail(artist.getEmail());
+                recruitArtist.setPhone(artist.getArtist_phone());
+                recruitArtist.setApply_date(loudSourcingApply.getReg_date());
+                artistList.add(recruitArtist);
+            }
+
+            modelAndView.addObject("artistList", artistList);
+
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-
-        modelAndView.addObject("artistList", artistList);
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1077,47 +1202,60 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getLoudSourcingDetailPage(String query, String type) {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        if (type.equals("Detail"))
-            modelAndView = new ModelAndView("loudsourcing_detail");
-        else if (type.equals("Edit"))
-            modelAndView = new ModelAndView("loudsourcing_detail_edit");
-        int loudsourcing_no = Integer.parseInt(query);
-        LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
-        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
-        loudSourcing.setApplied_artist_num(applyList.size());
-        String jsonString = loudSourcing.getFiles();
-        Gson gson = new Gson();
-        FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-        ArrayList<Upload> uploads = new ArrayList<>();
-        if (fileJson != null) {
-            for (FileJson json : fileJson) {
-                uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            if (type.equals("Detail"))
+                modelAndView = new ModelAndView("loudsourcing_detail");
+            else if (type.equals("Edit"))
+                modelAndView = new ModelAndView("loudsourcing_detail_edit");
+            else
+                throw new Exception("Bad Request");
+            int loudsourcing_no = Integer.parseInt(query);
+            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            if(loudSourcing == null){
+                throw new Exception("Bad Request");
+            }
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
+            loudSourcing.setApplied_artist_num(applyList.size());
+            String jsonString = loudSourcing.getFiles();
+            Gson gson = new Gson();
+            FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+            ArrayList<Upload> uploads = new ArrayList<>();
+            if (fileJson != null) {
+                for (FileJson json : fileJson) {
+                    uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                }
+            }
+            modelAndView.addObject("files", uploads);
+            if (loudSourcing.getHashtag() != null) {
+                ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(",")));
+                ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
+                loudSourcing.setHashtag(new Gson().toJson(modified_HashtagList));
+                log.info(modified_HashtagList);
+                System.out.println(modified_HashtagList);
+            }
+            modelAndView.addObject("Loudsourcing", loudSourcing);
+            if (loudSourcing.getStatus().equals("judge")) {
+                int preSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudsourcing_no).size();
+                int unPreSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudsourcing_no).size();
+                modelAndView.addObject("preSelectedNum", preSize);
+                modelAndView.addObject("unPreSelectedNum", unPreSize);
+
+            } else if (loudSourcing.getStatus().equals("end")) {
+                int finalSelected = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no).size();
+                modelAndView.addObject("final_selected_num", finalSelected);
+            }
+
+
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
             }
         }
-        modelAndView.addObject("files", uploads);
-        if (loudSourcing.getHashtag() != null) {
-            ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(",")));
-            ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
-            loudSourcing.setHashtag(new Gson().toJson(modified_HashtagList));
-            log.info(modified_HashtagList);
-            System.out.println(modified_HashtagList);
-        }
-        modelAndView.addObject("Loudsourcing", loudSourcing);
-        if (loudSourcing.getStatus().equals("judge")) {
-            int preSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudsourcing_no).size();
-            int unPreSize = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudsourcing_no).size();
-            modelAndView.addObject("preSelectedNum", preSize);
-            modelAndView.addObject("unPreSelectedNum", unPreSize);
-
-        } else if (loudSourcing.getStatus().equals("end")) {
-            int finalSelected = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no).size();
-            modelAndView.addObject("final_selected_num", finalSelected);
-        }
-
-
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1205,14 +1343,20 @@ public class AdminService {
             modelAndView = new ModelAndView("loudsourcing_advertiser_info");
 
             LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            if(loudSourcing == null){
+                throw new Exception("Bad Request");
+            }
             loudSourcing.setReg_date(loudSourcing.getReg_date().substring(0, loudSourcing.getReg_date().lastIndexOf(".")));
             loudSourcing.setRevise_date(loudSourcing.getRevise_date().substring(0, loudSourcing.getRevise_date().lastIndexOf(".")));
             modelAndView.addObject("LoudSourcing", loudSourcing);
 
             return modelAndView;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException(e);
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
     }
 
@@ -1223,14 +1367,20 @@ public class AdminService {
             modelAndView = new ModelAndView("loudsourcing_advertiser_info_edit");
 
             LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            if(loudSourcing == null){
+                throw new Exception("Bad Request");
+            }
             loudSourcing.setReg_date(loudSourcing.getReg_date().substring(0, loudSourcing.getReg_date().lastIndexOf(".")));
             loudSourcing.setRevise_date(loudSourcing.getRevise_date().substring(0, loudSourcing.getRevise_date().lastIndexOf(".")));
             modelAndView.addObject("LoudSourcing", loudSourcing);
 
             return modelAndView;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException(e);
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
     }
 
@@ -1238,8 +1388,6 @@ public class AdminService {
     public int advertiserEdit(AdvertiserEditRequest request) {
         try {
             loudSourcingDao.setSession(sqlSession);
-            log.info(request);
-            log.info("Advertiser Update...");
             LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(request.getLoudsourcing_no());
             loudSourcing.setAdvertiser_name(request.getAdvertiser_name());
             loudSourcing.setAdvertiser_phone(request.getAdvertiser_phone());
@@ -1249,7 +1397,6 @@ public class AdminService {
             loudSourcing.setAdvertiser_bank_owner(request.getAdvertiser_bank_owner());
             loudSourcing.setRevise_date(Time.TimeFormatHMS());
             loudSourcingDao.updateAdvertiser(loudSourcing);
-            log.info("Advertiser Update Complete");
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1259,76 +1406,98 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getLoudSourcingProcessArtistList(int loudsourcing_no) {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        loudSourcingEntryDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("loudsourcing_process_apply_list");
-        List<EntryProcessListRequest> requestList = new ArrayList<>();
-        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
-        for (LoudSourcingApply apply : applyList) {
-            EntryProcessListRequest request = new EntryProcessListRequest();
-            Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
-            LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
-            request.setArtist_no(artist.getArtist_no());
-            request.setArtist_name(artist.getArtist_name());
-            request.setPhone(artist.getArtist_phone());
-            request.setEmail(artist.getEmail());
-            request.setLoudsourcing_no(loudsourcing_no);
-            if (entry != null) {
-                request.setEntry_no(entry.getEntry_no());
-                request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
-                request.setVote_number(entry.getVote_number());
-            } else {
-                request.setUpload_date("미업로드");
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
+                throw new Exception("Bad Request");
             }
-            requestList.add(request);
+            modelAndView = new ModelAndView("loudsourcing_process_apply_list");
+            List<EntryProcessListRequest> requestList = new ArrayList<>();
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
+            for (LoudSourcingApply apply : applyList) {
+                EntryProcessListRequest request = new EntryProcessListRequest();
+                Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
+                LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
+                request.setArtist_no(artist.getArtist_no());
+                request.setArtist_name(artist.getArtist_name());
+                request.setPhone(artist.getArtist_phone());
+                request.setEmail(artist.getEmail());
+                request.setLoudsourcing_no(loudsourcing_no);
+                if (entry != null) {
+                    request.setEntry_no(entry.getEntry_no());
+                    request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
+                    request.setVote_number(entry.getVote_number());
+                } else {
+                    request.setUpload_date("미업로드");
+                }
+                requestList.add(request);
+            }
+            modelAndView.addObject("artistList", requestList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-        modelAndView.addObject("artistList", requestList);
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getEntryDetail(int loudsourcing_no, int artist_no) {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingEntryDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        penaltyDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("entry_detail");
-        LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(artist_no, loudsourcing_no);
-        if (apply == null) {
-            throw new BusinessException(new Exception("Wrong Access"));
-        }
-        Artist artist = artistDao.getArtistByArtistNo(artist_no);
-        if (artist.getHashtag() != null) {
-            ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
-            ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
-            artist.setHashtag(new Gson().toJson(modified_HashtagList));
-            log.info(modified_HashtagList);
-            System.out.println(modified_HashtagList);
-        }
-        User user = userDao.selectUserByUserNo(artist.getUser_no());
-        LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist_no, loudsourcing_no);
-        LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
-        List<Penalty> penaltyList = penaltyDao.getPenaltyListByArtistNo(artist_no);
-        if (artist.isArtist_private() && penaltyList.size() > 0) {
-            modelAndView.addObject("penalty", penaltyList.get(0));
-        }
-        modelAndView.addObject("status", loudSourcing.getStatus());
-        modelAndView.addObject("penalty_num", penaltyList.size());
-        modelAndView.addObject("Artist", artist);
-        modelAndView.addObject("loudsourcing_no", loudsourcing_no);
-        modelAndView.addObject("preSelected", apply.is_pre_selected());
-        if (entry != null) {
-            entry.setReg_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
-            modelAndView.addObject("entry", entry);
-        }
-        modelAndView.addObject("User", user);
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            penaltyDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("entry_detail");
+            LoudSourcingApply apply = loudSourcingApplyDao.getLoudSourcingApplyByArtistNoAndLoudSourcingNo(artist_no, loudsourcing_no);
+            if (apply == null) {
+                throw new Exception("Bad Request");
+            }
+            Artist artist = artistDao.getArtistByArtistNo(artist_no);
+            if(artist == null){
+                throw new Exception("Bad Request");
+            }
+            if (artist.getHashtag() != null) {
+                ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
+                ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
+                artist.setHashtag(new Gson().toJson(modified_HashtagList));
+                log.info(modified_HashtagList);
+                System.out.println(modified_HashtagList);
+            }
+            User user = userDao.selectUserByUserNo(artist.getUser_no());
+            LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist_no, loudsourcing_no);
+            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            List<Penalty> penaltyList = penaltyDao.getPenaltyListByArtistNo(artist_no);
+            if (artist.isArtist_private() && penaltyList.size() > 0) {
+                modelAndView.addObject("penalty", penaltyList.get(0));
+            }
+            modelAndView.addObject("status", loudSourcing.getStatus());
+            modelAndView.addObject("penalty_num", penaltyList.size());
+            modelAndView.addObject("Artist", artist);
+            modelAndView.addObject("loudsourcing_no", loudsourcing_no);
+            modelAndView.addObject("preSelected", apply.is_pre_selected());
+            if (entry != null) {
+                entry.setReg_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
+                modelAndView.addObject("entry", entry);
+            }
+            modelAndView.addObject("User", user);
 
 
-        return modelAndView;
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1370,36 +1539,59 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getUnknownEntryList(int loudsourcing_no) {
-        loudSourcingEntryDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("loudsourcing_process_withdraw_list");
-        List<LoudSourcingEntry> entryList = loudSourcingEntryDao.getEntryListByLoudSourcingNoAdmin(loudsourcing_no);
-        List<LoudSourcingEntry> resEntryList = new ArrayList<>();
-        if (entryList != null && !entryList.isEmpty()) {
-            for (LoudSourcingEntry entry : entryList) {
-                if (entry.getArtist_no() == 0) {
-                    entry.setReg_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
-                    resEntryList.add(entry);
+        try {
+            loudSourcingEntryDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("loudsourcing_process_withdraw_list");
+            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+                throw new Exception("Bad Request");
+            }
+            List<LoudSourcingEntry> entryList = loudSourcingEntryDao.getEntryListByLoudSourcingNoAdmin(loudsourcing_no);
+            List<LoudSourcingEntry> resEntryList = new ArrayList<>();
+            if (entryList != null && !entryList.isEmpty()) {
+                for (LoudSourcingEntry entry : entryList) {
+                    if (entry.getArtist_no() == 0) {
+                        entry.setReg_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
+                        resEntryList.add(entry);
+                    }
                 }
             }
-        }
 
-        modelAndView.addObject("entryList", resEntryList);
-        return modelAndView;
+            modelAndView.addObject("entryList", resEntryList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getUnknownEntryDetail(int loudsourcing_no, int entry_no) {
-        loudSourcingEntryDao.setSession(sqlSession);
-        loudSourcingDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("unknown_entry_detail");
-        LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
-        LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
-        entry.setReg_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
-        modelAndView.addObject("entry", entry);
-        modelAndView.addObject("status", loudSourcing.getStatus());
-        modelAndView.addObject("loudsourcing_no", loudsourcing_no);
+        try {
+            loudSourcingEntryDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("unknown_entry_detail");
+            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
+            if(loudSourcing == null){
+                throw new Exception("Bad Request");
+            }
+            LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
+            entry.setReg_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
+            modelAndView.addObject("entry", entry);
+            modelAndView.addObject("status", loudSourcing.getStatus());
+            modelAndView.addObject("loudsourcing_no", loudsourcing_no);
 
-        return modelAndView;
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1472,59 +1664,81 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getSelectedEntryList(int loudsourcing_no) {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        loudSourcingEntryDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("loudsourcing_selected_list");
-        List<EntryProcessListRequest> requestList = new ArrayList<>();
-        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudsourcing_no);
-        for (LoudSourcingApply apply : applyList) {
-            EntryProcessListRequest request = new EntryProcessListRequest();
-            Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
-            LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
-            request.setArtist_no(artist.getArtist_no());
-            request.setArtist_name(artist.getArtist_name());
-            request.setPhone(artist.getArtist_phone());
-            request.setEmail(artist.getEmail());
-            request.setLoudsourcing_no(loudsourcing_no);
-            request.setEntry_no(entry.getEntry_no());
-            request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
-            request.setVote_number(entry.getVote_number());
-            requestList.add(request);
-        }
-        modelAndView.addObject("artistList", requestList);
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("loudsourcing_selected_list");
+            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+                throw new Exception("Bad Request");
+            }
+            List<EntryProcessListRequest> requestList = new ArrayList<>();
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoPreSelected(loudsourcing_no);
+            for (LoudSourcingApply apply : applyList) {
+                EntryProcessListRequest request = new EntryProcessListRequest();
+                Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
+                LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
+                request.setArtist_no(artist.getArtist_no());
+                request.setArtist_name(artist.getArtist_name());
+                request.setPhone(artist.getArtist_phone());
+                request.setEmail(artist.getEmail());
+                request.setLoudsourcing_no(loudsourcing_no);
+                request.setEntry_no(entry.getEntry_no());
+                request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
+                request.setVote_number(entry.getVote_number());
+                requestList.add(request);
+            }
+            modelAndView.addObject("artistList", requestList);
 
-        return modelAndView;
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getUnSelectedEntryList(int loudsourcing_no) {
-        loudSourcingDao.setSession(sqlSession);
-        loudSourcingApplyDao.setSession(sqlSession);
-        loudSourcingEntryDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("loudsourcing_unselected_list");
-        List<EntryProcessListRequest> requestList = new ArrayList<>();
-        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudsourcing_no);
-        for (LoudSourcingApply apply : applyList) {
-            EntryProcessListRequest request = new EntryProcessListRequest();
-            Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
-            LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
-            request.setArtist_no(artist.getArtist_no());
-            request.setArtist_name(artist.getArtist_name());
-            request.setPhone(artist.getArtist_phone());
-            request.setEmail(artist.getEmail());
-            request.setLoudsourcing_no(loudsourcing_no);
-            request.setEntry_no(entry.getEntry_no());
-            request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
-            request.setVote_number(entry.getVote_number());
-            requestList.add(request);
+        try {
+            loudSourcingDao.setSession(sqlSession);
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("loudsourcing_unselected_list");
+            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+                throw new Exception("Bad Request");
+            }
+            List<EntryProcessListRequest> requestList = new ArrayList<>();
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoUnPreSelected(loudsourcing_no);
+            for (LoudSourcingApply apply : applyList) {
+                EntryProcessListRequest request = new EntryProcessListRequest();
+                Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
+                LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
+                request.setArtist_no(artist.getArtist_no());
+                request.setArtist_name(artist.getArtist_name());
+                request.setPhone(artist.getArtist_phone());
+                request.setEmail(artist.getEmail());
+                request.setLoudsourcing_no(loudsourcing_no);
+                request.setEntry_no(entry.getEntry_no());
+                request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
+                request.setVote_number(entry.getVote_number());
+                requestList.add(request);
+            }
+            modelAndView.addObject("artistList", requestList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-        modelAndView.addObject("artistList", requestList);
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1723,62 +1937,94 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getFinalSelectedList(int loudsourcing_no) {
-        loudSourcingApplyDao.setSession(sqlSession);
-        loudSourcingEntryDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("loudsourcing_final_list");
-        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no);
-        List<EntryProcessListRequest> requestList = new ArrayList<>();
-        for (LoudSourcingApply apply : applyList) {
-            EntryProcessListRequest request = new EntryProcessListRequest();
-            Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
-            LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
-            request.setArtist_no(artist.getArtist_no());
-            request.setArtist_name(artist.getArtist_name());
-            request.setPhone(artist.getArtist_phone());
-            request.setEmail(artist.getEmail());
-            request.setLoudsourcing_no(loudsourcing_no);
-            request.setEntry_no(entry.getEntry_no());
-            request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
-            request.setVote_number(entry.getVote_number());
-            requestList.add(request);
+        try {
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingEntryDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("loudsourcing_final_list");
+            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+                throw new Exception("Bad Request");
+            }
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no);
+            List<EntryProcessListRequest> requestList = new ArrayList<>();
+            for (LoudSourcingApply apply : applyList) {
+                EntryProcessListRequest request = new EntryProcessListRequest();
+                Artist artist = artistDao.getArtistByArtistNo(apply.getArtist_no());
+                LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist.getArtist_no(), loudsourcing_no);
+                request.setArtist_no(artist.getArtist_no());
+                request.setArtist_name(artist.getArtist_name());
+                request.setPhone(artist.getArtist_phone());
+                request.setEmail(artist.getEmail());
+                request.setLoudsourcing_no(loudsourcing_no);
+                request.setEntry_no(entry.getEntry_no());
+                request.setUpload_date(entry.getReg_date().substring(0, entry.getReg_date().lastIndexOf(".")));
+                request.setVote_number(entry.getVote_number());
+                requestList.add(request);
+            }
+            modelAndView.addObject("artistList", requestList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-        modelAndView.addObject("artistList", requestList);
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getArtistLoudSourcingList(int artist_no) {
-        loudSourcingApplyDao.setSession(sqlSession);
-        loudSourcingDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("artist_loudsourcing_list");
-        List<AdminArtistLoudSourcing> loudSourcingList = new ArrayList<>();
-        List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByArtistNo(artist_no);
-        for (LoudSourcingApply apply : applyList) {
-            AdminArtistLoudSourcing sourcing = new AdminArtistLoudSourcing();
-            LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(apply.getLoudsourcing_no());
-            sourcing.setArtist_no(artist_no);
-            sourcing.setLoudsourcing_no(loudSourcing.getLoudsourcing_no());
-            sourcing.setLoudsourcing_name(loudSourcing.getName());
-            sourcing.setHost(loudSourcing.getHost());
-            sourcing.setStatus(loudSourcing.getStatus());
-            sourcing.setStart_date(loudSourcing.getStart_date());
-            sourcing.setEnd_date(loudSourcing.getEnd_date());
-            sourcing.setReg_date(apply.getReg_date().substring(0, apply.getReg_date().lastIndexOf(" ")));
-            loudSourcingList.add(sourcing);
+        try {
+            loudSourcingApplyDao.setSession(sqlSession);
+            loudSourcingDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("artist_loudsourcing_list");
+            artistDao.setSession(sqlSession);
+            if(artistDao.getArtistByArtistNo(artist_no) == null){
+                throw new Exception("Bad Request");
+            }
+            List<AdminArtistLoudSourcing> loudSourcingList = new ArrayList<>();
+            List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByArtistNo(artist_no);
+            for (LoudSourcingApply apply : applyList) {
+                AdminArtistLoudSourcing sourcing = new AdminArtistLoudSourcing();
+                LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(apply.getLoudsourcing_no());
+                sourcing.setArtist_no(artist_no);
+                sourcing.setLoudsourcing_no(loudSourcing.getLoudsourcing_no());
+                sourcing.setLoudsourcing_name(loudSourcing.getName());
+                sourcing.setHost(loudSourcing.getHost());
+                sourcing.setStatus(loudSourcing.getStatus());
+                sourcing.setStart_date(loudSourcing.getStart_date());
+                sourcing.setEnd_date(loudSourcing.getEnd_date());
+                sourcing.setReg_date(apply.getReg_date().substring(0, apply.getReg_date().lastIndexOf(" ")));
+                loudSourcingList.add(sourcing);
+            }
+            modelAndView.addObject("loudsourcingList", loudSourcingList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-        modelAndView.addObject("loudsourcingList", loudSourcingList);
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getNoticeList() {
-        noticeDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("notice_list");
+        try {
+            noticeDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("notice_list");
 
-        List<Notice> noticeList = noticeDao.getNoticeForCDN();
-        modelAndView.addObject("noticeList", noticeList);
-        return modelAndView;
+            List<Notice> noticeList = noticeDao.getNoticeForCDN();
+            modelAndView.addObject("noticeList", noticeList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1795,13 +2041,24 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getNoticeDetail(int notice_no) {
-        noticeDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("notice_detail");
+        try {
+            noticeDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("notice_detail");
 
-        Notice notice = noticeDao.getNoticeByNoticeNo(notice_no);
+            Notice notice = noticeDao.getNoticeByNoticeNo(notice_no);
+            if(notice == null){
+                throw new Exception("Bad Request");
+            }
 
-        modelAndView.addObject("notice", notice);
-        return modelAndView;
+            modelAndView.addObject("notice", notice);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1845,20 +2102,39 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getFAQList() {
-        faqDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("faq_list");
-        List<FAQ> faqList = faqDao.getFAQForCDN();
-        modelAndView.addObject("faqList", faqList);
-        return modelAndView;
+        try {
+            faqDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("faq_list");
+            List<FAQ> faqList = faqDao.getFAQForCDN();
+            modelAndView.addObject("faqList", faqList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getFAQDetail(int faq_no) {
-        faqDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("faq_detail");
-        FAQ faq = faqDao.getFAQByFAQNo(faq_no);
-        modelAndView.addObject("faq", faq);
-        return modelAndView;
+        try {
+            faqDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("faq_detail");
+            FAQ faq = faqDao.getFAQByFAQNo(faq_no);
+            if(faq == null){
+                throw new Exception("Bad Request");
+            }
+            modelAndView.addObject("faq", faq);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -1907,32 +2183,50 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getBannerList() {
-        bannerAdDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("banner_list");
-        List<BannerAd> activeList = bannerAdDao.getActiveBannerList();
-        List<BannerAd> disableList = bannerAdDao.getDisableBannerList();
-        List<BannerAd> bannerList = new ArrayList<>();
-        bannerList.addAll(activeList);
-        bannerList.addAll(disableList);
+        try {
+            bannerAdDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("banner_list");
+            List<BannerAd> activeList = bannerAdDao.getActiveBannerList();
+            List<BannerAd> disableList = bannerAdDao.getDisableBannerList();
+            List<BannerAd> bannerList = new ArrayList<>();
+            bannerList.addAll(activeList);
+            bannerList.addAll(disableList);
 
-        modelAndView.addObject("bannerList", bannerList);
-        return modelAndView;
+            modelAndView.addObject("bannerList", bannerList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getBannerMake() {
-        bannerAdDao.setSession(sqlSession);
         modelAndView = new ModelAndView("banner_make");
         return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getBannerDetail(int banner_ad_no) {
-        bannerAdDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("banner_detail");
-        BannerAd bannerAd = bannerAdDao.getBannerAdByBannerAdNo(banner_ad_no);
-        modelAndView.addObject("banner", bannerAd);
-        return modelAndView;
+        try {
+            bannerAdDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("banner_detail");
+            BannerAd bannerAd = bannerAdDao.getBannerAdByBannerAdNo(banner_ad_no);
+            if(bannerAd == null){
+                throw new Exception("Bad Request");
+            }
+            modelAndView.addObject("banner", bannerAd);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -2024,43 +2318,125 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getInquiryList(String type) {
-        inquiryDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        switch (type) {
-            case "loudsourcing":
-                modelAndView = new ModelAndView("inquiry_list");
-                List<Inquiry> l_notAnsweredList = inquiryDao.getInquiryListByAnswerStatusAndType(false, "loudsourcing");
-                List<Inquiry> l_answeredList = inquiryDao.getInquiryListByAnswerStatusAndType(true, "loudsourcing");
-                List<Inquiry> l_inquiryList = new ArrayList<>();
-                l_inquiryList.addAll(l_notAnsweredList);
-                l_inquiryList.addAll(l_answeredList);
-                for (Inquiry inquiry : l_inquiryList) {
-                    User user = userDao.selectUserByUserNo(inquiry.getUser_no());
-                    Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
-                    if (artist != null) {
-                        inquiry.setUser_name(artist.getArtist_name());
+        try {
+            inquiryDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            switch (type) {
+                case "loudsourcing":
+                    modelAndView = new ModelAndView("inquiry_list");
+                    List<Inquiry> l_notAnsweredList = inquiryDao.getInquiryListByAnswerStatusAndType(false, "loudsourcing");
+                    List<Inquiry> l_answeredList = inquiryDao.getInquiryListByAnswerStatusAndType(true, "loudsourcing");
+                    List<Inquiry> l_inquiryList = new ArrayList<>();
+                    l_inquiryList.addAll(l_notAnsweredList);
+                    l_inquiryList.addAll(l_answeredList);
+                    for (Inquiry inquiry : l_inquiryList) {
+                        User user = userDao.selectUserByUserNo(inquiry.getUser_no());
+                        Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
+                        if (artist != null) {
+                            inquiry.setUser_name(artist.getArtist_name());
+                        } else {
+                            inquiry.setUser_name(user.getName());
+                        }
+                        inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
+                    }
+                    modelAndView.addObject("inquiryList", l_inquiryList);
+                    break;
+                case "report":
+                    modelAndView = new ModelAndView("inquiry_report_list");
+                    List<Inquiry> r_notAnsweredList = inquiryDao.getInquiryListByAnswerStatusAndType(false, "report");
+                    List<Inquiry> r_answeredList = inquiryDao.getInquiryListByAnswerStatusAndType(true, "report");
+                    List<Inquiry> r_inquiryList = new ArrayList<>();
+                    r_inquiryList.addAll(r_notAnsweredList);
+                    r_inquiryList.addAll(r_answeredList);
+                    for (Inquiry inquiry : r_inquiryList) {
+                        User user = userDao.selectUserByUserNo(inquiry.getUser_no());
+                        Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
+                        if (artist != null) {
+                            inquiry.setUser_name(artist.getArtist_name());
+                        } else {
+                            inquiry.setUser_name(user.getName());
+                        }
+                        User reported_user = userDao.selectUserByUserNo(inquiry.getReported_user_no());
+                        Artist reported_artist = artistDao.getArtistByUserNo(inquiry.getReported_user_no());
+                        if (reported_artist != null) {
+                            inquiry.setReported_user_name(reported_artist.getArtist_name());
+                        } else if (reported_user != null) {
+                            inquiry.setReported_user_name(reported_user.getName());
+                        }
+                        inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
+                    }
+                    modelAndView.addObject("inquiryList", r_inquiryList);
+                    break;
+                case "normal":
+                    modelAndView = new ModelAndView("inquiry_list");
+                    List<Inquiry> notAnsweredList = inquiryDao.getInquiryListByAnswerStatusAndType(false, "normal");
+                    List<Inquiry> answeredList = inquiryDao.getInquiryListByAnswerStatusAndType(true, "normal");
+                    List<Inquiry> inquiryList = new ArrayList<>();
+                    inquiryList.addAll(notAnsweredList);
+                    inquiryList.addAll(answeredList);
+                    for (Inquiry inquiry : inquiryList) {
+                        User user = userDao.selectUserByUserNo(inquiry.getUser_no());
+                        Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
+                        if (artist != null) {
+                            inquiry.setUser_name(artist.getArtist_name());
+                        } else {
+                            inquiry.setUser_name(user.getName());
+                        }
+                        inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
+                    }
+                    modelAndView.addObject("inquiryList", inquiryList);
+                    break;
+                default:
+                    throw new Exception("Bad Request");
+            }
+            modelAndView.addObject("type", type);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getInquiryDetail(int inquiry_no) {
+        try {
+            inquiryDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("inquiry_detail");
+            Inquiry inquiry = inquiryDao.getInquiryByInquiryNo(inquiry_no);
+            if(inquiry == null)
+                throw new Exception("Bad Request");
+            switch (inquiry.getType()) {
+                case "loudsourcing":
+                    User l_user = userDao.selectUserByUserNo(inquiry.getUser_no());
+                    Artist l_artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
+                    if (l_artist != null) {
+                        inquiry.setUser_name(l_artist.getArtist_name());
                     } else {
-                        inquiry.setUser_name(user.getName());
+                        inquiry.setUser_name(l_user.getName());
                     }
                     inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
-                }
-                modelAndView.addObject("inquiryList", l_inquiryList);
-                break;
-            case "report":
-                modelAndView = new ModelAndView("inquiry_report_list");
-                List<Inquiry> r_notAnsweredList = inquiryDao.getInquiryListByAnswerStatusAndType(false, "report");
-                List<Inquiry> r_answeredList = inquiryDao.getInquiryListByAnswerStatusAndType(true, "report");
-                List<Inquiry> r_inquiryList = new ArrayList<>();
-                r_inquiryList.addAll(r_notAnsweredList);
-                r_inquiryList.addAll(r_answeredList);
-                for (Inquiry inquiry : r_inquiryList) {
-                    User user = userDao.selectUserByUserNo(inquiry.getUser_no());
-                    Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
-                    if (artist != null) {
-                        inquiry.setUser_name(artist.getArtist_name());
+                    String jsonString = inquiry.getFile();
+                    Gson gson = new Gson();
+                    FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                    ArrayList<Upload> uploads = new ArrayList<>();
+                    for (FileJson json : fileJson) {
+                        uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                    }
+                    modelAndView.addObject("files", uploads);
+                    break;
+                case "report":
+                    User r_user = userDao.selectUserByUserNo(inquiry.getUser_no());
+                    Artist r_artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
+                    if (r_artist != null) {
+                        inquiry.setUser_name(r_artist.getArtist_name());
                     } else {
-                        inquiry.setUser_name(user.getName());
+                        inquiry.setUser_name(r_user.getName());
                     }
                     User reported_user = userDao.selectUserByUserNo(inquiry.getReported_user_no());
                     Artist reported_artist = artistDao.getArtistByUserNo(inquiry.getReported_user_no());
@@ -2070,17 +2446,8 @@ public class AdminService {
                         inquiry.setReported_user_name(reported_user.getName());
                     }
                     inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
-                }
-                modelAndView.addObject("inquiryList", r_inquiryList);
-                break;
-            case "normal":
-                modelAndView = new ModelAndView("inquiry_list");
-                List<Inquiry> notAnsweredList = inquiryDao.getInquiryListByAnswerStatusAndType(false, "normal");
-                List<Inquiry> answeredList = inquiryDao.getInquiryListByAnswerStatusAndType(true, "normal");
-                List<Inquiry> inquiryList = new ArrayList<>();
-                inquiryList.addAll(notAnsweredList);
-                inquiryList.addAll(answeredList);
-                for (Inquiry inquiry : inquiryList) {
+                    break;
+                case "normal":
                     User user = userDao.selectUserByUserNo(inquiry.getUser_no());
                     Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
                     if (artist != null) {
@@ -2089,73 +2456,20 @@ public class AdminService {
                         inquiry.setUser_name(user.getName());
                     }
                     inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
-                }
-                modelAndView.addObject("inquiryList", inquiryList);
-                break;
+                    break;
+            }
+            if (inquiry.is_answered()) {
+                inquiry.setAnswer_date(inquiry.getAnswer_date().substring(0, inquiry.getAnswer_date().lastIndexOf(".")));
+            }
+            modelAndView.addObject("inquiry", inquiry);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-        modelAndView.addObject("type", type);
-        return modelAndView;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public ModelAndView getInquiryDetail(int inquiry_no) {
-        inquiryDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("inquiry_detail");
-        Inquiry inquiry = inquiryDao.getInquiryByInquiryNo(inquiry_no);
-        switch (inquiry.getType()) {
-            case "loudsourcing":
-                User l_user = userDao.selectUserByUserNo(inquiry.getUser_no());
-                Artist l_artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
-                if (l_artist != null) {
-                    inquiry.setUser_name(l_artist.getArtist_name());
-                } else {
-                    inquiry.setUser_name(l_user.getName());
-                }
-                inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
-                String jsonString = inquiry.getFile();
-                Gson gson = new Gson();
-                FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
-                ArrayList<Upload> uploads = new ArrayList<>();
-                for (FileJson json : fileJson) {
-                    uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
-                }
-                modelAndView.addObject("files", uploads);
-                break;
-            case "report":
-                User r_user = userDao.selectUserByUserNo(inquiry.getUser_no());
-                Artist r_artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
-                if (r_artist != null) {
-                    inquiry.setUser_name(r_artist.getArtist_name());
-                } else {
-                    inquiry.setUser_name(r_user.getName());
-                }
-                User reported_user = userDao.selectUserByUserNo(inquiry.getReported_user_no());
-                Artist reported_artist = artistDao.getArtistByUserNo(inquiry.getReported_user_no());
-                if (reported_artist != null) {
-                    inquiry.setReported_user_name(reported_artist.getArtist_name());
-                } else if (reported_user != null) {
-                    inquiry.setReported_user_name(reported_user.getName());
-                }
-                inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
-                break;
-            case "normal":
-                User user = userDao.selectUserByUserNo(inquiry.getUser_no());
-                Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
-                if (artist != null) {
-                    inquiry.setUser_name(artist.getArtist_name());
-                } else {
-                    inquiry.setUser_name(user.getName());
-                }
-                inquiry.setReg_date(inquiry.getReg_date().substring(0, inquiry.getReg_date().lastIndexOf(".")));
-                break;
-        }
-        if(inquiry.is_answered()){
-            inquiry.setAnswer_date(inquiry.getAnswer_date().substring(0, inquiry.getAnswer_date().lastIndexOf(".")));
-        }
-        modelAndView.addObject("inquiry", inquiry);
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -2180,18 +2494,25 @@ public class AdminService {
             String time = Time.TimeFormatHMS();
             inquiry.setAnswer_date(time);
             inquiry.set_answered(true);
+            User user = userDao.selectUserByUserNo(inquiry.getUser_no());
+            Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
+            if(artist != null)
+                inquiry.setUser_name(artist.getArtist_name());
+            else
+                inquiry.setUser_name(user.getName());
+
             if (inquiry.getType().equals("loudsourcing")) {
-                inquiry.setAnswer_content("크라우드 문의 보내주신 \"사용자/아티스트 명\"님께 감사드립니다.\n" +
+                inquiry.setAnswer_content("크라우드 문의 보내주신 \""+ inquiry.getUser_name() + "\"님께 감사드립니다.\n" +
                         "보내주신 문의 내용과 첨부파일을 확인했습니다.\n" +
                         "며칠 안으로 입력하신 연락처 혹은 이메일로 연락드리겠습니다.\n" +
                         "앞으로도 많은 문의 보내주세요.");
             }
             inquiryDao.answerInquiry(inquiry);
             // 문의 답변 완료 알림
-            User user = userDao.selectUserByUserNo(inquiry.getUser_no());
+
             if (user.getFcm_token() != null) {
                 NotificationNext notificationNext = new NotificationNext(NotificationType.INQUIRY, null, null, inquiry.getInquiry_no(), NotificationType.INQUIRY, 0);
-                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.INQUIRY_FCM, "[문의] 회원님이 남긴 문의에 답변이 등록되었습니다.", new Gson().toJson(notificationNext));
+                firebaseMessagingSnippets.push(user.getFcm_token(), NotificationType.INQUIRY_FCM, "회원님이 남긴 문의에 답변이 등록되었습니다.", new Gson().toJson(notificationNext));
             } else {
                 log.info("FCM TOKEN ERROR, CANNOT SEND FCM MESSAGE");
             }
@@ -2199,7 +2520,7 @@ public class AdminService {
             Notification notification = new Notification();
             notification.setUser_no(user.getUser_no());
             notification.setType(NotificationType.INQUIRY);
-            notification.setContent("[문의] 회원님이 남긴 문의에 답변이 등록되었습니다.");
+            notification.setContent("회원님이 남긴 문의에 답변이 등록되었습니다.");
             notification.setReg_date(Time.TimeFormatHMS());
             NotificationNext notificationNext = new NotificationNext(NotificationType.INQUIRY, null, null, inquiry.getInquiry_no(), NotificationType.INQUIRY, 0);
             notification.setNext(new Gson().toJson(notificationNext));
@@ -2213,17 +2534,27 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getPenalty(int user_no) {
-        userDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("penalty");
-        User user = userDao.selectUserByUserNo(user_no);
-        Artist artist = artistDao.getArtistByUserNo(user_no);
-        if (artist != null) {
-            modelAndView.addObject("artist_name", artist.getArtist_name());
-        }
-        modelAndView.addObject("user", user);
+        try {
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("penalty");
+            User user = userDao.selectUserByUserNo(user_no);
+            if(user == null)
+                throw new Exception("Bad Request");
+            Artist artist = artistDao.getArtistByUserNo(user_no);
+            if (artist != null) {
+                modelAndView.addObject("artist_name", artist.getArtist_name());
+            }
+            modelAndView.addObject("user", user);
 
-        return modelAndView;
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -2301,64 +2632,83 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getSponList() {
-        sponDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("spon_list");
-        List<Spon> sponList = sponDao.getSponList();
-        for (Spon spon : sponList) {
+        try {
+            sponDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("spon_list");
+            List<Spon> sponList = sponDao.getSponList();
+            for (Spon spon : sponList) {
+                if (spon.getUser_no() != 0) {
+                    User user = userDao.selectUserByUserNo(spon.getUser_no());
+                    Artist sponArtist = artistDao.getArtistByUserNo(spon.getUser_no());
+                    if (sponArtist != null) {
+                        spon.setUser_name(sponArtist.getArtist_name());
+                    } else {
+                        spon.setUser_name(user.getName());
+                    }
+                } else {
+                    spon.setUser_name("탈퇴한 유저");
+                }
+                if (spon.getArtist_no() != 0) {
+                    Artist artist = artistDao.getArtistByArtistNo(spon.getArtist_no());
+                    spon.setArtist_name(artist.getArtist_name());
+                } else {
+                    spon.setArtist_name("탈퇴한 아티스트");
+                }
+            }
+            modelAndView.addObject("sponList", sponList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ModelAndView getSponDetail(int spon_no) {
+        try {
+            sponDao.setSession(sqlSession);
+            artistDao.setSession(sqlSession);
+            userDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("spon_detail");
+            Spon spon = sponDao.getSponBySponNo(spon_no);
+            if(spon == null){
+                throw new Exception("Bad Request");
+            }
+            spon.setPrice_send(spon.getPrice());
             if (spon.getUser_no() != 0) {
                 User user = userDao.selectUserByUserNo(spon.getUser_no());
                 Artist sponArtist = artistDao.getArtistByUserNo(spon.getUser_no());
                 if (sponArtist != null) {
                     spon.setUser_name(sponArtist.getArtist_name());
+                    user.setEmail(sponArtist.getEmail());
                 } else {
                     spon.setUser_name(user.getName());
                 }
+                modelAndView.addObject("user", user);
             } else {
                 spon.setUser_name("탈퇴한 유저");
             }
             if (spon.getArtist_no() != 0) {
                 Artist artist = artistDao.getArtistByArtistNo(spon.getArtist_no());
                 spon.setArtist_name(artist.getArtist_name());
+                modelAndView.addObject("artist", artist);
             } else {
                 spon.setArtist_name("탈퇴한 아티스트");
             }
-        }
-        modelAndView.addObject("sponList", sponList);
-        return modelAndView;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public ModelAndView getSponDetail(int spon_no) {
-        sponDao.setSession(sqlSession);
-        artistDao.setSession(sqlSession);
-        userDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("spon_detail");
-        Spon spon = sponDao.getSponBySponNo(spon_no);
-        spon.setPrice_send(spon.getPrice());
-        if (spon.getUser_no() != 0) {
-            User user = userDao.selectUserByUserNo(spon.getUser_no());
-            Artist sponArtist = artistDao.getArtistByUserNo(spon.getUser_no());
-            if (sponArtist != null) {
-                spon.setUser_name(sponArtist.getArtist_name());
-                user.setEmail(sponArtist.getEmail());
+            modelAndView.addObject("spon", spon);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
             } else {
-                spon.setUser_name(user.getName());
+                throw new AdminException(e);
             }
-            modelAndView.addObject("user", user);
-        } else {
-            spon.setUser_name("탈퇴한 유저");
         }
-        if (spon.getArtist_no() != 0) {
-            Artist artist = artistDao.getArtistByArtistNo(spon.getArtist_no());
-            spon.setArtist_name(artist.getArtist_name());
-            modelAndView.addObject("artist", artist);
-        } else {
-            spon.setArtist_name("탈퇴한 아티스트");
-        }
-        modelAndView.addObject("spon", spon);
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -2406,17 +2756,25 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getHashTagEdit() {
-        searchDao.setSession(sqlSession);
-        modelAndView = new ModelAndView("search_hashtag");
-        List<Search> searchList = searchDao.getKeywords();
-        List<String> keywordList = new ArrayList<>();
-        for (Search search : searchList) {
-            keywordList.add(search.getWord());
+        try {
+            searchDao.setSession(sqlSession);
+            modelAndView = new ModelAndView("search_hashtag");
+            List<Search> searchList = searchDao.getKeywords();
+            List<String> keywordList = new ArrayList<>();
+            for (Search search : searchList) {
+                keywordList.add(search.getWord());
+            }
+            String hashtagList = new Gson().toJson(keywordList);
+            log.info(hashtagList);
+            modelAndView.addObject("hashtagList", hashtagList);
+            return modelAndView;
+        } catch (Exception e){
+            if(e.getMessage().equals("Bad Request")){
+                throw new BadRequestException(e);
+            } else {
+                throw new AdminException(e);
+            }
         }
-        String hashtagList = new Gson().toJson(keywordList);
-        log.info(hashtagList);
-        modelAndView.addObject("hashtagList", hashtagList);
-        return modelAndView;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

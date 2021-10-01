@@ -22,28 +22,15 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws Exception {
-
-        System.out.println("Start adminLoginInterceptor session");
-
         HttpSession session = request.getSession(false);
-
-        log.info(request.getRequestURL());
-
-
         if (session != null) {
             Object admin = session.getAttribute("adminLogin");
-            log.info("session is not null");
             if (admin != null) {
-                log.info("adminLogin is not null");
                 Admin admin1 = (Admin) admin;
                 if (adminService.loginAdmin(admin1.getId(), admin1.getPw()) != null) {
                     return true;
                 }
-            } else {
-                log.info("adminLogin is null");
             }
-        } else {
-            log.info("session is null");
         }
         response.sendRedirect("/admin/login.do");
         return false;

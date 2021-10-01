@@ -69,7 +69,32 @@
                                         <td>${commentList[i-1].type}</td>
                                         <td>${commentList[i-1].writer_name}</td>
                                         <td>
-                                                ${commentList[i-1].content}
+                                            <c:choose>
+                                                <c:when test="${commentList[i-1].type == '포트폴리오'}">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                            onclick="openWindowPopComment('/admin/comment_detail.do?comment_no=${commentList[i-1].comment_no}&type=1', '댓글 내용')">
+                                                        <i class="btn-icon-prepend" data-feather="search"></i>
+                                                        내용 보기
+                                                    </button>
+                                                </c:when>
+                                                <c:when test="${commentList[i-1].type == '게시글'}">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                            onclick="openWindowPopComment('/admin/comment_detail.do?comment_no=${commentList[i-1].comment_no}&type=2', '댓글 내용')">
+                                                        <i class="btn-icon-prepend" data-feather="search"></i>
+                                                        내용 보기
+                                                    </button>
+                                                </c:when>
+                                                <c:when test="${commentList[i-1].type == '크라우드'}">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                                            onclick="openWindowPopComment('/admin/comment_detail.do?comment_no=${commentList[i-1].comment_no}&type=3', '댓글 내용')">
+                                                        <i class="btn-icon-prepend" data-feather="search"></i>
+                                                        내용 보기
+                                                    </button>
+                                                </c:when>
+                                            </c:choose>
                                         </td>
                                         <td>${commentList[i-1].reg_date}</td>
                                         <td>
@@ -77,7 +102,7 @@
                                                 <c:when test="${commentList[i-1]._private == false}">
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="if(confirm('댓글내용 : ${commentList[i-1].content}\n${i}번째 댓글을 비공개 처리하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
+                                                            onclick="if(confirm('${i}번째 댓글을 비공개 처리하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
                                                         <i class="btn-icon-prepend" data-feather="trash"></i>
                                                         비공개
                                                     </button>
@@ -85,7 +110,7 @@
                                                 <c:when test="${commentList[i-1]._private == true}">
                                                     <button type="button"
                                                             class="btn btn-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="if(confirm('댓글내용 : ${commentList[i-1].content}\n${i}번째 댓글을 비공개 해제하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
+                                                            onclick="if(confirm('${i}번째 댓글을 비공개 해제하시겠습니까?')){changeComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
                                                         <i class="btn-icon-prepend" data-feather="trash"></i>
                                                         비공개 해제
                                                     </button>
@@ -95,7 +120,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="if(confirm('댓글내용 : ${commentList[i-1].content}\n${i}번째 댓글을 삭제합니다.\n삭제 후 복구는 불가능합니다.\n해당 댓글을 정말 삭제하시겠습니까?')){deleteComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
+                                                    onclick="if(confirm('${i}번째 댓글을 삭제합니다.\n삭제 후 복구는 불가능합니다.\n해당 댓글을 정말 삭제하시겠습니까?')){deleteComment(${commentList[i-1].comment_no}, '${commentList[i-1].type}');} else {return false;}">
                                                 <i class="btn-icon-prepend" data-feather="trash"></i>
                                                 삭제
                                             </button>
@@ -108,15 +133,19 @@
                                 <div class="col-md-12">
                                     <%
                                         String beforeType = session.getAttribute("beforeType").toString();
-                                        if(beforeType.equals("artist")){
+                                        if (beforeType.equals("artist")) {
                                     %>
-                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/artists.do'">
+                                    <button type="button"
+                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                            style="float: right" onclick="location.href='/admin/artists.do'">
                                         뒤로가기
                                     </button>
                                     <%
-                                        } else {
+                                    } else {
                                     %>
-                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/users.do'">
+                                    <button type="button"
+                                            class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
+                                            style="float: right" onclick="location.href='/admin/users.do'">
                                         뒤로가기
                                     </button>
                                     <%
@@ -134,6 +163,19 @@
 </div>
 
 <script>
+    <%
+    if(session.getAttribute("adminLogin") != null){
+     %>
+
+    function openWindowPopComment(url, name) {
+        let options = 'top=10, left=10, width=720, height=640, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
+        window.open(url, name, options);
+    }
+
+    <%
+    }
+    %>
+
     function deleteComment(comment_no, type) {
         const data = {"comment_no": comment_no, "type": type};
         $.ajax({

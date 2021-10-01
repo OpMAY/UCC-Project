@@ -51,7 +51,7 @@
                                             <label class="form-check-label">
                                                 <input type="radio" class="form-check-input" name="send-to"
                                                        id="all-user" value="user">
-                                                유저
+                                                전체
                                             </label>
                                         </div>
                                         <div class="form-check">

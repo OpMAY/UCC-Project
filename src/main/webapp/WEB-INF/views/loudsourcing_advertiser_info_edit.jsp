@@ -167,8 +167,9 @@
 <!-- end custom js for this page -->
 <script>
     function editLoudSourcingAdvertiser() {
+        let loudsourcing_no = ${LoudSourcing.loudsourcing_no};
         let advertiserData = {
-            "loudsourcing_no": ${LoudSourcing.loudsourcing_no},
+            "loudsourcing_no": loudsourcing_no,
             "advertiser_name": $("#advertiser-name").val(),
             "advertiser_phone": $("#advertiser-phone").val(),
             "advertiser_email": $("#advertiser-email").val(),
@@ -186,7 +187,7 @@
             console.log(result);
             if (result === 0) {
                 alert("수정이 완료되었습니다.");
-                window.reload();
+                window.location.href = '/admin/loudsourcing_advertiser.do?loudsourcing_no=' + loudsourcing_no;
             } else {
                 alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
                 window.reload();

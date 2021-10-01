@@ -54,18 +54,6 @@ public class RequestChangeService {
     @Value("${cdnPath}")
     private String cdn_path;
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<RequestChange> getAllRequests() {
-        requestChangeDao.setSession(sqlSession);
-        return requestChangeDao.getAllRequests();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public RequestChange getRequestByUserNo(int user_no) {
-        requestChangeDao.setSession(sqlSession);
-        return requestChangeDao.getRequestByUserNo(user_no);
-    }
-
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity insertRequest(RequestChange rc, MultipartFile profile_img, MultipartFile main_img) {
@@ -123,13 +111,11 @@ public class RequestChangeService {
                         // CHECK UTF-8 ENCODING
                         if (EncodeChecker.encodeCheck(profile_img_decoded_file_name)) {
                             profile_img_decoded_file_name = URLDecoder.decode(profile_img_decoded_file_name, "UTF-8");
-                            log.info("File Name URL Encoded - Decoded File : " + profile_img_decoded_file_name);
                         }
 
                         // CHECK NFD ENCODING - For IOS Korean
                         if (!Normalizer.isNormalized(profile_img_decoded_file_name, Normalizer.Form.NFC)) {
                             profile_img_decoded_file_name = Normalizer.normalize(profile_img_decoded_file_name, Normalizer.Form.NFC);
-                            log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + profile_img_decoded_file_name);
                         }
 
                         String profile_img_file_name = uploadFile(profile_img_decoded_file_name, profile_img, artist_info, false);
@@ -159,13 +145,11 @@ public class RequestChangeService {
                         // CHECK UTF-8 ENCODING
                         if(EncodeChecker.encodeCheck(fan_main_img_decoded_file_name)){
                             fan_main_img_decoded_file_name = URLDecoder.decode(fan_main_img_decoded_file_name, "UTF-8");
-                            log.info("File Name URL Encoded - Decoded File : " + fan_main_img_decoded_file_name);
                         }
 
                         // CHECK NFD ENCODING - For IOS Korean
                         if(!Normalizer.isNormalized(fan_main_img_decoded_file_name, Normalizer.Form.NFC)) {
                             fan_main_img_decoded_file_name = Normalizer.normalize(fan_main_img_decoded_file_name, Normalizer.Form.NFC);
-                            log.info("(IOS Kor File) File is NFD Encoded - Decoded File : " + fan_main_img_decoded_file_name);
                         }
                         String fan_main_img_file_name = uploadFile(fan_main_img_decoded_file_name, main_img, artist_info, false);
                         String main_blur_img_file_name = uploadFile(fan_main_img_decoded_file_name, main_img, artist_info, true);
@@ -197,7 +181,6 @@ public class RequestChangeService {
                 if (artist.getHashtag() != null) {
                     ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                     artist.setHashtag_list(hashtagList);
-                    log.info(hashtagList);
                 }
 
                 /** Response JSON SETTING **/
@@ -232,8 +215,8 @@ public class RequestChangeService {
         } else {
             savedName = uid.toString().substring(0, 8) + "_" + originalName;
             cdnService.upload("api/images/" + artist_info + savedName, file);
-            Files.deleteIfExists(file.toPath());
         }
+        Files.deleteIfExists(file.toPath());
         return savedName;
     }
 }

@@ -28,7 +28,6 @@ public class DashboardController implements ControllerInitialize {
 
     @RequestMapping(value = "/admin/main.do", method = RequestMethod.GET)
     public ModelAndView AdminMain() {
-        init("GET Admin Main");
         return adminService.getAdminMain();
     }
 
@@ -40,8 +39,6 @@ public class DashboardController implements ControllerInitialize {
     @RequestMapping(value = "/admin/main_sns.do", method = RequestMethod.POST)
     @ResponseBody
     public String MainSNS(@RequestBody String body){
-        init("POST MainSNS");
-        log.info(body);
         SnsDate date = new Gson().fromJson(body, SnsDate.class);
         return adminService.getUserSNSByDate(date.getDate());
     }

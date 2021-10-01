@@ -39,11 +39,9 @@ public class FAQService {
                 List<FAQ> faqList = faqDao.getFAQ();
                 for (FAQ faq : faqList) {
                     String img = faq.getImg();
-                    log.info(img);
                     if (img != null) {
                         ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
                         faq.setImgList(imgList);
-                        log.info(imgList);
                     }
                 }
                 message.put("faq", faqList);
@@ -57,11 +55,9 @@ public class FAQService {
                 List<FAQ> faqList = faqDao.getFAQRefresh(faq1);
                 for (FAQ faq : faqList) {
                     String img = faq.getImg();
-                    log.info(img);
                     if (img != null) {
                         ArrayList<String> imgList = new ArrayList<>(Arrays.asList(img.split(", ")));
                         faq.setImgList(imgList);
-                        log.info(imgList);
                     }
                 }
                 message.put("faq", faqList);

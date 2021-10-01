@@ -75,7 +75,7 @@ public class PortfolioService {
             subscribeDao.setSession(sqlSession);
 
             if (portfolioDao.getPortfolioByPortfolioNo(portfolio_no) == null) {
-                log.info("Portfolio_no : " + portfolio_no);
+                log.info("Deleted Content No : " + portfolio_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -92,7 +92,6 @@ public class PortfolioService {
                             portfolioComment.set_fankoked(false);
                     }
 
-                    log.info(commentList);
                     message.put("comment_number", portfolio.getComment_number());
                     message.put("portfolio_comment", commentList);
                     if(commentList.size() > 0){
@@ -112,7 +111,6 @@ public class PortfolioService {
                         else
                             portfolioComment.set_fankoked(false);
                     }
-                    log.info(commentList);
                     message.put("comment_number", portfolio.getComment_number());
                     message.put("portfolio_comment", commentList);
                     if(commentList.size() > 0){
@@ -143,7 +141,6 @@ public class PortfolioService {
                         images = images.replace("]", "");
                         ArrayList<String> filelist = new ArrayList<>(Arrays.asList(images.split(", ")));
                         portfolio.setImage_list(filelist);
-                        log.info(filelist);
                     }
                 }
 
@@ -159,12 +156,6 @@ public class PortfolioService {
         } catch (JSONException e) {
             throw new BusinessException(e);
         }
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<Portfolio> getPortfolioListByArtistNo(int artist_no) {
-        portfolioDao.setSession(sqlSession);
-        return portfolioDao.getPortfolioListByArtistNo(artist_no);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -211,7 +202,7 @@ public class PortfolioService {
             Message message = new Message();
 
             if (portfolioDao.getPortfolioByPortfolioNo(portfolio_no) == null) {
-                log.info("Portfolio_no : " + portfolio_no);
+                log.info("Deleted Content No : " + portfolio_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -242,7 +233,6 @@ public class PortfolioService {
                     images = images.replace("]", "");
                     ArrayList<String> filelist = new ArrayList<>(Arrays.asList(images.split(", ")));
                     portfolio.setImage_list(filelist);
-                    log.info(filelist);
                 }
             }
             portfolio.setUser_no(artistDao.getArtistByArtistNo(portfolio.getArtist_no()).getUser_no());
@@ -306,12 +296,6 @@ public class PortfolioService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void insertFiles(Portfolio portfolio) {
-        portfolioDao.setSession(sqlSession);
-        portfolioDao.insertFiles(portfolio);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity updatePortfolio(Portfolio portfolio) {
         try {
             portfolioDao.setSession(sqlSession);
@@ -321,7 +305,7 @@ public class PortfolioService {
             Portfolio origin_portfolio = portfolioDao.getPortfolioByPortfolioNo(portfolio.getPortfolio_no());
 
             if (portfolioDao.getPortfolioByPortfolioNo(portfolio.getPortfolio_no()) == null) {
-                log.info("Portfolio_no : " + portfolio.getPortfolio_no());
+                log.info("Deleted Content No : " + portfolio.getPortfolio_no());
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -358,7 +342,7 @@ public class PortfolioService {
             Message message = new Message();
 
             if (portfolioDao.getPortfolioByPortfolioNo(portfolio_no) == null) {
-                log.info("Portfolio_no : " + portfolio_no);
+                log.info("Deleted Content No : " + portfolio_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -403,7 +387,7 @@ public class PortfolioService {
 
 
             if (portfolioDao.getPortfolioByPortfolioNo(portfolioComment.getPortfolio_no()) == null) {
-                log.info("Portfolio_no : " + portfolioComment.getPortfolio_no());
+                log.info("Deleted Content No : " + portfolioComment.getPortfolio_no());
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -555,7 +539,7 @@ public class PortfolioService {
             Message message = new Message();
 
             if (portfolioDao.getPortfolioByPortfolioNo(portfolio_no) == null) {
-                log.info("Portfolio_no : " + portfolio_no);
+                log.info("Deleted Content No : " + portfolio_no);
                 return new ResponseEntity(DefaultRes.res(StatusCode.DELETE_CONTENTS, ResMessage.NO_CONTENT_DETECTED), HttpStatus.OK);
             }
 
@@ -629,7 +613,6 @@ public class PortfolioService {
                         if (portfolio.getFile() != null) {
                             ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
                             portfolio.setImage_list(filelist);
-                            log.info(filelist);
                         }
                     }
                     resPortfolioList.add(portfolio);
@@ -660,7 +643,6 @@ public class PortfolioService {
                         if (portfolio.getFile() != null) {
                             ArrayList<String> filelist = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
                             portfolio.setImage_list(filelist);
-                            log.info(filelist);
                         }
                     }
                     resPortfolioList.add(portfolio);

@@ -54,9 +54,9 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large"><a
+                            <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px"
                                     href="${pageContext.request.contextPath}/admin/notices.do">공지사항 </a>FAQ
-                                <button type="button" style="float: right"
+                                <button type="button" style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
                                         onclick="openWindowPopFAQ('/admin/faq_make.do', 'FAQ 제작')">
                                     <i class="btn-icon-prepend" data-feather="edit"></i>

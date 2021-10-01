@@ -53,7 +53,7 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large"><a href="/admin/users.do">사용자</a> 아티스트 </h6>
+                            <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px" href="/admin/users.do">사용자</a> 아티스트 </h6>
                             <div class="table-responsive">
                                 <table id="artist-table" class="table" style="table-layout: fixed">
                                     <thead>
@@ -63,7 +63,7 @@
                                         <th width="25px">팬콕 수</th>
                                         <th width="130px">전환 일자</th>
                                         <th width="80px">포트폴리오</th>
-                                        <th width="80px">게시글</th>
+                                        <th width="80px">게시방</th>
                                         <th width="80px">크라우드</th>
                                         <th width="80px">댓글 내역</th>
                                         <th width="80px">자세히 보기</th>
