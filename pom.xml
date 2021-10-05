@@ -184,8 +184,28 @@
 		<dependency>
 			<groupId>com.google.apis</groupId>
 			<artifactId>google-api-services-androidpublisher</artifactId>
-			<version>v2-rev19-1.20.0</version>
+			<version>v3-rev20210901-1.32.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-plus</artifactId>
+			<version>v1-rev308-1.19.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.32.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client</artifactId>
+			<version>1.39.1</version>
+		</dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-bigquery</artifactId>
+            <version>1.127.10</version>
+        </dependency>
 	</dependencies>
 
 	<build>

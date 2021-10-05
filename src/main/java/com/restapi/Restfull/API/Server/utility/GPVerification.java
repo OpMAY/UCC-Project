@@ -1,39 +1,55 @@
 package com.restapi.Restfull.API.Server.utility;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleOAuthConstants;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpExecuteInterceptor;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.androidpublisher.AndroidPublisher;
 import com.google.api.services.androidpublisher.model.ProductPurchase;
+import com.google.api.services.plus.PlusScopes;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.restapi.Restfull.API.Server.models.GPResponseModel;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 
 @Log4j2
 @Service
-public class GooglePlayStoreVerification {
+public class GPVerification {
 
-    public void verify() throws GeneralSecurityException, IOException {
+    private static GPVerification GPVerification;
+
+    private GPVerification(){}
+
+    public static GPVerification getInstance(){
+        if(GPVerification == null){
+            GPVerification = new GPVerification();
+        }
+        return GPVerification;
+    }
+
+    public GPResponseModel verify(String packageName, String productId, String purchaseToken) throws GeneralSecurityException, IOException {
+        getInstance();
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         String DEVELOP_EMAIL = "kevin8622@playstore-purchase-verify.iam.gserviceaccount.com";
-        String PRIVATE_KEY_ID = "111590174174827635203";
-        GoogleCredential credential = new GoogleCredential.Builder()
-                .setTransport(httpTransport)
-                .setJsonFactory(JSON_FACTORY)
-                .setServiceAccountId(DEVELOP_EMAIL)
-                .setServiceAccountPrivateKeyId(PRIVATE_KEY_ID)
-                .setServiceAccountScopes(Collections.singleton("https://www.googleapis.com/auth/androidpublisher"))
-                .build();
+        String PRIVATE_KEY_ID = "4d69908fef02f7a50f328aa599bc72b4aa091994";
+        File jsonFile = new File("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-abaada2307f7.json");
+        GenericUrl genericUrl = new GenericUrl("https://oauth2.googleapis.com/token");
+        GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(jsonFile))
+                .createScoped(Collections.singleton("https://www.googleapis.com/auth/androidpublisher"));
 
-        String packageName = "";
-        String productId = "";
-        String purchaseToken = "";
 
         AndroidPublisher publisher = new AndroidPublisher.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(packageName)
@@ -55,5 +71,6 @@ public class GooglePlayStoreVerification {
         // 상품이 구매된 시각. 타임스탬프 형태
         Long purchaseTimeMillis = productPurchase.getPurchaseTimeMillis();
         String purchaseTimeString = Time.TimeMillsToDateString(purchaseTimeMillis, "yyyy-MM-dd HH:mm:ss.SSS");
+        return new GPResponseModel(consumptionState, developerPayload, purchaseState, purchaseTimeMillis, purchaseTimeString);
     }
 }

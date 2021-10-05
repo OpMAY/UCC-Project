@@ -11,4 +11,5 @@ public class AppleVerifyResponse {
     private PendingRenewalInfo pending_renewal_info;
     private Receipt receipt;
     private int status;
+    private String status_explain;
 }

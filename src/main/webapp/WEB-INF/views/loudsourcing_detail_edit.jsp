@@ -138,7 +138,7 @@
                                                     공모전 이름
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-name" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnter()"
+                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnterEdit()"
                                                 >${Loudsourcing.name}</textarea>
                                             </div>
                                             <div class="col-md-6" style="vertical-align: middle">
@@ -204,7 +204,7 @@
                                                     주최
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-host" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnter()"
+                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnterEdit()"
                                                 >${Loudsourcing.host}</textarea>
                                                 <label class="label d-flex" for="loudsourcing-reward"
                                                        style="font-size: larger">
@@ -653,6 +653,11 @@
         $('input[name="loudsourcing-process-start-date"]').val(nextDay($('input[name="loudsourcing-recruitment-end-date"]').val()));
     }
 
+    function preventEnterEdit() {
+        if(event.keyCode === 13)
+            event.returnValue = false;
+    }
+
     $(document).ready(function () {
         let tag = {};
         let counter = 0;
@@ -812,10 +817,7 @@
             }
         });
 
-        function preventEnter() {
-            if(event.keyCode === 13)
-                event.returnValue = false;
-        }
+
 
         function editLoudSourcing() {
             if (!inspection("loudsourcing-name", "loudsourcing_name")) {
