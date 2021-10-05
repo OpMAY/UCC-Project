@@ -804,6 +804,12 @@ public class AdminService {
                 log.info(modified_HashtagList);
                 System.out.println(modified_HashtagList);
             }
+            if(artist.getArtist_profile_img().equals("default")){
+                artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
+            }
+            if(artist.getMain_img().equals("default")){
+                artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
+            }
 
             modelAndView.addObject("penalty_num", penaltyList.size());
             modelAndView.addObject("User", user);
@@ -1228,12 +1234,10 @@ public class AdminService {
                 }
             }
             modelAndView.addObject("files", uploads);
-            if (loudSourcing.getHashtag() != null) {
+            if (loudSourcing.getHashtag() != null && !loudSourcing.getHashtag().equals("")) {
                 ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(loudSourcing.getHashtag().split(",")));
                 ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
                 loudSourcing.setHashtag(new Gson().toJson(modified_HashtagList));
-                log.info(modified_HashtagList);
-                System.out.println(modified_HashtagList);
             }
             modelAndView.addObject("Loudsourcing", loudSourcing);
             if (loudSourcing.getStatus().equals("judge")) {
@@ -1279,7 +1283,6 @@ public class AdminService {
             loudSourcing.setFiles(files);
             if (loudSourcing.getImg() == null)
                 loudSourcing.setImg(original_loudsourcing.getImg());
-            log.info(4);
             if (loudSourcing.getHashtag() != null) {
                 loudSourcing.setHashtag(loudSourcing.getHashtag().replace("[", "").replace("]", "").replace("\"", ""));
             }
@@ -1470,6 +1473,12 @@ public class AdminService {
                 artist.setHashtag(new Gson().toJson(modified_HashtagList));
                 log.info(modified_HashtagList);
                 System.out.println(modified_HashtagList);
+            }
+            if(artist.getArtist_profile_img().equals("default")){
+                artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
+            }
+            if(artist.getMain_img().equals("default")){
+                artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
             }
             User user = userDao.selectUserByUserNo(artist.getUser_no());
             LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByArtistNOAndLoudSourcingNo(artist_no, loudsourcing_no);

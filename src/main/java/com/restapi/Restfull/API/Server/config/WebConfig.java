@@ -23,6 +23,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources");
 
+        registry.addResourceHandler("/assets/**")
+                .addResourceLocations("classpath:/static/assets/");
+
         registry.addResourceHandler("/static/image/**")
                 .addResourceLocations("file:///" + uploadImagePath + "/")
                 .setCachePeriod(3600)

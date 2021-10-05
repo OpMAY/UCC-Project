@@ -50,7 +50,7 @@
             </nav>
 
             <div class="alert alert-primary" style="white-space: pre-wrap;" role="alert">
-                모든 후원은 송금처리 후
+                준비중입니다.
             </div>
 
             <div class="row">
@@ -143,6 +143,9 @@
             </div>
 
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 </div>
 

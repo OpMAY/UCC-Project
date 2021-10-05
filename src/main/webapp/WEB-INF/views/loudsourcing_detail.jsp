@@ -322,6 +322,9 @@
                 </div>
 
             </div>
+            <!-- partial:partials/_footer.jsp -->
+            <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+            <!-- partial -->
         </div>
     </div>
 
@@ -392,8 +395,11 @@
 
         // 서버 기본 해시태그 리스트를 가져온다.
         let hashtagList = '<c:out value="${Loudsourcing.hashtag}"/>';
+        console.log(hashtagList);
         let edit = replaceAll(hashtagList, '&#034;', '"');
         let obj = JSON.parse(edit);
+        console.log(obj);
+        console.log("length : " + obj.length);
         for (let i = 0; i < obj.length; i++) {
             console.log(obj[i]);
             tag[counter] = obj[i];

@@ -28,6 +28,66 @@
     <link rel="stylesheet" href="../assets/css/demo_1/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../assets/images/favicon.png"/>
+    <style>
+        details {
+            margin: 5px 0 10px;
+        }
+
+        details > summary {
+            background: #fff;
+            color: #007bff;
+            padding: 10px;
+            outline: 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.5s;
+            text-align: left;
+            box-shadow: 1px 1px 2px gray;
+        }
+
+        details > summary::-webkit-details-marker {
+            background: #444;
+            color: #fff;
+            background-size: contain;
+            transform: rotate3d(0, 0, 1, 90deg);
+            transition: transform 0.25s;
+        }
+
+        details[open] > summary::-webkit-details-marker {
+            transform: rotate3d(0, 0, 1, 180deg);
+        }
+
+        details[open] > summary {
+            background: #fff;
+            box-shadow: 1px 1px 2px gray;
+        }
+
+        details[open] > summary ~ * {
+            animation: reveal 0.5s;
+        }
+
+        .tpt {
+            background: #fff;
+            color: #000;
+            margin: 5px 0 10px;
+            padding: 5px 10px;
+            line-height: 25px;
+            border-radius: 5px;
+            box-shadow: 1px 1px 2px gray;
+            white-space: pre-wrap;
+        }
+
+        @keyframes reveal {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -30px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    </style>
 </head>
 <body>
 <!-- core:js -->
@@ -70,32 +130,43 @@
                     <li class="breadcrumb-item active" aria-current="page">심사</li>
                 </ol>
             </nav>
-
-            <div class="alert alert-primary" style="white-space: pre-wrap;" role="alert">
-                - 자동 선정 기준 -&#10;
-                &#10;
-                1. 총 출품작의 투표 수 상위 약 15%의 출품작을 자동 1차 선정합니다. (투표 수가 0인 출품작은 자동 선정되지 않습니다)&#10;
-                2. 공정성을 위해 선정되지 않은 작품 중, 1차 선정작 리스트에서 가장 적은 투표 수와 같은 투표 수의 작품이 있다면 해당 작품도 2차 선정되어집니다.&#10;
-                3. 2차 선정 이후 종료 전까지 관리자와 광고주가 관리하시면 됩니다.&#10;
-                4. 종료 일자에 자동으로 크라우드는 종료되고 선정 및 탈락된 참여자에겐 자동으로 알림 메세지가 전송됩니다.
-            </div>
+            <details>
+                <summary>선정 기준 보기</summary>
+                <div class="tpt">
+                    - 자동 선정 기준 -&#10;
+                    1. 총 출품작의 투표 수 상위 약 15%의 출품작을 자동 1차 선정합니다. (투표 수가 0인 출품작은 자동 선정되지 않습니다)&#10;
+                    2. 공정성을 위해 선정되지 않은 작품 중, 1차 선정작 리스트에서 가장 적은 투표 수와 같은 투표 수의 작품이 있다면 해당 작품도 2차 선정되어집니다.&#10;
+                    3. 2차 선정 이후 종료 전까지 관리자와 광고주가 관리하시면 됩니다.&#10;
+                    4. 종료 일자에 자동으로 크라우드는 종료되고 선정 및 탈락된 참여자에겐 자동으로 알림 메세지가 전송됩니다.&#10;
+                    5. 심사 및 종료 자동 전환은 각각 0시 5분, 0시 10분에 적용되며 각 페이지에 있는 버튼으로 수동 전환도 가능합니다.&#10;
+                    &#10;
+                    ## 크라우드 진행 기간은 지났지만 심사로 전환되지 않는 경우&#10;
+                    - 제출된 출품작 수가 0개일 때&#10;
+                    - 제출된 출품작 모두 투표 수가 0일 때
+                </div>
+            </details>
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_recruitment.do">
+                                                                                 href="${pageContext.request.contextPath}/admin/loudsourcing_recruitment.do">
                                 모집 </a><a style="margin-right: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_process.do">
+                                          href="${pageContext.request.contextPath}/admin/loudsourcing_process.do">
                                 진행 </a>심사 <a style="margin-left: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
-                                종료 </a><button type="button"
-                                               class="btn btn-outline-primary btn-icon-text"
-                                               style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
-                                               onclick="setLoudSourcingToEnd()">
-                                <i class="btn-icon-prepend" data-feather="refresh-ccw"></i>
-                                심사 수동 업데이트
-                            </button><span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="기간이 지났음에도 자동으로 종료 업데이트가 되지 않았을 때 클릭하시면 됩니다."><i data-feather="help-circle"></i></span></h6></h6>
+                                             href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
+                                종료 </a>
+                                <button type="button"
+                                        class="btn btn-outline-primary btn-icon-text"
+                                        style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
+                                        onclick="setLoudSourcingToEnd()">
+                                    <i class="btn-icon-prepend" data-feather="refresh-ccw"></i>
+                                    심사 수동 업데이트
+                                </button>
+                                <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top"
+                                      title="기간이 지났음에도 자동으로 종료 업데이트가 되지 않았을 때 클릭하시면 됩니다."><i
+                                        data-feather="help-circle"></i></span></h6>
+                            </h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
@@ -171,10 +242,23 @@
             </div>
 
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 </div>
 
 <script>
+    function openClosedToc() {
+        if (document.getElementById('judge-explain').style.display === 'block') {
+            document.getElementById('judge-explain').style.display = 'none';
+            document.getElementById('toc-toggle').textContent = '설명 보기';
+        } else {
+            document.getElementById('judge-explain').style.display = 'block';
+            document.getElementById('toc-toggle').textContent = '설명 닫기';
+        }
+    }
+
     function setLoudSourcingToEnd() {
         $.ajax({
             type: 'POST',

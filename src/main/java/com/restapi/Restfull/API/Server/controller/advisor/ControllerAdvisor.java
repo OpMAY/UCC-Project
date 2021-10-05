@@ -51,7 +51,6 @@ public class ControllerAdvisor {
     @ExceptionHandler(NotFoundException.class)
     public ModelAndView handle(NotFoundException e){
         log.info("NotFound Exception Handler");
-        e.printStackTrace();
         return new ModelAndView("400");
     }
 

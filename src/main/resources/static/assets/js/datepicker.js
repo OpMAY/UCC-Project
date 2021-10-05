@@ -71,11 +71,11 @@ $(function () {
         title: "종료일자",
         autoclose: true
     }).on("changeDate", function(selectedDate){
-        $('#dp-loudsourcing-start-date').datepicker("setEndDate", selectedDate.date);
-        $('#dp-loudsourcing-process-end-date').datepicker("setEndDate", selectedDate.date);
-        $('#dp-loudsourcing-process-start-date').datepicker("setEndDate", selectedDate.date);
-        $('#dp-loudsourcing-recruitment-end-date').datepicker("setEndDate", selectedDate.date);
-        $('#dp-loudsourcing-judge-start-date').datepicker("setEndDate", selectedDate.date);
+        $('#dp-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
+        $('#dp-loudsourcing-process-end-date').datepicker("setEndDate", prevDay(selectedDate.date));
+        $('#dp-loudsourcing-process-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
+        $('#dp-loudsourcing-recruitment-end-date').datepicker("setEndDate", prevDay(selectedDate.date));
+        $('#dp-loudsourcing-judge-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
     });
 
     $('#dp-loudsourcing-recruitment-end-date').datepicker({
@@ -83,10 +83,10 @@ $(function () {
         title: "모집 종료일자",
         autoclose: true
     }).on("changeDate", function(selectedDate){
-        $('#dp-loudsourcing-process-start-date').datepicker("setStartDate", selectedDate.date);
-        $('#dp-loudsourcing-process-end-date').datepicker("setStartDate", selectedDate.date);
-        $('#dp-loudsourcing-judge-start-date').datepicker("setStartDate", selectedDate.date);
-        $('#dp-loudsourcing-end-date').datepicker("setStartDate", selectedDate.date);
+        $('#dp-loudsourcing-process-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
+        $('#dp-loudsourcing-process-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
+        $('#dp-loudsourcing-judge-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
+        $('#dp-loudsourcing-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
     });
 
     $('#dp-loudsourcing-process-start-date').datepicker({
@@ -206,10 +206,4 @@ $(function () {
         return new Date(date.getFullYear(), date.getMonth(), number);
     }
 
-    /*$('.ban-date').on('changeDate', function () {
-        $('#ban-end-date-text1').val(
-            $('#ban-start-date-text1').datepicker('getFormattedDate')
-        )
-
-    });*/
 });

@@ -138,7 +138,7 @@
                                                     공모전 이름
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-name" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnter()"
                                                 >${Loudsourcing.name}</textarea>
                                             </div>
                                             <div class="col-md-6" style="vertical-align: middle">
@@ -204,7 +204,7 @@
                                                     주최
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-host" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnter()"
                                                 >${Loudsourcing.host}</textarea>
                                                 <label class="label d-flex" for="loudsourcing-reward"
                                                        style="font-size: larger">
@@ -505,6 +505,9 @@
                 </div>
             </div>
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 </div>
 
@@ -772,11 +775,47 @@
         $('input[name=loudsourcing-process-end-date]').attr("readonly", true);
         $('input[name=loudsourcing-judge-start-date]').attr("readonly", true);
 
-        console.log("ready");
         $('#editButton').on("click", function () {
             console.log("clicked");
             editLoudSourcing();
         });
+
+        $('textarea[id="loudsourcing-name"]').on('paste', function (e) {
+            let data;
+            console.log("name");
+            if (window.clipboardData) {
+                data = window.clipboardData.getData("Text");
+            } else {
+                data = e.originalEvent.clipboardData.getData("Text");
+            }
+            let match = /r|\n/.exec(data);
+            if(match){
+                data = data.replace(/(\r\n|\n|\r)/gm,"");
+                $(this).val($(this).val() + data);
+                e.originalEvent.preventDefault();
+            }
+        });
+
+        $('textarea[id="loudsourcing-host"]').on('paste', function (e) {
+            let data;
+            console.log("host")
+            if (window.clipboardData) {
+                data = window.clipboardData.getData("Text");
+            } else {
+                data = e.originalEvent.clipboardData.getData("Text");
+            }
+            let match = /r|\n/.exec(data);
+            if(match){
+                data = data.replace(/(\r\n|\n|\r)/gm,"");
+                $(this).val($(this).val() + data);
+                e.originalEvent.preventDefault();
+            }
+        });
+
+        function preventEnter() {
+            if(event.keyCode === 13)
+                event.returnValue = false;
+        }
 
         function editLoudSourcing() {
             if (!inspection("loudsourcing-name", "loudsourcing_name")) {

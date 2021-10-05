@@ -393,6 +393,9 @@
             </c:if>
 
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 </div>
 

@@ -1,18 +1,13 @@
 package com.restapi.Restfull.API.Server.services;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.daos.ArtistDao;
 import com.restapi.Restfull.API.Server.daos.BoardDao;
 import com.restapi.Restfull.API.Server.daos.PortfolioDao;
 import com.restapi.Restfull.API.Server.daos.SearchDao;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.Artist;
-import com.restapi.Restfull.API.Server.models.Board;
-import com.restapi.Restfull.API.Server.models.Portfolio;
-import com.restapi.Restfull.API.Server.models.Search;
-import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.Message;
-import com.restapi.Restfull.API.Server.response.ResMessage;
-import com.restapi.Restfull.API.Server.response.StatusCode;
+import com.restapi.Restfull.API.Server.models.*;
+import com.restapi.Restfull.API.Server.response.*;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONException;
@@ -24,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
@@ -75,6 +71,24 @@ public class SearchService {
 
             //LIMIT 15
             List<Portfolio> portfolioList = portfolioDao.SearchPortfolioLimit(query);
+            for(Portfolio portfolio : portfolioList){
+                if (portfolio.getType().equals(PortfolioType.FILE)) {
+                    String jsonString = portfolio.getFile();
+                    Gson gson = new Gson();
+                    FileJson[] fileJson = gson.fromJson(jsonString, FileJson[].class);
+                    ArrayList<Upload> uploads = new ArrayList<>();
+                    for (FileJson json : fileJson) {
+                        uploads.add(new Upload(json.getName().substring(9), json.getUrl()));
+                    }
+                    portfolio.setFile_list(uploads);
+                } else if (portfolio.getType().equals(PortfolioType.IMAGE)) {
+                    if (portfolio.getFile() != null) {
+                        ArrayList<String> fileList = new ArrayList<>(Arrays.asList(portfolio.getFile().split(", ")));
+                        portfolio.setImage_list(fileList);
+                    }
+                }
+            }
+
             if (last_index > -1) {
                 //LIMIT start_index + 10
                 if(last_index == 0) {

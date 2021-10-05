@@ -122,7 +122,8 @@
                                                     공모전 이름
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-make-name" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          style="line-height: 150%; font-size: large; text-align: center; white-space: nowrap"
+                                                          onkeypress="preventEnter()" placeholder="공모전 이름을 입력하세요."
                                                 ></textarea>
                                             </div>
                                             <div class="col-md-6">
@@ -172,7 +173,8 @@
                                                     주최
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-make-host" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          style="line-height: 150%; font-size: large; text-align: center; white-space: nowrap"
+                                                          onkeypress="preventEnter()" placeholder="주최 광고주를 입력해주세요."
                                                 ></textarea>
                                                 <label class="label d-flex" for="loudsourcing-make-reward"
                                                        style="font-size: larger">
@@ -181,6 +183,9 @@
                                                 <textarea class="form-control" id="loudsourcing-make-reward"
                                                           rows="1"
                                                           style="line-height: 150%; font-size: large; text-align: center"
+                                                          onkeypress="onlyNumber()"
+                                                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                          placeholder="상금을 입력해주세요."
                                                 ></textarea>
                                                 <label class="label d-flex"
                                                        style="font-size: larger">
@@ -201,11 +206,14 @@
                                                 </div>
                                                 <label class="label d-flex" for="make-total-recruit-number"
                                                        style="font-size: larger">
-                                                    총 모집 인원
+                                                    최소 모집 인원
                                                 </label>
                                                 <textarea class="form-control" id="make-total-recruit-number"
                                                           rows="1"
                                                           style="line-height: 150%; font-size: large; text-align: center"
+                                                          onkeypress="onlyNumber()"
+                                                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                          placeholder="최소 모집 인원을 입력해주세요."
                                                 ></textarea>
                                                 <label class="label d-flex" for="total-date"
                                                        style="font-size: larger">
@@ -306,7 +314,8 @@
                                                        style="font-size: larger">
                                                     파일 - [파일은 최대 3개까지 업로드 가능하며 파일 용량은 하나당 10MB를 넘을 수 없습니다.]
                                                 </label>
-                                                <div style="background-color: #ffffff; border: 1px solid black; line-height: 150%" id="file-list">
+                                                <div style="background-color: #ffffff; border: 1px solid black; line-height: 150%"
+                                                     id="file-list">
                                                     <input type="file" id="file-add-input-1" name="files"
                                                            hidden/>
                                                 </div>
@@ -377,6 +386,7 @@
                                                 <textarea class="form-control" id="loudsourcing-make-content"
                                                           rows="10"
                                                           style="line-height: 150%; font-size: large"
+                                                          placeholder="출품 안내를 입력해주세요."
                                                 ></textarea>
                                             </div>
                                         </div>
@@ -389,19 +399,22 @@
                                                 <textarea class="form-control" id="loudsourcing-make-warning"
                                                           rows="10"
                                                           style="line-height: 150%; font-size: large"
+                                                          placeholder="주의사항을 입력해주세요."
                                                 ></textarea>
                                             </div>
                                         </div>
                                         <div class="row mt-4 mb-3 justify-content-around">
                                             <div class="col-md-6 justify-content-center d-flex">
                                                 <button type="button" id="makeButton"
-                                                        class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                        class="btn btn-outline-primary"
+                                                        style="width : 50%; height: 150%"
                                                 >
                                                     확인
                                                 </button>
                                             </div>
                                             <div class="col-md-6 justify-content-center d-flex">
-                                                <button type="button" class="btn btn-secondary" style="width : 50%; height: 150%"
+                                                <button type="button" class="btn btn-secondary"
+                                                        style="width : 50%; height: 150%"
                                                         onclick="location.href = '/admin/loudsourcing_recruitment.do';">
                                                     취소
                                                 </button>
@@ -415,6 +428,9 @@
                 </div>
             </div>
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 </div>
 
@@ -457,6 +473,36 @@
 
     $('#dp-loudsourcing-process-end-date').on("click", function () {
         checkDate('processEndDate');
+    });
+
+    $('textarea[id="loudsourcing-make-name"]').on('paste', function (e) {
+        let data;
+        if (window.clipboardData) {
+            data = window.clipboardData.getData("Text");
+        } else {
+            data = e.originalEvent.clipboardData.getData("Text");
+        }
+        let match = /r|\n/.exec(data);
+        if(match){
+            data = data.replace(/(\r\n|\n|\r)/gm,"");
+            $(this).val($(this).val() + data);
+            e.originalEvent.preventDefault();
+        }
+    });
+
+    $('textarea[id="loudsourcing-make-host"]').on('paste', function (e) {
+        let data;
+        if (window.clipboardData) {
+            data = window.clipboardData.getData("Text");
+        } else {
+            data = e.originalEvent.clipboardData.getData("Text");
+        }
+        let match = /r|\n/.exec(data);
+        if(match){
+            data = data.replace(/(\r\n|\n|\r)/gm,"");
+            $(this).val($(this).val() + data);
+            e.originalEvent.preventDefault();
+        }
     });
 
     function checkDate(input) {
@@ -523,6 +569,16 @@
         return formatDate(sDate);
     }
 
+    function preventEnter() {
+        if (event.keyCode === 13)
+            event.returnValue = false;
+    }
+
+    function onlyNumber() {
+        if (event.keyCode < 48 || event.keyCode > 57 || event.keyCode === 13)
+            event.returnValue = false;
+    }
+
     function copyStartDate() {
         document.getElementById("recruitment-start-date").value = $('input[name="loudsourcing-start-date"]').val();
     }
@@ -582,7 +638,6 @@
 
                 // 해시태그 값 없으면 실행X
                 if (tagValue !== "") {
-                    console.log("length : " + tagValue.length);
                     if (tagValue.length <= 5) {
 
                         // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
