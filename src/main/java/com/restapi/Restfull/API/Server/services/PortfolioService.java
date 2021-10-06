@@ -314,6 +314,11 @@ public class PortfolioService {
             portfolio.setRevise_date(d);
             portfolio.setArtist_name(origin_portfolio.getArtist_name());
             portfolio.setArtist_profile_img(origin_portfolio.getArtist_profile_img());
+            if(portfolio.getType().equals("vod")){
+                if(portfolio.getVideo_length() == null){
+                    portfolio.setVideo_length(origin_portfolio.getVideo_length());
+                }
+            }
             portfolioDao.updatePortfolio(portfolio);
 
             Portfolio portfolio1 = portfolioDao.getPortfolioByPortfolioNo(portfolio.getPortfolio_no());

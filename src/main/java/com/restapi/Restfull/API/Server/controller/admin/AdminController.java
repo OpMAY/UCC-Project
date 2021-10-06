@@ -279,7 +279,6 @@ public class AdminController implements ControllerInitialize {
             Gson gson = new Gson();
             LoudSourcing loudSourcing = gson.fromJson(body, LoudSourcing.class);
             String loudsourcing_info = loudSourcing.getLoudsourcing_no() + "/";
-            log.info(loudSourcing);
             Upload[] original_fileList = gson.fromJson(original_file, Upload[].class);
 
             URLConverter urlConverter = new URLConverter();

@@ -475,6 +475,28 @@
         checkDate('processEndDate');
     });
 
+    function checkDateValid(){
+        let start_date = new Date($('input[name=loudsourcing-start-date]').val());
+        let end_date = new Date($('input[name=loudsourcing-end-date]').val());
+        let recruitment_end_date = new Date($('input[name=loudsourcing-recruitment-end-date]').val());
+        let process_start_date = new Date($('input[name=loudsourcing-process-start-date]').val());
+        let process_end_date = new Date($('input[name=loudsourcing-process-end-date]').val());
+        let judge_start_date = new Date($('input[name=loudsourcing-judge-start-date]').val());
+        if(start_date > end_date){
+            alert("날짜를 확인해주세요.");
+            return false;
+        } else if (process_start_date > process_end_date){
+            alert("날짜를 확인해주세요.");
+            return false;
+        } else if (judge_start_date > end_date){
+            alert("날짜를 확인해주세요.");
+            return false;
+        } else if (recruitment_end_date > end_date){
+            alert("날짜를 확인해주세요.");
+            return false;
+        }
+    };
+
     $('textarea[id="loudsourcing-make-name"]').on('paste', function (e) {
         let data;
         if (window.clipboardData) {
@@ -722,6 +744,8 @@
             } else if (!inspection("loudsourcing-process-end-date", "date")) {
                 return false;
             } else if (!inspection("loudsourcing-judge-start-date", "date")) {
+                return false;
+            } else if (!checkDateValid()){
                 return false;
             }
 

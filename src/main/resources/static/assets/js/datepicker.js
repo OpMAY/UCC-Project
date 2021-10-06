@@ -71,11 +71,11 @@ $(function () {
         title: "종료일자",
         autoclose: true
     }).on("changeDate", function(selectedDate){
-        $('#dp-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-loudsourcing-process-end-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-loudsourcing-process-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-loudsourcing-recruitment-end-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-loudsourcing-judge-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
+        $('#dp-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date ,1));
+        $('#dp-loudsourcing-process-end-date').datepicker("setEndDate", prevDay(selectedDate.date, 2));
+        $('#dp-loudsourcing-process-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
+        $('#dp-loudsourcing-recruitment-end-date').datepicker("setEndDate", prevDay(selectedDate.date, 4));
+        $('#dp-loudsourcing-judge-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
     });
 
     $('#dp-loudsourcing-recruitment-end-date').datepicker({
@@ -104,7 +104,7 @@ $(function () {
         autoclose: true
     }).on("changeDate", function (selectedDate) {
         $('#dp-loudsourcing-judge-start-date').datepicker("setStartDate", selectedDate.date);
-        $('#dp-loudsourcing-end-date').datepicker("setStartDate", selectedDate.date);
+        $('#dp-loudsourcing-end-date').datepicker("setStartDate", nextTwoDay(selectedDate.date));
     });
     $('#dp-loudsourcing-judge-start-date').datepicker({
         format: "yyyy-mm-dd",
@@ -134,7 +134,6 @@ $(function () {
     } else {
         start_date = $("#start-date").val();
     }
-    console.log("start_date : " + start_date);
 
     $('#dp-edit-loudsourcing-end-date').datepicker({
         format: "yyyy-mm-dd",
@@ -142,15 +141,14 @@ $(function () {
         autoclose: true,
         startDate : start_date,
     }).on("changeDate", function(selectedDate){
-        $('#dp-edit-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-edit-loudsourcing-process-end-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-edit-loudsourcing-process-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-edit-loudsourcing-recruitment-end-date').datepicker("setEndDate", prevDay(selectedDate.date));
-        $('#dp-edit-loudsourcing-judge-start-date').datepicker("setEndDate", prevDay(selectedDate.date));
+        $('#dp-edit-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
+        $('#dp-edit-loudsourcing-process-end-date').datepicker("setEndDate", prevDay(selectedDate.date, 2));
+        $('#dp-edit-loudsourcing-process-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
+        $('#dp-edit-loudsourcing-recruitment-end-date').datepicker("setEndDate", prevDay(selectedDate.date, 4));
+        $('#dp-edit-loudsourcing-judge-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
     });
 
     let end_date = $('input[name=loudsourcing-end-date]').val();
-    console.log("end_date : " + end_date);
 
     $('#dp-edit-loudsourcing-recruitment-end-date').datepicker({
         format: "yyyy-mm-dd",
@@ -184,7 +182,7 @@ $(function () {
         autoclose: true
     }).on("changeDate", function (selectedDate) {
         $('#dp-edit-loudsourcing-judge-start-date').datepicker("setStartDate", selectedDate.date);
-        $('#dp-edit-loudsourcing-end-date').datepicker("setStartDate", selectedDate.date);
+        $('#dp-edit-loudsourcing-end-date').datepicker("setStartDate", nextTwoDay(selectedDate.date));
     });
     $('#dp-edit-loudsourcing-judge-start-date').datepicker({
         format: "yyyy-mm-dd",
@@ -201,9 +199,15 @@ $(function () {
         return new Date(date.getFullYear(), date.getMonth(), number);
     }
 
-    function prevDay(date) {
-        let number = date.getDate() - 1;
+    function nextTwoDay(date){
+        let number = date.getDate() + 2;
         return new Date(date.getFullYear(), date.getMonth(), number);
     }
+
+    function prevDay(date, num) {
+        let number = date.getDate() - num;
+        return new Date(date.getFullYear(), date.getMonth(), number);
+    }
+
 
 });

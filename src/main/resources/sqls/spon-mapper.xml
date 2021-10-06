@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper">
     <insert id="insertSpon" useGeneratedKeys="true" keyProperty="spon_no">
-        insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_unique, receipt_id,
-                         purchase_data, purchase_status)
-        VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{purchase_unique},
-                #{receipt_id}, #{purchase_data}, #{purchase_status})
+        insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_token, receipt_id,
+                          purchase_status, verify_status, platform, product_id, currency)
+        VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{purchase_token},
+                #{receipt_id}, #{purchase_status}, #{verify_status}, #{platform}, #{product_id}, #{currency})
     </insert>
     <select id="getSponList" resultType="Spon">
         select *

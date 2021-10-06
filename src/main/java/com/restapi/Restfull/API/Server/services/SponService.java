@@ -5,7 +5,9 @@ import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
+import com.restapi.Restfull.API.Server.utility.ASVerification;
 import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
+import com.restapi.Restfull.API.Server.utility.GPVerification;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +50,28 @@ public class SponService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity insertSpon(Spon spon) {
+        try{
+            if(spon.getPlatform().equals("Android")){
+                GPResponseModel gpResponse = GPVerification.getInstance().verify(spon.getProduct_id(), spon.getPurchase_token());
+                if(gpResponse.isPurchaseState()){
+                    spon.setVerify_status(true);
+                } else {
+                    spon.setVerify_status(false);
+                }
+            } else if(spon.getPlatform().equals("IOS")){
+                AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false);
+                AppleVerifyResponse asResponse = ASVerification.getInstance().verify(request);
+                if(asResponse.getStatus_explain().equals("SUCCESS")){
+                    spon.setVerify_status(true);
+                } else {
+                    spon.setVerify_status(false);
+                }
+            } else {
+                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.SPON_PLATFORM_ERROR), HttpStatus.OK);
+            }
+        } catch (GeneralSecurityException | IOException e) {
+            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+        }
         try {
             sponDao.setSession(sqlSession);
             boardDao.setSession(sqlSession);
@@ -93,7 +119,7 @@ public class SponService {
                     boardSponComment.setProfile_img(user.getProfile_img());
                 }
                 boardSponComment.setType(BoardCommentType.SPON_COMMENT);
-                boardSponComment.setContent(Integer.toString(spon.getPrice()));
+                boardSponComment.setContent(spon.getPrice() + spon.getCurrency());
                 boardSponComment.setComment_private(false);
                 String date = Time.TimeFormatHMS();
                 boardSponComment.setReg_date(date);
@@ -121,16 +147,17 @@ public class SponService {
 
                 //FCM SET
                 NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, NotificationType.CONTENT_TYPE_BOARD, null, board.getBoard_no(), null, spon.getArtist_no());
-                firebaseMessagingSnippets.push(userDao.selectUserByUserNo(sponned_artist.getUser_no()).getFcm_token(), NotificationType.ARTIST_SPON_FCM,"'" + user.getName() + "'님이 회원님의 '" + board.getTitle() + "'에 '" + spon.getPrice() + "'원을 후원했습니다.", new Gson().toJson(notificationNext));
+                firebaseMessagingSnippets.push(userDao.selectUserByUserNo(sponned_artist.getUser_no()).getFcm_token(), NotificationType.ARTIST_SPON_FCM,"'" + user.getName() + "'님이 회원님의 게시글 '" + board.getTitle() + "'에 '" + spon.getPrice() + "'의 금액을 후원했습니다.", new Gson().toJson(notificationNext));
 
                 //Notification SET
                 Notification notification = new Notification();
                 notification.setUser_no(sponned_artist.getUser_no());
                 notification.setType(NotificationType.ARTIST_SPON);
-                notification.setContent("'" + user.getName() + "'님이 회원님의 '" + board.getTitle() + "'에 '" + spon.getPrice() + "'원을 후원했습니다.");
+                notification.setContent("'" + user.getName() + "'님이 회원님의 게시글 '" + board.getTitle() + "'에 '" + spon.getPrice() + "'의 금액을 후원했습니다.");
                 notification.setReg_date(Time.TimeFormatHMS());
                 notification.setNext(new Gson().toJson(notificationNext));
                 notificationDao.insertNotification(notification);
+                log.info("After : " + spon);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.BOARD_SPON_SUCCESS, message.getHashMap("ArtistSpon()")), HttpStatus.OK);
             } else {
                 spon.setType(SponType.Artist_SPON);
@@ -145,13 +172,14 @@ public class SponService {
                 Notification notification = new Notification();
                 notification.setUser_no(sponned_artist.getUser_no());
                 notification.setType(NotificationType.ARTIST_SPON);
-                notification.setContent("'" + user.getName() + "'님이 회원님께 '" + spon.getPrice() + "'원을 후원했습니다.");
+                notification.setContent("'" + user.getName() + "'님이 회원님께 '" + spon.getPrice() + "'의 금액을 후원했습니다.");
                 notification.setReg_date(Time.TimeFormatHMS());
                 notification.setNext(new Gson().toJson(notificationNext));
                 notificationDao.insertNotification(notification);
 
                 // Message Set
                 message.put("spon", spon);
+                log.info("After : " + spon);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("BoardSpon()")), HttpStatus.OK);
             }
         } catch (JSONException e) {

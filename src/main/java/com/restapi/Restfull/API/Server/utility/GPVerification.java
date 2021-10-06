@@ -39,23 +39,22 @@ public class GPVerification {
         return GPVerification;
     }
 
-    public GPResponseModel verify(String packageName, String productId, String purchaseToken) throws GeneralSecurityException, IOException {
+    private final String PACKAGE_NAME = "com.weart.ucc";
+
+    public GPResponseModel verify(String productId, String purchaseToken) throws GeneralSecurityException, IOException {
         getInstance();
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        String DEVELOP_EMAIL = "kevin8622@playstore-purchase-verify.iam.gserviceaccount.com";
-        String PRIVATE_KEY_ID = "4d69908fef02f7a50f328aa599bc72b4aa091994";
         File jsonFile = new File("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-abaada2307f7.json");
-        GenericUrl genericUrl = new GenericUrl("https://oauth2.googleapis.com/token");
         GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(jsonFile))
                 .createScoped(Collections.singleton("https://www.googleapis.com/auth/androidpublisher"));
 
 
         AndroidPublisher publisher = new AndroidPublisher.Builder(httpTransport, JSON_FACTORY, credential)
-                .setApplicationName(packageName)
+                .setApplicationName(PACKAGE_NAME)
                 .build();
 
-        AndroidPublisher.Purchases.Products.Get get = publisher.purchases().products().get(packageName, productId, purchaseToken);
+        AndroidPublisher.Purchases.Products.Get get = publisher.purchases().products().get(PACKAGE_NAME, productId, purchaseToken);
         ProductPurchase productPurchase = get.execute();
         log.info("Purchase Data : " + productPurchase.toPrettyString());
 

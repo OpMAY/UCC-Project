@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.ExchangeRateMapper">
+    <insert id="insertExchangeRate" keyProperty="er_no" useGeneratedKeys="true">
+        insert into exchange_rate (json, reg_date)
+        VALUES (#{json}, #{reg_date})
+    </insert>
+    <select id="getExchangeRate" resultType="String">
+        select *
+        from exchange_rate
+        ORDER BY reg_date DESC LIMIT 1
+    </select>
+</mapper>

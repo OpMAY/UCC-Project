@@ -138,7 +138,8 @@
                                                     공모전 이름
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-name" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnterEdit()"
+                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          onkeypress="preventEnterEdit()"
                                                 >${Loudsourcing.name}</textarea>
                                             </div>
                                             <div class="col-md-6" style="vertical-align: middle">
@@ -204,7 +205,8 @@
                                                     주최
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-host" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="preventEnterEdit()"
+                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          onkeypress="preventEnterEdit()"
                                                 >${Loudsourcing.host}</textarea>
                                                 <label class="label d-flex" for="loudsourcing-reward"
                                                        style="font-size: larger">
@@ -251,7 +253,7 @@
                                                                            name="loudsourcing-start-date"
                                                                            id="loudsourcing-start-date"
                                                                            onchange="copyStartDate()"
-                                                                           style="font-size: large;line-height: normal;text-align: center"
+                                                                           style="font-size: large;line-height: normal;text-align: center" disabled
                                                                            value="${Loudsourcing.start_date}"><span
                                                                         class="input-group-addon"><i
                                                                         data-feather="calendar"></i></span>
@@ -381,7 +383,8 @@
                                                        style="font-size: larger">
                                                     파일 - [파일은 최대 3개까지 업로드 가능하며 파일 용량은 하나당 10MB를 넘을 수 없습니다.]
                                                 </label>
-                                                <div style="background-color: #ffffff; border: 1px solid black; line-height: 150%" id="file-list">
+                                                <div style="background-color: #ffffff; border: 1px solid black; line-height: 150%"
+                                                     id="file-list">
                                                     <c:forEach var="i" begin="1" end="${files.size()}">
                                                         <div class="d-flex align-items-center justify-content-between">
                                                             <a style="font-size: 15px; font-weight: bold; color: #6A6A6A; text-decoration: underline"
@@ -485,13 +488,15 @@
                                         </div>
                                         <div class="row mt-4 mb-3 justify-content-around">
                                             <div class="col-md-6 justify-content-center d-flex">
-                                                <button type="button" class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                <button type="button" class="btn btn-outline-primary"
+                                                        style="width : 50%; height: 150%"
                                                         id="editButton">
                                                     수정
                                                 </button>
                                             </div>
                                             <div class="col-md-6 justify-content-center d-flex">
-                                                <button type="button" class="btn btn-secondary" style="width : 50%; height: 150%"
+                                                <button type="button" class="btn btn-secondary"
+                                                        style="width : 50%; height: 150%"
                                                         onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'">
                                                     취소
                                                 </button>
@@ -654,7 +659,7 @@
     }
 
     function preventEnterEdit() {
-        if(event.keyCode === 13)
+        if (event.keyCode === 13)
             event.returnValue = false;
     }
 
@@ -794,8 +799,8 @@
                 data = e.originalEvent.clipboardData.getData("Text");
             }
             let match = /r|\n/.exec(data);
-            if(match){
-                data = data.replace(/(\r\n|\n|\r)/gm,"");
+            if (match) {
+                data = data.replace(/(\r\n|\n|\r)/gm, "");
                 $(this).val($(this).val() + data);
                 e.originalEvent.preventDefault();
             }
@@ -810,8 +815,8 @@
                 data = e.originalEvent.clipboardData.getData("Text");
             }
             let match = /r|\n/.exec(data);
-            if(match){
-                data = data.replace(/(\r\n|\n|\r)/gm,"");
+            if (match) {
+                data = data.replace(/(\r\n|\n|\r)/gm, "");
                 $(this).val($(this).val() + data);
                 e.originalEvent.preventDefault();
             }
@@ -853,12 +858,6 @@
             let process_end_date = $('input[name=loudsourcing-process-end-date]').val();
             let judge_start_date = $('input[name=loudsourcing-judge-start-date]').val();
 
-            console.log("end_date : " + end_date);
-            console.log("recruitment_end_date : " + recruitment_end_date);
-            console.log("process_start_date : " + process_start_date);
-            console.log("process_end_date : " + process_end_date);
-            console.log("judge_start_date : " + judge_start_date);
-
             let form = $("#loudsourcingEditForm")[0];
             let formData = new FormData(form);
             console.log("existed_file url : " + $("#existed_file1").attr("href"));
@@ -871,7 +870,6 @@
                 };
                 OriginalFileObject.push(OriginalFileData);
             }
-            console.log("Object : " + OriginalFileObject);
             formData.append("original_files", JSON.stringify(OriginalFileObject));
             let status;
             switch ($("#loudsourcing-status").val()) {

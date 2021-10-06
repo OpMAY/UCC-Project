@@ -130,8 +130,8 @@ public class AdminService {
             modelAndView.addObject("LoudsourcingList", loudSourcingList);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -525,31 +525,32 @@ public class AdminService {
             if (type == 1) {
                 portfolioCommentDao.setSession(sqlSession);
                 PortfolioComment portfolioComment = portfolioCommentDao.getCommentByCommentNo(comment_no);
-                if(portfolioComment == null) throw new Exception("Bad Request");
+                if (portfolioComment == null) throw new Exception("Bad Request");
                 modelAndView.addObject("comment", portfolioComment);
             } else if (type == 2) {
                 boardCommentDao.setSession(sqlSession);
                 BoardComment boardComment = boardCommentDao.getCommentByCommentNo(comment_no);
-                if(boardComment == null) throw new Exception("Bad Request");
+                if (boardComment == null) throw new Exception("Bad Request");
                 modelAndView.addObject("comment", boardComment);
             } else if (type == 3) {
                 entryCommentDao.setSession(sqlSession);
                 EntryComment entryComment = entryCommentDao.getEntryCommentByCommentNo(comment_no);
-                if(entryComment == null) throw new Exception("Bad Request");
+                if (entryComment == null) throw new Exception("Bad Request");
                 modelAndView.addObject("comment", entryComment);
             } else {
                 throw new Exception("Bad Request");
             }
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
             }
         }
     }
+
 
     @Data
     class SnsUser {
@@ -567,8 +568,8 @@ public class AdminService {
             List<User> userList = userDao.getAllUserList();
             modelAndView.addObject("UserList", userList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -585,8 +586,8 @@ public class AdminService {
             List<Artist> artistList = artistDao.getAllArtists();
             modelAndView.addObject("artistList", artistList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -602,7 +603,7 @@ public class AdminService {
             entryCommentDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
             int user_no = Integer.parseInt(query);
-            if(userDao.selectUserByUserNo(user_no) == null){
+            if (userDao.selectUserByUserNo(user_no) == null) {
                 throw new Exception("Bad Request");
             }
             modelAndView = new ModelAndView("comments");
@@ -664,8 +665,8 @@ public class AdminService {
             });
             modelAndView.addObject("commentList", adminCommentList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -755,15 +756,15 @@ public class AdminService {
             modelAndView = new ModelAndView("user_detail");
             int user_no = Integer.parseInt(query);
             User user = userDao.selectUserByUserNo(user_no);
-            if(user == null) throw new Exception("Bad Request");
+            if (user == null) throw new Exception("Bad Request");
             List<Spon> sponList = sponDao.getSponListByUserNo(user_no);
             int spon_amount = 0;
-            if (sponList.size() > 0) {
-                for (Spon spon : sponList) {
-                    int price = spon.getPrice();
-                    spon_amount = spon_amount + price;
-                }
-            }
+//            if (sponList.size() > 0) {
+//                for (Spon spon : sponList) {
+//                    int price = spon.getPrice();
+//                    spon_amount = spon_amount + price;
+//                }
+//            }
             List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
             modelAndView.addObject("penalty_num", penaltyList.size());
             modelAndView.addObject("User", user);
@@ -772,8 +773,8 @@ public class AdminService {
             }
             modelAndView.addObject("spon_amount", spon_amount);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -804,10 +805,10 @@ public class AdminService {
                 log.info(modified_HashtagList);
                 System.out.println(modified_HashtagList);
             }
-            if(artist.getArtist_profile_img().equals("default")){
+            if (artist.getArtist_profile_img().equals("default")) {
                 artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
             }
-            if(artist.getMain_img().equals("default")){
+            if (artist.getMain_img().equals("default")) {
                 artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
             }
 
@@ -816,7 +817,7 @@ public class AdminService {
             modelAndView.addObject("Artist", artist);
 
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AdminException(e);
         }
     }
@@ -829,7 +830,7 @@ public class AdminService {
             modelAndView = new ModelAndView("portfolio_list");
 
             int artist_no = Integer.parseInt(query);
-            if(artistDao.getArtistByArtistNo(artist_no) == null){
+            if (artistDao.getArtistByArtistNo(artist_no) == null) {
                 throw new Exception("Bad Request");
             }
 
@@ -885,8 +886,8 @@ public class AdminService {
             modelAndView.addObject("type", type);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -902,7 +903,7 @@ public class AdminService {
             artistDao.setSession(sqlSession);
             modelAndView = new ModelAndView("board_list");
             int artist_no = Integer.parseInt(query);
-            if(artistDao.getArtistByArtistNo(artist_no) == null)
+            if (artistDao.getArtistByArtistNo(artist_no) == null)
                 throw new Exception("Bad Request");
 
             List<Board> boardList = boardDao.getBoardListByArtistNo(artist_no);
@@ -912,16 +913,16 @@ public class AdminService {
 
                 if (sponDao.getSponListByBoardNo(board.getBoard_no()) != null && sponDao.getSponListByBoardNo(board.getBoard_no()).size() > 0) {
                     List<Spon> sponList = sponDao.getSponListByBoardNo(board.getBoard_no());
-                    for (Spon spon : sponList) {
-                        board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
-                    }
+//                    for (Spon spon : sponList) {
+//                        board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
+//                    }
                 }
             }
 
             modelAndView.addObject("boardList", boardList);
 
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AdminException(e);
         }
     }
@@ -958,7 +959,7 @@ public class AdminService {
             modelAndView.addObject("portfolio", portfolio);
 
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AdminException(e);
         }
     }
@@ -984,20 +985,20 @@ public class AdminService {
             int board_no = Integer.parseInt(query);
 
             Board board = boardDao.getBoardByBoardNo(board_no);
-            if(board == null){
+            if (board == null) {
                 throw new BadRequestException(new Exception("Bad Request"));
             }
             List<Spon> sponList = sponDao.getSponListByBoardNo(board_no);
-            for (Spon spon : sponList) {
-                board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
-            }
+//            for (Spon spon : sponList) {
+//                board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
+//            }
             board.setRevise_date(board.getRevise_date().substring(0, board.getRevise_date().lastIndexOf(".")));
 
             modelAndView.addObject("board", board);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1035,7 +1036,7 @@ public class AdminService {
             modelAndView.addObject("loudsourcingList", loudSourcingList);
 
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AdminException(e);
         }
     }
@@ -1058,7 +1059,7 @@ public class AdminService {
             modelAndView.addObject("loudsourcingList", loudSourcingList);
 
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AdminException(e);
         }
     }
@@ -1086,7 +1087,7 @@ public class AdminService {
             modelAndView.addObject("loudsourcingList", loudSourcingList);
 
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AdminException(e);
         }
     }
@@ -1111,7 +1112,7 @@ public class AdminService {
             modelAndView.addObject("loudsourcingList", loudSourcingList);
 
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AdminException(e);
         }
     }
@@ -1123,7 +1124,7 @@ public class AdminService {
             loudSourcingApplyDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             int loudsourcing_no = Integer.parseInt(query);
-            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+            if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
                 throw new BadRequestException(new Exception("Bad Request"));
             }
 
@@ -1147,8 +1148,8 @@ public class AdminService {
             modelAndView.addObject("artistList", artistList);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1219,7 +1220,7 @@ public class AdminService {
                 throw new Exception("Bad Request");
             int loudsourcing_no = Integer.parseInt(query);
             LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
-            if(loudSourcing == null){
+            if (loudSourcing == null) {
                 throw new Exception("Bad Request");
             }
             List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNo(loudsourcing_no);
@@ -1253,8 +1254,8 @@ public class AdminService {
 
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1294,14 +1295,13 @@ public class AdminService {
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
+            return 2;
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getLoudSourcingUploadPage() {
         modelAndView = new ModelAndView("loudsourcing_make");
-
         return modelAndView;
     }
 
@@ -1318,7 +1318,6 @@ public class AdminService {
             loudSourcing.setType("default");
             loudSourcing.setHost_profile_img("http://www.weart-page.com/static/image/profile_img_basic.png");
             loudSourcingDao.insertLoudSourcing(loudSourcing);
-
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1346,7 +1345,7 @@ public class AdminService {
             modelAndView = new ModelAndView("loudsourcing_advertiser_info");
 
             LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
-            if(loudSourcing == null){
+            if (loudSourcing == null) {
                 throw new Exception("Bad Request");
             }
             loudSourcing.setReg_date(loudSourcing.getReg_date().substring(0, loudSourcing.getReg_date().lastIndexOf(".")));
@@ -1354,8 +1353,8 @@ public class AdminService {
             modelAndView.addObject("LoudSourcing", loudSourcing);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1370,7 +1369,7 @@ public class AdminService {
             modelAndView = new ModelAndView("loudsourcing_advertiser_info_edit");
 
             LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
-            if(loudSourcing == null){
+            if (loudSourcing == null) {
                 throw new Exception("Bad Request");
             }
             loudSourcing.setReg_date(loudSourcing.getReg_date().substring(0, loudSourcing.getReg_date().lastIndexOf(".")));
@@ -1378,8 +1377,8 @@ public class AdminService {
             modelAndView.addObject("LoudSourcing", loudSourcing);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1440,8 +1439,8 @@ public class AdminService {
             }
             modelAndView.addObject("artistList", requestList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1464,7 +1463,7 @@ public class AdminService {
                 throw new Exception("Bad Request");
             }
             Artist artist = artistDao.getArtistByArtistNo(artist_no);
-            if(artist == null){
+            if (artist == null) {
                 throw new Exception("Bad Request");
             }
             if (artist.getHashtag() != null) {
@@ -1474,10 +1473,10 @@ public class AdminService {
                 log.info(modified_HashtagList);
                 System.out.println(modified_HashtagList);
             }
-            if(artist.getArtist_profile_img().equals("default")){
+            if (artist.getArtist_profile_img().equals("default")) {
                 artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
             }
-            if(artist.getMain_img().equals("default")){
+            if (artist.getMain_img().equals("default")) {
                 artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
             }
             User user = userDao.selectUserByUserNo(artist.getUser_no());
@@ -1500,8 +1499,8 @@ public class AdminService {
 
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1552,7 +1551,7 @@ public class AdminService {
             loudSourcingEntryDao.setSession(sqlSession);
             loudSourcingDao.setSession(sqlSession);
             modelAndView = new ModelAndView("loudsourcing_process_withdraw_list");
-            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+            if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
                 throw new Exception("Bad Request");
             }
             List<LoudSourcingEntry> entryList = loudSourcingEntryDao.getEntryListByLoudSourcingNoAdmin(loudsourcing_no);
@@ -1568,8 +1567,8 @@ public class AdminService {
 
             modelAndView.addObject("entryList", resEntryList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1584,7 +1583,7 @@ public class AdminService {
             loudSourcingDao.setSession(sqlSession);
             modelAndView = new ModelAndView("unknown_entry_detail");
             LoudSourcing loudSourcing = loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no);
-            if(loudSourcing == null){
+            if (loudSourcing == null) {
                 throw new Exception("Bad Request");
             }
             LoudSourcingEntry entry = loudSourcingEntryDao.getEntryByEntryNo(entry_no);
@@ -1594,8 +1593,8 @@ public class AdminService {
             modelAndView.addObject("loudsourcing_no", loudsourcing_no);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1680,7 +1679,7 @@ public class AdminService {
             artistDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
             modelAndView = new ModelAndView("loudsourcing_selected_list");
-            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+            if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
                 throw new Exception("Bad Request");
             }
             List<EntryProcessListRequest> requestList = new ArrayList<>();
@@ -1702,8 +1701,8 @@ public class AdminService {
             modelAndView.addObject("artistList", requestList);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1720,7 +1719,7 @@ public class AdminService {
             artistDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
             modelAndView = new ModelAndView("loudsourcing_unselected_list");
-            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+            if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
                 throw new Exception("Bad Request");
             }
             List<EntryProcessListRequest> requestList = new ArrayList<>();
@@ -1741,8 +1740,8 @@ public class AdminService {
             }
             modelAndView.addObject("artistList", requestList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1952,7 +1951,7 @@ public class AdminService {
             loudSourcingDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             modelAndView = new ModelAndView("loudsourcing_final_list");
-            if(loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null){
+            if (loudSourcingDao.getLoudSourcingByLoudsourcingNo(loudsourcing_no) == null) {
                 throw new Exception("Bad Request");
             }
             List<LoudSourcingApply> applyList = loudSourcingApplyDao.getLoudSourcingApplyListByLoudSourcingNoSelected(loudsourcing_no);
@@ -1973,8 +1972,8 @@ public class AdminService {
             }
             modelAndView.addObject("artistList", requestList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1989,7 +1988,7 @@ public class AdminService {
             loudSourcingDao.setSession(sqlSession);
             modelAndView = new ModelAndView("artist_loudsourcing_list");
             artistDao.setSession(sqlSession);
-            if(artistDao.getArtistByArtistNo(artist_no) == null){
+            if (artistDao.getArtistByArtistNo(artist_no) == null) {
                 throw new Exception("Bad Request");
             }
             List<AdminArtistLoudSourcing> loudSourcingList = new ArrayList<>();
@@ -2009,8 +2008,8 @@ public class AdminService {
             }
             modelAndView.addObject("loudsourcingList", loudSourcingList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2027,8 +2026,8 @@ public class AdminService {
             List<Notice> noticeList = noticeDao.getNoticeForCDN();
             modelAndView.addObject("noticeList", noticeList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2055,14 +2054,14 @@ public class AdminService {
             modelAndView = new ModelAndView("notice_detail");
 
             Notice notice = noticeDao.getNoticeByNoticeNo(notice_no);
-            if(notice == null){
+            if (notice == null) {
                 throw new Exception("Bad Request");
             }
 
             modelAndView.addObject("notice", notice);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2117,8 +2116,8 @@ public class AdminService {
             List<FAQ> faqList = faqDao.getFAQForCDN();
             modelAndView.addObject("faqList", faqList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2132,13 +2131,13 @@ public class AdminService {
             faqDao.setSession(sqlSession);
             modelAndView = new ModelAndView("faq_detail");
             FAQ faq = faqDao.getFAQByFAQNo(faq_no);
-            if(faq == null){
+            if (faq == null) {
                 throw new Exception("Bad Request");
             }
             modelAndView.addObject("faq", faq);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2203,8 +2202,8 @@ public class AdminService {
 
             modelAndView.addObject("bannerList", bannerList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2224,13 +2223,13 @@ public class AdminService {
             bannerAdDao.setSession(sqlSession);
             modelAndView = new ModelAndView("banner_detail");
             BannerAd bannerAd = bannerAdDao.getBannerAdByBannerAdNo(banner_ad_no);
-            if(bannerAd == null){
+            if (bannerAd == null) {
                 throw new Exception("Bad Request");
             }
             modelAndView.addObject("banner", bannerAd);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2401,8 +2400,8 @@ public class AdminService {
             }
             modelAndView.addObject("type", type);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2418,7 +2417,7 @@ public class AdminService {
             userDao.setSession(sqlSession);
             modelAndView = new ModelAndView("inquiry_detail");
             Inquiry inquiry = inquiryDao.getInquiryByInquiryNo(inquiry_no);
-            if(inquiry == null)
+            if (inquiry == null)
                 throw new Exception("Bad Request");
             switch (inquiry.getType()) {
                 case "loudsourcing":
@@ -2472,8 +2471,8 @@ public class AdminService {
             }
             modelAndView.addObject("inquiry", inquiry);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2505,13 +2504,13 @@ public class AdminService {
             inquiry.set_answered(true);
             User user = userDao.selectUserByUserNo(inquiry.getUser_no());
             Artist artist = artistDao.getArtistByUserNo(inquiry.getUser_no());
-            if(artist != null)
+            if (artist != null)
                 inquiry.setUser_name(artist.getArtist_name());
             else
                 inquiry.setUser_name(user.getName());
 
             if (inquiry.getType().equals("loudsourcing")) {
-                inquiry.setAnswer_content("크라우드 문의 보내주신 \""+ inquiry.getUser_name() + "\"님께 감사드립니다.\n" +
+                inquiry.setAnswer_content("크라우드 문의 보내주신 \"" + inquiry.getUser_name() + "\"님께 감사드립니다.\n" +
                         "보내주신 문의 내용과 첨부파일을 확인했습니다.\n" +
                         "며칠 안으로 입력하신 연락처 혹은 이메일로 연락드리겠습니다.\n" +
                         "앞으로도 많은 문의 보내주세요.");
@@ -2548,7 +2547,7 @@ public class AdminService {
             artistDao.setSession(sqlSession);
             modelAndView = new ModelAndView("penalty");
             User user = userDao.selectUserByUserNo(user_no);
-            if(user == null)
+            if (user == null)
                 throw new Exception("Bad Request");
             Artist artist = artistDao.getArtistByUserNo(user_no);
             if (artist != null) {
@@ -2557,8 +2556,8 @@ public class AdminService {
             modelAndView.addObject("user", user);
 
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2668,8 +2667,8 @@ public class AdminService {
             }
             modelAndView.addObject("sponList", sponList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2685,7 +2684,7 @@ public class AdminService {
             userDao.setSession(sqlSession);
             modelAndView = new ModelAndView("spon_detail");
             Spon spon = sponDao.getSponBySponNo(spon_no);
-            if(spon == null){
+            if (spon == null) {
                 throw new Exception("Bad Request");
             }
             spon.setPrice_send(spon.getPrice());
@@ -2711,8 +2710,8 @@ public class AdminService {
             }
             modelAndView.addObject("spon", spon);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2777,8 +2776,8 @@ public class AdminService {
             log.info(hashtagList);
             modelAndView.addObject("hashtagList", hashtagList);
             return modelAndView;
-        } catch (Exception e){
-            if(e.getMessage().equals("Bad Request")){
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);

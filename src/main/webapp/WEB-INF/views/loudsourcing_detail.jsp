@@ -257,7 +257,8 @@
                                         <c:when test="${Loudsourcing.status == 'recruitment'}">
                                             <div class="row mt-4 mb-3 justify-content-around">
                                                 <div class="col-md-6 justify-content-center d-flex">
-                                                    <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                    <button class="btn btn-outline-primary"
+                                                            style="width : 50%; height: 150%"
                                                             onclick="location.href='/admin/loudsourcing_edit.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'">
                                                         수정
                                                     </button>
@@ -279,7 +280,8 @@
                                                     </button>
                                                 </div>
                                                 <div class="col-md-3" style="text-align: center">
-                                                    <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                    <button class="btn btn-outline-primary"
+                                                            style="width : 50%; height: 150%"
                                                             onclick="if(confirm('진행 중인 크라우드를 삭제합니다.\n\n진행 중인 크라우드를 삭제하면 현재 등록된 출품작도 함께 삭제됩니다.\n정말 삭제하시겠습니까?')){deleteLoudSourcing(${Loudsourcing.loudsourcing_no});} else {return false;}">
                                                         삭제
                                                     </button>
