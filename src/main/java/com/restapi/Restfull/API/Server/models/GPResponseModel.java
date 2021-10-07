@@ -8,7 +8,7 @@ import lombok.Data;
 public class GPResponseModel {
     private boolean consumptionState;
     private String developerPayload;
-    private boolean purchaseState;
+    private int purchaseState;
     private Long purchaseTimeMillis;
     private String purchaseTimeString;
 }

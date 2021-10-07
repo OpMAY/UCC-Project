@@ -34,11 +34,14 @@ public class ASVerification {
     private final String APPLE_TEST_SANDBOX_URL = "https://sandbox.itunes.apple.com/verifyReceipt";
 
     public AppleVerifyResponse verify(AppleVerifyRequest request) throws IOException {
-        getInstance();
         HttpResponse res = getAppleStoreVerification(request);
         String responseString = IOUtils.toString(res.getEntity().getContent(), StandardCharsets.UTF_8);
         AppleVerifyResponse response = new Gson().fromJson(responseString, AppleVerifyResponse.class);
-        if (response.getStatus() == 21007)
+        log.info("Apple Response : " + response);
+//        if(response.is_retryable()){
+//            verify(request);
+//        }
+        if (response.getStatus() == 0)
             response.setStatus_explain("SUCCESS");
         else {
             response.setStatus_explain(verifyStatusCode(response.getStatus()));
@@ -57,7 +60,8 @@ public class ASVerification {
 
     private HttpResponse getAppleStoreVerification(AppleVerifyRequest request) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = getPost(APPLE_VERIFY_URL, new StringEntity(new Gson().toJson(request), "UTF-8"));
+        String jsonData = "{\"receipt-data\" : \"" + request.getReceipt_data() + "\", \"password\" : \"" + request.getPassword() + "\"}";
+        HttpPost post = getPost(APPLE_TEST_SANDBOX_URL, new StringEntity(jsonData));
         return client.execute(post);
     }
 

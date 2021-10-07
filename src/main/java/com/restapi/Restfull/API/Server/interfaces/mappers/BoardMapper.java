@@ -27,7 +27,7 @@ public interface BoardMapper {
 
     void updateBoardByFankok(Board board);
 
-    List<Board> getRecentBoardList();
+    List<Board> getRecentBoardList(List<Integer> artistList);
 
     List<Board> searchBoard(String query);
 

@@ -38,6 +38,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         auth_excludeList.add("/api/auth/*");
         auth_excludeList.add("/api/auth");
         auth_excludeList.add("/api/login");
+        auth_excludeList.add("/api/apple/notification");
 
         List<String> directory_excludeList = new ArrayList<>();
         List<String> admin_excludeList = new ArrayList<>();

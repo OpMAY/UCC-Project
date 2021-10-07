@@ -86,4 +86,5 @@ public class ResMessage {
     public static final String MANUALLY_DELETE_CDN = "CDN Deleted Manually";
     public static final String FCM_TOKEN_UPDATED = "FCM Token Updated";
     public static final String SPON_PLATFORM_ERROR = "Spon Platform Error";
+    public static final String APPLE_NOTIFICATION_SUCCESS = "Apple Notification Success";
 }

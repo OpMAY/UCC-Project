@@ -100,9 +100,9 @@ public class BoardDao {
         boardMapper.updateBoardByFankok(board);
     }
 
-    public List<Board> getRecentBoardList() {
+    public List<Board> getRecentBoardList(List<Integer> artistList) {
         BoardMapper boardMapper = sqlSession.getMapper(BoardMapper.class);
-        return boardMapper.getRecentBoardList();
+        return boardMapper.getRecentBoardList(artistList);
     }
 
     public List<Board> SearchBoard(String query) {

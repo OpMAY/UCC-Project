@@ -58,6 +58,14 @@
     <select id="getRecentBoardList" resultType="Board">
         select *
         from board
+        <choose>
+            <when test="artistList.size() != 0">
+        WHERE artist_no not in
+                <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
         order by reg_date DESC
         limit 15
     </select>

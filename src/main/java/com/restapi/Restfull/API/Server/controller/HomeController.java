@@ -1,13 +1,19 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
+import com.restapi.Restfull.API.Server.models.AppleVerifyRequest;
+import com.restapi.Restfull.API.Server.models.AppleVerifyResponse;
 import com.restapi.Restfull.API.Server.models.Auth;
+import com.restapi.Restfull.API.Server.models.GPResponseModel;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.SecurityService;
 import com.restapi.Restfull.API.Server.services.CurrencyService;
+import com.restapi.Restfull.API.Server.utility.ASVerification;
+import com.restapi.Restfull.API.Server.utility.GPVerification;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -18,7 +24,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Base64;
 
 
 @Log4j2
@@ -94,23 +102,24 @@ public class HomeController {
         private String platform;
     }
 
-    @RequestMapping(value = "/api/test", method = RequestMethod.GET)
-    public ResponseEntity TestMethod() {
+    @RequestMapping(value = "/api/test", method = RequestMethod.POST)
+    public ResponseEntity TestMethod(@RequestBody String body) {
         try {
             Message message = new Message();
-            String time = Time.TimeFormatDay();
-            currencyService.saveCurrencyInfo(time);
+//            String time = Time.TimeFormatDay();
+//            currencyService.saveCurrencyInfo(time);
             /** Google PlayStore, Apple AppStore Purchase Verification Logic **/
-//            PurchaseVerification verification = new Gson().fromJson(body, PurchaseVerification.class);
-//            if (verification.getPlatform().equals("Android")) {
-//                GPResponseModel gpResponse = GPVerification.getInstance().verify(verification.getProductId(), verification.getPurchaseToken());
-//                log.info(gpResponse);
-//                message.put("google_verify", gpResponse);
-//            } else if (verification.getPlatform().equals("IOS")) {
-//                AppleVerifyRequest request = new AppleVerifyRequest(verification.getReceipt_data(), verification.getPassword(), false);
-//                AppleVerifyResponse asResponse = ASVerification.getInstance().verify(request);
-//                message.put("apple_verify", asResponse);
-//            }
+            PurchaseVerification verification = new Gson().fromJson(body, PurchaseVerification.class);
+            if (verification.getPlatform().equals("Android")) {
+                GPResponseModel gpResponse = GPVerification.getInstance().verify(verification.getProductId(), verification.getPurchaseToken());
+                log.info(gpResponse);
+                message.put("google_verify", gpResponse);
+            } else if (verification.getPlatform().equals("IOS")) {
+//                String receipt = Base64.getEncoder().encodeToString(verification.getReceipt_data().getBytes(StandardCharsets.UTF_8));
+                AppleVerifyRequest request = new AppleVerifyRequest(verification.getReceipt_data(), verification.getPassword(), true);
+                AppleVerifyResponse asResponse = ASVerification.getInstance().verify(request);
+                message.put("apple_verify", asResponse);
+            }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS, message.getHashMap("TestEncode()")), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

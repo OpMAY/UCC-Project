@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper">
     <insert id="insertSpon" useGeneratedKeys="true" keyProperty="spon_no">
         insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_token, receipt_id,
-                          purchase_status, verify_status, platform, product_id, currency)
+                         purchase_status, verify_status, platform, product_id, currency)
         VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{purchase_token},
                 #{receipt_id}, #{purchase_status}, #{verify_status}, #{platform}, #{product_id}, #{currency})
     </insert>
@@ -57,4 +57,39 @@
         from spon
         WHERE spon_no = #{spon_no}
     </delete>
+    <select id="getSponListStatusPurchase" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status NOT IN (0)
+        ORDER BY spon_date DESC
+    </select>
+    <select id="getSponListStatusApply" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = false
+          AND send_date IS NULL
+        ORDER BY spon_date DESC
+    </select>
+    <select id="getSponListStatusSend" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND send_date IS NULL
+        ORDER BY spon_date DESC
+    </select>
+    <select id="getSponListStatusComplete" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND send_date IS NOT NULL
+        ORDER BY spon_date DESC
+    </select>
+    <update id="updateSponByPurchaseUpdate">
+        update spon
+        SET verify_status=#{verify_status}
+        WHERE spon_no = #{spon_no}
+    </update>
 </mapper>

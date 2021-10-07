@@ -15,20 +15,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>후원 관리</title>
     <!-- core:css -->
-    <link rel="stylesheet" href="../assets/vendors/core/core.css">
+    <link rel="stylesheet" href="/assets/vendors/core/core.css">
     <!-- endinject -->
     <!-- plugin css for this page -->
-    <link rel="stylesheet" href="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <!-- end plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="../assets/fonts/feather-font/css/iconfont.css">
-    <link rel="stylesheet" href="../assets/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/assets/fonts/feather-font/css/iconfont.css">
+    <link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css">
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="../assets/css/demo_1/style.css">
+    <link rel="stylesheet" href="/assets/css/demo_1/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="../assets/images/favicon.png"/>
+    <link rel="shortcut icon" href="/assets/images/favicon.png"/>
 
 </head>
 <body>
@@ -49,16 +49,34 @@
                 </ol>
             </nav>
 
-            <div class="alert alert-primary" style="white-space: pre-wrap;" role="alert">
-                준비중입니다.
-            </div>
 
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title" style="font-size: x-large">후원 관리
-                            </h6>
+                            <h6 class="card-title" style="font-size: x-large"><c:choose><c:when
+                                    test="${status == 'purchase'}">결제 오류 <a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/spon/apply.do">미승인 </a><a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/spon/send.do">미정산 </a><a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/spon/complete.do">완료 </a>
+                            </c:when><c:when test="${status == 'apply'}"><a style="margin-right: 10px"
+                                                                        href="${pageContext.request.contextPath}/admin/spon/purchase.do">
+                                결제오류 </a>미승인 <a style="margin-left: 10px"
+                                                 href="${pageContext.request.contextPath}/admin/spon/send.do">
+                                미정산 </a><a style="margin-left: 10px"
+                                           href="${pageContext.request.contextPath}/admin/spon/complete.do">
+                                완료 </a></c:when><c:when
+                                    test="${status == 'send'}"><a style="margin-right: 10px"
+                                                                 href="${pageContext.request.contextPath}/admin/spon/purchase.do">
+                                결제오류 </a><a style="margin-right: 10px"
+                                             href="${pageContext.request.contextPath}/admin/spon/apply.do">
+                                미승인 </a>미정산 <a style="margin-left: 10px"
+                                               href="${pageContext.request.contextPath}/admin/spon/complete.do">
+                                완료 </a></c:when><c:when
+                                    test="${status == 'complete'}"><a style="margin-right: 10px"
+                                                                href="${pageContext.request.contextPath}/admin/spon/purchase.do">
+                                결제오류 </a><a style="margin-right: 10px"
+                                             href="${pageContext.request.contextPath}/admin/spon/apply.do">
+                                미승인 </a><a style="margin-right: 10px"
+                                           href="${pageContext.request.contextPath}/admin/spon/send.do">
+                                미정산 </a>완료 </c:when></c:choose></h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
@@ -66,12 +84,12 @@
                                         <th width="10px">#</th>
                                         <th width="30px">후원한 사용자</th>
                                         <th width="30px">후원받은 사용자</th>
-                                        <th width="30px">후원 종류</th>
-                                        <th width="60px">후원 일자</th>
+                                        <th width="30px">결제 여부</th>
                                         <th width="30px">승인 여부</th>
+                                        <th width="30px">입금 여부</th>
                                         <th width="70px">금액</th>
+                                        <th width="60px">후원 일자</th>
                                         <th width="40px">자세히 보기</th>
-                                        <th width="50px">송금 처리</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -81,7 +99,7 @@
                                         <td>${i}</td>
                                         <td class="overflow-hidden"
                                             style="text-overflow: ellipsis">
-                                            ${sponList[i-1].user_name}
+                                                ${sponList[i-1].user_name}
                                         </td>
                                         <td class="overflow-hidden"
                                             style="text-overflow: ellipsis">
@@ -89,48 +107,50 @@
                                         </td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${sponList[i-1].type == 'Board Spon'}">
-                                                    게시글 후원
+                                                <c:when test="${sponList[i-1].verify_status == 0}">
+                                                    O
                                                 </c:when>
-                                                <c:when test="${sponList[i-1].type == 'Artist Spon'}">
-                                                    아티스트 후원
+                                                <c:when test="${sponList[i-1].verify_status == 1}">
+                                                    취소됨
+                                                </c:when>
+                                                <c:when test="${sponList[i-1].verify_status == 2}">
+                                                    보류 중
                                                 </c:when>
                                             </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${sponList[i-1].status == true}">
+                                                    O
+                                                </c:when>
+                                                <c:when test="${sponList[i-1].status == false}">
+                                                    X
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${sponList[i-1].purchase_status == true}">
+                                                    O
+                                                </c:when>
+                                                <c:when test="${sponList[i-1].purchase_status == false}">
+                                                    X
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                                ${sponList[i-1].price}
                                         </td>
                                         <td class="overflow-hidden"
                                             style="text-overflow: ellipsis">
                                                 ${sponList[i-1].spon_date}
                                         </td>
                                         <td>
-                                            <c:choose>
-                                                <c:when test="${sponList[i-1].status == true}">
-                                                    승인
-                                                </c:when>
-                                                <c:when test="${sponList[i-1].status == false}">
-                                                    미승인
-                                                </c:when>
-                                            </c:choose>
-                                        </td>
-                                        <td class="overflow-hidden"
-                                            style="text-overflow: ellipsis">
-                                            ${sponList[i-1].price}원
-                                        </td>
-                                        <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="location.href='/admin/spon_detail.do?spon_no=${sponList[i-1].spon_no}'">
+                                                    onclick="location.href='/admin/spon_detail.do?spon_no=${sponList[i-1].spon_no}&prevStatus=${status}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
-                                            </button>
-                                        </td>
-                                        <td>
-
-                                            <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="if(confirm('${sponList[i-1].artist_name}님께 후원 금액을 송금 처리하시겠습니까?')){sendSpon(${sponList[i-1].spon_no});} else {return false;}"
-                                                    <c:if test="${sponList[i-1].purchase_status == true}">disabled</c:if>>
-                                                <i class="btn-icon-prepend" data-feather="send"></i>
-                                                처리하기
                                             </button>
                                         </td>
                                     </tr>
@@ -150,53 +170,30 @@
 </div>
 
 <!-- core:js -->
-<script src="../assets/vendors/core/core.js"></script>
+<script src="/assets/vendors/core/core.js"></script>
 <!-- endinject -->
 <!-- plugin js for this page -->
-<script src="../assets/vendors/chartjs/Chart.min.js"></script>
-<script src="../assets/vendors/jquery.flot/jquery.flot.js"></script>
-<script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
-<script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
-<script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
-<script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
-<script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/assets/vendors/chartjs/Chart.min.js"></script>
+<script src="/assets/vendors/jquery.flot/jquery.flot.js"></script>
+<script src="/assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
+<script src="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="/assets/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <!-- end plugin js for this page -->
 <!-- inject:js -->
-<script src="../assets/vendors/feather-icons/feather.min.js"></script>
-<script src="../assets/js/template.js"></script>
-<script src="../assets/js/inspect.js"></script>
+<script src="/assets/vendors/feather-icons/feather.min.js"></script>
+<script src="/assets/js/template.js"></script>
+<script src="/assets/js/inspect.js"></script>
 <!-- endinject -->
 <!-- custom js for this page -->
-<script src="../assets/js/dashboard.js"></script>
-<script src="../assets/js/datepicker.js"></script>
-<script src="../assets/js/data-table.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script src="/assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
-    function sendSpon(spon_no) {
-        let data = {"spon_no": spon_no};
-        $.ajax({
-            type: 'POST',
-            url: '/admin/spon_send.do',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function (result) {
-            console.log(result);
-            if (result === 0) {
-                alert("후원 금액 전송 처리하였습니다.");
-                window.location.reload();
-            } else if (result === 2) {
-                alert("승인된 후원 결제 내역만 송금처리 할 수 있습니다.");
-            } else {
-                alert("알 수 없는 오류 발생. 관리자에게 문의하세요.");
-                window.location.reload();
-            }
-        }).fail(function (error) {
-            alert(error);
-            window.location.reload();
-        })
-    }
+
 </script>
 </body>
 </html>

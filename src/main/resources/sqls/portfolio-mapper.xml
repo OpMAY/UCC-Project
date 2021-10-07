@@ -105,7 +105,15 @@
     <select id="getPortfolioListByRandom" resultType="Portfolio">
         select *
         from portfolio
-        WHERE type = #{type}
+        WHERE type='vod'
+        <choose>
+            <when test="artistList.size() != 0">
+        AND artist_no NOT in
+                <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
         order by RAND()
         limit 5
     </select>

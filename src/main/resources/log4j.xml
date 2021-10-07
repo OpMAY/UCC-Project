@@ -24,5 +24,11 @@
         <logger name="com.restapi.Restfull.API.Server" additivity="true">
             <AppenderRef ref="console" level="debug"/>
         </logger>
+        <logger name="org.springframework.web">
+            <AppenderRef ref="console" level="debug"/>
+        </logger>
+        <logger name="com.mapper">
+            <AppenderRef ref="console" level="debug"/>
+        </logger>
     </Loggers>
 </Configuration>

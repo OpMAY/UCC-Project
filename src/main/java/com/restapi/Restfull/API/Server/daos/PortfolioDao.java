@@ -94,9 +94,9 @@ public class PortfolioDao {
         portfolioMapper.updatePortfolioByVisit(portfolio);
     }
 
-    public List<Portfolio> getPortfolioListByRandom() {
+    public List<Portfolio> getPortfolioListByRandom(List<Integer> artistList) {
         PortfolioMapper portfolioMapper = sqlSession.getMapper(PortfolioMapper.class);
-        return portfolioMapper.getPortfolioListByRandom("vod");
+        return portfolioMapper.getPortfolioListByRandom(artistList);
     }
 
     public List<Portfolio> SearchPortfolioLimit(String query) {

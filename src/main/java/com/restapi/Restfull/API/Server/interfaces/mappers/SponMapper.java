@@ -24,4 +24,14 @@ public interface SponMapper {
     void updateSponBySend(Spon spon);
 
     void deleteSpon(int spon_no);
+
+    List<Spon> getSponListStatusPurchase();
+
+    List<Spon> getSponListStatusApply();
+
+    List<Spon> getSponListStatusSend();
+
+    List<Spon> getSponListStatusComplete();
+
+    void updateSponByPurchaseUpdate(Spon spon);
 }

@@ -60,7 +60,7 @@ public class MainService {
     private InquiryDao inquiryDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity GetMain() {
+    public ResponseEntity GetMain(List<Integer> artistList) {
         try {
             Message message = new Message();
             artistDao.setSession(sqlSession);
@@ -74,11 +74,11 @@ public class MainService {
              * 4. Recent Board List
              * **/
             // New Artist List - total 15
-            List<Artist> newArtistList = artistDao.getNewArtistList();
+            List<Artist> newArtistList = artistDao.getNewArtistList(artistList);
 
 
             // Popular Artist - total 15
-            List<Artist> popularArtistList = artistDao.getArtistListByPopular();
+            List<Artist> popularArtistList = artistDao.getArtistListByPopular(artistList);
             for (Artist artist : popularArtistList) {
                 String hashtag = artist.getHashtag();
                 if (hashtag != null) {
@@ -88,10 +88,10 @@ public class MainService {
             }
 
             // Random Portfolio List
-            List<Portfolio> randomPortfolioList = portfolioDao.getPortfolioListByRandom();
+            List<Portfolio> randomPortfolioList = portfolioDao.getPortfolioListByRandom(artistList);
 
             // Recent Board List
-            List<Board> recentBoardList = boardDao.getRecentBoardList();
+            List<Board> recentBoardList = boardDao.getRecentBoardList(artistList);
 
             message.put("new_artists", newArtistList);
             message.put("popular_artists", popularArtistList);

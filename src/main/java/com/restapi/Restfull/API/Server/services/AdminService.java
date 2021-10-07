@@ -8,7 +8,9 @@ import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.NotificationType;
 import com.restapi.Restfull.API.Server.response.PortfolioType;
+import com.restapi.Restfull.API.Server.utility.ASVerification;
 import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
+import com.restapi.Restfull.API.Server.utility.GPVerification;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.*;
 
@@ -551,6 +554,35 @@ public class AdminService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int updateSpon(int spon_no) {
+        try{
+            sponDao.setSession(sqlSession);
+            Spon spon = sponDao.getSponBySponNo(spon_no);
+            String platform = spon.getPlatform();
+            if(platform.equals("Android")){
+                GPResponseModel response = GPVerification.getInstance().verify(spon.getProduct_id(), spon.getPurchase_token());
+                spon.setVerify_status(response.getPurchaseState());
+                sponDao.updateSponByPurchaseUpdate(spon);
+            } else if (platform.equals("IOS")){
+                AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false);
+                AppleVerifyResponse response = ASVerification.getInstance().verify(request);
+                if(response.getStatus_explain().equals("SUCCESS")){
+                    spon.setVerify_status(0);
+                    sponDao.updateSponByPurchaseUpdate(spon);
+                } else {
+                    throw new Exception(response.getStatus_explain());
+                }
+            } else {
+                throw new Exception("Platform Error");
+            }
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
 
     @Data
     class SnsUser {
@@ -757,21 +789,12 @@ public class AdminService {
             int user_no = Integer.parseInt(query);
             User user = userDao.selectUserByUserNo(user_no);
             if (user == null) throw new Exception("Bad Request");
-            List<Spon> sponList = sponDao.getSponListByUserNo(user_no);
-            int spon_amount = 0;
-//            if (sponList.size() > 0) {
-//                for (Spon spon : sponList) {
-//                    int price = spon.getPrice();
-//                    spon_amount = spon_amount + price;
-//                }
-//            }
             List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
             modelAndView.addObject("penalty_num", penaltyList.size());
             modelAndView.addObject("User", user);
             if (user.is_user_private() && penaltyList.size() > 0) {
                 modelAndView.addObject("penalty", penaltyList.get(0));
             }
-            modelAndView.addObject("spon_amount", spon_amount);
             return modelAndView;
         } catch (Exception e) {
             if (e.getMessage().equals("Bad Request")) {
@@ -910,13 +933,6 @@ public class AdminService {
             for (Board board : boardList) {
                 board.setReg_date(Time.MsToSecond(board.getReg_date()));
                 board.setRevise_date(Time.MsToSecond(board.getRevise_date()));
-
-                if (sponDao.getSponListByBoardNo(board.getBoard_no()) != null && sponDao.getSponListByBoardNo(board.getBoard_no()).size() > 0) {
-                    List<Spon> sponList = sponDao.getSponListByBoardNo(board.getBoard_no());
-//                    for (Spon spon : sponList) {
-//                        board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
-//                    }
-                }
             }
 
             modelAndView.addObject("boardList", boardList);
@@ -988,10 +1004,6 @@ public class AdminService {
             if (board == null) {
                 throw new BadRequestException(new Exception("Bad Request"));
             }
-            List<Spon> sponList = sponDao.getSponListByBoardNo(board_no);
-//            for (Spon spon : sponList) {
-//                board.setSpon_amount(board.getSpon_amount() + spon.getPrice());
-//            }
             board.setRevise_date(board.getRevise_date().substring(0, board.getRevise_date().lastIndexOf(".")));
 
             modelAndView.addObject("board", board);
@@ -2639,13 +2651,33 @@ public class AdminService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ModelAndView getSponList() {
+    public ModelAndView getSponList(String status) {
         try {
             sponDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             modelAndView = new ModelAndView("spon_list");
-            List<Spon> sponList = sponDao.getSponList();
+            List<Spon> sponList = new ArrayList<>();
+            switch (status) {
+                case "purchase":
+                    //TODO 결제 오류 내역
+                    sponList.addAll(sponDao.getSponListStatusPurchase());
+                    break;
+                case "apply":
+                    //TODO 결제 OK, 미승인 내역
+                    sponList.addAll(sponDao.getSponListStatusApply());
+                    break;
+                case "send":
+                    //TODO 결제 OK, 승인 OK, 미입금 내역
+                    sponList.addAll(sponDao.getSponListStatusSend());
+                    break;
+                case "complete":
+                    //TODO 모두 완료 내역
+                    sponList.addAll(sponDao.getSponListStatusComplete());
+                    break;
+                default:
+                    throw new Exception("Bad Request");
+            }
             for (Spon spon : sponList) {
                 if (spon.getUser_no() != 0) {
                     User user = userDao.selectUserByUserNo(spon.getUser_no());
@@ -2666,6 +2698,7 @@ public class AdminService {
                 }
             }
             modelAndView.addObject("sponList", sponList);
+            modelAndView.addObject("status", status);
             return modelAndView;
         } catch (Exception e) {
             if (e.getMessage().equals("Bad Request")) {
@@ -2677,7 +2710,7 @@ public class AdminService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ModelAndView getSponDetail(int spon_no) {
+    public ModelAndView getSponDetail(int spon_no, String prevStatus) {
         try {
             sponDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
@@ -2709,6 +2742,7 @@ public class AdminService {
                 spon.setArtist_name("탈퇴한 아티스트");
             }
             modelAndView.addObject("spon", spon);
+            modelAndView.addObject("prevStatus", prevStatus);
             return modelAndView;
         } catch (Exception e) {
             if (e.getMessage().equals("Bad Request")) {
@@ -2724,6 +2758,9 @@ public class AdminService {
         try {
             sponDao.setSession(sqlSession);
             Spon spon = sponDao.getSponBySponNo(spon_no);
+            if(spon.getVerify_status() != 0){
+                return 2;
+            }
             spon.setApply_date(Time.TimeFormatDay());
             sponDao.updateSponByApply(spon);
             return 0;

@@ -52,14 +52,14 @@ public class ArtistDao {
         artistMapper.deleteArtist(artist_no);
     }
 
-    public List<Artist> getArtistListByPopular() {
+    public List<Artist> getArtistListByPopular(List<Integer> artistList) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
-        return artistMapper.getArtistListByPopular();
+        return artistMapper.getArtistListByPopular(artistList);
     }
 
-    public List<Artist> getNewArtistList() {
+    public List<Artist> getNewArtistList(List<Integer> artistList) {
         ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
-        return artistMapper.getNewArtistList();
+        return artistMapper.getNewArtistList(artistList);
     }
 
     public List<Artist> SearchArtist(String search) {

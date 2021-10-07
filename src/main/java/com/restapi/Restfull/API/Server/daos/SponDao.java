@@ -65,4 +65,29 @@ public class SponDao {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         sponMapper.deleteSpon(spon_no);
     }
+
+    public List<Spon> getSponListStatusPurchase(){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListStatusPurchase();
+    }
+
+    public List<Spon> getSponListStatusApply(){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListStatusApply();
+    }
+
+    public List<Spon> getSponListStatusSend(){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListStatusSend();
+    }
+
+    public List<Spon> getSponListStatusComplete(){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListStatusComplete();
+    }
+
+    public void updateSponByPurchaseUpdate(Spon spon) {
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        sponMapper.updateSponByPurchaseUpdate(spon);
+    }
 }

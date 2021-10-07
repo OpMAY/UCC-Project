@@ -99,10 +99,28 @@
       </li>
       <li class="nav-item nav-category">후원</li>
       <li class="nav-item">
-        <a href="/admin/spon.do" class="nav-link">
+        <a class="nav-link" data-toggle="collapse" href="#sponComponents" role="button" aria-expanded="false"
+           aria-controls="uiComponents">
           <i class="link-icon" data-feather="dollar-sign"></i>
           <span class="link-title">후원 관리</span>
+          <i class="link-arrow" data-feather="chevron-down"></i>
         </a>
+        <div class="collapse" id="sponComponents">
+          <ul class="nav sub-menu">
+            <li class="nav-item">
+              <a href="/admin/spon/purchase.do" class="nav-link">결제 오류 내역</a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/spon/apply.do" class="nav-link">미승인 내역</a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/spon/send.do" class="nav-link">미정산 내역</a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/spon/complete.do" class="nav-link">정산 완료 내역</a>
+            </li>
+          </ul>
+        </div>
       </li>
       <li class="nav-item nav-category">배너 광고</li>
       <li class="nav-item">

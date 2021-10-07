@@ -16,20 +16,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>회원 관리 - 사용자 상세</title>
     <!-- core:css -->
-    <link rel="stylesheet" href="../assets/vendors/core/core.css">
+    <link rel="stylesheet" href="/assets/vendors/core/core.css">
     <!-- endinject -->
     <!-- plugin css for this page -->
-    <link rel="stylesheet" href="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <!-- end plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="../assets/fonts/feather-font/css/iconfont.css">
-    <link rel="stylesheet" href="../assets/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/assets/fonts/feather-font/css/iconfont.css">
+    <link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css">
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="../assets/css/demo_1/style.css">
+    <link rel="stylesheet" href="/assets/css/demo_1/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="../assets/images/favicon.png"/>
+    <link rel="shortcut icon" href="/assets/images/favicon.png"/>
 </head>
 <body>
 <div class="main-wrapper">
@@ -56,7 +56,7 @@
                                             <label class="label" style="font-size: larger">
                                                 프로필 이미지
                                             </label>
-                                            <div style="height: 526px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
+                                            <div style="height: 445px; overflow: hidden; background-color: #d1d1d1; border: 1px solid black"
                                                  class="d-flex justify-content-center">
                                                 <img class="img-fluid" src="${User.profile_img}"
                                                      style="height: 100%; object-fit: contain"
@@ -90,13 +90,6 @@
                                             <textarea class="form-control" id="bank-name" rows="1"
                                                       style="line-height: 150%; font-size: large"
                                                       disabled>${User.reg_date}</textarea>
-                                            <label class="label d-flex" for="bank-owner" style="font-size: large">
-                                                총 후원 금액
-                                            </label>
-                                            <textarea class="form-control" id="bank-owner" rows="1"
-                                                      style="line-height: 150%; font-size: large"
-                                                      disabled><fmt:formatNumber value="${spon_amount}"
-                                                                                 type="number"/>원</textarea>
                                             <label class="label d-flex" for="bank-account" style="font-size: large">
                                                 누적 정지 횟수
                                             </label>
@@ -156,34 +149,35 @@
                 </div>
 
             </div>
-            <!-- partial:partials/_footer.jsp -->
-            <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
-            <!-- partial -->
+
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 
     <!-- core:js -->
-    <script src="../assets/vendors/core/core.js"></script>
+    <script src="/assets/vendors/core/core.js"></script>
     <!-- endinject -->
     <!-- plugin js for this page -->
-    <script src="../assets/vendors/chartjs/Chart.min.js"></script>
-    <script src="../assets/vendors/jquery.flot/jquery.flot.js"></script>
-    <script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
-    <script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
-    <script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
-    <script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <script src="/assets/vendors/chartjs/Chart.min.js"></script>
+    <script src="/assets/vendors/jquery.flot/jquery.flot.js"></script>
+    <script src="/assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
+    <script src="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/vendors/apexcharts/apexcharts.min.js"></script>
+    <script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="/assets/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
     <!-- end plugin js for this page -->
     <!-- inject:js -->
-    <script src="../assets/vendors/feather-icons/feather.min.js"></script>
-    <script src="../assets/js/template.js"></script>
-    <script src="../assets/js/inspect.js"></script>
+    <script src="/assets/vendors/feather-icons/feather.min.js"></script>
+    <script src="/assets/js/template.js"></script>
+    <script src="/assets/js/inspect.js"></script>
     <!-- endinject -->
     <!-- custom js for this page -->
-    <script src="../assets/js/dashboard.js"></script>
-    <script src="../assets/js/datepicker.js"></script>
-    <script src="../assets/js/data-table.js"></script>
+    <script src="/assets/js/dashboard.js"></script>
+    <script src="/assets/js/datepicker.js"></script>
+    <script src="/assets/js/data-table.js"></script>
     <!-- end custom js for this page -->
     <script>
         function openWindowPopBan(url, name, penalty) {

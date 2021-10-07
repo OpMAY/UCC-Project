@@ -53,23 +53,21 @@ public class SponService {
         try{
             if(spon.getPlatform().equals("Android")){
                 GPResponseModel gpResponse = GPVerification.getInstance().verify(spon.getProduct_id(), spon.getPurchase_token());
-                if(gpResponse.isPurchaseState()){
-                    spon.setVerify_status(true);
-                } else {
-                    spon.setVerify_status(false);
-                }
+                spon.setVerify_status(gpResponse.getPurchaseState());
             } else if(spon.getPlatform().equals("IOS")){
                 AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false);
                 AppleVerifyResponse asResponse = ASVerification.getInstance().verify(request);
                 if(asResponse.getStatus_explain().equals("SUCCESS")){
-                    spon.setVerify_status(true);
+
+                    spon.setVerify_status(0);
                 } else {
-                    spon.setVerify_status(false);
+                    spon.setVerify_status(1);
                 }
             } else {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.SPON_PLATFORM_ERROR), HttpStatus.OK);
             }
         } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
         }
         try {
@@ -92,6 +90,9 @@ public class SponService {
 
             FirebaseMessagingSnippets firebaseMessagingSnippets= new FirebaseMessagingSnippets();
 
+            if(sponned_artist == null){
+                return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.NO_ARTIST_DETECTED), HttpStatus.OK);
+            }
             if (sponned_artist.getUser_no() == spon.getUser_no()) {
                 return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.CANNOT_SPON_YOURSELF), HttpStatus.OK);
             }
@@ -187,4 +188,16 @@ public class SponService {
         }
     }
 
+    public ResponseEntity androidPurchaseValidate(AndroidVerificationRequest request) {
+        try{
+            Message message = new Message();
+            GPResponseModel response = GPVerification.getInstance().verify(request.getProduct_id(), request.getPurchase_token());
+            // 0 : 성공 / 1 : 취소됨 / 2 : 보류 중
+            message.put("status", response.getPurchaseState());
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("BoardSpon()")), HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+        }
+    }
 }

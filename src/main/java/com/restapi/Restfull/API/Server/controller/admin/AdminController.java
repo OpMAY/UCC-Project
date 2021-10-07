@@ -43,9 +43,6 @@ public class AdminController implements ControllerInitialize {
     @Autowired
     private LoudSourcingService loudSourcingService;
 
-    @Value("${uploadPath}")
-    private String upload_path;
-
     @Value("${cdnPath}")
     private String cdn_path;
 
@@ -895,15 +892,31 @@ public class AdminController implements ControllerInitialize {
         return adminService.answerInquiry(inquiry);
     }
 
-    @GetMapping("/admin/spon.do")
-    public ModelAndView GetSponList() {
-        return adminService.getSponList();
+    @GetMapping("/admin/spon/purchase.do")
+    public ModelAndView GetSponPurchaseList() {
+        return adminService.getSponList("purchase");
+    }
+
+    @GetMapping("/admin/spon/apply.do")
+    public ModelAndView GetSponApplyList() {
+        return adminService.getSponList("apply");
+    }
+
+    @GetMapping("/admin/spon/send.do")
+    public ModelAndView GetSponSendList() {
+        return adminService.getSponList("send");
+    }
+
+    @GetMapping("/admin/spon/complete.do")
+    public ModelAndView GetSponCompleteList() {
+        return adminService.getSponList("complete");
     }
 
     @GetMapping("/admin/spon_detail.do")
-    public ModelAndView GetSponDetail(@RequestParam("spon_no") String param) {
+    public ModelAndView GetSponDetail(@RequestParam("spon_no") String param,
+                                      @RequestParam("prevStatus") String status) {
         int spon_no = Integer.parseInt(param);
-        return adminService.getSponDetail(spon_no);
+        return adminService.getSponDetail(spon_no, status);
     }
 
     @Getter
@@ -932,6 +945,13 @@ public class AdminController implements ControllerInitialize {
     public int DeleteSpon(@RequestBody String body) {
         SponRequest request = new Gson().fromJson(body, SponRequest.class);
         return adminService.deleteSpon(request.getSpon_no());
+    }
+
+    @PostMapping("/admin/spon/update.do")
+    @ResponseBody
+    public int UpdateSpon(@RequestBody String body){
+        SponRequest request = new Gson().fromJson(body, SponRequest.class);
+        return adminService.updateSpon(request.getSpon_no());
     }
 
     @GetMapping("/admin/hashtag.do")

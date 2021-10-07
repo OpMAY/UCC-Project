@@ -51,7 +51,8 @@ public class ArtistService {
             Message message = new Message();
             searchDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
-            List<Artist> newArtistList = artistDao.getNewArtistList();
+            List<Integer> emptyList = new ArrayList<>();
+            List<Artist> newArtistList = artistDao.getNewArtistList(emptyList);
             List<Artist> resArtistList = new ArrayList<>();
             for (int i = 0; i < 15; i++) {
                 if (newArtistList.size() <= i)

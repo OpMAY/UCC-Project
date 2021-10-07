@@ -2,6 +2,8 @@ package com.restapi.Restfull.API.Server.models;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+
 @Data
 public class Receipt {
     private Integer adam_id;
@@ -12,7 +14,7 @@ public class Receipt {
     private String expiration_date;
     private String expiration_date_ms;
     private String expiration_date_pst;
-    private InApp in_app;
+    private ArrayList<InApp> in_app;
     private String original_application_version;
     private String original_purchase_date;
     private String original_purchase_date_ms;

@@ -19,9 +19,9 @@ public interface ArtistMapper {
 
     void deleteArtist(int artist_no);
 
-    List<Artist> getArtistListByPopular();
+    List<Artist> getArtistListByPopular(List<Integer> artistList);
 
-    List<Artist> getNewArtistList();
+    List<Artist> getNewArtistList(List<Integer> artistList);
 
     List<Artist> searchArtist(String search);
 

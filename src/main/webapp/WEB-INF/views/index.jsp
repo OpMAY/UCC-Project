@@ -9,20 +9,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>관리자 HOME</title>
     <!-- core:css -->
-    <link rel="stylesheet" href="../assets/vendors/core/core.css">
+    <link rel="stylesheet" href="/assets/vendors/core/core.css">
     <!-- endinject -->
     <!-- plugin css for this page -->
-    <link rel="stylesheet" href="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <!-- end plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="../assets/fonts/feather-font/css/iconfont.css">
-    <link rel="stylesheet" href="../assets/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/assets/fonts/feather-font/css/iconfont.css">
+    <link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css">
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="../assets/css/demo_1/style.css">
+    <link rel="stylesheet" href="/assets/css/demo_1/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="../assets/images/favicon.png"/>
+    <link rel="shortcut icon" href="/assets/images/favicon.png"/>
 </head>
 <body>
 <div class="main-wrapper">
@@ -109,7 +109,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title">가입 SNS <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="설정한 날짜의 SNS 회원가입 인원 수가 표시됩니다."></i></h6>
+                                <h6 class="card-title">가입 SNS <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="설정한 날짜의 SNS 회원가입 횟수가 표시됩니다."></i></h6>
                                 <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
                                      id="index-date">
                                     <input type="text" class="form-control" name="index-sns-date" id="index-sns-date" readonly><span
@@ -244,26 +244,26 @@
 </div>
 
 <!-- core:js -->
-<script src="../assets/vendors/core/core.js"></script>
+<script src="/assets/vendors/core/core.js"></script>
 <!-- endinject -->
 <!-- plugin js for this page -->
-<script src="../assets/vendors/chartjs/Chart.min.js"></script>
-<script src="../assets/vendors/jquery.flot/jquery.flot.js"></script>
-<script src="../assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
-<script src="../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
-<script src="../assets/vendors/datatables.net/jquery.dataTables.js"></script>
-<script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
-<script src="../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/assets/vendors/chartjs/Chart.min.js"></script>
+<script src="/assets/vendors/jquery.flot/jquery.flot.js"></script>
+<script src="/assets/vendors/jquery.flot/jquery.flot.resize.js"></script>
+<script src="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <!-- end plugin js for this page -->
 <!-- inject:js -->
-<script src="../assets/vendors/feather-icons/feather.min.js"></script>
-<script src="../assets/js/template.js"></script>
-<script src="../assets/js/inspect.js"></script>
+<script src="/assets/vendors/feather-icons/feather.min.js"></script>
+<script src="/assets/js/template.js"></script>
+<script src="/assets/js/inspect.js"></script>
 <!-- endinject -->
 <!-- custom js for this page -->
-<script src="../assets/js/dashboard.js"></script>
-<script src="../assets/js/datepicker.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+<script src="/assets/js/datepicker.js"></script>
 <!-- end custom js for this page -->
 <script>
     $(document).ready(function() {

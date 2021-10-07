@@ -45,7 +45,8 @@ public class GPVerification {
         getInstance();
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        File jsonFile = new File("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-abaada2307f7.json");
+//        File jsonFile = new File("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-abaada2307f7.json");
+        File jsonFile = new File("/www/weart-page_com/ROOT/resources/weart-ucc-abaada2307f7.json");
         GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(jsonFile))
                 .createScoped(Collections.singleton("https://www.googleapis.com/auth/androidpublisher"));
 
@@ -64,8 +65,8 @@ public class GPVerification {
         // 개발자가 지정한 임의 문자열 정보
         String developerPayload = productPurchase.getDeveloperPayload();
 
-        // 구매 상태. 0 구매완료 / 1 취소됨
-        boolean purchaseState = productPurchase.getPurchaseState() == 0;
+        // 구매 상태. 0 구매완료 / 1 취소됨 / 2 보류 중
+        int purchaseState = productPurchase.getPurchaseState();
 
         // 상품이 구매된 시각. 타임스탬프 형태
         Long purchaseTimeMillis = productPurchase.getPurchaseTimeMillis();

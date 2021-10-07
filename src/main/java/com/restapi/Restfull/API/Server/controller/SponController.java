@@ -2,6 +2,7 @@ package com.restapi.Restfull.API.Server.controller;
 
 import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
+import com.restapi.Restfull.API.Server.models.AndroidVerificationRequest;
 import com.restapi.Restfull.API.Server.models.BootpayVerificationData;
 import com.restapi.Restfull.API.Server.models.PurchaseData;
 import com.restapi.Restfull.API.Server.models.Spon;
@@ -59,6 +60,17 @@ public class SponController {
             Spon spon = new Gson().fromJson(body, Spon.class);
             log.info("Before : " + spon);
             return sponService.insertSpon(spon);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
+    @RequestMapping(value = "/api/spon/validate/android", method = RequestMethod.POST)
+    public ResponseEntity AndroidPurchaseValidate(@RequestBody String body){
+        try{
+            AndroidVerificationRequest request = new Gson().fromJson(body, AndroidVerificationRequest.class);
+            return sponService.androidPurchaseValidate(request);
         } catch (Exception e){
             e.printStackTrace();
             throw new BusinessException(e);

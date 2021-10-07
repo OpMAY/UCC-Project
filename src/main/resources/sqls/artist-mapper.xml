@@ -54,12 +54,28 @@
     <select id="getArtistListByPopular" resultType="Artist">
         select *
         from artist
+        <choose>
+            <when test="artistList.size() != 0">
+        WHERE artist_no not in
+                <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
         order by fan_number desc
         limit 15
     </select>
     <select id="getNewArtistList" resultType="Artist">
         select *
         from artist
+        <choose>
+            <when test="artistList.size() != 0">
+        WHERE artist_no not in
+                <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
         order by reg_date desc
         limit 15
     </select>

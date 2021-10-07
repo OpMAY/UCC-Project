@@ -35,7 +35,7 @@ public interface PortfolioMapper {
 
     void updatePortfolioByFankok(Portfolio portfolio);
 
-    List<Portfolio> getPortfolioListByRandom(String type);
+    List<Portfolio> getPortfolioListByRandom(List<Integer> artistList);
 
     List<Portfolio> SearchPortfolioLimit(String query);
 

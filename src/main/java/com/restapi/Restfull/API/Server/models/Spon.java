@@ -21,7 +21,7 @@ public class Spon {
     private String purchase_token;
     private String receipt_id;
     private boolean purchase_status;
-    private boolean verify_status;
+    private int verify_status;
     private String apply_date;
     private String send_date;
     private String price_send;
