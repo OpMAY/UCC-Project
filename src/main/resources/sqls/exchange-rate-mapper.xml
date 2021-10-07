@@ -8,8 +8,8 @@
         VALUES (#{json}, #{reg_date})
     </insert>
     <select id="getExchangeRate" resultType="String">
-        select *
+        select json
         from exchange_rate
-        ORDER BY reg_date DESC LIMIT 1
+        WHERE TIMESTAMPDIFF(HOUR, reg_date, #{reg_date}) <![CDATA[<]]> 24 AND reg_date <![CDATA[<]]> #{reg_date}
     </select>
 </mapper>

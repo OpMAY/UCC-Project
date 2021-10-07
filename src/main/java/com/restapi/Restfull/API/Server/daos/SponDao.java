@@ -90,4 +90,14 @@ public class SponDao {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         sponMapper.updateSponByPurchaseUpdate(spon);
     }
+
+    public boolean isExistAppleReceipt(String receipt_id){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.isExistAppleReceipt(receipt_id);
+    }
+
+    public Spon getSponByReceiptIdForApple(String receipt_id){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponByReceiptIdForApple(receipt_id);
+    }
 }

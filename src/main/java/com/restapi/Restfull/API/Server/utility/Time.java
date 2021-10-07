@@ -68,6 +68,23 @@ public class Time {
         return transFormat.parse(dateString);
     }
 
+    public static String SetCurrencyUpdateTime(String dateString) throws ParseException {
+        Date date = StringToDateFormat(dateString);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        // manipulate date
+        c.add(Calendar.YEAR, 0);
+        c.add(Calendar.MONTH, 0);
+        c.add(Calendar.DATE, 0); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+        c.add(Calendar.HOUR, 11);
+        c.add(Calendar.MINUTE, 10);
+        c.add(Calendar.SECOND, 0);
+        // convert calendar to date
+        Date currencyUpdateTime = c.getTime();
+        return TimeFormatter(currencyUpdateTime);
+    }
+
     public static String DatePlusOneDay(String dateString) throws ParseException {
         Date date = StringToDateFormat(dateString);
 

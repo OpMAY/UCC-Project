@@ -19,9 +19,9 @@ public class ExchangeRateDao {
         exchangeRateMapper.insertExchangeRate(exchangeRate);
     }
 
-    public String getExchangeRate(){
+    public String getExchangeRate(String now){
         ExchangeRateMapper exchangeRateMapper = sqlSession.getMapper(ExchangeRateMapper.class);
-        return exchangeRateMapper.getExchangeRate();
+        return exchangeRateMapper.getExchangeRate(now);
     }
 
 }

@@ -126,4 +126,15 @@ public class HomeController {
             throw new BusinessException(e);
         }
     }
+
+    @RequestMapping(value = "/api/currency", method = RequestMethod.GET)
+    public ResponseEntity UpdateCurrency(@RequestParam("date") String date){
+        try{
+            currencyService.saveCurrencyInfo(date);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS), HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
 }

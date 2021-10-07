@@ -1,8 +1,10 @@
 package com.restapi.Restfull.API.Server.schedule;
 
+import com.restapi.Restfull.API.Server.services.CurrencyService;
 import com.restapi.Restfull.API.Server.services.LoudSourcingService;
 import com.restapi.Restfull.API.Server.services.MainService;
 import com.restapi.Restfull.API.Server.services.PenaltyService;
+import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,9 @@ public class Scheduler {
 
     @Autowired
     private LoudSourcingService loudSourcingService;
+
+    @Autowired
+    private CurrencyService currencyService;
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void deleteFiles() {
@@ -86,5 +91,10 @@ public class Scheduler {
     @Scheduled(cron = "0 5 0 * * ?")
     public void setLoudSourcingJudgeToEnd() {
         loudSourcingService.setLoudSourcingJudgeToEnd();
+    }
+
+    @Scheduled(cron = "0 10 11 * * ?")
+    public void updateCurrencyInfo() {
+        currencyService.saveCurrencyInfo(Time.TimeFormatDay());
     }
 }

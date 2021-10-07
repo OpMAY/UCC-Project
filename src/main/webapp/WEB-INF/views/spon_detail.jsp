@@ -94,15 +94,17 @@
                                         </label>
                                         <textarea class="form-control" id="spon-app-vat" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled>${spon.price}</textarea>
+                                                  disabled><c:choose><c:when
+                                                test="${spon.platform == 'Android'}">${spon.price}</c:when><c:when
+                                                test="${spon.type == 'IOS'}">${applePrice}</c:when></c:choose></textarea>
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="spon-exchange-rate" style="font-size: large">
-                                            결제 당시 환율
+                                            결제 당시 환율 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="단위 값에 따른 환율입니다. ex) 1달러 = 1,200원"><i data-feather="help-circle"></i></span>
                                         </label>
                                         <textarea class="form-control" id="spon-exchange-rate" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled>${vat}</textarea>
+                                                  disabled><fmt:formatNumber value="${currencyRate}" type="number"/>원</textarea>
                                     </div>
                                 </div>
                                 <div class="row mt-3 justify-content-around">
@@ -112,8 +114,7 @@
                                         </label>
                                         <textarea class="form-control" id="spon-status" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled><c:choose><c:when test="${spon.status == false}">미승인</c:when><c:when
-                                                test="${spon.status == true}">승인</c:when></c:choose></textarea>
+                                                  disabled><fmt:formatNumber value="${resultPrice}" type="number"/>원</textarea>
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="send-price" style="font-size: large">
@@ -121,15 +122,15 @@
                                         </label>
                                         <textarea class="form-control" id="send-price" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled>${spon.price_send}</textarea>
+                                                  disabled><fmt:formatNumber value="${sendPrice}" type="number"/>원</textarea>
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="send-vat" style="font-size: large">
-                                            세액
+                                            세액 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="VAT 10%"><i data-feather="help-circle"></i></span>
                                         </label>
                                         <textarea class="form-control" id="send-vat" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled>${spon.price_send}</textarea>
+                                                  disabled><fmt:formatNumber value="${tax}" type="number"/>원</textarea>
                                     </div>
                                 </div>
                                 <div class="row mt-3 mb-3 justify-content-around">
@@ -144,7 +145,9 @@
                                                 <div class="col-md-6">
                                                     <button type="button" class="btn btn-outline-primary"
                                                             style="float:right"
-                                                            onclick="if(confirm('이 결제에 대한 결제 검증 요청을 하시겠습니까?')){setArtistNameBasic(${Artist.artist_no})} else{return false;}">
+<%--                                                            onclick="if(confirm('이 결제에 대한 결제 검증 요청을 하시겠습니까?')){updateSpon(${spon.spon_no})} else{return false;}"--%>
+                                                            onclick="alert('준비중입니다.')"
+                                                    >
                                                         결제 정보 업데이트
                                                     </button>
                                                 </div>
@@ -384,6 +387,28 @@
                     window.location.reload();
                 } else if (result === 2) {
                     alert("승인된 후원 결제 내역만 송금처리 할 수 있습니다.");
+                } else {
+                    alert("알 수 없는 오류 발생. 관리자에게 문의하세요.");
+                    window.location.reload();
+                }
+            }).fail(function (error) {
+                alert(error);
+                window.location.reload();
+            })
+        }
+        function updateSpon(spon_no) {
+            let data = {"spon_no": spon_no};
+            $.ajax({
+                type: 'POST',
+                url: '/admin/spon/update.do',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function (result) {
+                console.log(result);
+                if (result === 0) {
+                    alert("업데이트 되었습니다.");
+                    window.location.reload();
                 } else {
                     alert("알 수 없는 오류 발생. 관리자에게 문의하세요.");
                     window.location.reload();

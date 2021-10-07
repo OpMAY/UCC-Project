@@ -34,4 +34,8 @@ public interface SponMapper {
     List<Spon> getSponListStatusComplete();
 
     void updateSponByPurchaseUpdate(Spon spon);
+
+    boolean isExistAppleReceipt(String receipt_id);
+
+    Spon getSponByReceiptIdForApple(String receipt_id);
 }

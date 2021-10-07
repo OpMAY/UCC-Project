@@ -92,4 +92,12 @@
         SET verify_status=#{verify_status}
         WHERE spon_no = #{spon_no}
     </update>
+    <select id="isExistAppleReceipt" resultType="_boolean">
+        select EXISTS(select * from spon WHERE receipt_id = #{receipt_id}) as success;
+    </select>
+    <select id="getSponByReceiptIdForApple" resultType="Spon">
+        select *
+        from spon
+        WHERE receipt_id = #{receipt_id}
+    </select>
 </mapper>

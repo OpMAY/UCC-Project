@@ -5,6 +5,7 @@ import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
+import com.restapi.Restfull.API.Server.utility.ASVerification;
 import com.restapi.Restfull.API.Server.utility.URLConverter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -58,6 +59,9 @@ public class MainService {
 
     @Autowired
     private InquiryDao inquiryDao;
+
+    @Autowired
+    private SponDao sponDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity GetMain(List<Integer> artistList) {
@@ -390,4 +394,33 @@ public class MainService {
         return url;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity appleServerToServerNotification(AppleNotificationResponse response) {
+        try {
+            sponDao.setSession(sqlSession);
+            if (response.getNotification_type().equals(AppleNotificationType.REFUND)) {
+                String receipt_id = response.getUnified_receipt().getLatest_receipt();
+                String password = response.getPassword();
+                if (sponDao.isExistAppleReceipt(receipt_id)) {
+                    AppleVerifyResponse verifyResponse = ASVerification.getInstance().verify(new AppleVerifyRequest(receipt_id, password, false));
+                    if (verifyResponse.getStatus() == 0) {
+//                        if (verifyResponse.getReceipt().getIn_app().get(0).getCancellation_date_ms().equals(response.getUnified_receipt().getLatest_receipt_info().get(0).getCancellation_date())) {
+                        Spon spon = sponDao.getSponByReceiptIdForApple(receipt_id);
+                        if (!spon.isStatus() && !spon.isPurchase_status()) {
+                            spon.setVerify_status(1);
+                            sponDao.updateSponByPurchaseUpdate(spon);
+                        }
+//                        }
+                    } else {
+                        throw new Exception("Verification Error");
+                    }
+                } else {
+                    throw new Exception("No Spon Matching receipt_id");
+                }
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.APPLE_NOTIFICATION_SUCCESS), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new BusinessException(e);
+        }
+    }
 }

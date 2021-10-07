@@ -58,7 +58,6 @@ public class SponService {
                 AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false);
                 AppleVerifyResponse asResponse = ASVerification.getInstance().verify(request);
                 if(asResponse.getStatus_explain().equals("SUCCESS")){
-
                     spon.setVerify_status(0);
                 } else {
                     spon.setVerify_status(1);

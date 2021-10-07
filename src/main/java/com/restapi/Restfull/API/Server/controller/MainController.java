@@ -47,7 +47,7 @@ public class MainController {
     }
 
     @Data
-    class BanArtist{
+    class BanArtist {
         private List<Integer> artistList;
     }
 
@@ -58,24 +58,24 @@ public class MainController {
     }
 
     @RequestMapping(value = "/api/cdn/delete", method = RequestMethod.GET)
-    public ResponseEntity DeleteCDNManual(){
+    public ResponseEntity DeleteCDNManual() {
         try {
             Message message = new Message();
             mainService.deleteCDNFiles();
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.MANUALLY_DELETE_CDN, message.getHashMap("DeleteCDNManual()")), HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException(e);
         }
     }
 
     @RequestMapping(value = "/api/apple/notification", method = RequestMethod.POST)
-    public ResponseEntity AppleServerToServerNotification(@RequestBody String body){
-        try{
+    public ResponseEntity AppleServerToServerNotification(@RequestBody String body) {
+        try {
+            log.info("Notification JSON : " + body);
             AppleNotificationResponse response = new Gson().fromJson(body, AppleNotificationResponse.class);
-            log.info(response);
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.APPLE_NOTIFICATION_SUCCESS), HttpStatus.OK);
-        } catch (Exception e){
+            return mainService.appleServerToServerNotification(response);
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.TEST_FAILED), HttpStatus.OK);
         }

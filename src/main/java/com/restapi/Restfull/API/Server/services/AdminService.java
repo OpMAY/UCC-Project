@@ -88,6 +88,9 @@ public class AdminService {
     @Autowired
     private NotificationDao notificationDao;
 
+    @Autowired
+    private CurrencyService currencyService;
+
     private ModelAndView modelAndView;
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -825,8 +828,6 @@ public class AdminService {
                 ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                 ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
                 artist.setHashtag(new Gson().toJson(modified_HashtagList));
-                log.info(modified_HashtagList);
-                System.out.println(modified_HashtagList);
             }
             if (artist.getArtist_profile_img().equals("default")) {
                 artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
@@ -967,7 +968,6 @@ public class AdminService {
                     images = images.replace("]", "");
                     ArrayList<String> filelist = new ArrayList<>(Arrays.asList(images.split(", ")));
                     portfolio.setImage_list(filelist);
-                    log.info(filelist);
                 }
             }
             portfolio.setRevise_date(portfolio.getRevise_date().substring(0, portfolio.getRevise_date().lastIndexOf(".")));
@@ -1021,7 +1021,6 @@ public class AdminService {
     @Transactional(propagation = Propagation.REQUIRED)
     public int deleteBoard(int board_no) {
         try {
-            log.info(board_no);
             boardDao.setSession(sqlSession);
             boardDao.deleteBoard(board_no);
             return 0;
@@ -1341,7 +1340,6 @@ public class AdminService {
     public int deleteLoudSourcing(int loudsourcing_no) {
         try {
             loudSourcingDao.setSession(sqlSession);
-            log.info(loudsourcing_no);
             loudSourcingDao.deleteLoudSourcing(loudsourcing_no);
             return 0;
         } catch (Exception e) {
@@ -1482,8 +1480,6 @@ public class AdminService {
                 ArrayList<String> hashtagList = new ArrayList<>(Arrays.asList(artist.getHashtag().split(", ")));
                 ArrayList<String> modified_HashtagList = new ArrayList<>(hashtagList);
                 artist.setHashtag(new Gson().toJson(modified_HashtagList));
-                log.info(modified_HashtagList);
-                System.out.println(modified_HashtagList);
             }
             if (artist.getArtist_profile_img().equals("default")) {
                 artist.setArtist_profile_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/profile_img_basic.png");
@@ -2741,6 +2737,21 @@ public class AdminService {
             } else {
                 spon.setArtist_name("탈퇴한 아티스트");
             }
+            if(spon.getPlatform().equals("IOS")){
+                String applePrice = calculateAppleVat(spon.getPrice());
+                modelAndView.addObject("applePrice", applePrice);
+            }
+            String currencyRate = currencyService.getCurrencyRate(spon.getSpon_date(), spon.getCurrency());
+            int resultPrice = Long.valueOf(currencyService.calculateCurrency(spon.getPrice(), spon.getCurrency(), spon.getSpon_date())).intValue();
+            if(resultPrice == 0 || currencyRate.equals("")){
+                throw new Exception("Currency Error");
+            }
+            modelAndView.addObject("currencyRate", currencyRate);
+            modelAndView.addObject("resultPrice", resultPrice);
+            int tax = resultPrice * 10 / 100;
+            int sendPrice = resultPrice - tax;
+            modelAndView.addObject("sendPrice", sendPrice);
+            modelAndView.addObject("tax", tax);
             modelAndView.addObject("spon", spon);
             modelAndView.addObject("prevStatus", prevStatus);
             return modelAndView;
@@ -2751,6 +2762,14 @@ public class AdminService {
                 throw new AdminException(e);
             }
         }
+    }
+
+    private String calculateAppleVat(String money){
+        String[] part = money.split("(?<=\\D)(?=\\d)");
+        String clearMoneyValue = money.replaceAll("[^0-9.]", "");
+        double vatMoney = Double.parseDouble(clearMoneyValue) * 0.85;
+        long vatMoneyRound = Math.round(vatMoney);
+        return part[0] + vatMoneyRound;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -2810,7 +2829,6 @@ public class AdminService {
                 keywordList.add(search.getWord());
             }
             String hashtagList = new Gson().toJson(keywordList);
-            log.info(hashtagList);
             modelAndView.addObject("hashtagList", hashtagList);
             return modelAndView;
         } catch (Exception e) {
@@ -2833,7 +2851,6 @@ public class AdminService {
             for (Search search : originalSearchList) {
                 originalKeywordList.add(search.getWord());
             }
-            log.info(hashtag);
             String replaced = hashtag.replace("[", "").replace("]", "").replace("\"", "");
             System.out.println(replaced);
             List<String> keywordList = new ArrayList<>(Arrays.asList(replaced.split(",")));
