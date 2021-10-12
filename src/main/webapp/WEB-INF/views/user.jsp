@@ -148,7 +148,7 @@
 <script>
     function openWindowPopBan(url, name, user_private){
         if(user_private){
-            alert("이미 정지된 유저입니다.");
+            alert("이미 정지된 유저입니다. 정지 해제는 유저 상세 페이지에서 가능합니다.");
             return false;
         } else {
             let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';

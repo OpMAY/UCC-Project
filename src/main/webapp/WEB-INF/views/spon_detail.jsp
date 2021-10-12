@@ -49,6 +49,18 @@
                         <div class="col-md-10">
                             <div class="card mb-3" style="background-color: #FFFFFf; border-radius: 1.5%">
                                 <h6 class="card-title mt-3 ml-3" style="font-size: x-large">후원 내역</h6>
+                                <c:if test="${spon.platform == 'Android'}">
+                                    <div class="row mt-3 justify-content-around">
+                                        <div class="col-md-12" style="padding: 0 30px 0 30px">
+                                            <label class="label d-flex" for="google-orderId" style="font-size: large">
+                                                구글 검증 코드
+                                            </label>
+                                            <textarea class="form-control" id="google-orderId" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled>${spon.order_id}</textarea>
+                                        </div>
+                                    </div>
+                                </c:if>
                                 <div class="row mt-3 justify-content-around">
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="spon-user" style="font-size: large">
@@ -104,7 +116,7 @@
                                         </label>
                                         <textarea class="form-control" id="spon-exchange-rate" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled><fmt:formatNumber value="${currencyRate}" type="number"/>원</textarea>
+                                                  disabled>${currencyRate}원</textarea>
                                     </div>
                                 </div>
                                 <div class="row mt-3 justify-content-around">
@@ -158,7 +170,8 @@
                                                   disabled><c:choose><c:when
                                                 test="${spon.verify_status == 0}">O</c:when><c:when
                                                 test="${spon.verify_status == 1}">취소</c:when><c:when
-                                                test="${spon.verify_status == 2}">보류 중</c:when></c:choose></textarea>
+                                                test="${spon.verify_status == 2}">보류 중</c:when><c:when
+                                                test="${spon.verify_status == 3}">검증 대기 중</c:when></c:choose></textarea>
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="spon-rate" style="font-size: large">

@@ -100,4 +100,9 @@ public class SponDao {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponByReceiptIdForApple(receipt_id);
     }
+
+    public Spon getSponByPurchaseToken(String purchase_token){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponByPurchaseToken(purchase_token);
+    }
 }

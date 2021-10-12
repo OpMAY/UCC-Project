@@ -115,6 +115,12 @@
         <!-- partial -->
         <div class="page-content">
 
+            <nav class="page-breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item" style="color: #baa2fc">검색 해시태그 관리</li>
+                </ol>
+            </nav>
+
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">

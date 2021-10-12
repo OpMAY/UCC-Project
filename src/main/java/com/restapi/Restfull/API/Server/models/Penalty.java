@@ -12,7 +12,7 @@ import lombok.ToString;
 public class Penalty {
     private int penalty_no;
     private int user_no;
-    private int artist_no;
+    private Integer artist_no;
     private String penalty_start_date;
     private String penalty_end_date;
     private String reg_date;

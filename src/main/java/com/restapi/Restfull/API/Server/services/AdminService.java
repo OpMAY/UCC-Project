@@ -462,6 +462,7 @@ public class AdminService {
             Artist artist = artistDao.getArtistByUserNo(user_no);
             List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
             user.set_user_private(false);
+            userDao.updateUser(user);
             if (artist != null) {
                 artist.setArtist_private(false);
                 artistDao.updateArtist(artist);

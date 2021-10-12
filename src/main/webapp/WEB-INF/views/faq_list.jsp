@@ -46,7 +46,7 @@
             <nav class="page-breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item" style="color: #baa2fc">고객센터</li>
-                    <li class="breadcrumb-item active" aria-current="page">공지사항</li>
+                    <li class="breadcrumb-item active" aria-current="page">FAQ</li>
                 </ol>
             </nav>
 

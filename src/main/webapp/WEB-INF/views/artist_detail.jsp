@@ -43,7 +43,7 @@
         ul li {
             display: inline-block;
             margin: 0 5px;
-            font-size: 20px;
+            font-size: large;
             letter-spacing: -.5px;
         }
 
@@ -53,10 +53,7 @@
 
         ul li.tag-item {
             padding: 4px 8px;
-            background-color: #ffffff;
-            color: #727cf5;
-            border-radius: 20px;
-            border: 1px solid #727cf5;
+            color: #495057;
         }
     </style>
 </head>
@@ -268,7 +265,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <ul id="tag-list"></ul>
+                                            <ul id="tag-list" style="border: 1px solid #e9ecef; padding: 4px"></ul>
                                             <hr>
                                             <div class="row justify-content-center mb-3">
                                                 <div class="col-md-4">

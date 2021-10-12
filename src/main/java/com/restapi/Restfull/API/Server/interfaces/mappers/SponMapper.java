@@ -38,4 +38,6 @@ public interface SponMapper {
     boolean isExistAppleReceipt(String receipt_id);
 
     Spon getSponByReceiptIdForApple(String receipt_id);
+
+    Spon getSponByPurchaseToken(String purchase_token);
 }

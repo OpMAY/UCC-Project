@@ -30,4 +30,5 @@ public class Spon {
     private String platform;
     private String currency;
     private String product_id;
+    private String order_id;
 }
