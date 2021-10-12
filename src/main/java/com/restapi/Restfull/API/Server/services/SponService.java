@@ -51,7 +51,10 @@ public class SponService {
             artistDao.setSession(sqlSession);
             userDao.setSession(sqlSession);
             notificationDao.setSession(sqlSession);
-
+            Spon originalSpon = sponDao.getSponByPurchaseToken(spon.getPurchase_token());
+            if(originalSpon != null){
+                return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS), HttpStatus.OK);
+            }
             int artist_no = spon.getArtist_no();
 
             if (artist_no == 0) {
