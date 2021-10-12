@@ -274,7 +274,8 @@
                                         <c:when test="${Loudsourcing.status == 'process'}">
                                             <div class="row mt-4 mb-3 justify-content-around">
                                                 <div class="col-md-3" style="text-align: center">
-                                                    <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                    <button class="btn btn-outline-primary"
+                                                            style="width : 50%; height: 150%"
                                                             onclick="if(confirm('진행 중인 크라우드를 수정합니다.\n\n진행 중인 크라우드를 수정하기 전 해당 크라우드에 참여한\n모든 아티스트에게 변경 여부를 꼭 공지하시길 바랍니다.\n정말 수정하시겠습니까?')){location.href='/admin/loudsourcing_edit.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'} else {return false}">
                                                         수정
                                                     </button>
@@ -375,7 +376,7 @@
             console.log(result);
             if (result === 0) {
                 alert("해당 크라우드를 삭제했습니다.");
-                window.location.reload();
+                window.location.href = "/admin/loudsourcing_process.do";
             } else {
                 alert("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
                 window.location.reload();
@@ -399,15 +400,17 @@
         let hashtagList = '<c:out value="${Loudsourcing.hashtag}"/>';
         console.log(hashtagList);
         let edit = replaceAll(hashtagList, '&#034;', '"');
-        let obj = JSON.parse(edit);
-        console.log(obj);
-        console.log("length : " + obj.length);
-        for (let i = 0; i < obj.length; i++) {
-            console.log(obj[i]);
-            tag[counter] = obj[i];
-            console.log(counter);
-            $("#tag-list").append("<li class='tag-item'>#" + obj[i] + "</li>");
-            counter++;
+        if(edit !== "") {
+            let obj = JSON.parse(edit);
+            console.log(obj);
+            console.log("length : " + obj.length);
+            for (let i = 0; i < obj.length; i++) {
+                console.log(obj[i]);
+                tag[counter] = obj[i];
+                console.log(counter);
+                $("#tag-list").append("<li class='tag-item' style='margin-bottom: 3px'>#" + obj[i] + "</li>");
+                counter++;
+            }
         }
     });
 </script>

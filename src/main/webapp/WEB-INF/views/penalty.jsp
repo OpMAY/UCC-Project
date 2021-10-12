@@ -35,15 +35,10 @@
 </head>
 <body onload="copyDate()">
 <div class="main-wrapper">
-    <div class="page-wrapper">
+    <div class="page-wrapper" style="margin-left: 0; width: 100%">
         <jsp:include page="partials/_popupnavbar.jsp" flush="true"></jsp:include>
         <div class="page-content">
 
-            <nav class="page-breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item" style="color: #baa2fc">유저 정지 관리</li>
-                </ol>
-            </nav>
 
             <div class="row">
                 <div class="col-md-12 grid-margin">

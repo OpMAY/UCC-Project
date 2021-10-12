@@ -37,11 +37,6 @@
         <jsp:include page="partials/_popupnavbar.jsp" flush="true"></jsp:include>
         <div class="page-content">
 
-            <nav class="page-breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item" style="color: #baa2fc">광고 발주자 상세정보</li>
-                </ol>
-            </nav>
 
             <div class="row">
                 <div class="col-md-12 grid-margin">

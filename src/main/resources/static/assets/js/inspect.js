@@ -45,7 +45,7 @@ function inspection(inputId, what) {
     const warning = /^.{10,2000}$/gs;
 
     const inspect_notice_title = /^.{2,20}$/;
-    const inspect_notice_content = /^.{2,2000}$/;
+    const inspect_notice_content = /^.{2,2000}$/gs;
     const inspect_faq_question = /^.{2,40}$/;
     const inspect_faq_answer = /^.{2,1000}$/gs;
     const inspect_penalty_reason = /^.{10,100}$/gs;

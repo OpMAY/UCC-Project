@@ -137,7 +137,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -549,7 +549,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -604,7 +604,7 @@ public class AdminService {
             modelAndView.addObject("UserList", userList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -622,7 +622,7 @@ public class AdminService {
             modelAndView.addObject("artistList", artistList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -701,7 +701,7 @@ public class AdminService {
             modelAndView.addObject("commentList", adminCommentList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -800,7 +800,7 @@ public class AdminService {
             }
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -911,7 +911,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1010,7 +1010,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1160,7 +1160,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1266,7 +1266,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1364,7 +1364,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1388,7 +1388,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1450,7 +1450,7 @@ public class AdminService {
             modelAndView.addObject("artistList", requestList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1508,7 +1508,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1576,7 +1576,7 @@ public class AdminService {
             modelAndView.addObject("entryList", resEntryList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1602,7 +1602,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1710,7 +1710,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -1721,6 +1721,7 @@ public class AdminService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getUnSelectedEntryList(int loudsourcing_no) {
         try {
+            log.info(loudsourcing_no);
             loudSourcingDao.setSession(sqlSession);
             loudSourcingApplyDao.setSession(sqlSession);
             loudSourcingEntryDao.setSession(sqlSession);
@@ -1749,9 +1750,10 @@ public class AdminService {
             modelAndView.addObject("artistList", requestList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1981,7 +1983,7 @@ public class AdminService {
             modelAndView.addObject("artistList", requestList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2017,7 +2019,7 @@ public class AdminService {
             modelAndView.addObject("loudsourcingList", loudSourcingList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2035,7 +2037,7 @@ public class AdminService {
             modelAndView.addObject("noticeList", noticeList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2069,7 +2071,7 @@ public class AdminService {
             modelAndView.addObject("notice", notice);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2125,7 +2127,7 @@ public class AdminService {
             modelAndView.addObject("faqList", faqList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2145,7 +2147,7 @@ public class AdminService {
             modelAndView.addObject("faq", faq);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2211,7 +2213,7 @@ public class AdminService {
             modelAndView.addObject("bannerList", bannerList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2237,7 +2239,7 @@ public class AdminService {
             modelAndView.addObject("banner", bannerAd);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2409,7 +2411,7 @@ public class AdminService {
             modelAndView.addObject("type", type);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2480,7 +2482,7 @@ public class AdminService {
             modelAndView.addObject("inquiry", inquiry);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2565,7 +2567,7 @@ public class AdminService {
 
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2697,7 +2699,7 @@ public class AdminService {
             modelAndView.addObject("status", status);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2756,7 +2758,7 @@ public class AdminService {
             modelAndView.addObject("prevStatus", prevStatus);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);
@@ -2832,7 +2834,7 @@ public class AdminService {
             modelAndView.addObject("hashtagList", hashtagList);
             return modelAndView;
         } catch (Exception e) {
-            if (e.getMessage().equals("Bad Request")) {
+            if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 throw new AdminException(e);

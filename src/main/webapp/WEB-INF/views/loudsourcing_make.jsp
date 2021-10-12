@@ -323,8 +323,13 @@
                                                     function DeleteElement(elem, id) {
                                                         elem.parentElement.remove();
                                                         console.log(id);
+                                                        let agent = navigator.userAgent.toLowerCase();
                                                         if (id != null) {
-                                                            $(id).val('');
+                                                            if ((navigator.appName === 'Netscape' && navigator.userAgent.search('Trident') !== -1) || (agent.indexOf("msie") !== -1)) {
+                                                                $(id).replaceWith($(id).clone(true));
+                                                            } else {
+                                                                $(id).val('');
+                                                            }
                                                         }
                                                         file_number--;
                                                     }
@@ -348,21 +353,27 @@
                                                                     if (this.files && this.files[0]) {
                                                                         const reader = new FileReader;
                                                                         reader.onload = function (data) {
-                                                                            console.log(data);
                                                                             if (data.total > 10 * 1024 * 1024) {
                                                                                 alert("파일용량은 10MB를 넘길 수 없습니다.");
-                                                                                $("#file-add-input-" + input_index).val('');
+                                                                                let agent = navigator.userAgent.toLowerCase();
+                                                                                if ((navigator.appName === 'Netscape' && navigator.userAgent.search('Trident') !== -1) || (agent.indexOf("msie") !== -1)) {
+                                                                                    $("#file-add-input-" + input_index).replaceWith($("#file-add-input-" + input_index).clone(true));
+                                                                                } else {
+                                                                                    $("#file-add-input-" + input_index).val('');
+                                                                                }
                                                                                 return false;
                                                                             } else {
                                                                                 console.log("In " + input_index);
                                                                                 console.log($('#file-add-input-' + input_index).val());
                                                                                 const fileValue = $('#file-add-input-' + input_index).val().split("\\");
                                                                                 const fileName = fileValue[fileValue.length - 1];
-                                                                                input_index++;
-                                                                                file_number++;
-                                                                                console.log("After" + input_index);
-                                                                                const now_index = input_index - 1;
-                                                                                $("#file-list").append("<div class=\"d-flex align-items-center justify-content-between\"><a style=\"font-size: 15px; font-weight: bold; color: #6A6A6A; text-decoration: underline\" class=\"d-inline\" onmouseover=\"this.style.color='#6FAAF2'\" onmouseout=\"this.style.color='#6A6A6A'\" href=\"javascript: void(0)\"><i data-feather=\"file\"></i>" + fileName + "</a><button class=\"btn btn-outline-primary\" type='button' style=\"float: right;height: 35px\" onclick=\"DeleteElement(this, '#file-add-input-" + now_index + "')\">X</button></div><input type=\"file\" id=\"file-add-input-" + input_index + "\" name=\"files\" hidden/>");
+                                                                                if (fileName !== "") {
+                                                                                    input_index++;
+                                                                                    file_number++;
+                                                                                    console.log("After" + input_index);
+                                                                                    const now_index = input_index - 1;
+                                                                                    $("#file-list").append("<div class=\"d-flex align-items-center justify-content-between\"><a style=\"font-size: 15px; font-weight: bold; color: #6A6A6A; text-decoration: underline\" class=\"d-inline\" onmouseover=\"this.style.color='#6FAAF2'\" onmouseout=\"this.style.color='#6A6A6A'\" href=\"javascript: void(0)\"><i data-feather=\"file\"></i>" + fileName + "</a><button class=\"btn btn-outline-primary\" type='button' style=\"float: right;height: 35px\" onclick=\"DeleteElement(this, '#file-add-input-" + now_index + "')\">X</button></div><input type=\"file\" id=\"file-add-input-" + input_index + "\" name=\"files\" hidden/>");
+                                                                                }
                                                                             }
                                                                         };
                                                                         reader.readAsDataURL(this.files[0]);
@@ -475,26 +486,27 @@
         checkDate('processEndDate');
     });
 
-    function checkDateValid(){
+    function checkDateValid() {
         let start_date = new Date($('input[name=loudsourcing-start-date]').val());
         let end_date = new Date($('input[name=loudsourcing-end-date]').val());
         let recruitment_end_date = new Date($('input[name=loudsourcing-recruitment-end-date]').val());
         let process_start_date = new Date($('input[name=loudsourcing-process-start-date]').val());
         let process_end_date = new Date($('input[name=loudsourcing-process-end-date]').val());
         let judge_start_date = new Date($('input[name=loudsourcing-judge-start-date]').val());
-        if(start_date > end_date){
+        if (start_date > end_date) {
             alert("날짜를 확인해주세요.");
             return false;
-        } else if (process_start_date > process_end_date){
+        } else if (process_start_date > process_end_date) {
             alert("날짜를 확인해주세요.");
             return false;
-        } else if (judge_start_date > end_date){
+        } else if (judge_start_date > end_date) {
             alert("날짜를 확인해주세요.");
             return false;
-        } else if (recruitment_end_date > end_date){
+        } else if (recruitment_end_date > end_date) {
             alert("날짜를 확인해주세요.");
             return false;
         }
+        return true;
     };
 
     $('textarea[id="loudsourcing-make-name"]').on('paste', function (e) {
@@ -505,8 +517,8 @@
             data = e.originalEvent.clipboardData.getData("Text");
         }
         let match = /r|\n/.exec(data);
-        if(match){
-            data = data.replace(/(\r\n|\n|\r)/gm,"");
+        if (match) {
+            data = data.replace(/(\r\n|\n|\r)/gm, "");
             $(this).val($(this).val() + data);
             e.originalEvent.preventDefault();
         }
@@ -520,8 +532,8 @@
             data = e.originalEvent.clipboardData.getData("Text");
         }
         let match = /r|\n/.exec(data);
-        if(match){
-            data = data.replace(/(\r\n|\n|\r)/gm,"");
+        if (match) {
+            data = data.replace(/(\r\n|\n|\r)/gm, "");
             $(this).val($(this).val() + data);
             e.originalEvent.preventDefault();
         }
@@ -644,7 +656,7 @@
 
         $('#tag').on("copy", function () {
             return false;
-        })
+        });
 
         $("#tag").on("keypress", function (e) {
             let self = $(this);
@@ -670,7 +682,7 @@
                         // 해시태그가 중복되었는지 확인
                         if (result.length === 0) {
                             if (counter < 10) {
-                                $("#tag-list").append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+                                $("#tag-list").append("<li class='tag-item' style='margin-bottom: 3px'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
                                 addTag(tagValue);
                                 self.val("");
                             } else {
@@ -745,7 +757,7 @@
                 return false;
             } else if (!inspection("loudsourcing-judge-start-date", "date")) {
                 return false;
-            } else if (!checkDateValid()){
+            } else if (!checkDateValid()) {
                 return false;
             }
 

@@ -54,18 +54,18 @@
         select *
         from loudsourcingapply
         WHERE is_pre_selected = true
-          AND loudsourcing_no = #{loudsourcing_no}
+          AND loudsourcing_no = #{loudsourcing_no} AND entry = true
     </select>
     <select id="getLoudSourcingApplyListByLoudSourcingNoUnPreSelected" resultType="LoudSourcingApply">
         select *
         from loudsourcingapply
         WHERE is_pre_selected = false
-          AND loudsourcing_no = #{loudsourcing_no}
+          AND loudsourcing_no = #{loudsourcing_no} AND entry = true
     </select>
     <select id="getLoudSourcingApplyListByLoudSourcingNoSelected" resultType="LoudSourcingApply">
         select *
         from loudsourcingapply
         WHERE is_selected = true
-          AND loudsourcing_no = #{loudsourcing_no}
+          AND loudsourcing_no = #{loudsourcing_no} AND entry = true
     </select>
 </mapper>

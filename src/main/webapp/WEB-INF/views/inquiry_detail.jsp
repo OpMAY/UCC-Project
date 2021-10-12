@@ -298,7 +298,7 @@
                                             <c:when test="${inquiry._answered == false}">
                                                 <div class="col-md-6 justify-content-center d-flex">
                                                     <button class="btn btn-outline-primary" style="width : 50%; height: 150%"
-                                                            onclick="if(confirm('답변은 한번 입력 후 수정할 수 없습니다.\n정말 답변하시겠습니까?')){answerInquiry(${inquiry.inquiry_no}, '${inquiry.type}', ${inquiry.user_no})} else {return false;}">
+                                                            onclick="if(confirm('답변은 한번 등록 후 수정할 수 없습니다.\n정말 답변하시겠습니까?')){answerInquiry(${inquiry.inquiry_no}, '${inquiry.type}', ${inquiry.user_no})} else {return false;}">
                                                         답변하기
                                                     </button>
                                                 </div>

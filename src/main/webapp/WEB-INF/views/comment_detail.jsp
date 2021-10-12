@@ -34,7 +34,7 @@
 </head>
 <body>
 <div class="main-wrapper">
-    <div class="page-wrapper">
+    <div class="page-wrapper" style="margin-left: 0; width: 100%">
         <jsp:include page="partials/_popupnavbar.jsp" flush="true"></jsp:include>
         <div class="page-content">
 
