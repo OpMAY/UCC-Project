@@ -136,10 +136,10 @@ public class SponService {
                         Artist userArtist = artistDao.getArtistByUserNo(sponUser.getUser_no());
                         BoardComment boardSponComment = new BoardComment();
                         boardSponComment.setBoard_no(spon.getBoard_no());
-                        boardSponComment.setUser_no(spon.getUser_no());
+                        boardSponComment.setUser_no(sponUser.getUser_no());
                         if (userArtist != null) {
-                            boardSponComment.setCommenter_name(artist.getArtist_name());
-                            boardSponComment.setProfile_img(artist.getArtist_profile_img());
+                            boardSponComment.setCommenter_name(userArtist.getArtist_name());
+                            boardSponComment.setProfile_img(userArtist.getArtist_profile_img());
                         } else {
                             boardSponComment.setCommenter_name(sponUser.getName());
                             boardSponComment.setProfile_img(sponUser.getProfile_img());
