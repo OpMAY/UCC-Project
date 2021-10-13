@@ -306,19 +306,19 @@
                                                     <c:choose>
                                                         <c:when test="${inquiry.type == 'loudsourcing'}">
                                                             <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                    onclick="location.href='/admin/inquiry_loudsourcing.do'">
+                                                                    onclick="location.href='/admin/inquiry/loudsourcing.do'">
                                                                 돌아가기
                                                             </button>
                                                         </c:when>
                                                         <c:when test="${inquiry.type == 'report'}">
                                                             <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                    onclick="location.href='/admin/inquiry_report.do'">
+                                                                    onclick="location.href='/admin/inquiry/report.do'">
                                                                 돌아가기
                                                             </button>
                                                         </c:when>
                                                         <c:when test="${inquiry.type == 'normal'}">
                                                             <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                    onclick="location.href='/admin/inquiry_normal.do'">
+                                                                    onclick="location.href='/admin/inquiry/normal.do'">
                                                                 돌아가기
                                                             </button>
                                                         </c:when>
@@ -329,19 +329,19 @@
                                                 <c:choose>
                                                     <c:when test="${inquiry.type == 'loudsourcing'}">
                                                         <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                onclick="location.href='/admin/inquiry_loudsourcing.do'">
+                                                                onclick="location.href='/admin/inquiry/loudsourcing.do'">
                                                             돌아가기
                                                         </button>
                                                     </c:when>
                                                     <c:when test="${inquiry.type == 'report'}">
                                                         <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                onclick="location.href='/admin/inquiry_report.do'">
+                                                                onclick="location.href='/admin/inquiry/report.do'">
                                                             돌아가기
                                                         </button>
                                                     </c:when>
                                                     <c:when test="${inquiry.type == 'normal'}">
                                                         <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                onclick="location.href='/admin/inquiry_normal.do'">
+                                                                onclick="location.href='/admin/inquiry/normal.do'">
                                                             돌아가기
                                                         </button>
                                                     </c:when>
@@ -359,10 +359,11 @@
                 </div>
 
             </div>
-            <!-- partial:partials/_footer.jsp -->
-            <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
-            <!-- partial -->
+
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 
     <!-- core:js -->

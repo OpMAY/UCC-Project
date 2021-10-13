@@ -44,16 +44,16 @@
         <div class="collapse" id="uiComponents">
           <ul class="nav sub-menu">
             <li class="nav-item">
-              <a href="/admin/loudsourcing_recruitment.do" class="nav-link">모집</a>
+              <a href="/admin/loudsourcing/recruitment.do" class="nav-link">모집</a>
             </li>
             <li class="nav-item">
-              <a href="/admin/loudsourcing_process.do" class="nav-link">진행</a>
+              <a href="/admin/loudsourcing/process.do" class="nav-link">진행</a>
             </li>
             <li class="nav-item">
-              <a href="/admin/loudsourcing_judge.do" class="nav-link">심사</a>
+              <a href="/admin/loudsourcing/judge.do" class="nav-link">심사</a>
             </li>
             <li class="nav-item">
-              <a href="/admin/loudsourcing_end.do" class="nav-link">종료</a>
+              <a href="/admin/loudsourcing/end.do" class="nav-link">종료</a>
             </li>
           </ul>
         </div>
@@ -73,19 +73,19 @@
       </li>
       <li class="nav-item nav-category">문의</li>
       <li class="nav-item">
-        <a href="/admin/inquiry_loudsourcing.do" class="nav-link">
+        <a href="/admin/inquiry/loudsourcing.do" class="nav-link">
           <i class="link-icon" data-feather="cloud"></i>
           <span class="link-title">크라우드 문의</span>
         </a>
       </li>
       <li class="nav-item">
-        <a href="/admin/inquiry_report.do" class="nav-link">
+        <a href="/admin/inquiry/report.do" class="nav-link">
           <i class="link-icon" data-feather="flag"></i>
           <span class="link-title">신고 문의</span>
         </a>
       </li>
       <li class="nav-item">
-        <a href="/admin/inquiry_normal.do" class="nav-link">
+        <a href="/admin/inquiry/normal.do" class="nav-link">
           <i class="link-icon" data-feather="file"></i>
           <span class="link-title">일반 문의</span>
         </a>
@@ -133,7 +133,7 @@
       <li class="nav-item">
         <a style="cursor: pointer" onclick="openWindowPopPush('/admin/messages.do', 'Push 알림 전송하기')" class="nav-link">
           <i class="link-icon" data-feather="edit"></i>
-          <span class="link-title">알림 제작 및 전송</span>
+          <span class="link-title">PUSH 알림 전송</span>
         </a>
       </li>
       <script>

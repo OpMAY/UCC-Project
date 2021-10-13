@@ -44,7 +44,7 @@
                         <div class="col-md-12">
                             <div class="card" style="background-color: #FFFFFf; border-radius: 1.5%">
                                 <div class="card-body">
-                                    <h6 class="card-title" style="font-size: x-large">Push 알림 제작
+                                    <h6 class="card-title" style="font-size: x-large">Push 알림 전송
                                     </h6>
                                     <div class="form-group">
                                         <div class="form-check">

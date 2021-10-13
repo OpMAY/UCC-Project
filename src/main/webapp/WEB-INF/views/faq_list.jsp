@@ -58,7 +58,7 @@
                                     href="${pageContext.request.contextPath}/admin/notices.do">공지사항 </a>FAQ
                                 <button type="button" style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                        onclick="openWindowPopFAQ('/admin/faq_make.do', 'FAQ 제작')">
+                                        onclick="openWindowPopFAQ('/admin/faq/make.do', 'FAQ 제작')">
                                     <i class="btn-icon-prepend" data-feather="edit"></i>
                                     추가하기
                                 </button>
@@ -91,7 +91,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="openWindowPopFAQ('/admin/faq_detail.do?faq_no=${faqList[i-1].faq_no}', 'FAQ 상세보기')">
+                                                    onclick="openWindowPopFAQ('/admin/faq/detail.do?faq_no=${faqList[i-1].faq_no}', 'FAQ 상세보기')">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>

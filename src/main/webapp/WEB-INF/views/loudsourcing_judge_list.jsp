@@ -150,11 +150,11 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px"
-                                                                                 href="${pageContext.request.contextPath}/admin/loudsourcing_recruitment.do">
+                                                                                 href="${pageContext.request.contextPath}/admin/loudsourcing/recruitment.do">
                                 모집 </a><a style="margin-right: 10px"
-                                          href="${pageContext.request.contextPath}/admin/loudsourcing_process.do">
+                                          href="${pageContext.request.contextPath}/admin/loudsourcing/process.do">
                                 진행 </a>심사 <a style="margin-left: 10px"
-                                             href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
+                                             href="${pageContext.request.contextPath}/admin/loudsourcing/end.do">
                                 종료 </a>
                                 <button type="button"
                                         class="btn btn-outline-primary btn-icon-text"
@@ -210,7 +210,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/selected_entry.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/judge/list/entry/selected.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -218,7 +218,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/unselected_entry.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/judge/list/entry/unselected.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -226,7 +226,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>

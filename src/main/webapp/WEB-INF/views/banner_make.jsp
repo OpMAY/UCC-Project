@@ -49,7 +49,10 @@
                                     <form id="banner-makeForm">
                                         <div class="col-md-12">
                                             <label class="label" style="font-size: larger">
-                                                배너 사진 - [사진을 추가 및 변경하려면 사진을 클릭하세요.]
+                                                배너 사진<span style="float: right; margin-right: 3px"
+                                                           data-toggle="tooltip" data-placement="top" data-html="true"
+                                                           title="사진을 추가 및 변경하려면<br>사진을 클릭하세요."><i
+                                                    data-feather="help-circle"></i></span>
                                             </label>
                                             <input type="file" id="banner-img" name="img" accept="image/*"
                                                    hidden/>

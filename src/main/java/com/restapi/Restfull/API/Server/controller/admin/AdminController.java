@@ -140,7 +140,7 @@ public class AdminController implements ControllerInitialize {
         }
     }
 
-    @GetMapping("/admin/user_detail.do")
+    @GetMapping("/admin/user/detail.do")
     public ModelAndView UserDetailPage(@RequestParam("user_no") String user_no) {
         return adminService.getUserDetail(user_no);
     }
@@ -159,7 +159,7 @@ public class AdminController implements ControllerInitialize {
         return adminService.setCommentPrivate(commentHandleRequest.getComment_no(), commentHandleRequest.getType());
     }
 
-    @GetMapping("/admin/artist_detail.do")
+    @GetMapping("/admin/artist/detail.do")
     public ModelAndView ArtistDetailPage(@RequestParam("artist_no") String artist_no) {
         return adminService.getArtistDetail(artist_no);
     }
@@ -174,7 +174,7 @@ public class AdminController implements ControllerInitialize {
         return adminService.getBoardList(artist_no);
     }
 
-    @GetMapping("/admin/portfolio_detail.do")
+    @GetMapping("/admin/portfolio/detail.do")
     public ModelAndView PortfolioDetailPage(@RequestParam("portfolio_no") String portfolio_no) {
         return adminService.getPortfolioDetail(portfolio_no);
     }
@@ -193,7 +193,7 @@ public class AdminController implements ControllerInitialize {
         return adminService.deletePortfolio(portfolioHandleRequest.getPortfolio_no());
     }
 
-    @GetMapping("/admin/board_detail.do")
+    @GetMapping("/admin/board/detail.do")
     public ModelAndView BoardDetailPage(@RequestParam("board_no") String board_no) {
         return adminService.getBoardDetail(board_no);
     }
@@ -212,33 +212,33 @@ public class AdminController implements ControllerInitialize {
         return adminService.deleteBoard(boardHandleRequest.getBoard_no());
     }
 
-    @GetMapping("/admin/artist_loudsourcing.do")
+    @GetMapping("/admin/artist/loudsourcing.do")
     public ModelAndView GetArtistLoudSourcingList(@RequestParam("artist_no") String param) {
         int artist_no = Integer.parseInt(param);
         return adminService.getArtistLoudSourcingList(artist_no);
     }
 
-    @GetMapping("/admin/loudsourcing_recruitment.do")
+    @GetMapping("/admin/loudsourcing/recruitment.do")
     public ModelAndView LoudSourcingRecruitmentPage() {
         return adminService.getLoudSourcingRecruitmentPage();
     }
 
-    @GetMapping("/admin/loudsourcing_process.do")
+    @GetMapping("/admin/loudsourcing/process.do")
     public ModelAndView LoudSourcingProcessPage() {
         return adminService.getLoudSourcingProcessPage();
     }
 
-    @GetMapping("/admin/loudsourcing_judge.do")
+    @GetMapping("/admin/loudsourcing/judge.do")
     public ModelAndView LoudSourcingJudgePage() throws ParseException {
         return adminService.getLoudSourcingJudgePage();
     }
 
-    @GetMapping("/admin/loudsourcing_end.do")
+    @GetMapping("/admin/loudsourcing/end.do")
     public ModelAndView LoudSourcingEndPage() {
         return adminService.getLoudSourcingEndPage();
     }
 
-    @GetMapping("/admin/recruitment_apply_list.do")
+    @GetMapping("/admin/loudsourcing/recruitment/list/apply.do")
     public ModelAndView RecruitmentApplyListPage(@RequestParam("loudsourcing_no") String loudsourcing_no) {
         return adminService.getRecruitmentApplyListPage(loudsourcing_no);
     }
@@ -251,17 +251,17 @@ public class AdminController implements ControllerInitialize {
         return adminService.sendProcessStartMessageToAll(loudSourcingNotificationRequest.getLoudsourcing_no());
     }
 
-    @GetMapping("/admin/loudsourcing_detail.do")
+    @GetMapping("/admin/loudsourcing/detail.do")
     public ModelAndView GetLoudSourcingDetail(@RequestParam("loudsourcing_no") String loudsourcing_no) {
         return adminService.getLoudSourcingDetailPage(loudsourcing_no, "Detail");
     }
 
-    @GetMapping("/admin/loudsourcing_upload.do")
+    @GetMapping("/admin/loudsourcing/make.do")
     public ModelAndView GetLoudSourcingUploadPage() {
         return adminService.getLoudSourcingUploadPage();
     }
 
-    @GetMapping("/admin/loudsourcing_edit.do")
+    @GetMapping("/admin/loudsourcing/edit.do")
     public ModelAndView GetLoudSourcingEditPage(@RequestParam("loudsourcing_no") String loudsourcing_no) {
         return adminService.getLoudSourcingDetailPage(loudsourcing_no, "Edit");
     }
@@ -420,13 +420,13 @@ public class AdminController implements ControllerInitialize {
         return adminService.deleteLoudSourcing(loudSourcingDeleteRequest.getLoudsourcing_no());
     }
 
-    @GetMapping("/admin/loudsourcing_advertiser.do")
+    @GetMapping("/admin/loudsourcing/advertiser/detail.do")
     public ModelAndView GetLoudSourcingAdvertiser(@RequestParam("loudsourcing_no") String param) {
         int loudsourcing_no = Integer.parseInt(param);
         return adminService.getLoudSourcingAdvertiserInfo(loudsourcing_no);
     }
 
-    @GetMapping("/admin/advertiser_edit.do")
+    @GetMapping("/admin/loudsourcing/advertiser/edit.do")
     public ModelAndView GetLoudSourcingAdvertiserForEdit(@RequestParam("loudsourcing_no") String param) {
         int loudsourcing_no = Integer.parseInt(param);
         return adminService.getLoudSourcingAdvertiserForEdit(loudsourcing_no);
@@ -439,13 +439,13 @@ public class AdminController implements ControllerInitialize {
         return adminService.advertiserEdit(request);
     }
 
-    @GetMapping("/admin/process_apply_list.do")
+    @GetMapping("/admin/loudsourcing/process/list/apply.do")
     public ModelAndView GetLoudSourcingProcessArtistList(@RequestParam("loudsourcing_no") String param) {
         int loudsourcing_no = Integer.parseInt(param);
         return adminService.getLoudSourcingProcessArtistList(loudsourcing_no);
     }
 
-    @GetMapping("/admin/entry_detail.do")
+    @GetMapping("/admin/loudsourcing/detail/entry.do")
     public ModelAndView GetEntryDetail(@RequestParam("loudsourcing_no") String lparam, @RequestParam("artist_no") String aparam) {
         int loudsourcing_no = Integer.parseInt(lparam);
         int artist_no = Integer.parseInt(aparam);
@@ -474,13 +474,13 @@ public class AdminController implements ControllerInitialize {
         return adminService.sendProcessStartMessage(request.getLoudsourcing_no(), request.getArtist_no());
     }
 
-    @GetMapping("/admin/unknown_entry_list.do")
+    @GetMapping("/admin/loudsourcing/process/list/entry/unknown.do")
     public ModelAndView GetUnknownEntryList(@RequestParam("loudsourcing_no") String param) {
         int loudsourcing_no = Integer.parseInt(param);
         return adminService.getUnknownEntryList(loudsourcing_no);
     }
 
-    @GetMapping("/admin/unknown_entry_detail.do")
+    @GetMapping("/admin/loudsourcing/process/detail/entry/unknown.do")
     public ModelAndView GetUnknownEntryDetail(@RequestParam("loudsourcing_no") String lParam, @RequestParam("entry_no") String eParam) {
         int loudsourcing_no = Integer.parseInt(lParam);
         int entry_no = Integer.parseInt(eParam);
@@ -508,13 +508,13 @@ public class AdminController implements ControllerInitialize {
         return adminService.deleteApply(request.getArtist_no(), request.getLoudsourcing_no());
     }
 
-    @GetMapping("/admin/selected_entry.do")
+    @GetMapping("/admin/loudsourcing/judge/list/entry/selected.do")
     public ModelAndView GetSelectedEntryList(@RequestParam("loudsourcing_no") String param) {
         int loudsourcing_no = Integer.parseInt(param);
         return adminService.getSelectedEntryList(loudsourcing_no);
     }
 
-    @GetMapping("/admin/unselected_entry.do")
+    @GetMapping("/admin/loudsourcing/judge/list/entry/unselected.do")
     public ModelAndView GetUnSelectedEntryList(@RequestParam("loudsourcing_no") String param) {
         int loudsourcing_no = Integer.parseInt(param);
         return adminService.getUnSelectedEntryList(loudsourcing_no);
@@ -555,7 +555,7 @@ public class AdminController implements ControllerInitialize {
         return adminService.changeSelect(request.getArtist_no(), request.getLoudsourcing_no());
     }
 
-    @GetMapping("/admin/final_selected.do")
+    @GetMapping("/admin/loudsourcing/end/list/entry/final.do")
     public ModelAndView GetFinalSelectedList(@RequestParam("loudsourcing_no") String param) {
         int loudsourcing_no = Integer.parseInt(param);
         return adminService.getFinalSelectedList(loudsourcing_no);
@@ -580,13 +580,13 @@ public class AdminController implements ControllerInitialize {
         return adminService.deleteNotice(request.getNotice_no());
     }
 
-    @GetMapping("/admin/notice_detail.do")
+    @GetMapping("/admin/notice/detail.do")
     public ModelAndView GetNoticeDetail(@RequestParam("notice_no") String param) {
         int notice_no = Integer.parseInt(param);
         return adminService.getNoticeDetail(notice_no);
     }
 
-    @GetMapping("/admin/notice_make.do")
+    @GetMapping("/admin/notice/make.do")
     public ModelAndView GetNoticeMake() {
         return adminService.getNoticeMake();
     }
@@ -657,13 +657,13 @@ public class AdminController implements ControllerInitialize {
         return adminService.getFAQList();
     }
 
-    @GetMapping("/admin/faq_detail.do")
+    @GetMapping("/admin/faq/detail.do")
     public ModelAndView GetFAQDetail(@RequestParam("faq_no") String param) {
         int faq_no = Integer.parseInt(param);
         return adminService.getFAQDetail(faq_no);
     }
 
-    @GetMapping("/admin/faq_make.do")
+    @GetMapping("/admin/faq/make.do")
     public ModelAndView GetFAQMake() {
         return adminService.getFAQMake();
     }
@@ -747,12 +747,12 @@ public class AdminController implements ControllerInitialize {
         return adminService.getBannerList();
     }
 
-    @GetMapping("/admin/banner_make.do")
+    @GetMapping("/admin/banner/make.do")
     public ModelAndView GetBannerMake() {
         return adminService.getBannerMake();
     }
 
-    @GetMapping("/admin/banner_detail.do")
+    @GetMapping("/admin/banner/detail.do")
     public ModelAndView GetBannerDetail(@RequestParam("banner_no") String param) {
         int banner_ad_no = Integer.parseInt(param);
         return adminService.getBannerDetail(banner_ad_no);
@@ -850,22 +850,22 @@ public class AdminController implements ControllerInitialize {
         }
     }
 
-    @GetMapping("/admin/inquiry_loudsourcing.do")
+    @GetMapping("/admin/inquiry/loudsourcing.do")
     public ModelAndView GetInquiryLoudsourcingList() {
         return adminService.getInquiryList("loudsourcing");
     }
 
-    @GetMapping("/admin/inquiry_report.do")
+    @GetMapping("/admin/inquiry/report.do")
     public ModelAndView GetInquiryReportList() {
         return adminService.getInquiryList("report");
     }
 
-    @GetMapping("/admin/inquiry_normal.do")
+    @GetMapping("/admin/inquiry/normal.do")
     public ModelAndView GetInquiryNormalList() {
         return adminService.getInquiryList("normal");
     }
 
-    @GetMapping("/admin/inquiry_detail.do")
+    @GetMapping("/admin/inquiry/detail.do")
     public ModelAndView GetInquiryDetail(@RequestParam("inquiry_no") String param) {
         int inquiry_no = Integer.parseInt(param);
         return adminService.getInquiryDetail(inquiry_no);
@@ -912,7 +912,7 @@ public class AdminController implements ControllerInitialize {
         return adminService.getSponList("complete");
     }
 
-    @GetMapping("/admin/spon_detail.do")
+    @GetMapping("/admin/spon/detail.do")
     public ModelAndView GetSponDetail(@RequestParam("spon_no") String param,
                                       @RequestParam("prevStatus") String status) {
         int spon_no = Integer.parseInt(param);
@@ -1072,7 +1072,7 @@ public class AdminController implements ControllerInitialize {
         return adminService.sendCustomMessage(customMessage.getTitle(), customMessage.getContent(), customMessage.getSend_to());
     }
 
-    @GetMapping("/admin/comment_detail.do")
+    @GetMapping("/admin/comment/detail.do")
     public ModelAndView GetCommentDetail(@RequestParam("comment_no") String param, @RequestParam("type") String param2){
         int comment_no = Integer.parseInt(param);
         int type = Integer.parseInt(param2);

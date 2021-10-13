@@ -76,16 +76,16 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large">모집 <a style="margin-left: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_process.do">
+                                    href="${pageContext.request.contextPath}/admin/loudsourcing/process.do">
                                 진행 </a><a style="margin-left: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_judge.do">
+                                    href="${pageContext.request.contextPath}/admin/loudsourcing/judge.do">
                                 심사 </a><a style="margin-left: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
+                                    href="${pageContext.request.contextPath}/admin/loudsourcing/end.do">
                                 종료 </a>
                                 <button type="button"
                                         class="btn btn-outline-primary btn-icon-text"
                                         style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
-                                        onclick="location.href='/admin/loudsourcing_upload.do'">
+                                        onclick="location.href='/admin/loudsourcing/make.do'">
                                     <i class="btn-icon-prepend" data-feather="edit"></i>
                                     새 크라우드 만들기
                                 </button>
@@ -133,7 +133,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/recruitment_apply_list.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/recruitment/list/apply.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -141,7 +141,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>

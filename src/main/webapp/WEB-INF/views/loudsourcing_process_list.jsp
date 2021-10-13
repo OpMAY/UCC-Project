@@ -53,18 +53,18 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_recruitment.do">
+                                    href="${pageContext.request.contextPath}/admin/loudsourcing/recruitment.do">
                                 모집 </a>진행 <a style="margin-left: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_judge.do">
+                                    href="${pageContext.request.contextPath}/admin/loudsourcing/judge.do">
                                 심사 </a><a style="margin-left: 10px"
-                                    href="${pageContext.request.contextPath}/admin/loudsourcing_end.do">
+                                    href="${pageContext.request.contextPath}/admin/loudsourcing/end.do">
                                 종료 </a><button type="button"
                                                class="btn btn-outline-primary btn-icon-text"
                                                style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                                onclick="setLoudSourcingToJudge()">
                                 <i class="btn-icon-prepend" data-feather="refresh-ccw"></i>
                                 심사 수동 업데이트
-                            </button><span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="자동으로 심사 업데이트가 되지 않았을 때 클릭하면 됩니다. &#13; 단, 출품작이 하나도 등록되지 않았을 경우 심사로 업데이트 되지 않습니다."><i data-feather="help-circle"></i></span></h6>
+                            </button><span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" data-html="true" title="기간이 지났음에도 자동으로 심사 업데이트 되지 않았을 때 클릭하시면 됩니다.<br><br>단, 출품작이 1개라도 등록되지 않았을 경우 심사로 업데이트 되지 않습니다."><i data-feather="help-circle"></i></span></h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
@@ -108,7 +108,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/unknown_entry_list.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/process/list/entry/unknown.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -116,7 +116,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/process_apply_list.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/process/list/apply.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>
@@ -124,7 +124,7 @@
                                             <td>
                                                 <button type="button"
                                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                        onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/detail.do?loudsourcing_no=${loudsourcingList[i-1].loudsourcing_no}'">
                                                     <i class="btn-icon-prepend" data-feather="search"></i>
                                                     보기
                                                 </button>

@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/assets/css/demo_1/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/images/favicon.png"/>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="main-wrapper">
@@ -50,7 +51,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h6 class="card-title mb-3">미답변 문의 <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="미답변 문의 중 가장 오래된 순으로 표시됩니다."></i></h6>
+                                <h6 class="card-title mb-3">미답변 문의<span style="margin-left: 5px" data-toggle="tooltip" data-placement="right" data-html="true" title="미답변 문의 중<br>가장 오래된 순으로 표시됩니다."><i data-feather="help-circle"></i></span></h6>
                             </div>
                             <div class="table-responsive">
                                 <table id="index-inquiry-table" class="table table-hover mb-0" style="table-layout: fixed">
@@ -91,7 +92,7 @@
                                                     style="text-overflow: ellipsis">
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="location.href='/admin/inquiry_detail.do?inquiry_no=${InquiryList[i-1].inquiry_no}'">
+                                                            onclick="location.href='/admin/inquiry/detail.do?inquiry_no=${InquiryList[i-1].inquiry_no}'">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>
@@ -108,8 +109,8 @@
                 <div class="col-lg-5 col-xl-4 stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title">가입 SNS <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="설정한 날짜의 SNS 회원가입 횟수가 표시됩니다."></i></h6>
+                            <div class="d-flex justify-content-between align-items-baseline" style="margin-bottom: 1.2rem">
+                                <h6 class="card-title">가입 SNS<span style="margin-left: 5px" data-toggle="tooltip" data-placement="right" data-html="true" title="설정한 날짜의<br>SNS 가입 횟수가 표시됩니다."><i data-feather="help-circle"></i></span></h6>
                                 <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
                                      id="index-date">
                                     <input type="text" class="form-control" name="index-sns-date" id="index-sns-date" readonly><span
@@ -155,7 +156,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h6 class="card-title mb-4">최신 크라우드 현황 <i data-feather="help-circle" data-toggle="tooltip" data-placement="right" data-animation="true" title="모집 상태의 크라우드가 최신 순으로 표시됩니다."></i></h6>
+                                <h6 class="card-title mb-4">최신 크라우드 현황<span style="margin-left: 5px" data-toggle="tooltip" data-placement="right" data-animation="true" data-html="true" title="모집 상태의 크라우드가<br>최신 순으로 표시됩니다."><i data-feather="help-circle"></i></span></h6>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0" id="index-loudsourcing-table" style="table-layout: fixed">
@@ -202,7 +203,7 @@
                                                 <td>
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="location.href='/admin/recruitment_apply_list.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
+                                                            onclick="location.href='/admin/loudsourcing/recruitment/list/apply.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>
@@ -210,7 +211,7 @@
                                                 <td>
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
+                                                            onclick="location.href='/admin/loudsourcing/detail.do?loudsourcing_no=${LoudsourcingList[i-1].loudsourcing_no}'">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         보기
                                                     </button>

@@ -129,7 +129,10 @@
                                         <div class="row mt-3 justify-content-around">
                                             <div class="col-md-6">
                                                 <label class="label" style="font-size: larger">
-                                                    공모전 사진 - [사진을 변경하려면 사진을 클릭하세요.]
+                                                    공모전 사진<span style="float: right; margin-right: 3px"
+                                                                data-toggle="tooltip" data-placement="top" data-html="true"
+                                                                title="사진을 추가 및 변경하려면<br>사진을 클릭하세요."><i
+                                                        data-feather="help-circle"></i></span>
                                                 </label>
                                                 <input type="file" id="loudsourcing-make-img" name="img"
                                                        accept="image/*"
@@ -185,14 +188,18 @@
                                                 ></textarea>
                                                 <label class="label d-flex"
                                                        style="font-size: larger">
-                                                    해시태그 - (대괄호([]), 쌍따옴표(") 등의 특수문자는 불가능합니다.)
+                                                    해시태그<span style="float: right; margin-right: 3px"
+                                                              data-toggle="tooltip" data-placement="top" data-html="true"
+                                                              title="대괄호([]), 쌍따옴표(&quot;)<br>위의 특수문자는 불가합니다."><i
+                                                        data-feather="help-circle"></i></span>
                                                 </label>
                                                 <div class="tr_hashTag_area">
                                                     <div class="form-group">
                                                         <input type="hidden" value="" name="tag" id="rdTag"/>
                                                     </div>
 
-                                                    <ul id="tag-list" style="border: 1px solid #e9ecef; padding: 4px"></ul>
+                                                    <ul id="tag-list"
+                                                        style="border: 1px solid #e9ecef; padding: 4px"></ul>
 
                                                     <div class="form-group">
                                                         <input type="text" id="tag" size="7"
@@ -308,7 +315,10 @@
                                                 </div>
                                                 <label class="label d-flex" for="file-list"
                                                        style="font-size: larger">
-                                                    파일 - [파일은 최대 3개까지 업로드 가능하며 파일 용량은 하나당 10MB를 넘을 수 없습니다.]
+                                                    파일<span style="float: right; margin-right: 3px"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="파일은 최대 3개까지 업로드 가능하며 파일 용량은 하나당 10MB를 넘을 수 없습니다."><i
+                                                        data-feather="help-circle"></i></span>
                                                 </label>
                                                 <div style="background-color: #ffffff; border: 1px solid black; line-height: 150%"
                                                      id="file-list">
@@ -422,7 +432,7 @@
                                             <div class="col-md-6 justify-content-center d-flex">
                                                 <button type="button" class="btn btn-secondary"
                                                         style="width : 50%; height: 150%"
-                                                        onclick="location.href = '/admin/loudsourcing_recruitment.do';">
+                                                        onclick="location.href = '/admin/loudsourcing/recruitment.do';">
                                                     취소
                                                 </button>
                                             </div>
@@ -819,14 +829,14 @@
                 console.log(result);
                 if (result === 0) {
                     alert("새 크라우드를 생성하였습니다.");
-                    window.location.href = '/admin/loudsourcing_recruitment.do';
+                    window.location.href = '/admin/loudsourcing/recruitment.do';
                 } else {
                     alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
-                    window.location.href = '/admin/loudsourcing_recruitment.do';
+                    window.location.href = '/admin/loudsourcing/recruitment.do';
                 }
             }).fail(function (error) {
                 console.log(error);
-                window.location.href = '/admin/loudsourcing_recruitment.do';
+                window.location.href = '/admin/loudsourcing/recruitment.do';
             })
         }
     })

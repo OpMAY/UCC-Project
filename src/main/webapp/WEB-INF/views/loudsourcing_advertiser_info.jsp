@@ -48,7 +48,7 @@
                                         <c:when test="${LoudSourcing.status != 'end'}">
                                             <button type="button" class="btn btn-outline-primary"
                                                     style="float:right; font-size: large"
-                                                    onclick="location.href='/admin/advertiser_edit.do?loudsourcing_no=${LoudSourcing.loudsourcing_no}'">
+                                                    onclick="location.href='/admin/loudsourcing/advertiser/edit.do?loudsourcing_no=${LoudSourcing.loudsourcing_no}'">
                                                 수정
                                             </button>
                                         </c:when>

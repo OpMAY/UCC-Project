@@ -142,7 +142,7 @@
                                             <div class="col-md-6" style="vertical-align: middle">
                                                 <button type="button" class="btn btn-outline-primary"
                                                         style="float:right; font-size: large;position: relative; top: 43px;"
-                                                        onclick="openWindowPopEdit('/admin/advertiser_edit.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}', '광고 발주자 상세정보 수정')">
+                                                        onclick="openWindowPopEdit('/admin/loudsourcing/advertiser/edit.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}', '광고 발주자 상세정보 수정')">
                                                     광고 발주자 상세정보 수정
                                                 </button>
                                             </div>
@@ -150,7 +150,10 @@
                                         <div class="row mt-3 justify-content-around">
                                             <div class="col-md-6">
                                                 <label class="label" style="font-size: larger">
-                                                    공모전 사진 - [사진을 변경하려면 사진을 클릭하세요.]
+                                                    공모전 사진<span style="float: right; margin-right: 3px"
+                                                                data-toggle="tooltip" data-placement="top" data-html="true"
+                                                                title="사진을 추가 및 변경하려면<br>사진을 클릭하세요."><i
+                                                        data-feather="help-circle"></i></span>
                                                 </label>
                                                 <input type="file" id="loudsourcing-img" name="img" accept="image/*"
                                                        hidden/>
@@ -203,18 +206,23 @@
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-host" rows="1"
                                                           style="line-height: 150%; font-size: large; text-align: center"
-                                                          onkeypress="preventEnterEdit()"
+                                                          onkeypress="preventEnterEdit()" placeholder="주최 광고주를 입력해주세요."
                                                 >${Loudsourcing.host}</textarea>
                                                 <label class="label d-flex" for="loudsourcing-reward"
                                                        style="font-size: larger">
                                                     상금
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-reward" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="onlyNumberEdit()"
+                                                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                          placeholder="상금을 입력해주세요."
                                                 >${Loudsourcing.reward}</textarea>
                                                 <label class="label d-flex"
                                                        style="font-size: larger">
-                                                    해시태그 - (대괄호([]), 쌍따옴표(") 등의 특수문자는 불가능합니다.)
+                                                    해시태그<span style="float: right; margin-right: 3px"
+                                                              data-toggle="tooltip" data-placement="top" data-html="true"
+                                                              title="대괄호([]), 쌍따옴표(&quot;)<br>위의 특수문자는 불가합니다."><i
+                                                        data-feather="help-circle"></i></span>
                                                 </label>
                                                 <div class="tr_hashTag_area">
                                                     <div class="form-group">
@@ -234,7 +242,9 @@
                                                     총 모집 인원
                                                 </label>
                                                 <textarea class="form-control" id="total-recruit-number" rows="1"
-                                                          style="line-height: 150%; font-size: large; text-align: center"
+                                                          style="line-height: 150%; font-size: large; text-align: center" onkeypress="onlyNumberEdit()"
+                                                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                          placeholder="최소 모집 인원을 입력해주세요."
                                                 >${Loudsourcing.total_recruitment_number}</textarea>
                                                 <label class="label d-flex" for="total-date"
                                                        style="font-size: larger">
@@ -378,7 +388,10 @@
                                                 </div>
                                                 <label class="label d-flex"
                                                        style="font-size: larger">
-                                                    파일 - [파일은 최대 3개까지 업로드 가능하며 파일 용량은 하나당 10MB를 넘을 수 없습니다.]
+                                                    파일<span style="float: right; margin-right: 3px"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="파일은 최대 3개까지 업로드 가능하며 파일 용량은 하나당 10MB를 넘을 수 없습니다."><i
+                                                        data-feather="help-circle"></i></span>
                                                 </label>
                                                 <div style="background-color: #ffffff; border: 1px solid black; line-height: 150%"
                                                      id="file-list">
@@ -479,7 +492,7 @@
                                                     출품 안내
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-content" rows="10"
-                                                          style="line-height: 150%; font-size: large"
+                                                          style="line-height: 150%; font-size: large" placeholder="출품 안내를 입력해주세요."
                                                 >${Loudsourcing.content}</textarea>
                                             </div>
                                         </div>
@@ -490,7 +503,7 @@
                                                     주의 사항
                                                 </label>
                                                 <textarea class="form-control" id="loudsourcing-warning" rows="10"
-                                                          style="line-height: 150%; font-size: large"
+                                                          style="line-height: 150%; font-size: large" placeholder="주의사항을 입력해주세요."
                                                 >${Loudsourcing.warning}</textarea>
                                             </div>
                                         </div>
@@ -505,7 +518,7 @@
                                             <div class="col-md-6 justify-content-center d-flex">
                                                 <button type="button" class="btn btn-secondary"
                                                         style="width : 50%; height: 150%"
-                                                        onclick="location.href='/admin/loudsourcing_detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'">
+                                                        onclick="location.href='/admin/loudsourcing/detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}'">
                                                     취소
                                                 </button>
                                             </div>
@@ -691,6 +704,11 @@
 
     function preventEnterEdit() {
         if (event.keyCode === 13)
+            event.returnValue = false;
+    }
+
+    function onlyNumberEdit() {
+        if (event.keyCode < 48 || event.keyCode > 57 || event.keyCode === 13)
             event.returnValue = false;
     }
 
@@ -957,14 +975,14 @@
                 console.log(result);
                 if (result === 0) {
                     alert("수정이 완료되었습니다.");
-                    window.location.href = '/admin/loudsourcing_detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
+                    window.location.href = '/admin/loudsourcing/detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
                 } else {
                     alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
-                    window.location.href = '/admin/loudsourcing_detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
+                    window.location.href = '/admin/loudsourcing/detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
                 }
             }).fail(function (error) {
                 console.log(error);
-                window.location.href = '/admin/loudsourcing_detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
+                window.location.href = '/admin/loudsourcing/detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
             })
         }
     });

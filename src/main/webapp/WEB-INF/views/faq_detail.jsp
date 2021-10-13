@@ -52,7 +52,7 @@
                                             질문
                                         </label>
                                         <textarea class="form-control" id="faq-question" rows="2"
-                                                  style="line-height: 150%; font-size: large"
+                                                  style="line-height: 150%; font-size: large" placeholder="FAQ 질문을 입력해주세요."
                                         >${faq.question}</textarea>
                                     </div>
                                     <div class="col-md-12 mt-3 justify-content-around">
@@ -60,13 +60,16 @@
                                             답변
                                         </label>
                                         <textarea class="form-control" id="faq-answer" rows="5"
-                                                  style="line-height: 150%; font-size: large"
+                                                  style="line-height: 150%; font-size: large" placeholder="FAQ 답변을 입력해주세요."
                                         >${faq.answer}</textarea>
                                     </div>
                                     <form id="faq-editForm">
                                         <div class="col-md-12">
                                             <label class="label" style="font-size: larger">
-                                                FAQ 사진 - [사진을 추가 및 변경하려면 사진을 클릭하세요.]
+                                                FAQ 사진<span style="float: right; margin-right: 3px"
+                                                            data-toggle="tooltip" data-placement="top" data-html="true"
+                                                            title="사진을 추가 및 변경하려면<br>사진을 클릭하세요."><i
+                                                    data-feather="help-circle"></i></span>
                                             </label>
                                             <input type="file" id="faq-img" name="img" accept="image/*"
                                                    hidden/>

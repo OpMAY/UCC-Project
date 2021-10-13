@@ -73,7 +73,7 @@
                                                 <c:when test="${commentList[i-1].type == '포트폴리오'}">
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="openWindowPopComment('/admin/comment_detail.do?comment_no=${commentList[i-1].comment_no}&type=1', '댓글 내용')">
+                                                            onclick="openWindowPopComment('/admin/comment/detail.do?comment_no=${commentList[i-1].comment_no}&type=1', '댓글 내용')">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         내용 보기
                                                     </button>
@@ -81,7 +81,7 @@
                                                 <c:when test="${commentList[i-1].type == '게시글'}">
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="openWindowPopComment('/admin/comment_detail.do?comment_no=${commentList[i-1].comment_no}&type=2', '댓글 내용')">
+                                                            onclick="openWindowPopComment('/admin/comment/detail.do?comment_no=${commentList[i-1].comment_no}&type=2', '댓글 내용')">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         내용 보기
                                                     </button>
@@ -89,7 +89,7 @@
                                                 <c:when test="${commentList[i-1].type == '크라우드'}">
                                                     <button type="button"
                                                             class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                            onclick="openWindowPopComment('/admin/comment_detail.do?comment_no=${commentList[i-1].comment_no}&type=3', '댓글 내용')">
+                                                            onclick="openWindowPopComment('/admin/comment/detail.do?comment_no=${commentList[i-1].comment_no}&type=3', '댓글 내용')">
                                                         <i class="btn-icon-prepend" data-feather="search"></i>
                                                         내용 보기
                                                     </button>

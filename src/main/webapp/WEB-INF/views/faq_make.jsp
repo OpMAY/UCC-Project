@@ -53,7 +53,7 @@
                                             질문
                                         </label>
                                         <textarea class="form-control" id="faq-make-question" rows="1"
-                                                  style="line-height: 150%; font-size: large"
+                                                  style="line-height: 150%; font-size: large" placeholder="FAQ 질문을 입력해주세요."
                                         ></textarea>
                                     </div>
                                     <div class="col-md-12 mt-3 justify-content-around">
@@ -61,13 +61,16 @@
                                             답변
                                         </label>
                                         <textarea class="form-control" id="faq-make-answer" rows="5"
-                                                  style="line-height: 150%; font-size: large"
+                                                  style="line-height: 150%; font-size: large" placeholder="FAQ 답변을 입력해주세요."
                                         ></textarea>
                                     </div>
                                     <form id="faq-makeForm">
                                         <div class="col-md-12">
                                             <label class="label" style="font-size: larger">
-                                                FAQ 사진 - [사진을 추가 및 변경하려면 사진을 클릭하세요.]
+                                                FAQ 사진<span style="float: right; margin-right: 3px"
+                                                            data-toggle="tooltip" data-placement="top" data-html="true"
+                                                            title="사진을 추가 및 변경하려면<br>사진을 클릭하세요."><i
+                                                    data-feather="help-circle"></i></span>
                                             </label>
                                             <input type="file" id="faq-make-img" name="img" accept="image/*"
                                                    hidden/>

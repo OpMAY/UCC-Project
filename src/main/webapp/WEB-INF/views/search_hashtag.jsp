@@ -169,10 +169,11 @@
                 </div>
 
             </div>
-            <!-- partial:partials/_footer.jsp -->
-            <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
-            <!-- partial -->
+
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 
     <!-- core:js -->

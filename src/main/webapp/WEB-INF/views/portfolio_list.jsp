@@ -125,7 +125,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="location.href='/admin/portfolio_detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
+                                                    onclick="location.href='/admin/portfolio/detail.do?portfolio_no=${portfolioList[i-1].portfolio_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>

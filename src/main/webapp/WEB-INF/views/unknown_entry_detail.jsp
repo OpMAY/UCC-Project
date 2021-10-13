@@ -129,7 +129,7 @@
                                         </div>
                                         <div class="col-md-5" style="text-align: center">
                                             <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                    onclick="location.href = '/admin/unknown_entry_list.do?loudsourcing_no=${loudsourcing_no}';">
+                                                    onclick="location.href = '/admin/loudsourcing/process/list/entry/unknown.do?loudsourcing_no=${loudsourcing_no}';">
                                                 돌아가기
                                             </button>
                                         </div>
@@ -185,14 +185,14 @@
             console.log(result);
             if (result === 0) {
                 alert("출품작 삭제 완료");
-                location.href = '/admin/unknown_entry_list.do?loudsourcing_no=${loudsourcing_no}';
+                location.href = '/admin/loudsourcing/process/list/entry/unknown.do?loudsourcing_no=${loudsourcing_no}';
             } else {
                 alert("알 수 없는 오류 발생");
-                location.href = '/admin/unknown_entry_list.do?loudsourcing_no=${loudsourcing_no}';
+                location.href = '/admin/loudsourcing/process/list/entry/unknown.do?loudsourcing_no=${loudsourcing_no}';
             }
         }).fail(function (error) {
             alert(error);
-            location.href = '/admin/unknown_entry_list.do?loudsourcing_no=${loudsourcing_no}';
+            location.href = '/admin/loudsourcing/process/list/entry/unknown.do?loudsourcing_no=${loudsourcing_no}';
         })
     }
 </script>

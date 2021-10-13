@@ -93,7 +93,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="location.href='/admin/entry_detail.do?loudsourcing_no=${artistList[i-1].loudsourcing_no}&artist_no=${artistList[i-1].artist_no}'">
+                                                    onclick="location.href='/admin/loudsourcing/detail/entry.do?loudsourcing_no=${artistList[i-1].loudsourcing_no}&artist_no=${artistList[i-1].artist_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>
@@ -112,7 +112,7 @@
                             </div>
                             <div class="row mt-3 mb-3">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/loudsourcing_end.do'">
+                                    <button type="button" class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" style="float: right" onclick="location.href='/admin/loudsourcing/end.do'">
                                         뒤로가기
                                     </button>
                                 </div>

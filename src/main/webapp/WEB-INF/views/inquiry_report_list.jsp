@@ -55,8 +55,8 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><a style="margin-right: 10px"
-                                    href="${pageContext.request.contextPath}/admin/inquiry_loudsourcing.do">크라우드</a> 신고
-                                <a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/inquiry_normal.do">
+                                    href="${pageContext.request.contextPath}/admin/inquiry/loudsourcing.do">크라우드</a> 신고
+                                <a style="margin-left: 10px" href="${pageContext.request.contextPath}/admin/inquiry/normal.do">
                                     기타 </a>
                             </h6>
                             <div class="table-responsive">
@@ -105,7 +105,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="location.href='/admin/inquiry_detail.do?inquiry_no=${inquiryList[i-1].inquiry_no}'">
+                                                    onclick="location.href='/admin/inquiry/detail.do?inquiry_no=${inquiryList[i-1].inquiry_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>

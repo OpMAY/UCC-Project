@@ -93,7 +93,7 @@
                                         </td>
                                         <td>
                                             <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/board_detail.do?board_no=${boardList[i-1].board_no}'">
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/board/detail.do?board_no=${boardList[i-1].board_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>
@@ -123,6 +123,9 @@
             </div>
 
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 </div>
 

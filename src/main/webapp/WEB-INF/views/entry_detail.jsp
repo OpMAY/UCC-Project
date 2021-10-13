@@ -235,7 +235,7 @@
                                                 <div class="row mt-4 mb-3 justify-content-center">
                                                     <div class="col-md-10" style="text-align: center">
                                                         <button class="btn btn-secondary"
-                                                                onclick="location.href = '/admin/recruitment_apply_list.do?loudsourcing_no=${loudsourcing_no}';">
+                                                                onclick="location.href = '/admin/loudsourcing/recruitment/list/apply.do?loudsourcing_no=${loudsourcing_no}';">
                                                             돌아가기
                                                         </button>
                                                     </div>
@@ -245,7 +245,7 @@
                                                 <div class="row mt-4 mb-3 justify-content-center">
                                                     <div class="col-md-10" style="text-align: center">
                                                         <button class="btn btn-secondary"
-                                                                onclick="location.href = '/admin/process_apply_list.do?loudsourcing_no=${loudsourcing_no}';">
+                                                                onclick="location.href = '/admin/loudsourcing/process/list/apply.do?loudsourcing_no=${loudsourcing_no}';">
                                                             돌아가기
                                                         </button>
                                                     </div>
@@ -355,7 +355,7 @@
                                                 <c:choose>
                                                     <c:when test="${status == 'process'}">
                                                         <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                onclick="location.href = '/admin/process_apply_list.do?loudsourcing_no=${loudsourcing_no}';">
+                                                                onclick="location.href = '/admin/loudsourcing/process/list/apply.do?loudsourcing_no=${loudsourcing_no}';">
                                                             돌아가기
                                                         </button>
                                                     </c:when>
@@ -363,13 +363,13 @@
                                                         <c:choose>
                                                             <c:when test="${preSelected == true}">
                                                                 <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                        onclick="location.href = '/admin/selected_entry.do?loudsourcing_no=${loudsourcing_no}';">
+                                                                        onclick="location.href = '/admin/loudsourcing/judge/list/entry/selected.do?loudsourcing_no=${loudsourcing_no}';">
                                                                     돌아가기
                                                                 </button>
                                                             </c:when>
                                                             <c:when test="${preSelected == false}">
                                                                 <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                        onclick="location.href = '/admin/unselected_entry.do?loudsourcing_no=${loudsourcing_no}';">
+                                                                        onclick="location.href = '/admin/loudsourcing/judge/list/entry/unselected.do?loudsourcing_no=${loudsourcing_no}';">
                                                                     돌아가기
                                                                 </button>
                                                             </c:when>
@@ -377,7 +377,7 @@
                                                     </c:when>
                                                     <c:when test="${status == 'end'}">
                                                         <button class="btn btn-secondary" style="width : 50%; height: 150%"
-                                                                onclick="location.href = '/admin/final_selected.do?loudsourcing_no=${loudsourcing_no}';">
+                                                                onclick="location.href = '/admin/loudsourcing/end/list/entry/final.do?loudsourcing_no=${loudsourcing_no}';">
                                                             돌아가기
                                                         </button>
                                                     </c:when>

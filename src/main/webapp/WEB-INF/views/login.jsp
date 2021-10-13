@@ -30,6 +30,11 @@
                 <div class="col-md-8 col-xl-6 mx-auto">
                     <div class="card">
                         <div class="row">
+                            <div class="col-md-4 pr-md-0">
+                                <div class="auth-left-wrapper">
+<%--                                    <img src="https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png" class="img-fluid mb-2" alt="404">--%>
+                                </div>
+                            </div>
                             <div class="col-md-8 pl-md-0">
                                 <div class="auth-form-wrapper px-4 py-5">
                                     <a href="#" class="noble-ui-logo d-block mb-2"><span>UCC 앱</span></a>
@@ -37,18 +42,18 @@
                                     <form class="forms-sample" name="login-form">
                                         <div class="form-group">
                                             <label for="id">ID</label>
-                                            <input type="text" class="form-control" id="id" name="id" placeholder="id"
+                                            <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력하세요."
                                                    autofocus>
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password</label>
                                             <input type="password" class="form-control" id="password"
                                                    autocomplete="current-password" name="password"
-                                                   placeholder="password">
+                                                   placeholder="비밀번호를 입력하세요.">
                                         </div>
                                         <div class="mt-3">
                                             <button type="button" id="login_btn"
-                                                    class="btn btn-primary mr-2 mb-2 mb-md-0 text-white">Login
+                                                    class="btn btn-primary mr-2 mb-2 mb-md-0 text-white">로그인
                                             </button>
                                         </div>
                                     </form>

@@ -93,7 +93,7 @@
                                         </td>
                                         <td>
                                             <button type="button"
-                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/user_detail.do?user_no=${UserList[i-1].user_no}'">
+                                                    class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0" onclick="location.href='/admin/user/detail.do?user_no=${UserList[i-1].user_no}'">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>

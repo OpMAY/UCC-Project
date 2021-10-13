@@ -61,7 +61,7 @@
                             <h6 class="card-title" style="font-size: x-large">배너광고 관리
                                 <button type="button" style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
                                         class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                        onclick="openWindowPopBanner('/admin/banner_make.do', '배너광고 업로드')">
+                                        onclick="openWindowPopBanner('/admin/banner/make.do', '배너광고 업로드')">
                                     <i class="btn-icon-prepend" data-feather="edit"></i>
                                     추가하기
                                 </button>
@@ -121,7 +121,7 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-outline-primary btn-icon-text mr-2 mb-2 mb-md-0"
-                                                    onclick="openWindowPopBanner('/admin/banner_detail.do?banner_no=${bannerList[i-1].banner_ad_no}', '배너 광고 상세보기')">
+                                                    onclick="openWindowPopBanner('/admin/banner/detail.do?banner_no=${bannerList[i-1].banner_ad_no}', '배너 광고 상세보기')">
                                                 <i class="btn-icon-prepend" data-feather="search"></i>
                                                 보기
                                             </button>

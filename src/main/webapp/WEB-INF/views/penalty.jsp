@@ -152,7 +152,7 @@
                                                 정지 사유
                                             </label>
                                             <textarea class="form-control" id="penalty-reason" rows="5"
-                                                      style="line-height: 150%; font-size: large"
+                                                      style="line-height: 150%; font-size: large" placeholder="정지 사유를 입력해주세요."
                                             ></textarea>
                                         </div>
                                         <div class="col-md-10 mt-4 mb-3 justify-content-around d-flex">

@@ -51,7 +51,7 @@
                                                 광고 발주자 명
                                             </label>
                                             <textarea class="form-control" id="advertiser-name" rows="1"
-                                                      style="line-height: 150%; font-size: large"
+                                                      style="line-height: 150%; font-size: large" placeholder="광고 발주자 명을 입력하세요."
                                             >${LoudSourcing.advertiser_name}</textarea>
                                         </div>
                                         <div class="col-md-12 mt-3 justify-content-center">
@@ -59,7 +59,7 @@
                                                 연락처
                                             </label>
                                             <textarea class="form-control" id="advertiser-phone" rows="1"
-                                                      style="line-height: 150%; font-size: large"
+                                                      style="line-height: 150%; font-size: large" placeholder="광고주 연락처를 입력하세요."
                                             >${LoudSourcing.advertiser_phone}</textarea>
                                         </div>
                                         <div class="col-md-12 mt-3 justify-content-center">
@@ -67,7 +67,7 @@
                                                 이메일
                                             </label>
                                             <textarea class="form-control" id="advertiser-email" rows="1"
-                                                      style="line-height: 150%; font-size: large"
+                                                      style="line-height: 150%; font-size: large" placeholder="광고주 이메일을 입력하세요."
                                             >${LoudSourcing.advertiser_email}</textarea>
                                         </div>
                                         <div class="col-md-12 mt-3 justify-content-around">
@@ -76,7 +76,7 @@
                                                 은행 명
                                             </label>
                                             <textarea class="form-control" id="advertiser-bank-name" rows="1"
-                                                      style="line-height: 150%; font-size: large"
+                                                      style="line-height: 150%; font-size: large" placeholder="광고주 은행 명을 입력하세요."
                                             >${LoudSourcing.advertiser_bank_name}</textarea>
                                         </div>
                                         <div class="col-md-12 mt-3 justify-content-center">
@@ -85,7 +85,7 @@
                                                 예금주 명
                                             </label>
                                             <textarea class="form-control" id="advertiser-bank-owner" rows="1"
-                                                      style="line-height: 150%; font-size: large"
+                                                      style="line-height: 150%; font-size: large" placeholder="광고주 은행 예금주 명을 입력하세요."
                                             >${LoudSourcing.advertiser_bank_owner}</textarea>
                                         </div>
                                         <div class="col-md-12 mt-3 justify-content-center">
@@ -94,7 +94,7 @@
                                                 계좌번호
                                             </label>
                                             <textarea class="form-control" id="advertiser-bank-account" rows="1"
-                                                      style="line-height: 150%; font-size: large"
+                                                      style="line-height: 150%; font-size: large" placeholder="광고주 은행 계좌번호를 입력하세요."
                                             >${LoudSourcing.advertiser_bank_account}</textarea>
                                         </div>
                                         <div class="col-md-12 mt-3 justify-content-around">
@@ -182,7 +182,7 @@
             console.log(result);
             if (result === 0) {
                 alert("수정이 완료되었습니다.");
-                window.location.href = '/admin/loudsourcing_advertiser.do?loudsourcing_no=' + loudsourcing_no;
+                window.location.href = '/admin/loudsourcing/advertiser/detail.do?loudsourcing_no=' + loudsourcing_no;
             } else {
                 alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
                 window.reload();
