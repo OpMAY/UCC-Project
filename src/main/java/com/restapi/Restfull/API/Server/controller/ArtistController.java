@@ -146,4 +146,11 @@ public class ArtistController {
     public ResponseEntity UpdateArtistPush(@PathVariable("artist_no") int artist_no){
         return artistService.updateArtistPush(artist_no);
     }
+
+
+    @RequestMapping(value = "/api/artist/spon/amount", method = RequestMethod.GET)
+    public ResponseEntity GetArtistSponAmount(@RequestParam("user_no") int user_no){
+        log.info(user_no);
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS), HttpStatus.OK);
+    }
 }

@@ -106,9 +106,7 @@
                                         </label>
                                         <textarea class="form-control" id="spon-app-vat" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled><c:choose><c:when
-                                                test="${spon.platform == 'Android'}">${spon.price}</c:when><c:when
-                                                test="${spon.type == 'IOS'}">${applePrice}</c:when></c:choose></textarea>
+                                                  disabled>${applePrice}</textarea>
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="spon-exchange-rate" style="font-size: large">

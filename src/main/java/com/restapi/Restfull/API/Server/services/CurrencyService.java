@@ -36,17 +36,19 @@ public class CurrencyService {
     public void saveCurrencyInfo(String now) {
         try {
             exchangeRateDao.setSession(sqlSession);
-            HttpResponse res = getCurrencyRequest(now);
-            String resBody = IOUtils.toString(res.getEntity().getContent(), StandardCharsets.UTF_8);
-            log.info(resBody);
-            if(resBody.replace("[", "").replace("]", "").equals("")){
-                // 휴일 및 공휴일엔 영업 X, 그 전날 데이터 그대로 반영
-                resBody = exchangeRateDao.getExchangeRate(Time.DateMinusOneDay(now));
+            if(exchangeRateDao.getExchangeRate(now) == null) {
+                HttpResponse res = getCurrencyRequest(now);
+                String resBody = IOUtils.toString(res.getEntity().getContent(), StandardCharsets.UTF_8);
+                log.info(resBody);
+                if (resBody.replace("[", "").replace("]", "").equals("")) {
+                    // 휴일 및 공휴일엔 영업 X, 그 전날 데이터 그대로 반영
+                    resBody = exchangeRateDao.getExchangeRate(Time.DateMinusOneDay(now));
+                }
+                ExchangeRate exchangeRate = new ExchangeRate();
+                exchangeRate.setJson(resBody);
+                exchangeRate.setReg_date(Time.SetCurrencyUpdateTime(now));
+                exchangeRateDao.insertExchangeRate(exchangeRate);
             }
-            ExchangeRate exchangeRate = new ExchangeRate();
-            exchangeRate.setJson(resBody);
-            exchangeRate.setReg_date(Time.SetCurrencyUpdateTime(now));
-            exchangeRateDao.insertExchangeRate(exchangeRate);
         } catch (Exception e){
             e.printStackTrace();
         }

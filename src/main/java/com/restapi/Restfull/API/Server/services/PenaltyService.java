@@ -86,7 +86,9 @@ public class PenaltyService {
             for (Penalty penalty : penaltyList) {
                 Artist artist = new Artist();
                 artist.setUser_no(penalty.getUser_no());
-                artist.setArtist_no(penalty.getArtist_no());
+                if(penalty.getArtist_no() != null) {
+                    artist.setArtist_no(penalty.getArtist_no());
+                }
                 if (!artistList.contains(artist)) {
                     artistList.add(artist);
                     latestPenaltyList.add(penalty);

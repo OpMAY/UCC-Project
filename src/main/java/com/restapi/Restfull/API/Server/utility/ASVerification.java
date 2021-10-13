@@ -32,6 +32,7 @@ public class ASVerification {
 
     private final String APPLE_VERIFY_URL = "https://buy.itunes.apple.com/verifyReceipt";
     private final String APPLE_TEST_SANDBOX_URL = "https://sandbox.itunes.apple.com/verifyReceipt";
+    private final String PASSWORD = "467d4edd3ef24af19d42f19b98c535a2";
 
     public AppleVerifyResponse verify(AppleVerifyRequest request) throws IOException {
         HttpResponse res = getAppleStoreVerification(request);
@@ -60,7 +61,7 @@ public class ASVerification {
 
     private HttpResponse getAppleStoreVerification(AppleVerifyRequest request) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
-        String jsonData = "{\"receipt-data\" : \"" + request.getReceipt_data() + "\", \"password\" : \"" + request.getPassword() + "\"}";
+        String jsonData = "{\"receipt-data\" : \"" + request.getReceipt_data() + "\", \"password\" : \"" + PASSWORD + "\"}";
         HttpPost post = getPost(APPLE_TEST_SANDBOX_URL, new StringEntity(jsonData));
         return client.execute(post);
     }

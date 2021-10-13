@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminPageInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(!request.getRequestURL().toString().contains(".map")) {
+        if (!request.getRequestURL().toString().contains(".map")) {
             log.info("Request URL : " + request.getRequestURL().toString());
         }
-        if(request.getRequestURL().toString().equals("http://weart-page.com") || request.getRequestURL().toString().equals("http://weart-page.com/") || request.getRequestURL().toString().equals("http://www.weart-page.com/") || request.getRequestURL().toString().equals("http://www.weart-page.com") || request.getRequestURL().toString().equals("http://localhost:8080/") || request.getRequestURL().toString().equals("http://localhost:8080")){
+        if (request.getRequestURL().toString().startsWith("http://")) {
+            response.sendRedirect(request.getRequestURL().toString().replaceAll("http://", "https://"));
+            return false;
+        } else if (request.getRequestURL().toString().equals("https://weart-page.com") || request.getRequestURL().toString().equals("https://weart-page.com/") || request.getRequestURL().toString().equals("https://www.weart-page.com/") || request.getRequestURL().toString().equals("https://www.weart-page.com") || request.getRequestURL().toString().equals("http://localhost:8080/") || request.getRequestURL().toString().equals("http://localhost:8080")) {
             response.sendRedirect("/admin/main.do");
             return false;
         } else {

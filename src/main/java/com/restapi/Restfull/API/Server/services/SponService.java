@@ -5,6 +5,7 @@ import com.restapi.Restfull.API.Server.daos.*;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.*;
+import com.restapi.Restfull.API.Server.utility.ASVerification;
 import com.restapi.Restfull.API.Server.utility.FirebaseMessagingSnippets;
 import com.restapi.Restfull.API.Server.utility.GPVerification;
 import com.restapi.Restfull.API.Server.utility.Time;
@@ -17,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 @Log4j2
 @Service
@@ -86,7 +89,8 @@ public class SponService {
                 sponDao.insertSpon(spon);
                 return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("Spon()")), HttpStatus.OK);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new BusinessException(e);
         }
     }
@@ -167,10 +171,31 @@ public class SponService {
                 }
             }
             message.put("status", response.getPurchaseState());
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("BoardSpon()")), HttpStatus.OK);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("AndroidPurchaseValidate()")), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity applePurchaseValidate(AppleVerifyRequest request) {
+        try{
+            Message message = new Message();
+            AppleVerifyResponse response = ASVerification.getInstance().verify(request);
+            if(response.getStatus() == 0){
+                if(response.getReceipt().getIn_app().size() > 0){
+                    boolean is_refund = response.getReceipt().getIn_app().get(0).getCancellation_date() != null;
+                    message.put("is_refund", is_refund);
+                }
+            } else {
+                message.put("apple_status", response.getStatus());
+                message.put("status_explain", response.getStatus_explain());
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("ApplePurchaseValidate()")), HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e);
         }
     }
 }

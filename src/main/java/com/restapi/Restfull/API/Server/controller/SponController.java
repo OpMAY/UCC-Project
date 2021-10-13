@@ -3,11 +3,9 @@ package com.restapi.Restfull.API.Server.controller;
 import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.models.AndroidVerificationRequest;
-import com.restapi.Restfull.API.Server.models.BootpayVerificationData;
-import com.restapi.Restfull.API.Server.models.PurchaseData;
+import com.restapi.Restfull.API.Server.models.AppleVerifyRequest;
 import com.restapi.Restfull.API.Server.models.Spon;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.BoardService;
@@ -56,25 +54,21 @@ public class SponController {
 
     @RequestMapping(value = "/api/spon", method = RequestMethod.POST) //CHECK
     public ResponseEntity ArtistSpon(@RequestBody String body) {
-        try {
-            Spon spon = new Gson().fromJson(body, Spon.class);
-            log.info("Before : " + spon);
-            return sponService.insertSpon(spon);
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException(e);
-        }
+        Spon spon = new Gson().fromJson(body, Spon.class);
+        log.info("Before : " + spon);
+        return sponService.insertSpon(spon);
     }
 
     @RequestMapping(value = "/api/spon/validate/android", method = RequestMethod.POST)
-    public ResponseEntity AndroidPurchaseValidate(@RequestBody String body){
-        try{
-            AndroidVerificationRequest request = new Gson().fromJson(body, AndroidVerificationRequest.class);
-            return sponService.androidPurchaseValidate(request);
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException(e);
-        }
+    public ResponseEntity AndroidPurchaseValidate(@RequestBody String body) {
+        AndroidVerificationRequest request = new Gson().fromJson(body, AndroidVerificationRequest.class);
+        return sponService.androidPurchaseValidate(request);
+    }
+
+    @RequestMapping(value = "/api/spon/validate/apple", method = RequestMethod.POST)
+    public ResponseEntity ApplePurchaseValidate(@RequestBody String body) {
+        AppleVerifyRequest request = new Gson().fromJson(body, AppleVerifyRequest.class);
+        return sponService.applePurchaseValidate(request);
     }
 
 }
