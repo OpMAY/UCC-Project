@@ -9,4 +9,5 @@ public class AppleVerifyRequest {
     private String receipt_data;
     private String password;
     private boolean exclude_old_transactions;
+    private boolean sandbox;
 }

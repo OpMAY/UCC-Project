@@ -402,7 +402,7 @@ public class MainService {
                 String receipt_id = response.getUnified_receipt().getLatest_receipt();
                 String password = response.getPassword();
                 if (sponDao.isExistAppleReceipt(receipt_id)) {
-                    AppleVerifyResponse verifyResponse = ASVerification.getInstance().verify(new AppleVerifyRequest(receipt_id, password, false));
+                    AppleVerifyResponse verifyResponse = ASVerification.getInstance().verify(new AppleVerifyRequest(receipt_id, password, false, false));
                     if (verifyResponse.getStatus() == 0) {
 //                        if (verifyResponse.getReceipt().getIn_app().get(0).getCancellation_date_ms().equals(response.getUnified_receipt().getLatest_receipt_info().get(0).getCancellation_date())) {
                         Spon spon = sponDao.getSponByReceiptIdForApple(receipt_id);

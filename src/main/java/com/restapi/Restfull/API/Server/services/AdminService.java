@@ -568,7 +568,7 @@ public class AdminService {
                 spon.setVerify_status(response.getPurchaseState());
                 sponDao.updateSponByPurchaseUpdate(spon);
             } else if (platform.equals("IOS")) {
-                AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false);
+                AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false, false);
                 AppleVerifyResponse response = ASVerification.getInstance().verify(request);
                 if (response.getStatus_explain().equals("SUCCESS")) {
                     spon.setVerify_status(0);

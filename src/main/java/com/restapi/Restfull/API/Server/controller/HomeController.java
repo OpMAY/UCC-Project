@@ -116,7 +116,7 @@ public class HomeController {
                 message.put("google_verify", gpResponse);
             } else if (verification.getPlatform().equals("IOS")) {
 //                String receipt = Base64.getEncoder().encodeToString(verification.getReceipt_data().getBytes(StandardCharsets.UTF_8));
-                AppleVerifyRequest request = new AppleVerifyRequest(verification.getReceipt_data(), verification.getPassword(), true);
+                AppleVerifyRequest request = new AppleVerifyRequest(verification.getReceipt_data(), verification.getPassword(), true, false);
                 AppleVerifyResponse asResponse = ASVerification.getInstance().verify(request);
                 message.put("apple_verify", asResponse);
             }

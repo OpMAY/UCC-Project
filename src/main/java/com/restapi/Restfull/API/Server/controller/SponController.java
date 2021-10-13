@@ -66,7 +66,7 @@ public class SponController {
     }
 
     @RequestMapping(value = "/api/spon/validate/apple", method = RequestMethod.POST)
-    public ResponseEntity ApplePurchaseValidate(@RequestBody String body) {
+    public ResponseEntity ApplePurchaseValidate(@RequestParam String body) {
         AppleVerifyRequest request = new Gson().fromJson(body, AppleVerifyRequest.class);
         return sponService.applePurchaseValidate(request);
     }

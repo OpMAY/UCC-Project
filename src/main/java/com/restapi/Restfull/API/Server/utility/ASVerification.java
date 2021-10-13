@@ -62,8 +62,13 @@ public class ASVerification {
     private HttpResponse getAppleStoreVerification(AppleVerifyRequest request) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         String jsonData = "{\"receipt-data\" : \"" + request.getReceipt_data() + "\", \"password\" : \"" + PASSWORD + "\"}";
-        HttpPost post = getPost(APPLE_TEST_SANDBOX_URL, new StringEntity(jsonData));
-        return client.execute(post);
+        if(request.isSandbox()){
+            HttpPost post = getPost(APPLE_TEST_SANDBOX_URL, new StringEntity(jsonData));
+            return client.execute(post);
+        } else {
+            HttpPost post = getPost(APPLE_VERIFY_URL, new StringEntity(jsonData));
+            return client.execute(post);
+        }
     }
 
     private String verifyStatusCode(int statusCode){
