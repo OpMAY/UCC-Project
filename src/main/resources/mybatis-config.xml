@@ -34,5 +34,6 @@
         <typeAlias alias="Subscribe" type="main.models.Subscribe"/>
         <typeAlias alias="ArtistVisit" type="main.models.ArtistVisit"/>
         <typeAlias alias="Penalty" type="main.models.Penalty"/>
+        <typeAlias alias="ArtistSponTotal" type="main.models.ArtistSponTotal"/>
     </typeAliases>
 </configuration>

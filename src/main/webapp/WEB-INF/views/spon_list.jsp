@@ -116,6 +116,9 @@
                                                 <c:when test="${sponList[i-1].verify_status == 2}">
                                                     보류 중
                                                 </c:when>
+                                                <c:when test="${sponList[i-1].verify_status == 3}">
+                                                    검증 대기 중
+                                                </c:when>
                                             </c:choose>
                                         </td>
                                         <td>

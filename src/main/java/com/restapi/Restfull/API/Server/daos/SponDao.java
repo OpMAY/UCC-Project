@@ -1,6 +1,7 @@
 package com.restapi.Restfull.API.Server.daos;
 
 import com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper;
+import com.restapi.Restfull.API.Server.models.ArtistSponTotal;
 import com.restapi.Restfull.API.Server.models.Spon;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -104,5 +105,15 @@ public class SponDao {
     public Spon getSponByPurchaseToken(String purchase_token){
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponByPurchaseToken(purchase_token);
+    }
+
+    public List<ArtistSponTotal> getMonthlySponAmountForArtist(String year, String month, int artist_no){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getMonthlySponAmountForArtist(year, month, artist_no);
+    }
+
+    public List<ArtistSponTotal> getPurchasedSponAmountForArtistAdmin(int artist_no){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getPurchasedSponAmountForArtistAdmin(artist_no);
     }
 }

@@ -80,15 +80,14 @@ public class CurrencyService {
         for(CurrencyApiResponse response : currencyList){
             if(response.getCur_unit().equals(currency)){
                 double calcRate = Double.parseDouble(response.getDeal_bas_r().replaceAll("[^0-9.]", ""));
+                double result;
                 if(currency.equals("JPY(100)") || currency.equals("IDR(100)")){
-                    double result = (calcRate * price) / 100;
-                    after = Math.round(result);
-                    break;
+                    result = (calcRate * price) / 100;
                 } else {
-                    double result = calcRate * price;
-                    after = Math.round(result);
-                    break;
+                    result = calcRate * price;
                 }
+                after = Math.round(result);
+                break;
             }
         }
         return after;

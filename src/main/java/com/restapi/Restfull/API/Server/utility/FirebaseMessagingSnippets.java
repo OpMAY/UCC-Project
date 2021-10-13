@@ -20,7 +20,7 @@ public class FirebaseMessagingSnippets {
     //초기화
     public void initFirebase() {
         try {
-            FileInputStream refreshToken = new FileInputStream("/www/weart-page_com/ROOT/resources/weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
+            FileInputStream refreshToken = new FileInputStream("/www/weart-page_com/www/resources/weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
             //FileInputStream refreshToken = new FileInputStream("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-firebase-adminsdk-3e85h-646607f007.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))

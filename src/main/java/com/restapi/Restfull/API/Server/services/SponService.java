@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 @Service
@@ -44,6 +45,9 @@ public class SponService {
 
     @Autowired
     private NotificationDao notificationDao;
+
+    @Autowired
+    private CurrencyService currencyService;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity insertSpon(Spon spon) {
@@ -187,12 +191,103 @@ public class SponService {
                 if(response.getReceipt().getIn_app().size() > 0){
                     boolean is_refund = response.getReceipt().getIn_app().get(0).getCancellation_date() != null;
                     message.put("is_refund", is_refund);
+                    if(!is_refund) {
+                        sponDao.setSession(sqlSession);
+                        notificationDao.setSession(sqlSession);
+                        artistDao.setSession(sqlSession);
+                        userDao.setSession(sqlSession);
+                        boardDao.setSession(sqlSession);
+                        boardCommentDao.setSession(sqlSession);
+                        FirebaseMessagingSnippets firebaseMessagingSnippets = new FirebaseMessagingSnippets();
+
+                        Spon spon = sponDao.getSponByReceiptIdForApple(request.getReceipt_data());
+                        spon.setVerify_status(0);
+                        sponDao.updateSponByPurchaseUpdate(spon);
+                        if (spon.getType().equals(SponType.Artist_SPON)) {
+                            Artist artist = artistDao.getArtistByArtistNo(spon.getArtist_no());
+                            if (artist != null) {
+                                User artistUser = userDao.selectUserByUserNo(artist.getUser_no());
+                                User sponUser = userDao.selectUserByUserNo(spon.getUser_no());
+
+                                //FCM SET
+                                NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, null, null, 0, null, spon.getArtist_no());
+                                firebaseMessagingSnippets.push(artistUser.getFcm_token(), NotificationType.ARTIST_SPON_FCM, "'" + sponUser.getName() + "'님이 회원님께 '" + spon.getPrice() + spon.getCurrency() + "'의 금액을 후원했습니다.", new Gson().toJson(notificationNext));
+
+                                //Notification SET
+                                Notification notification = new Notification();
+                                notification.setUser_no(artistUser.getUser_no());
+                                notification.setType(NotificationType.ARTIST_SPON);
+                                notification.setContent("'" + sponUser.getName() + "'님이 회원님께 '" + spon.getPrice() + spon.getCurrency() + "'의 금액을 후원했습니다.");
+                                notification.setReg_date(Time.TimeFormatHMS());
+                                notification.setNext(new Gson().toJson(notificationNext));
+                                notificationDao.insertNotification(notification);
+                            }
+                        } else if (spon.getType().equals(SponType.BOARD_SPON)) {
+                            Artist artist = artistDao.getArtistByArtistNo(spon.getArtist_no());
+                            Board board = boardDao.getBoardByBoardNo(spon.getBoard_no());
+                            if (board != null) {
+                                User artistUser = userDao.selectUserByUserNo(artist.getUser_no());
+                                User sponUser = userDao.selectUserByUserNo(spon.getUser_no());
+                                Artist userArtist = artistDao.getArtistByUserNo(sponUser.getUser_no());
+                                BoardComment boardSponComment = new BoardComment();
+                                boardSponComment.setBoard_no(spon.getBoard_no());
+                                boardSponComment.setUser_no(sponUser.getUser_no());
+                                if (userArtist != null) {
+                                    boardSponComment.setCommenter_name(userArtist.getArtist_name());
+                                    boardSponComment.setProfile_img(userArtist.getArtist_profile_img());
+                                } else {
+                                    boardSponComment.setCommenter_name(sponUser.getName());
+                                    boardSponComment.setProfile_img(sponUser.getProfile_img());
+                                }
+                                boardSponComment.setType(BoardCommentType.SPON_COMMENT);
+                                boardSponComment.setContent(spon.getPrice() + spon.getCurrency());
+                                boardSponComment.setComment_private(false);
+                                String date = Time.TimeFormatHMS();
+                                boardSponComment.setReg_date(date);
+                                boardCommentDao.insertComment(boardSponComment);
+
+                                //FCM SET
+                                NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, NotificationType.CONTENT_TYPE_BOARD, null, board.getBoard_no(), null, spon.getArtist_no());
+                                firebaseMessagingSnippets.push(artistUser.getFcm_token(), NotificationType.ARTIST_SPON_FCM, "'" + sponUser.getName() + "'님이 회원님의 게시글 '" + board.getTitle() + "'에 '" + spon.getPrice() + spon.getCurrency() + "'의 금액을 후원했습니다.", new Gson().toJson(notificationNext));
+
+                                //Notification SET
+                                Notification notification = new Notification();
+                                notification.setUser_no(artistUser.getUser_no());
+                                notification.setType(NotificationType.ARTIST_SPON);
+                                notification.setContent("'" + sponUser.getName() + "'님이 회원님의 게시글 '" + board.getTitle() + "'에 '" + spon.getPrice() + spon.getCurrency() + "'의 금액을 후원했습니다.");
+                                notification.setReg_date(Time.TimeFormatHMS());
+                                notification.setNext(new Gson().toJson(notificationNext));
+                                notificationDao.insertNotification(notification);
+                            }
+                        }
+                    }
                 }
             } else {
                 message.put("apple_status", response.getStatus());
                 message.put("status_explain", response.getStatus_explain());
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.ARTIST_SPON_SUCCESS, message.getHashMap("ApplePurchaseValidate()")), HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity getArtistSponAmount(int artist_no, String year, String month) {
+        try{
+            Message message = new Message();
+            sponDao.setSession(sqlSession);
+            List<ArtistSponTotal> sponTotalList = sponDao.getMonthlySponAmountForArtist(year, month, artist_no);
+            long result = 0;
+            for(ArtistSponTotal sponTotal : sponTotalList){
+                //TODO 플랫폼 별 가격 계산 다르게
+                long temp = currencyService.calculateCurrency(sponTotal.getPrice(), sponTotal.getCurrency(), sponTotal.getSpon_date());
+                result = result + temp;
+            }
+            int totalPrice = Long.valueOf(result).intValue();
+            message.put("total_price", totalPrice);
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS, message.getHashMap("getArtistSponAmount()")), HttpStatus.OK);
         } catch (Exception e){
             e.printStackTrace();
             throw new BusinessException(e);

@@ -106,4 +106,22 @@
         from spon
         WHERE purchase_token = #{purchase_token}
     </select>
+    <select id="getMonthlySponAmountForArtist" resultType="ArtistSponTotal">
+        select price, currency, platform, spon_date
+        from spon
+        WHERE YEAR(spon_date) = #{year}
+          AND MONTH(spon_date) = #{month}
+          AND verify_status = 0
+          AND STATUS = TRUE
+          AND artist_no = #{artist_no}
+    </select>
+    <select id="getPurchasedSponAmountForArtistAdmin" resultType="ArtistSponTotal">
+        select price, currency, platform, spon_date, send_date
+        from spon
+        WHERE verify_status = 0
+          AND STATUS = TRUE
+          AND purchase_status = TRUE
+          AND artist_no = #{artist_no}
+        ORDER BY send_date DESC
+    </select>
 </mapper>

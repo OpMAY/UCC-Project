@@ -55,7 +55,7 @@ public class ImageConverter {
             //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
             //System.load("E:\\vodAppServer\\src\\main\\java\\opencv_java451.dll");
-            System.load("/www/weart-page_com/ROOT/resources/libopencv_java320.so");
+            System.load("/www/weart-page_com/www/resources/libopencv_java320.so");
 
             // Source Image by creating Matlab object
             Mat src = new Mat();

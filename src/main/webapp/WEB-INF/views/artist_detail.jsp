@@ -236,7 +236,7 @@
                                             </label>
                                             <textarea class="form-control" id="spon-number" rows="1"
                                                       style="line-height: 150%; font-size: large"
-                                                      disabled>0회</textarea>
+                                                      disabled>${spon_num}회</textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="label d-flex" for="last-spon-date" style="font-size: large">
@@ -244,7 +244,7 @@
                                             </label>
                                             <textarea class="form-control" id="last-spon-date" rows="1"
                                                       style="line-height: 150%; font-size: large"
-                                                      disabled>-</textarea>
+                                                      disabled><c:choose><c:when test="${latest_send_date == null}">-</c:when><c:when test="${latest_send_date != null}">${latest_send_date}</c:when></c:choose></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="label d-flex" for="total-spon-amount"
@@ -253,7 +253,7 @@
                                             </label>
                                             <textarea class="form-control" id="total-spon-amount" rows="1"
                                                       style="line-height: 150%; font-size: large"
-                                                      disabled>0원</textarea>
+                                                      disabled>${total_spon}원</textarea>
                                         </div>
                                     </div>
                                     <div class="row mt-3 justify-content-center">
@@ -354,10 +354,11 @@
                 </div>
 
             </div>
-            <!-- partial:partials/_footer.jsp -->
-            <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
-            <!-- partial -->
+
         </div>
+        <!-- partial:partials/_footer.jsp -->
+        <jsp:include page="partials/_footer.jsp" flush="true"></jsp:include>
+        <!-- partial -->
     </div>
 
 

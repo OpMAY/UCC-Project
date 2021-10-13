@@ -114,7 +114,7 @@
                                         </label>
                                         <textarea class="form-control" id="spon-exchange-rate" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled>${currencyRate}원</textarea>
+                                                  disabled><fmt:formatNumber value="${currencyRate}" type="number"/>원</textarea>
                                     </div>
                                 </div>
                                 <div class="row mt-3 justify-content-around">
@@ -155,8 +155,7 @@
                                                 <div class="col-md-6">
                                                     <button type="button" class="btn btn-outline-primary"
                                                             style="float:right"
-<%--                                                            onclick="if(confirm('이 결제에 대한 결제 검증 요청을 하시겠습니까?')){updateSpon(${spon.spon_no})} else{return false;}"--%>
-                                                            onclick="alert('준비중입니다.')"
+                                                            onclick="if(confirm('이 결제에 대한 결제 검증 요청을 하시겠습니까?')){updateSpon(${spon.spon_no})} else{return false;}"
                                                     >
                                                         결제 정보 업데이트
                                                     </button>

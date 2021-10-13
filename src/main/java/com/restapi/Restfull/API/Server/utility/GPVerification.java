@@ -46,7 +46,8 @@ public class GPVerification {
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         //File jsonFile = new File("E:\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-abaada2307f7.json");
-        File jsonFile = new File("/www/weart-page_com/ROOT/resources/weart-ucc-abaada2307f7.json");
+        File jsonFile = new File("/www/weart-page_com/www/resources/weart-ucc-abaada2307f7.json");
+//        File jsonFile = new File("C:\\Users\\kevin\\Desktop\\Projects\\vodAppServer\\src\\main\\webapp\\resources\\weart-ucc-abaada2307f7.json");
         GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(jsonFile))
                 .createScoped(Collections.singleton("https://www.googleapis.com/auth/androidpublisher"));
 

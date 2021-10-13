@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
 
@@ -139,6 +140,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -552,6 +554,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -570,10 +573,16 @@ public class AdminService {
             } else if (platform.equals("IOS")) {
                 AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false, false);
                 AppleVerifyResponse response = ASVerification.getInstance().verify(request);
-                if (response.getStatus_explain().equals("SUCCESS")) {
-                    spon.setVerify_status(0);
+                if (response.getStatus() == 0) {
+                    boolean is_refund = response.getReceipt().getIn_app().get(0).getCancellation_date() != null;
+                    if(!is_refund) {
+                        spon.setVerify_status(0);
+                    } else {
+                        spon.setVerify_status(1);
+                    }
                     sponDao.updateSponByPurchaseUpdate(spon);
                 } else {
+                    // TODO Apple Receipt StatusCode 별 예외처리?
                     throw new Exception(response.getStatus_explain());
                 }
             } else {
@@ -607,6 +616,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -625,6 +635,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -704,6 +715,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -803,6 +815,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -814,6 +827,7 @@ public class AdminService {
             userDao.setSession(sqlSession);
             artistDao.setSession(sqlSession);
             penaltyDao.setSession(sqlSession);
+            sponDao.setSession(sqlSession);
             modelAndView = new ModelAndView("artist_detail");
 
             int artist_no = Integer.parseInt(query);
@@ -835,11 +849,23 @@ public class AdminService {
             if (artist.getMain_img().equals("default")) {
                 artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
             }
-
+            List<ArtistSponTotal> sponTotalList = sponDao.getPurchasedSponAmountForArtistAdmin(artist_no);
+            long totalTemp = 0;
+            if (sponTotalList.size() > 0) {
+                String latestSendDate = sponTotalList.get(0).getSend_date();
+                modelAndView.addObject("latest_send_date", latestSendDate);
+            }
+            for (ArtistSponTotal sponTotal : sponTotalList) {
+                // TODO 플랫폼 별 계산
+                long temp = currencyService.calculateCurrency(sponTotal.getPrice(), sponTotal.getCurrency(), sponTotal.getSpon_date());
+                totalTemp = totalTemp + temp;
+            }
+            int totalSpon = Long.valueOf(totalTemp).intValue();
+            modelAndView.addObject("total_spon", totalSpon);
+            modelAndView.addObject("spon_num", sponTotalList.size());
             modelAndView.addObject("penalty_num", penaltyList.size());
             modelAndView.addObject("User", user);
             modelAndView.addObject("Artist", artist);
-
             return modelAndView;
         } catch (Exception e) {
             throw new AdminException(e);
@@ -914,6 +940,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1013,6 +1040,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1163,6 +1191,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1269,6 +1298,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1367,6 +1397,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1391,6 +1422,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1453,6 +1485,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1511,6 +1544,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1579,6 +1613,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1605,6 +1640,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1713,6 +1749,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -1986,6 +2023,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2022,6 +2060,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2040,6 +2079,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2074,6 +2114,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2130,6 +2171,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2150,6 +2192,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2216,6 +2259,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2242,6 +2286,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2414,6 +2459,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2485,6 +2531,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2570,6 +2617,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2702,6 +2750,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2759,6 +2808,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }
@@ -2769,7 +2819,8 @@ public class AdminService {
         String clearMoneyValue = money.replaceAll("[^0-9.]", "");
         double vatMoney = Double.parseDouble(clearMoneyValue) * 0.85;
         long vatMoneyRound = Math.round(vatMoney);
-        return part[0] + vatMoneyRound;
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        return part[0] + decimalFormat.format(vatMoneyRound);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -2835,6 +2886,7 @@ public class AdminService {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
+                e.printStackTrace();
                 throw new AdminException(e);
             }
         }

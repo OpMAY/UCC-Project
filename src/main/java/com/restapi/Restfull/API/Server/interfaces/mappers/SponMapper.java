@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.interfaces.mappers;
 
+import com.restapi.Restfull.API.Server.models.ArtistSponTotal;
 import com.restapi.Restfull.API.Server.models.Spon;
 
 import java.util.List;
@@ -40,4 +41,8 @@ public interface SponMapper {
     Spon getSponByReceiptIdForApple(String receipt_id);
 
     Spon getSponByPurchaseToken(String purchase_token);
+
+    List<ArtistSponTotal> getMonthlySponAmountForArtist(String year, String month, int artist_no);
+
+    List<ArtistSponTotal> getPurchasedSponAmountForArtistAdmin(int artist_no);
 }
