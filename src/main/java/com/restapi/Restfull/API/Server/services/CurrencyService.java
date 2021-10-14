@@ -36,8 +36,9 @@ public class CurrencyService {
     public void saveCurrencyInfo(String now) {
         try {
             exchangeRateDao.setSession(sqlSession);
-            if(exchangeRateDao.getExchangeRate(now) == null) {
+            if(exchangeRateDao.getExchangeRate(Time.SetCurrencyUpdateTime(now)) == null) {
                 HttpResponse res = getCurrencyRequest(now);
+                log.info(res);
                 String resBody = IOUtils.toString(res.getEntity().getContent(), StandardCharsets.UTF_8);
                 log.info(resBody);
                 if (resBody.replace("[", "").replace("]", "").equals("")) {

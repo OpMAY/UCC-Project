@@ -2745,6 +2745,9 @@ public class AdminService {
             }
             modelAndView.addObject("sponList", sponList);
             modelAndView.addObject("status", status);
+            modelAndView.addObject("purchase_number", sponDao.getSponListStatusPurchase().size());
+            modelAndView.addObject("apply_number", sponDao.getSponListStatusApply().size());
+            modelAndView.addObject("send_number", sponDao.getSponListStatusSend().size());
             return modelAndView;
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
@@ -2788,19 +2791,35 @@ public class AdminService {
             } else {
                 spon.setArtist_name("탈퇴한 아티스트");
             }
-            String applePrice = calculateAppleVat(spon.getPrice());
-            modelAndView.addObject("applePrice", applePrice);
-            String currencyRate = currencyService.getCurrencyRate(spon.getSpon_date(), spon.getCurrency());
-            int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
-            if (resultPrice == 0 || currencyRate.equals("")) {
-                throw new Exception("Currency Error");
+            if(spon.getPlatform().equals("IOS")) {
+                String applePrice = calculateAppleVat(spon.getPrice());
+                modelAndView.addObject("applePrice", applePrice);
+                int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
+                if (resultPrice == 0) {
+                    throw new Exception("Currency Error");
+                }
+                modelAndView.addObject("resultPrice", resultPrice);
+                int tax = Long.valueOf(Math.round((double) resultPrice * 1 / 11)).intValue();
+                int sendPrice = resultPrice - tax;
+                modelAndView.addObject("sendPrice", sendPrice);
+                modelAndView.addObject("tax", tax);
+            } else if(spon.getPlatform().equals("Android")){
+                String googlePrice = calculateGoogleVat(spon.getPrice());
+                modelAndView.addObject("googlePrice", googlePrice);
+                int resultPrice = Long.valueOf(currencyService.calculateCurrency(googlePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
+                if (resultPrice == 0) {
+                    throw new Exception("Currency Error");
+                }
+                modelAndView.addObject("resultPrice", resultPrice);
+                int tax = Long.valueOf(Math.round((double) resultPrice * 5 / 100)).intValue();
+                int sendPrice = resultPrice - tax;
+                modelAndView.addObject("sendPrice", sendPrice);
+                modelAndView.addObject("tax", tax);
             }
+            String currencyRate = currencyService.getCurrencyRate(spon.getSpon_date(), spon.getCurrency());
+            if(currencyRate.equals(""))
+                throw new Exception("Currency Error");
             modelAndView.addObject("currencyRate", currencyRate);
-            modelAndView.addObject("resultPrice", resultPrice);
-            int tax = resultPrice * 10 / 100;
-            int sendPrice = resultPrice - tax;
-            modelAndView.addObject("sendPrice", sendPrice);
-            modelAndView.addObject("tax", tax);
             modelAndView.addObject("spon", spon);
             modelAndView.addObject("prevStatus", prevStatus);
             return modelAndView;
@@ -2818,6 +2837,15 @@ public class AdminService {
         String[] part = money.split("(?<=\\D)(?=\\d)");
         String clearMoneyValue = money.replaceAll("[^0-9.]", "");
         double vatMoney = Double.parseDouble(clearMoneyValue) * 0.85;
+        long vatMoneyRound = Math.round(vatMoney);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        return part[0] + decimalFormat.format(vatMoneyRound);
+    }
+
+    private String calculateGoogleVat(String money){
+        String[] part = money.split("(?<=\\D)(?=\\d)");
+        String clearMoneyValue = money.replaceAll("[^0-9.]", "");
+        double vatMoney = Double.parseDouble(clearMoneyValue) / 1.1;
         long vatMoneyRound = Math.round(vatMoney);
         DecimalFormat decimalFormat = new DecimalFormat("###,###");
         return part[0] + decimalFormat.format(vatMoneyRound);

@@ -101,16 +101,29 @@
                                                   disabled>${spon.price}</textarea>
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
-                                        <label class="label d-flex" for="spon-app-vat" style="font-size: large">
-                                            인앱 수수료 적용 금액 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="애플 앱스토어의 경우 15%의 수수료가 부과됩니다."><i data-feather="help-circle"></i></span>
-                                        </label>
-                                        <textarea class="form-control" id="spon-app-vat" rows="1"
-                                                  style="line-height: 150%; font-size: large"
-                                                  disabled>${applePrice}</textarea>
+                                        <c:choose>
+                                            <c:when test="${spon.platform == 'Android'}">
+                                                <label class="label d-flex" for="spon-app-vat" style="font-size: large">
+                                                    부가가치세 계산 금액 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="구글 플레이 스토어의 상품 가격은 부가가치세 10% 포함 가격입니다."><i data-feather="help-circle"></i></span>
+                                                </label>
+                                                <textarea class="form-control" id="spon-app-vat" rows="1"
+                                                          style="line-height: 150%; font-size: large"
+                                                          disabled>${googlePrice}</textarea>
+                                            </c:when>
+                                            <c:when test="${spon.platform == 'IOS'}">
+                                                <label class="label d-flex" for="spon-app-vat" style="font-size: large">
+                                                    인앱 수수료 적용 금액 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="애플 앱스토어의 경우 15%의 수수료가 부과됩니다."><i data-feather="help-circle"></i></span>
+                                                </label>
+                                                <textarea class="form-control" id="spon-app-vat" rows="1"
+                                                          style="line-height: 150%; font-size: large"
+                                                          disabled>${applePrice}</textarea>
+                                            </c:when>
+                                        </c:choose>
+
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="spon-exchange-rate" style="font-size: large">
-                                            결제 당시 환율 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="단위 값에 따른 환율입니다. ex) 1달러 = 1,200원"><i data-feather="help-circle"></i></span>
+                                            결제 당시 환율 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" data-html="true" title="단위 값에 따른 환율입니다.<br>ex) 1달러 = 1,200원"><i data-feather="help-circle"></i></span>
                                         </label>
                                         <textarea class="form-control" id="spon-exchange-rate" rows="1"
                                                   style="line-height: 150%; font-size: large"
@@ -127,20 +140,33 @@
                                                   disabled><fmt:formatNumber value="${resultPrice}" type="number"/>원</textarea>
                                     </div>
                                     <div class="col-md-4" style="padding: 0 30px 0 30px">
+                                        <c:choose>
+                                            <c:when test="${spon.platform == 'Android'}">
+                                                <label class="label d-flex" for="send-vat" style="font-size: large">
+                                                    인앱 결제 수수료 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" data-html="true" title="구글 플레이 수수료 15%<br>= 부가가치세 10%<br>+ 인앱 수수료 5%<br>위 값 중 인앱 수수료에<br>해당하는 값입니다."><i data-feather="help-circle"></i></span>
+                                                </label>
+                                                <textarea class="form-control" id="send-vat" rows="1"
+                                                          style="line-height: 150%; font-size: large"
+                                                          disabled><fmt:formatNumber value="${tax}" type="number"/>원</textarea>
+                                            </c:when>
+                                            <c:when test="${spon.platform == 'IOS'}">
+                                                <label class="label d-flex" for="send-vat" style="font-size: large">
+                                                    부가가치세 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="부가가치세 10%"><i data-feather="help-circle"></i></span>
+                                                </label>
+                                                <textarea class="form-control" id="send-vat" rows="1"
+                                                          style="line-height: 150%; font-size: large"
+                                                          disabled><fmt:formatNumber value="${tax}" type="number"/>원</textarea>
+                                            </c:when>
+                                        </c:choose>
+
+                                    </div>
+                                    <div class="col-md-4" style="padding: 0 30px 0 30px">
                                         <label class="label d-flex" for="send-price" style="font-size: large">
                                             입금할 금액
                                         </label>
                                         <textarea class="form-control" id="send-price" rows="1"
                                                   style="line-height: 150%; font-size: large"
                                                   disabled><fmt:formatNumber value="${sendPrice}" type="number"/>원</textarea>
-                                    </div>
-                                    <div class="col-md-4" style="padding: 0 30px 0 30px">
-                                        <label class="label d-flex" for="send-vat" style="font-size: large">
-                                            세액 <span style="float: right; margin-right: 3px" data-toggle="tooltip" data-placement="top" title="VAT 10%"><i data-feather="help-circle"></i></span>
-                                        </label>
-                                        <textarea class="form-control" id="send-vat" rows="1"
-                                                  style="line-height: 150%; font-size: large"
-                                                  disabled><fmt:formatNumber value="${tax}" type="number"/>원</textarea>
                                     </div>
                                 </div>
                                 <div class="row mt-3 mb-3 justify-content-around">

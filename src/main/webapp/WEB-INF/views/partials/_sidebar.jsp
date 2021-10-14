@@ -108,7 +108,7 @@
         <div class="collapse" id="sponComponents">
           <ul class="nav sub-menu">
             <li class="nav-item">
-              <a href="/admin/spon/purchase.do" class="nav-link">결제 오류 내역</a>
+              <a href="/admin/spon/purchase.do" class="nav-link">결제 실패 내역</a>
             </li>
             <li class="nav-item">
               <a href="/admin/spon/apply.do" class="nav-link">미승인 내역</a>

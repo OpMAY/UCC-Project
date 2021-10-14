@@ -52,6 +52,14 @@ $(function () {
     });
     $('#index-date').datepicker('setDate', today);
 
+    $('#index-date2').datepicker({
+        format: "yyyy-mm-dd",
+        todayHighlight: true,
+        endDate: today,
+        autoclose: true,
+    });
+    $('#index-date2').datepicker('setDate', today);
+
     $('#dp-loudsourcing-start-date').datepicker({
         format: "yyyy-mm-dd",
         todayHighlight: true,

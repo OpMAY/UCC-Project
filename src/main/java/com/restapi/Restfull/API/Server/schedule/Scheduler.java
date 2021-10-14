@@ -68,6 +68,7 @@ public class Scheduler {
      **/
     @Scheduled(cron = "0 0 0 * * ?")
     public void penaltyUserSetting() throws ParseException {
+        log.info("UpdateCurrencyInfo() Scheduled");
         penaltyService.setUserPrivate();
     }
 
@@ -79,6 +80,7 @@ public class Scheduler {
      **/
     @Scheduled(cron = "0 10 0 * * ?")
     public void setLoudSourcingProcessToJudge() {
+        log.info("UpdateCurrencyInfo() Scheduled");
         loudSourcingService.setLoudSourcingProcessToJudge();
     }
 
@@ -90,11 +92,13 @@ public class Scheduler {
      **/
     @Scheduled(cron = "0 5 0 * * ?")
     public void setLoudSourcingJudgeToEnd() {
+        log.info("UpdateCurrencyInfo() Scheduled");
         loudSourcingService.setLoudSourcingJudgeToEnd();
     }
 
     @Scheduled(cron = "0 10 11 * * ?")
     public void updateCurrencyInfo() {
+        log.info("UpdateCurrencyInfo() Scheduled");
         currencyService.saveCurrencyInfo(Time.TimeFormatDay());
     }
 }

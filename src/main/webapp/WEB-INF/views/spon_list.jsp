@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <html>
@@ -30,7 +31,7 @@
     <link rel="stylesheet" href="/assets/css/demo_1/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/images/favicon.png"/>
-
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="main-wrapper">
@@ -44,6 +45,7 @@
         <!-- partial -->
         <div class="page-content">
 
+
             <nav class="page-breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item" style="color: #baa2fc">후원 관리</li>
@@ -55,13 +57,13 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-center">
-                                <h6 class="card-title mb-0">10월 총 수익금</h6>
+                                <h6 class="card-title mb-0">10월 총 예상 수익금</h6>
                             </div>
                             <div class="row" style="padding-top: 15px">
                                 <div class="col-6 col-md-12 col-xl-6" style="border-right: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 15px; text-align: center"><i
-                                                class="mdi mdi-google-play"></i>Google PLAY</span>
+                                                class="mdi mdi-google-play"></i>Google PlayStore</span>
                                         <span class="mb-2 d-block"
                                               style="font-size: 20px; text-align: center">10,000원</span>
                                     </div>
@@ -86,21 +88,21 @@
                             <div class="row" style="padding-top: 15px">
                                 <div class="col-4 col-md-12 col-xl-4" style="border-right: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
-                                        <span class="d-block" style="font-size: 12px; text-align: center">미결제</span>
-                                        <span class="mb-2 d-block" style="font-size: 20px; text-align: center">10</span>
+                                        <span class="d-block" style="font-size: 12px; text-align: center">결제 실패</span>
+                                        <span class="mb-2 d-block" style="font-size: 20px; text-align: center">${purchase_number}</span>
                                     </div>
                                 </div>
                                 <div class="col-4 col-md-12 col-xl-4">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 12px; text-align: center">미승인</span>
-                                        <span class="mb-2 d-block" style="font-size: 20px; text-align: center">99</span>
+                                        <span class="mb-2 d-block" style="font-size: 20px; text-align: center">${apply_number}</span>
                                     </div>
                                 </div>
                                 <div class="col-4 col-md-12 col-xl-4" style="border-left: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 12px; text-align: center">미정산</span>
                                         <span class="mb-2 d-block"
-                                              style="font-size: 20px; text-align: center">100</span>
+                                              style="font-size: 20px; text-align: center">${send_number}</span>
                                     </div>
                                 </div>
                             </div>
@@ -110,35 +112,50 @@
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-center">
-                                <h6 class="card-title mb-0">확인 필요한 후원</h6>
+                            <div class="d-block">
+                                <h6 class="card-title mb-0" style="text-align: center">기간 별 정산 금액</h6>
                             </div>
                             <div class="row" style="padding-top: 15px">
-                                <div class="col-4 col-md-12 col-xl-4" style="border-right: 1px solid #f2f4f9;">
-                                    <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex" style="width: 240px"
+                                <div class="col-3 col-md-12 col-xl-3" style="border-right: 1px solid #f2f4f9;">
+                                    <span class="d-block" style="text-align: center; font-size: 12px">시작 일</span>
+                                    <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
+                                         style="width: 100%"
                                          id="index-date">
                                         <input type="text" class="form-control" name="index-sns-date"
                                                id="index-sns-date" readonly style="text-align: center"><span
                                             class="input-group-addon bg-transparent"><i
                                             data-feather="calendar"></i></span>
                                     </div>
-                                    <span class="d-block" style="text-align: center; margin-top: 5px">시작 일</span>
                                 </div>
-                                <div class="col-4 col-md-12 col-xl-4">
-                                    <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex" style="width: 240px"
+                                <div class="col-3 col-md-12 col-xl-3">
+                                    <span class="d-block" style="text-align: center; font-size: 12px">종료 일</span>
+                                    <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
+                                         style="width: 100%"
                                          id="index-date2">
                                         <input type="text" class="form-control" name="index-sns-date2"
                                                id="index-sns-date2" readonly style="text-align: center"><span
                                             class="input-group-addon bg-transparent"><i
                                             data-feather="calendar"></i></span>
                                     </div>
-                                    <span class="d-block" style="text-align: center; margin-top: 5px">종료 일</span>
                                 </div>
-                                <div class="col-4 col-md-12 col-xl-4" style="border-left: 1px solid #f2f4f9;">
+                                <div class="col-3 col-md-12 col-xl-3" style="border-left: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
-                                        <span class="d-block" style="font-size: 12px; text-align: center">미정산</span>
+                                        <span class="d-block" style="font-size: 12px; text-align: center">플랫폼</span>
+                                        <select class="form-control" id="exampleFormControlSelect1" style="color: grey"
+                                                onchange="document.getElementById('exampleFormControlSelect1').style['color'] = 'black'">
+                                            <option selected disabled style="display: none">선택</option>
+                                            <option style="color: black">전체</option>
+                                            <option style="color: black">구글</option>
+                                            <option style="color: black">애플</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3 col-md-12 col-xl-3" style="border-left: 1px solid #f2f4f9;">
+                                    <div class="align-items-baseline">
+                                        <span class="d-block" style="font-size: 12px; text-align: center">정산 금액</span>
                                         <span class="mb-2 d-block"
-                                              style="font-size: 20px; text-align: center">100</span>
+                                              style="font-size: 20px; text-align: center"><fmt:formatNumber
+                                                value="20000" type="number"/>원</span>
                                     </div>
                                 </div>
                             </div>
@@ -152,12 +169,12 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><c:choose><c:when
-                                    test="${status == 'purchase'}">결제 오류 <a style="margin-left: 10px"
-                                                                            href="${pageContext.request.contextPath}/admin/spon/apply.do">미승인 </a><a
+                                    test="${status == 'purchase'}">결제실패 <a style="margin-left: 10px"
+                                                                           href="${pageContext.request.contextPath}/admin/spon/apply.do">미승인 </a><a
                                     style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/spon/send.do">미정산 </a><a
                                     style="margin-left: 10px"
-                                    href="${pageContext.request.contextPath}/admin/spon/complete.do">완료 </a><c:if
+                                    href="${pageContext.request.contextPath}/admin/spon/complete.do">정산완료 </a><c:if
                                     test="${sponList.size() > 0}">
                                 <button type="button"
                                         class="btn btn-outline-primary btn-icon-text"
@@ -169,25 +186,25 @@
                             </c:if>
                             </c:when><c:when test="${status == 'apply'}"><a style="margin-right: 10px"
                                                                             href="${pageContext.request.contextPath}/admin/spon/purchase.do">
-                                결제 오류 </a>미승인 <a style="margin-left: 10px"
-                                                 href="${pageContext.request.contextPath}/admin/spon/send.do">
+                                결제실패 </a>미승인 <a style="margin-left: 10px"
+                                                href="${pageContext.request.contextPath}/admin/spon/send.do">
                                 미정산 </a><a style="margin-left: 10px"
                                            href="${pageContext.request.contextPath}/admin/spon/complete.do">
-                                완료 </a></c:when><c:when
+                                정산완료 </a></c:when><c:when
                                     test="${status == 'send'}"><a style="margin-right: 10px"
                                                                   href="${pageContext.request.contextPath}/admin/spon/purchase.do">
-                                결제 오류 </a><a style="margin-right: 10px"
-                                             href="${pageContext.request.contextPath}/admin/spon/apply.do">
+                                결제실패 </a><a style="margin-right: 10px"
+                                            href="${pageContext.request.contextPath}/admin/spon/apply.do">
                                 미승인 </a>미정산 <a style="margin-left: 10px"
                                                href="${pageContext.request.contextPath}/admin/spon/complete.do">
-                                완료 </a></c:when><c:when
+                                정산완료 </a></c:when><c:when
                                     test="${status == 'complete'}"><a style="margin-right: 10px"
                                                                       href="${pageContext.request.contextPath}/admin/spon/purchase.do">
-                                결제 오류 </a><a style="margin-right: 10px"
-                                             href="${pageContext.request.contextPath}/admin/spon/apply.do">
+                                결제실패 </a><a style="margin-right: 10px"
+                                            href="${pageContext.request.contextPath}/admin/spon/apply.do">
                                 미승인 </a><a style="margin-right: 10px"
                                            href="${pageContext.request.contextPath}/admin/spon/send.do">
-                                미정산 </a>완료 </c:when></c:choose></h6>
+                                미정산 </a>정산완료 </c:when></c:choose></h6>
                             <div class="table-responsive">
                                 <table id="dataTableExample" class="table" style="table-layout: fixed">
                                     <thead>
@@ -195,7 +212,10 @@
                                         <th width="10px">#</th>
                                         <th width="30px">후원한 사용자</th>
                                         <th width="30px">후원받은 사용자</th>
-                                        <th width="30px">결제 여부</th>
+                                        <th width="30px"><c:choose>
+                                            <c:when test="${status == 'purchase'}">결제 실패 사유</c:when>
+                                            <c:when test="${status != 'purchase'}">결제 여부</c:when>
+                                        </c:choose></th>
                                         <th width="30px">승인 여부</th>
                                         <th width="30px">입금 여부</th>
                                         <th width="70px">금액</th>
