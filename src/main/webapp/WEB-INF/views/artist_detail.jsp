@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/assets/css/demo_1/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/images/favicon.png"/>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -217,7 +218,7 @@
                                             </label>
                                             <textarea class="form-control" id="artist-phone" rows="1"
                                                       style="line-height: 150%; font-size: large"
-                                                      disabled>${Artist.artist_phone}</textarea>
+                                                      disabled></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="label d-flex" for="fankok-number"
@@ -244,7 +245,9 @@
                                             </label>
                                             <textarea class="form-control" id="last-spon-date" rows="1"
                                                       style="line-height: 150%; font-size: large"
-                                                      disabled><c:choose><c:when test="${latest_send_date == null}">-</c:when><c:when test="${latest_send_date != null}">${latest_send_date}</c:when></c:choose></textarea>
+                                                      disabled><c:choose><c:when
+                                                    test="${latest_send_date == null}">-</c:when><c:when
+                                                    test="${latest_send_date != null}">${latest_send_date}</c:when></c:choose></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="label d-flex" for="total-spon-amount"
@@ -334,7 +337,8 @@
                                                     </button>
                                                 </c:when>
                                                 <c:when test="${penalty == null}">
-                                                    <button type="button" class="btn btn-outline-primary" style="width : 50%; height: 150%"
+                                                    <button type="button" class="btn btn-outline-primary"
+                                                            style="width : 50%; height: 150%"
                                                             onclick="if(confirm('이 아티스트를 정지하겠습니까?')){openWindowPopBan('/admin/penalty.do?user_no=${Artist.user_no}','회원 정지', ${penalty.penalty_no})} else {return false;}">
                                                         사용 정지
                                                     </button>
@@ -342,7 +346,8 @@
                                             </c:choose>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-6 justify-content-center d-flex">
-                                            <button class="btn btn-secondary" style="width : 50%; height: 150%" onclick="location.href='/admin/artists.do'">
+                                            <button class="btn btn-secondary" style="width : 50%; height: 150%"
+                                                    onclick="location.href='/admin/artists.do'">
                                                 돌아가기
                                             </button>
                                         </div>
@@ -387,7 +392,7 @@
     <!-- end custom js for this page -->
     <script>
         function openWindowPopBan(url, name, penalty) {
-            if(penalty == null){
+            if (penalty == null) {
                 let options = 'top=10, left=10, width=720, height=1040, status=1, scrollbars=1, resizable=1, menubar=0, fullscreen=0, location=0';
                 window.open(url, name, options);
             } else {
@@ -422,6 +427,7 @@
                 window.location.reload();
             })
         }
+
         function resetHashtags(artist_no) {
             let data = {"artist_no": artist_no};
             $.ajax({
@@ -444,7 +450,7 @@
             })
         }
 
-        function resetArtistExplain(artist_no){
+        function resetArtistExplain(artist_no) {
             let data = {"artist_no": artist_no};
             $.ajax({
                 type: 'POST',
@@ -539,7 +545,7 @@
             // 서버 기본 해시태그 리스트를 가져온다.
             let hashtagList = '<c:out value="${Artist.hashtag}"/>';
             let edit = replaceAll(hashtagList, '&#034;', '"');
-            if(edit != "") {
+            if (edit != "") {
                 let obj = JSON.parse(edit);
                 for (let i = 0; i < obj.length; i++) {
                     tag[counter] = obj[i];
@@ -547,7 +553,32 @@
                     counter++;
                 }
             }
+
+            document.getElementById("artist-phone").innerText = phoneFormatter("${Artist.artist_phone}");
         });
+
+        function phoneFormatter(num) {
+            let formatNum = '';
+            try {
+                if (num.length === 11) {
+                    formatNum = num.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+                } else if (num.length === 8) {
+                    formatNum = num.replace(/(\d{4})(\d{4})/, '$1-$2');
+                } else if (num.length === 10) {
+                    formatNum = num.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+                } else {
+                    if (num.indexOf('02') === 0) {
+                        formatNum = num.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3');
+                    } else {
+                        formatNum = num.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+                    }
+                }
+            } catch (e) {
+                formatNum = num;
+                console.log(e);
+            }
+            return formatNum;
+        }
     </script>
 </body>
 </html>

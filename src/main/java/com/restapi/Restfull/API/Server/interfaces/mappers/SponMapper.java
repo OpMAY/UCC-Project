@@ -45,4 +45,10 @@ public interface SponMapper {
     List<ArtistSponTotal> getMonthlySponAmountForArtist(String year, String month, int artist_no);
 
     List<ArtistSponTotal> getPurchasedSponAmountForArtistAdmin(int artist_no);
+
+    List<Spon> getSponListForIncomePlatform();
+
+    List<Spon> getSponListForSendInDuration(String start_date, String end_date);
+
+    List<ArtistSponTotal> getSponListForArtistSend(int artist_no, String start_date, String end_date);
 }

@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 @Data
 public class Receipt {
-    private Integer adam_id;
-    private Integer app_item_id;
+    private String adam_id;
+    private String app_item_id;
     private String application_version;
     private String bundle_id;
-    private Integer download_id;
+    private String download_id;
     private String expiration_date;
     private String expiration_date_ms;
     private String expiration_date_pst;

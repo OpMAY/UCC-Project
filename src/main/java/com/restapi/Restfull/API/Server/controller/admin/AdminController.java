@@ -954,6 +954,25 @@ public class AdminController implements ControllerInitialize {
         return adminService.updateSpon(request.getSpon_no());
     }
 
+    @Data
+    class SponSendDataRequest{
+        private String start_date;
+        private String end_date;
+        private String platform;
+    }
+
+    @PostMapping("/admin/spon/list/update.do")
+    @ResponseBody
+    public int GetSendPrice(@RequestBody String body){
+        SponSendDataRequest request = new Gson().fromJson(body, SponSendDataRequest.class);
+        return adminService.getSendPrice(request.getStart_date(), request.getEnd_date(), request.getPlatform());
+    }
+
+    @GetMapping("/admin/spon/summary/artist.do")
+    public ModelAndView GetSponSummaryOfArtist(){
+        return adminService.getSponSummaryOfArtist();
+    }
+
     @GetMapping("/admin/hashtag.do")
     public ModelAndView HashTagEdit() {
         return adminService.getHashTagEdit();

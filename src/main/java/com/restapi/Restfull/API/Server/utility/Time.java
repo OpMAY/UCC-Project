@@ -39,6 +39,12 @@ public class Time {
         return dateFormat.format(date);
     }
 
+    public static String TimeKorYearMonth(){
+        Date now = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월");
+        return dateFormat.format(now);
+    }
+
     public static String TimeFormatDay() {
         Date now = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

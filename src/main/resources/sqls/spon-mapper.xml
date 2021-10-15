@@ -124,4 +124,28 @@
           AND artist_no = #{artist_no}
         ORDER BY send_date DESC
     </select>
+    <select id="getSponListForIncomePlatform" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND DATE_FORMAT(spon_date, '%Y-%m') = DATE_FORMAT(now(), '%Y-%m')
+    </select>
+    <select id="getSponListForSendInDuration" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = false
+          AND spon_date <![CDATA[>=]]> #{start_date}
+          AND spon_date <![CDATA[<=]]> #{end_date}
+    </select>
+    <select id="getSponListForArtistSend" resultType="ArtistSponTotal">
+        select price, currency, spon_date
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND purchase_status = false
+          AND artist_no = #{artist_no}
+          AND spon_date <![CDATA[>=]]> #{start_date}
+          AND spon_date <![CDATA[<=]]> #{end_date}
+    </select>
 </mapper>

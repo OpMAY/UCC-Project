@@ -52,13 +52,30 @@ $(function () {
     });
     $('#index-date').datepicker('setDate', today);
 
-    $('#index-date2').datepicker({
+    $('#spon-send-start-date').datepicker({
         format: "yyyy-mm-dd",
-        todayHighlight: true,
         endDate: today,
         autoclose: true,
+        forceParse : true
     });
-    $('#index-date2').datepicker('setDate', today);
+    $('#spon-send-start-date').datepicker('setDate', today);
+
+    $('#spon-send-start-date').datepicker().on("changeDate", function (selectedDate) {
+        $('#spon-send-end-date').datepicker('setStartDate', selectedDate.date);
+        if(new Date($('input[name=input-spon-send-end-date]').val()) > selectedDate.date){
+            $('#spon-send-end-date').datepicker('setDate', selectedDate.date);
+        }
+    });
+
+    $('#spon-send-end-date').datepicker({
+        format: "yyyy-mm-dd",
+        endDate: today,
+        autoclose: true,
+        forceParse : true
+    }).on("changeDate", function (selectedDate) {
+        $('#spon-send-start-date').datepicker('setEndDate', selectedDate.date);
+    });
+    $('#spon-send-end-date').datepicker('setDate', today);
 
     $('#dp-loudsourcing-start-date').datepicker({
         format: "yyyy-mm-dd",
@@ -66,7 +83,7 @@ $(function () {
         title: "시작일자",
         startDate: '0d',
         autoclose: true
-    }).on("changeDate", function(selectedDate){
+    }).on("changeDate", function (selectedDate) {
         $('#dp-loudsourcing-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-loudsourcing-judge-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-loudsourcing-process-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
@@ -78,8 +95,8 @@ $(function () {
         format: "yyyy-mm-dd",
         title: "종료일자",
         autoclose: true
-    }).on("changeDate", function(selectedDate){
-        $('#dp-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date ,1));
+    }).on("changeDate", function (selectedDate) {
+        $('#dp-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
         $('#dp-loudsourcing-process-end-date').datepicker("setEndDate", prevDay(selectedDate.date, 2));
         $('#dp-loudsourcing-process-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
         $('#dp-loudsourcing-recruitment-end-date').datepicker("setEndDate", prevDay(selectedDate.date, 4));
@@ -90,7 +107,7 @@ $(function () {
         format: "yyyy-mm-dd",
         title: "모집 종료일자",
         autoclose: true
-    }).on("changeDate", function(selectedDate){
+    }).on("changeDate", function (selectedDate) {
         $('#dp-loudsourcing-process-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-loudsourcing-process-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-loudsourcing-judge-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
@@ -128,7 +145,7 @@ $(function () {
         title: "시작일자",
         startDate: '0d',
         autoclose: true
-    }).on("changeDate", function(selectedDate){
+    }).on("changeDate", function (selectedDate) {
         $('#dp-edit-loudsourcing-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-edit-loudsourcing-judge-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-edit-loudsourcing-process-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
@@ -137,7 +154,7 @@ $(function () {
     });
 
     let start_date = "";
-    if($('input[name=loudsourcing-start-date]').val() != null){
+    if ($('input[name=loudsourcing-start-date]').val() != null) {
         start_date = $('input[name=loudsourcing-start-date]').val();
     } else {
         start_date = $("#start-date").val();
@@ -147,8 +164,8 @@ $(function () {
         format: "yyyy-mm-dd",
         title: "종료일자",
         autoclose: true,
-        startDate : start_date,
-    }).on("changeDate", function(selectedDate){
+        startDate: start_date,
+    }).on("changeDate", function (selectedDate) {
         $('#dp-edit-loudsourcing-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
         $('#dp-edit-loudsourcing-process-end-date').datepicker("setEndDate", prevDay(selectedDate.date, 2));
         $('#dp-edit-loudsourcing-process-start-date').datepicker("setEndDate", prevDay(selectedDate.date, 1));
@@ -164,7 +181,7 @@ $(function () {
         startDate: start_date,
         endDate: end_date,
         autoclose: true
-    }).on("changeDate", function(selectedDate){
+    }).on("changeDate", function (selectedDate) {
         $('#dp-edit-loudsourcing-process-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-edit-loudsourcing-process-end-date').datepicker("setStartDate", nextDay(selectedDate.date));
         $('#dp-edit-loudsourcing-judge-start-date').datepicker("setStartDate", nextDay(selectedDate.date));
@@ -207,7 +224,7 @@ $(function () {
         return new Date(date.getFullYear(), date.getMonth(), number);
     }
 
-    function nextTwoDay(date){
+    function nextTwoDay(date) {
         let number = date.getDate() + 2;
         return new Date(date.getFullYear(), date.getMonth(), number);
     }

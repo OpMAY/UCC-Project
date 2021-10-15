@@ -158,6 +158,7 @@ public class SponService {
                         String date = Time.TimeFormatHMS();
                         boardSponComment.setReg_date(date);
                         boardCommentDao.insertComment(boardSponComment);
+                        boardDao.updateBoardByComment(board.getBoard_no(), boardCommentDao.getCommentNumberByBoardNo(board.getBoard_no()).size());
 
                         //FCM SET
                         NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, NotificationType.CONTENT_TYPE_BOARD, null, board.getBoard_no(), null, spon.getArtist_no());
@@ -245,6 +246,7 @@ public class SponService {
                                 String date = Time.TimeFormatHMS();
                                 boardSponComment.setReg_date(date);
                                 boardCommentDao.insertComment(boardSponComment);
+                                boardDao.updateBoardByComment(board.getBoard_no(), boardCommentDao.getCommentNumberByBoardNo(board.getBoard_no()).size());
 
                                 //FCM SET
                                 NotificationNext notificationNext = new NotificationNext(NotificationType.ARTIST_SPON, NotificationType.CONTENT_TYPE_BOARD, null, board.getBoard_no(), null, spon.getArtist_no());

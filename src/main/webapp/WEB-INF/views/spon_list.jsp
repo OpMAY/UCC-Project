@@ -57,7 +57,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-center">
-                                <h6 class="card-title mb-0">10월 총 예상 수익금</h6>
+                                <h6 class="card-title mb-0">${nowMonth} 총 예상 정산금</h6>
                             </div>
                             <div class="row" style="padding-top: 15px">
                                 <div class="col-6 col-md-12 col-xl-6" style="border-right: 1px solid #f2f4f9;">
@@ -65,14 +65,17 @@
                                         <span class="d-block" style="font-size: 15px; text-align: center"><i
                                                 class="mdi mdi-google-play"></i>Google PlayStore</span>
                                         <span class="mb-2 d-block"
-                                              style="font-size: 20px; text-align: center">10,000원</span>
+                                              style="font-size: 20px; text-align: center"><fmt:formatNumber
+                                                value="${androidIncome}" type="number"/>원</span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-12 col-xl-6">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 15px; text-align: center"><i
                                                 class="mdi mdi-apple"></i>Apple Store</span>
-                                        <span class="mb-2 d-block" style="font-size: 20px; text-align: center">99,655,000원</span>
+                                        <span class="mb-2 d-block"
+                                              style="font-size: 20px; text-align: center"><fmt:formatNumber
+                                                value="${iosIncome}" type="number"/>원</span>
                                     </div>
                                 </div>
                             </div>
@@ -89,20 +92,25 @@
                                 <div class="col-4 col-md-12 col-xl-4" style="border-right: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 12px; text-align: center">결제 실패</span>
-                                        <span class="mb-2 d-block" style="font-size: 20px; text-align: center">${purchase_number}</span>
+                                        <span class="mb-2 d-block"
+                                              style="font-size: 20px; text-align: center"><fmt:formatNumber
+                                                value="${purchase_number}" type="number"/></span>
                                     </div>
                                 </div>
                                 <div class="col-4 col-md-12 col-xl-4">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 12px; text-align: center">미승인</span>
-                                        <span class="mb-2 d-block" style="font-size: 20px; text-align: center">${apply_number}</span>
+                                        <span class="mb-2 d-block"
+                                              style="font-size: 20px; text-align: center"><fmt:formatNumber
+                                                value="${apply_number}" type="number"/></span>
                                     </div>
                                 </div>
                                 <div class="col-4 col-md-12 col-xl-4" style="border-left: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 12px; text-align: center">미정산</span>
                                         <span class="mb-2 d-block"
-                                              style="font-size: 20px; text-align: center">${send_number}</span>
+                                              style="font-size: 20px; text-align: center"><fmt:formatNumber
+                                                value="${send_number}" type="number"/></span>
                                     </div>
                                 </div>
                             </div>
@@ -113,16 +121,19 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-block">
-                                <h6 class="card-title mb-0" style="text-align: center">기간 별 정산 금액</h6>
+                                <div class="spinner-border spinner-border-sm text-primary" role="status" id="Progress_Loading">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <h6 class="card-title mb-0" style="text-align: center">기간 별 예상 수익금</h6>
                             </div>
                             <div class="row" style="padding-top: 15px">
                                 <div class="col-3 col-md-12 col-xl-3" style="border-right: 1px solid #f2f4f9;">
                                     <span class="d-block" style="text-align: center; font-size: 12px">시작 일</span>
                                     <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
                                          style="width: 100%"
-                                         id="index-date">
-                                        <input type="text" class="form-control" name="index-sns-date"
-                                               id="index-sns-date" readonly style="text-align: center"><span
+                                         id="spon-send-start-date">
+                                        <input type="text" class="form-control" name="input-spon-send-start-date"
+                                               id="input-spon-send-start-date" readonly style="text-align: center"><span
                                             class="input-group-addon bg-transparent"><i
                                             data-feather="calendar"></i></span>
                                     </div>
@@ -131,9 +142,9 @@
                                     <span class="d-block" style="text-align: center; font-size: 12px">종료 일</span>
                                     <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex"
                                          style="width: 100%"
-                                         id="index-date2">
-                                        <input type="text" class="form-control" name="index-sns-date2"
-                                               id="index-sns-date2" readonly style="text-align: center"><span
+                                         id="spon-send-end-date">
+                                        <input type="text" class="form-control" name="input-spon-send-end-date"
+                                               id="input-spon-send-end-date" readonly style="text-align: center"><span
                                             class="input-group-addon bg-transparent"><i
                                             data-feather="calendar"></i></span>
                                     </div>
@@ -141,21 +152,36 @@
                                 <div class="col-3 col-md-12 col-xl-3" style="border-left: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
                                         <span class="d-block" style="font-size: 12px; text-align: center">플랫폼</span>
-                                        <select class="form-control" id="exampleFormControlSelect1" style="color: grey"
-                                                onchange="document.getElementById('exampleFormControlSelect1').style['color'] = 'black'">
-                                            <option selected disabled style="display: none">선택</option>
-                                            <option style="color: black">전체</option>
-                                            <option style="color: black">구글</option>
-                                            <option style="color: black">애플</option>
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <select class="form-control" id="platform-select"
+                                                        style="color: grey; width: 100%"
+                                                        onchange="document.getElementById('platform-select').style['color'] = 'black'">
+                                                    <option selected disabled style="display: none" id="select-disable">
+                                                        선택
+                                                    </option>
+                                                    <option style="color: black" id="select-all">전체</option>
+                                                    <option style="color: black" id="select-google">Google PlayStore
+                                                    </option>
+                                                    <option style="color: black" id="select-apple">Apple Store</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button"
+                                                        class="btn btn-outline-primary btn-icon-text"
+                                                        style="float: right;border-color: transparent; width: 100%; padding-left: 5px; padding-right: 20px; padding-bottom: 10px"
+                                                        onclick="getTotalSendPrice()">
+                                                    <i class="btn-icon-prepend" data-feather="search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-3 col-md-12 col-xl-3" style="border-left: 1px solid #f2f4f9;">
                                     <div class="align-items-baseline">
-                                        <span class="d-block" style="font-size: 12px; text-align: center">정산 금액</span>
+                                        <span class="d-block" style="font-size: 12px; text-align: center">수익금</span>
                                         <span class="mb-2 d-block"
-                                              style="font-size: 20px; text-align: center"><fmt:formatNumber
-                                                value="20000" type="number"/>원</span>
+                                              style="font-size: 20px; text-align: center" id="resultPrice">선택 필요</span>
                                     </div>
                                 </div>
                             </div>
@@ -327,7 +353,66 @@
 <script src="/assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
+    $(document).ready(function () {
+        $('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
+    }).ajaxStart(function () {
+        $('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
+    }).ajaxStop(function () {
+        $('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
+    });
 
+    function getTotalSendPrice() {
+        let selectedPlatform;
+        switch ($('#platform-select').val()) {
+            case "전체" : {
+                selectedPlatform = "all";
+            }
+                break;
+            case "Google PlayStore" : {
+                selectedPlatform = "Android";
+            }
+                break;
+            case "Apple Store" : {
+                selectedPlatform = "IOS";
+            }
+                break;
+            default :
+                alert("플랫폼을 먼저 선택해주세요.");
+                return false;
+        }
+        let start_date = $("input[name=input-spon-send-start-date]").val();
+        let end_date = $("input[name=input-spon-send-end-date]").val();
+
+        if (start_date > end_date) {
+            alert("날짜를 확인해주세요.");
+            return false;
+        }
+
+        let formData = {
+            "start_date" : start_date,
+            "end_date" : end_date,
+            "platform" : selectedPlatform
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/admin/spon/list/update.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(formData)
+        }).done(function (result) {
+            if (result === -1) {
+                alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            } else {
+                let target = document.getElementById("resultPrice");
+                target.innerText = result.toLocaleString() + "원"
+            }
+        }).fail(function (error) {
+            console.log(error);
+            window.location.href = '/admin/loudsourcing/detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
+        })
+
+    }
 </script>
 </body>
 </html>

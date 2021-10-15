@@ -116,4 +116,19 @@ public class SponDao {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getPurchasedSponAmountForArtistAdmin(artist_no);
     }
+
+    public List<Spon> getSponListForIncomePlatform(){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListForIncomePlatform();
+    }
+
+    public List<Spon> getSponListForSendInDuration(String start_date, String end_date){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListForSendInDuration(start_date, end_date);
+    }
+
+    public List<ArtistSponTotal> getSponListForArtistSend(int artist_no, String start_date, String end_date){
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListForArtistSend(artist_no, start_date, end_date);
+    }
 }
