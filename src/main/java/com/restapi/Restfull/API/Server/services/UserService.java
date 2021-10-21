@@ -72,7 +72,7 @@ public class UserService {
                 user.set_artist(false);
                 user.setProfile_img(basic_profile_img);
                 user.set_user_private(false);
-                user.setReg_date(Time.TimeFormatDay());
+                user.setReg_date(Time.TimeFormatHMS());
                 user.setPush(true);
                 user.setComment_push(true);
                 user.setFankok_push(true);

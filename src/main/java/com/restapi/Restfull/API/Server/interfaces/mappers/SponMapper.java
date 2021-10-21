@@ -51,4 +51,6 @@ public interface SponMapper {
     List<Spon> getSponListForSendInDuration(String start_date, String end_date);
 
     List<ArtistSponTotal> getSponListForArtistSend(int artist_no, String start_date, String end_date);
+
+    List<Spon> getSponListForSendByArtistNo(int artist_no);
 }

@@ -136,8 +136,7 @@
                                         </label>
                                         <textarea class="form-control" id="spon-exchange-rate" rows="1"
                                                   style="line-height: 150%; font-size: large"
-                                                  disabled><fmt:formatNumber value="${currencyRate}"
-                                                                             type="number"/>원</textarea>
+                                                  disabled>${currencyRate}원</textarea>
                                     </div>
                                 </div>
                                 <div class="row mt-3 justify-content-around">
@@ -463,16 +462,18 @@
                 data: JSON.stringify(data)
             }).done(function (result) {
                 console.log(result);
-                if (result === 0) {
+                if (result.status === 0) {
                     alert("업데이트 되었습니다.");
                     window.location.reload();
                 } else {
-                    alert("알 수 없는 오류 발생. 관리자에게 문의하세요.");
+                    alert('결제 검증 오류 발생\n원인 : ' + result.statusMessage);
                     window.location.reload();
                 }
-            }).fail(function (error) {
-                alert(error);
-                window.location.reload();
+            }).fail(function(xhr, textStatus, errorThrown) {
+                alert('결제 검증 오류 발생\n원인 : ' + xhr.responseText);
+                console.log(xhr.responseText);
+                console.log(textStatus);
+                console.log(errorThrown);
             })
         }
     </script>

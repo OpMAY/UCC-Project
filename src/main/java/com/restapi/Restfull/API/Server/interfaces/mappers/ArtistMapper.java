@@ -48,4 +48,6 @@ public interface ArtistMapper {
     List<Artist> getSubscribedArtistListSortName(@Param("artist_list") ArrayList<Integer> artist_list);
 
     List<Artist> getAllArtistForCDN();
+
+    Artist getArtistByArtistName(String artist_name);
 }

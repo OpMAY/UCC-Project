@@ -562,49 +562,54 @@ public class AdminService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public int updateSpon(int spon_no) {
+    public SponDetailVerificationResponse updateSpon(int spon_no) {
+        SponDetailVerificationResponse response = new SponDetailVerificationResponse();
         try {
             sponDao.setSession(sqlSession);
             Spon spon = sponDao.getSponBySponNo(spon_no);
             String platform = spon.getPlatform();
             if (platform.equals("Android")) {
-                GPResponseModel response = GPVerification.getInstance().verify(spon.getProduct_id(), spon.getPurchase_token());
-                spon.setVerify_status(response.getPurchaseState());
+                GPResponseModel gpResponse = GPVerification.getInstance().verify(spon.getProduct_id(), spon.getPurchase_token());
+                spon.setVerify_status(gpResponse.getPurchaseState());
                 sponDao.updateSponByPurchaseUpdate(spon);
+                response.setStatus(0);
             } else if (platform.equals("IOS")) {
                 AppleVerifyRequest request = new AppleVerifyRequest(spon.getReceipt_id(), null, false, false);
-                AppleVerifyResponse response = ASVerification.getInstance().verify(request);
-                if (response.getStatus() == 0) {
-                    boolean is_refund = response.getReceipt().getIn_app().get(0).getCancellation_date() != null;
-                    if(!is_refund) {
+                AppleVerifyResponse avResponse = ASVerification.getInstance().verify(request);
+                if (avResponse.getStatus() == 0) {
+                    boolean is_refund = avResponse.getReceipt().getIn_app().get(0).getCancellation_date() != null;
+                    if (!is_refund) {
                         spon.setVerify_status(0);
                     } else {
                         spon.setVerify_status(1);
                     }
                     sponDao.updateSponByPurchaseUpdate(spon);
+                    response.setStatus(0);
                 } else {
-                    // TODO Apple Receipt StatusCode 별 예외처리?
-                    throw new Exception(response.getStatus_explain());
+                    response.setStatus(1);
+                    response.setStatusMessage(avResponse.getStatus_explain());
                 }
             } else {
                 throw new Exception("Platform Error");
             }
-            return 0;
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
+            response.setStatus(1);
+            response.setStatusMessage("서버 오류 : " + e.getMessage());
+            return response;
         }
     }
 
     @Transactional(readOnly = true)
     public int getSendPrice(String start_date, String end_date, String platform) {
-        try{
+        try {
             sponDao.setSession(sqlSession);
             int result = 0;
             List<Spon> dataList = sponDao.getSponListForSendInDuration(start_date, end_date);
-            for(Spon spon : dataList){
-                if(platform.equals("all")){
-                    if(spon.getPlatform().equals("IOS")) {
+            for (Spon spon : dataList) {
+                if (platform.equals("all")) {
+                    if (spon.getPlatform().equals("IOS")) {
                         String applePrice = calculateAppleVat(spon.getPrice());
                         int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
                         if (resultPrice == 0) {
@@ -613,7 +618,7 @@ public class AdminService {
                         int tax = Long.valueOf(Math.round((double) resultPrice * 1 / 11)).intValue();
                         int sendPrice = resultPrice - tax;
                         result = result + sendPrice;
-                    } else if(spon.getPlatform().equals("Android")){
+                    } else if (spon.getPlatform().equals("Android")) {
                         String googlePrice = calculateGoogleVat(spon.getPrice());
                         int resultPrice = Long.valueOf(currencyService.calculateCurrency(googlePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
                         if (resultPrice == 0) {
@@ -624,8 +629,8 @@ public class AdminService {
                         result = result + sendPrice;
                     }
                 } else {
-                    if(platform.equals(spon.getPlatform())){
-                        if(spon.getPlatform().equals("IOS")) {
+                    if (platform.equals(spon.getPlatform())) {
+                        if (spon.getPlatform().equals("IOS")) {
                             String applePrice = calculateAppleVat(spon.getPrice());
                             int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
                             if (resultPrice == 0) {
@@ -634,7 +639,7 @@ public class AdminService {
                             int tax = Long.valueOf(Math.round((double) resultPrice * 1 / 11)).intValue();
                             int sendPrice = resultPrice - tax;
                             result = result + sendPrice;
-                        } else if(spon.getPlatform().equals("Android")){
+                        } else if (spon.getPlatform().equals("Android")) {
                             String googlePrice = calculateGoogleVat(spon.getPrice());
                             int resultPrice = Long.valueOf(currencyService.calculateCurrency(googlePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
                             if (resultPrice == 0) {
@@ -648,7 +653,7 @@ public class AdminService {
                 }
             }
             return result;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
@@ -656,18 +661,132 @@ public class AdminService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ModelAndView getSponSummaryOfArtist() {
-        try{
-            modelAndView = new ModelAndView();
+        try {
+            modelAndView = new ModelAndView("spon_summary");
             sponDao.setSession(sqlSession);
-
+            artistDao.setSession(sqlSession);
+            List<Spon> sponList = sponDao.getSponListStatusSend();
+            List<Artist> artistList = new ArrayList<>();
+            for (Spon spon : sponList) {
+                if (spon.getArtist_no() != 0) {
+                    Artist artist = artistDao.getArtistByArtistNo(spon.getArtist_no());
+                    if (!artistList.contains(artist))
+                        artistList.add(artist);
+                }
+            }
+            log.info("Size : " + artistList.size());
+            modelAndView.addObject("artistList", artistList);
             return modelAndView;
-        } catch (Exception e){
+        } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("Bad Request")) {
                 throw new BadRequestException(e);
             } else {
                 e.printStackTrace();
                 throw new AdminException(e);
             }
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public SponSummaryArtistResponse getSelectedArtistInfoInSponSummary(String artist_name) {
+        try {
+            artistDao.setSession(sqlSession);
+            sponDao.setSession(sqlSession);
+            SponSummaryArtistResponse response = new SponSummaryArtistResponse();
+            log.info("artist_name : " + artist_name);
+            Artist artist = artistDao.getArtistByArtistName(artist_name);
+            log.info("Artist : " + artist);
+            response.setArtist(artist);
+            List<Spon> sponList = sponDao.getSponListForSendByArtistNo(artist.getArtist_no());
+            int spon_amount = 0;
+            for (Spon spon : sponList) {
+                if (spon.getPlatform().equals("IOS")) {
+                    String applePrice = calculateAppleVat(spon.getPrice());
+                    int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
+                    if (resultPrice == 0) {
+                        throw new Exception("Currency Error");
+                    }
+                    int tax = Long.valueOf(Math.round((double) resultPrice * 1 / 11)).intValue();
+                    int sendPrice = resultPrice - tax;
+                    spon_amount = spon_amount + sendPrice;
+                } else if (spon.getPlatform().equals("Android")) {
+                    String googlePrice = calculateGoogleVat(spon.getPrice());
+                    int resultPrice = Long.valueOf(currencyService.calculateCurrency(googlePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
+                    if (resultPrice == 0) {
+                        throw new Exception("Currency Error");
+                    }
+                    int tax = Long.valueOf(Math.round((double) resultPrice * 5 / 100)).intValue();
+                    int sendPrice = resultPrice - tax;
+                    spon_amount = spon_amount + sendPrice;
+                }
+            }
+            response.setSpon_amount(spon_amount);
+            response.setSpon_count(sponList.size());
+            log.info(response);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int setArtistSponListToComplete(String artist_name) {
+        try{
+            artistDao.setSession(sqlSession);
+            sponDao.setSession(sqlSession);
+            Artist artist = artistDao.getArtistByArtistName(artist_name);
+            List<Spon> sponList = sponDao.getSponListForSendByArtistNo(artist.getArtist_no());
+            for(Spon spon : sponList){
+                String now = Time.TimeFormatDay();
+                spon.setSend_date(now);
+                sponDao.updateSponBySend(spon);
+            }
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public SponListVerificationResponse verifyAllSponList() {
+        try{
+            sponDao.setSession(sqlSession);
+            List<Spon> sponList = sponDao.getSponListStatusPurchase();
+            SponListVerificationResponse response = new SponListVerificationResponse();
+            response.setTotal_num(sponList.size());
+            int success_num = 0;
+            int fail_num = 0;
+            for(Spon spon : sponList){
+                String platform = spon.getPlatform();
+                if (platform.equals("Android")) {
+                    GPResponseModel gpResponse = GPVerification.getInstance().verify(spon.getProduct_id(), spon.getPurchase_token());
+                    spon.setVerify_status(gpResponse.getPurchaseState());
+                    sponDao.updateSponByPurchaseUpdate(spon);
+                    success_num++;
+                } else if(platform.equals("IOS")){
+                    AppleVerifyRequest avRequest = new AppleVerifyRequest(spon.getReceipt_id(), null, false, false);
+                    AppleVerifyResponse avResponse = ASVerification.getInstance().verify(avRequest);
+                    if (avResponse.getStatus() == 0) {
+                        boolean is_refund = avResponse.getReceipt().getIn_app().get(0).getCancellation_date() != null;
+                        if (!is_refund) {
+                            spon.setVerify_status(0);
+                        } else {
+                            spon.setVerify_status(1);
+                        }
+                        sponDao.updateSponByPurchaseUpdate(spon);
+                    } else {
+                        fail_num++;
+                    }
+                }
+            }
+            response.setSuccess_num(success_num);
+            response.setFail_num(fail_num);
+            return response;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -2822,8 +2941,8 @@ public class AdminService {
             int androidIncome = 0;
             int iosIncome = 0;
             List<Spon> thisMonthIncomeList = sponDao.getSponListForIncomePlatform();
-            for(Spon spon : thisMonthIncomeList){
-                if(spon.getPlatform().equals("Android")){
+            for (Spon spon : thisMonthIncomeList) {
+                if (spon.getPlatform().equals("Android")) {
                     String googlePrice = calculateGoogleVat(spon.getPrice());
                     int resultPrice = Long.valueOf(currencyService.calculateCurrency(googlePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
                     if (resultPrice == 0) {
@@ -2832,7 +2951,7 @@ public class AdminService {
                     int tax = Long.valueOf(Math.round((double) resultPrice * 5 / 100)).intValue();
                     int sendPrice = resultPrice - tax;
                     androidIncome = androidIncome + sendPrice;
-                } else if (spon.getPlatform().equals("IOS")){
+                } else if (spon.getPlatform().equals("IOS")) {
                     String applePrice = calculateAppleVat(spon.getPrice());
                     int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
                     if (resultPrice == 0) {
@@ -2895,7 +3014,7 @@ public class AdminService {
             } else {
                 spon.setArtist_name("탈퇴한 아티스트");
             }
-            if(spon.getPlatform().equals("IOS")) {
+            if (spon.getPlatform().equals("IOS")) {
                 String applePrice = calculateAppleVat(spon.getPrice());
                 modelAndView.addObject("applePrice", applePrice);
                 int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
@@ -2907,7 +3026,7 @@ public class AdminService {
                 int sendPrice = resultPrice - tax;
                 modelAndView.addObject("sendPrice", sendPrice);
                 modelAndView.addObject("tax", tax);
-            } else if(spon.getPlatform().equals("Android")){
+            } else if (spon.getPlatform().equals("Android")) {
                 String googlePrice = calculateGoogleVat(spon.getPrice());
                 modelAndView.addObject("googlePrice", googlePrice);
                 int resultPrice = Long.valueOf(currencyService.calculateCurrency(googlePrice, spon.getCurrency(), spon.getSpon_date())).intValue();
@@ -2921,10 +3040,13 @@ public class AdminService {
                 modelAndView.addObject("tax", tax);
             }
             String currencyRate = currencyService.getCurrencyRate(spon.getSpon_date(), spon.getCurrency());
-            if(currencyRate.equals(""))
+            if (currencyRate.equals(""))
                 throw new Exception("Currency Error");
             modelAndView.addObject("currencyRate", currencyRate);
             modelAndView.addObject("spon", spon);
+            if(prevStatus.equals("apply")){
+                prevStatus = "applys";
+            }
             modelAndView.addObject("prevStatus", prevStatus);
             return modelAndView;
         } catch (Exception e) {
@@ -2946,7 +3068,7 @@ public class AdminService {
         return part[0] + decimalFormat.format(vatMoneyRound);
     }
 
-    private String calculateGoogleVat(String money){
+    private String calculateGoogleVat(String money) {
         String[] part = money.split("(?<=\\D)(?=\\d)");
         String clearMoneyValue = money.replaceAll("[^0-9.]", "");
         double vatMoney = Double.parseDouble(clearMoneyValue) / 1.1;

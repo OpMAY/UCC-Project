@@ -56,7 +56,7 @@
         from artist
         <choose>
             <when test="artistList.size() != 0">
-        WHERE artist_no not in
+                WHERE artist_no not in
                 <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
                     #{code}
                 </foreach>
@@ -70,7 +70,7 @@
         from artist
         <choose>
             <when test="artistList.size() != 0">
-        WHERE artist_no not in
+                WHERE artist_no not in
                 <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
                     #{code}
                 </foreach>
@@ -178,5 +178,10 @@
     <select id="getAllArtistForCDN" resultType="Artist">
         select *
         from artist
+    </select>
+    <select id="getArtistByArtistName" resultType="Artist">
+        select *
+        from artist
+        WHERE artist_name = #{artist_name}
     </select>
 </mapper>

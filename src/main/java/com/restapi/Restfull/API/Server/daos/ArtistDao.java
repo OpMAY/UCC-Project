@@ -118,4 +118,9 @@ public class ArtistDao {
         ArtistMapper artistMapper = ROSqlSession.getMapper(ArtistMapper.class);
         return artistMapper.getAllArtistForCDN();
     }
+
+    public Artist getArtistByArtistName(String artist_name) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getArtistByArtistName(artist_name);
+    }
 }

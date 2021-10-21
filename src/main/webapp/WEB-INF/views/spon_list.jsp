@@ -196,7 +196,7 @@
                         <div class="card-body">
                             <h6 class="card-title" style="font-size: x-large"><c:choose><c:when
                                     test="${status == 'purchase'}">결제실패 <a style="margin-left: 10px"
-                                                                           href="${pageContext.request.contextPath}/admin/spon/apply.do">미승인 </a><a
+                                                                           href="${pageContext.request.contextPath}/admin/spon/applys.do">미승인 </a><a
                                     style="margin-left: 10px"
                                     href="${pageContext.request.contextPath}/admin/spon/send.do">미정산 </a><a
                                     style="margin-left: 10px"
@@ -205,7 +205,7 @@
                                 <button type="button"
                                         class="btn btn-outline-primary btn-icon-text"
                                         style="float: right; padding-top: 10px; padding-bottom: 10px; margin-bottom: 2px"
-                                        onclick="alert('준비 중 입니다.')">
+                                        onclick="if(confirm('전체 결제 검증을 진행하시겠습니까?')){verifySponStatus();} else return false;">
                                     <i class="btn-icon-prepend" data-feather="credit-card"></i>
                                     전체 결제 검증
                                 </button>
@@ -220,14 +220,14 @@
                                     test="${status == 'send'}"><a style="margin-right: 10px"
                                                                   href="${pageContext.request.contextPath}/admin/spon/purchase.do">
                                 결제실패 </a><a style="margin-right: 10px"
-                                            href="${pageContext.request.contextPath}/admin/spon/apply.do">
+                                            href="${pageContext.request.contextPath}/admin/spon/applys.do">
                                 미승인 </a>미정산 <a style="margin-left: 10px"
                                                href="${pageContext.request.contextPath}/admin/spon/complete.do">
                                 정산완료 </a></c:when><c:when
                                     test="${status == 'complete'}"><a style="margin-right: 10px"
                                                                       href="${pageContext.request.contextPath}/admin/spon/purchase.do">
                                 결제실패 </a><a style="margin-right: 10px"
-                                            href="${pageContext.request.contextPath}/admin/spon/apply.do">
+                                            href="${pageContext.request.contextPath}/admin/spon/applys.do">
                                 미승인 </a><a style="margin-right: 10px"
                                            href="${pageContext.request.contextPath}/admin/spon/send.do">
                                 미정산 </a>정산완료 </c:when></c:choose></h6>
@@ -361,6 +361,26 @@
         $('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
     });
 
+    function verifySponStatus(){
+        $.ajax({
+            type: 'POST',
+            url: '/admin/spon/list/update/verifications.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        }).done(function (result) {
+            if (result !== null) {
+                alert('업데이트 되었습니다.\n검증 요청한 후원 갯수 : ' + result.total_num + '\n검증 성공 : ' + result.success_num + '\n검증 실패 : ' + result.fail_num);
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.");
+                window.location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error);
+            window.location.reload();
+        })
+    }
+
     function getTotalSendPrice() {
         let selectedPlatform;
         switch ($('#platform-select').val()) {
@@ -395,7 +415,7 @@
         };
         $.ajax({
             type: 'POST',
-            url: '/admin/spon/list/update.do',
+            url: '/admin/spon/list/update/expectations.do',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(formData)
@@ -409,7 +429,7 @@
             }
         }).fail(function (error) {
             console.log(error);
-            window.location.href = '/admin/loudsourcing/detail.do?loudsourcing_no=${Loudsourcing.loudsourcing_no}';
+            window.location.reload();
         })
 
     }

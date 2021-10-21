@@ -897,7 +897,7 @@ public class AdminController implements ControllerInitialize {
         return adminService.getSponList("purchase");
     }
 
-    @GetMapping("/admin/spon/apply.do")
+    @GetMapping("/admin/spon/applys.do")
     public ModelAndView GetSponApplyList() {
         return adminService.getSponList("apply");
     }
@@ -949,7 +949,7 @@ public class AdminController implements ControllerInitialize {
 
     @PostMapping("/admin/spon/update.do")
     @ResponseBody
-    public int UpdateSpon(@RequestBody String body){
+    public SponDetailVerificationResponse UpdateSpon(@RequestBody String body){
         SponRequest request = new Gson().fromJson(body, SponRequest.class);
         return adminService.updateSpon(request.getSpon_no());
     }
@@ -961,16 +961,41 @@ public class AdminController implements ControllerInitialize {
         private String platform;
     }
 
-    @PostMapping("/admin/spon/list/update.do")
+    @PostMapping("/admin/spon/list/update/expectations.do")
     @ResponseBody
     public int GetSendPrice(@RequestBody String body){
         SponSendDataRequest request = new Gson().fromJson(body, SponSendDataRequest.class);
         return adminService.getSendPrice(request.getStart_date(), request.getEnd_date(), request.getPlatform());
     }
 
+    @PostMapping("/admin/spon/list/update/verifications.do")
+    @ResponseBody
+    public SponListVerificationResponse VerifyAllSponList(){
+        return adminService.verifyAllSponList();
+    }
+
     @GetMapping("/admin/spon/summary/artist.do")
     public ModelAndView GetSponSummaryOfArtist(){
         return adminService.getSponSummaryOfArtist();
+    }
+
+    @Data
+    class ArtistNameRequest {
+        private String artist_name;
+    }
+
+    @PostMapping("/admin/spon/summary/information/artist.do")
+    @ResponseBody
+    public SponSummaryArtistResponse GetSelectedArtistInfo(@RequestBody String body){
+        ArtistNameRequest request = new Gson().fromJson(body, ArtistNameRequest.class);
+        return adminService.getSelectedArtistInfoInSponSummary(request.getArtist_name());
+    }
+
+    @PostMapping("/admin/spon/summary/send/to_artist.do")
+    @ResponseBody
+    public int SetArtistSponListToComplete(@RequestBody String body){
+        ArtistNameRequest request = new Gson().fromJson(body, ArtistNameRequest.class);
+        return adminService.setArtistSponListToComplete(request.getArtist_name());
     }
 
     @GetMapping("/admin/hashtag.do")

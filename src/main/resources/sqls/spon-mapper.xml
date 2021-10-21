@@ -148,4 +148,12 @@
           AND spon_date <![CDATA[>=]]> #{start_date}
           AND spon_date <![CDATA[<=]]> #{end_date}
     </select>
+    <select id="getSponListForSendByArtistNo" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND purchase_status = false
+          AND artist_no = #{artist_no}
+    </select>
 </mapper>

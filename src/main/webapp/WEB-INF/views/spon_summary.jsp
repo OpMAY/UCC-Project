@@ -33,7 +33,6 @@
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://MomentJS.com/downloads/moment.js"></script>
 </head>
-<body onload="copyDate()">
 <div class="main-wrapper">
     <div class="page-wrapper" style="margin-left: 0; width: 100%">
         <jsp:include page="partials/_popupnavbar.jsp" flush="true"></jsp:include>
@@ -48,49 +47,78 @@
                                 <div class="card-body">
                                     <h6 class="card-title" style="font-size: x-large">아티스트 정산
                                     </h6>
-                                    <div class="row">
+                                    <div class="row mb-3">
                                         <div class="col-md-12">
-
+                                            <label for="artist-select">아티스트 명</label>
+                                            <select class="form-control" id="artist-select" style="color: #0e1014">
+                                                <option selected disabled hidden id="default">아티스트를 선택하세요.</option>
+                                                <c:forEach var="i" begin="1" end="${artistList.size()}">
+                                                    <option>${artistList[i-1].artist_name}</option>
+                                                </c:forEach>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-
+                                    <div class="row mb-3">
+                                        <div class="col-6 col-md-6">
+                                            <label class="label d-flex" for="price-to-send">
+                                                정산 금액
+                                            </label>
+                                            <textarea class="form-control" id="price-to-send" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled></textarea>
                                         </div>
-                                        <div class="col-md-6">
-
+                                        <div class="col-6 col-md-6">
+                                            <label class="label d-flex" for="number-to-send">
+                                                후원 정산 건수
+                                            </label>
+                                            <textarea class="form-control" id="number-to-send" rows="1"
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled></textarea>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row mb-3">
                                         <div class="col-md-12">
-                                            <label class="label d-flex" for="artist_bank_info" style="font-size: large">
+                                            <label class="label d-flex" for="artist_bank_info">
                                                 아티스트 계좌정보
                                             </label>
                                             <textarea class="form-control" id="artist_bank_info" rows="1"
-                                                      style="line-height: 150%; font-size: large" placeholder="미승인"
-                                                      disabled>${artist.bank_name} ${artist.bank_account} ${artist.bank_owner}</textarea>
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled></textarea>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="label d-flex" for="artist_phone" style="font-size: large">
+                                    <div class="row mb-3">
+                                        <div class="col-6 col-md-6">
+                                            <label class="label d-flex" for="artist_phone">
                                                 아티스트 전화번호
                                             </label>
                                             <textarea class="form-control" id="artist_phone" rows="1"
-                                                      style="line-height: 150%; font-size: large" placeholder="미승인"
-                                                      disabled>${artist.phone}</textarea>
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled></textarea>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="label d-flex" for="artist_email" style="font-size: large">
-                                                아티스트 계좌정보
+                                        <div class="col-6 col-md-6">
+                                            <label class="label d-flex" for="artist_email">
+                                                아티스트 이메일
                                             </label>
                                             <textarea class="form-control" id="artist_email" rows="1"
-                                                      style="line-height: 150%; font-size: large" placeholder="미승인"
-                                                      disabled>${artist.bank_name} ${artist.bank_account} ${artist.bank_owner}}</textarea>
+                                                      style="line-height: 150%; font-size: large"
+                                                      disabled></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-12 justify-content-around d-flex">
+                                            <button type="button" class="btn btn-outline-primary" style="float: right; width: 25%; height: 150%"
+                                                    onclick="if(confirm('입금처리 하시겠습니까?')){setPurchaseStatusTrue()} else {return false;}">
+                                                입금 처리
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" style="float: right; width: 25%; height: 150%"
+                                                    onclick="window.close()">
+                                                닫기
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -130,10 +158,80 @@
         window.opener.location.reload();
     }
 
-    $(document).ready(function () {
-        if(${Artist})
+    function checkArtistListSize(){
+        let size = ${artistList.size()};
+        return size !== 0;
+    }
 
-        document.getElementById("artist-phone").innerText = phoneFormatter("${Artist.artist_phone}");
+    function setPurchaseStatusTrue(){
+        let artist_name = $('select[id=artist-select] option:selected').val();
+        if(artist_name === '아티스트를 선택하세요.'){
+            alert("입금 처리할 아티스트를 먼저 선택해주세요.");
+            return false;
+        }
+        console.log(artist_name);
+        let data = {
+            "artist_name" : artist_name
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/admin/spon/summary/send/to_artist.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            if (result === 0) {
+                alert("입금 처리 완료했습니다.");
+                window.location.reload();
+            } else {
+                alert("알 수 없는 오류 발생");
+                window.location.reload();
+            }
+        }).fail(function(xhr, textStatus, errorThrown) {
+            alert(xhr.responseText);
+            console.log(xhr.responseText);
+            console.log(textStatus);
+            console.log(errorThrown);
+        })
+    }
+
+    $(document).ready(function () {
+        if(!checkArtistListSize()){
+            alert("정산할 아티스트가 존재하지 않습니다.");
+            window.close();
+        }
+    });
+
+    $('select[id=artist-select]').on('change', function(){
+        let artist_name = $('select[id=artist-select] option:selected').val();
+        console.log(artist_name);
+        let data = {
+            "artist_name" : artist_name
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/admin/spon/summary/information/artist.do',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (result) {
+            if (result !== null) {
+                console.log(result);
+                document.getElementById("price-to-send").innerText = result.spon_amount.toLocaleString() + '원';
+                document.getElementById("number-to-send").innerText = result.spon_count.toLocaleString() + '회';
+                document.getElementById("artist_bank_info").innerText = result.artist.bank_name + ' ' + result.artist.bank_account + ' ' + result.artist.bank_owner;
+                document.getElementById("artist_phone").innerText = phoneFormatter(result.artist.artist_phone);
+                document.getElementById("artist_email").innerText = result.artist.email;
+            } else {
+                alert("알 수 없는 오류 발생");
+                window.location.reload();
+            }
+        }).fail(function(xhr, textStatus, errorThrown) {
+            alert(xhr.responseText);
+            console.log(xhr.responseText);
+            console.log(textStatus);
+            console.log(errorThrown);
+        })
     });
 
     function phoneFormatter(num) {

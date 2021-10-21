@@ -68,16 +68,19 @@
                                             Push 알림 제목
                                         </label>
                                         <textarea class="form-control" id="push-make-title" rows="1"
-                                                  style="line-height: 150%; font-size: large" placeholder="알림 제목을 입력하세요."
+                                                  style="line-height: 150%; font-size: large"
+                                                  placeholder="알림 제목을 입력하세요."
                                         ></textarea>
                                     </div>
                                     <div class="col-md-12 mt-3 justify-content-around">
                                         <label class="label" style="font-size: larger" for="push-make-content">
                                             Push 알림 내용
                                         </label>
-                                        <textarea class="form-control" id="push-make-content" rows="5"
-                                                  style="line-height: 150%; font-size: large" placeholder="알림 내용을 입력하세요."
+                                        <textarea class="form-control" id="push-make-content" rows="3"
+                                                  style="line-height: 150%; font-size: large"
+                                                  placeholder="알림 내용을 입력하세요." maxlength="80" onkeyup="checkLength()"
                                         ></textarea>
+                                        <span style="color:#aaa;" id="counter">(0 / 80)</span>
                                     </div>
                                     <div class="col-md-12 mt-4 mb-3 justify-content-around d-flex">
                                         <button type="button" class="btn btn-outline-primary"
@@ -126,12 +129,22 @@
 <script src="/assets/js/data-table.js"></script>
 <!-- end custom js for this page -->
 <script>
+    function checkLength() {
+        let content = $('#push-make-content').val();
+        let length = content.length;
+        if (length > 80) {
+            $('#counter').text("(80 / 80)");
+        } else {
+            $('#counter').text("(" + length + " / 80)");
+        }
+    }
+
     function sendPush() {
         if (!inspection("push-make-title", "push_title")) {
             return false;
         } else if (!inspection("push-make-content", "push_content")) {
             return false;
-        } else if ($('input[name="send-to"]:checked').val() == undefined) {
+        } else if ($('input[name="send-to"]:checked').val() === undefined) {
             alert("전송할 대상을 선택해주세요.");
             return false;
         }

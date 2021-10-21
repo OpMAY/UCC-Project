@@ -74,27 +74,27 @@ public class ASVerification {
     private String verifyStatusCode(int statusCode){
         switch (statusCode) {
             case 21000:
-                return "[Status code: " + statusCode + "] The request to the App Store was not made using the HTTP POST request method.";
+                return "[Status code: " + statusCode + "] The request to the App Store was not made using the HTTP POST request method.\n 앱스토어에 올바르지 못한 요청 방식을 이용하였습니다.";
             case 21001:
                 return "[Status code: " + statusCode + "] This status code is no longer sent by the App Store.";
             case 21002:
-                return "[Status code: " + statusCode + "] The data in the receipt-data property was malformed or the service experienced a temporary issue. Try again.";
+                return "[Status code: " + statusCode + "] The data in the receipt-data property was malformed or the service experienced a temporary issue. Try again.\n 영수증 데이터가 만료되었습니다.";
             case 21003:
                 return "[Status code: " + statusCode + "] The receipt could not be authenticated.";
             case 21004:
                 return "[Status code: " + statusCode + "] The shared secret you provided does not match the shared secret on file for your account.";
             case 21005:
-                return "[Status code: " + statusCode + "] The receipt server was temporarily unable to provide the receipt. Try again.";
+                return "[Status code: " + statusCode + "] The receipt server was temporarily unable to provide the receipt. Try again.\nApple 영수증 조회 서버 오류입니다. 시간이 지난 후 다시 시도해주세요.";
             case 21006:
                 return "[Status code: " + statusCode + "] This receipt is valid but the subscription has expired. When this status code is returned to your server, the receipt data is also decoded and returned as part of the response. Only returned for iOS 6-style transaction receipts for auto-renewable subscriptions.";
             case 21008:
                 return "[Status code: " + statusCode + "] This receipt is from the production environment, but it was sent to the test environment for verification.";
             case 21009:
-                return "[Status code: " + statusCode + "] Internal data access error. Try again later.";
+                return "[Status code: " + statusCode + "] Internal data access error. Try again later.\nApple 영수증 조회 서버 오류입니다. 시간이 지난 후 다시 시도해주세요.";
             case 21010:
-                return "[Status code: " + statusCode + "] The user account cannot be found or has been deleted.";
+                return "[Status code: " + statusCode + "] The user account cannot be found or has been deleted.\n해당 상품을 결제한 유저를 찾을 수 없거나 삭제되었습니다.";
             default:
-                return "[Status code: " + statusCode + "] The receipt for the App Store is incorrect.";
+                return "[Status code: " + statusCode + "] The receipt for the App Store is incorrect.\n해당 결제 데이터의 영수증이 올바르지 않습니다.";
         }
     }
 }

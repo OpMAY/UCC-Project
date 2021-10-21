@@ -131,4 +131,9 @@ public class SponDao {
         SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
         return sponMapper.getSponListForArtistSend(artist_no, start_date, end_date);
     }
+
+    public List<Spon> getSponListForSendByArtistNo(int artist_no) {
+        SponMapper sponMapper = sqlSession.getMapper(SponMapper.class);
+        return sponMapper.getSponListForSendByArtistNo(artist_no);
+    }
 }
