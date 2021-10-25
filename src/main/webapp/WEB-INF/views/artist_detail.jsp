@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <html>
@@ -237,7 +238,7 @@
                                             </label>
                                             <textarea class="form-control" id="spon-number" rows="1"
                                                       style="line-height: 150%; font-size: large"
-                                                      disabled>${spon_num}회</textarea>
+                                                      disabled><fmt:formatNumber value="${spon_num}" type="number"/>회</textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="label d-flex" for="last-spon-date" style="font-size: large">
@@ -256,7 +257,8 @@
                                             </label>
                                             <textarea class="form-control" id="total-spon-amount" rows="1"
                                                       style="line-height: 150%; font-size: large"
-                                                      disabled>${total_spon}원</textarea>
+                                                      disabled><fmt:formatNumber value="${total_spon}"
+                                                                                 type="number"/>원</textarea>
                                         </div>
                                     </div>
                                     <div class="row mt-3 justify-content-center">

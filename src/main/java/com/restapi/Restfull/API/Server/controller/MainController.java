@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -79,6 +80,11 @@ public class MainController {
             e.printStackTrace();
             return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.TEST_FAILED), HttpStatus.OK);
         }
+    }
+
+    @RequestMapping(value = "/api/apple/notification", method = RequestMethod.GET)
+    public ResponseEntity Test(){
+        return new ResponseEntity(DefaultRes.res(StatusCode.NOT_FOUND, ResMessage.TEST_SUCCESS), HttpStatus.NOT_FOUND);
     }
 
 }

@@ -805,6 +805,9 @@ public class AdminService {
             userDao.setSession(sqlSession);
             modelAndView = new ModelAndView("user");
             List<User> userList = userDao.getAllUserList();
+            for(User user : userList){
+                user.setReg_date(Time.MsToSecond(user.getReg_date()));
+            }
             modelAndView.addObject("UserList", userList);
             return modelAndView;
         } catch (Exception e) {
@@ -1001,6 +1004,7 @@ public class AdminService {
             if (user == null) throw new Exception("Bad Request");
             List<Penalty> penaltyList = penaltyDao.getPenaltyListByUserNo(user_no);
             modelAndView.addObject("penalty_num", penaltyList.size());
+            user.setReg_date(Time.MsToSecond(user.getReg_date()));
             modelAndView.addObject("User", user);
             if (user.is_user_private() && penaltyList.size() > 0) {
                 modelAndView.addObject("penalty", penaltyList.get(0));
@@ -1045,15 +1049,31 @@ public class AdminService {
                 artist.setMain_img("https://vodappserver.s3.ap-northeast-2.amazonaws.com/api/images/default/fan_main_img_basic.png");
             }
             List<ArtistSponTotal> sponTotalList = sponDao.getPurchasedSponAmountForArtistAdmin(artist_no);
-            long totalTemp = 0;
+            int totalTemp = 0;
             if (sponTotalList.size() > 0) {
                 String latestSendDate = sponTotalList.get(0).getSend_date();
                 modelAndView.addObject("latest_send_date", latestSendDate);
             }
             for (ArtistSponTotal sponTotal : sponTotalList) {
-                // TODO 플랫폼 별 계산
-                long temp = currencyService.calculateCurrency(sponTotal.getPrice(), sponTotal.getCurrency(), sponTotal.getSpon_date());
-                totalTemp = totalTemp + temp;
+                if(sponTotal.getPlatform().equals("IOS")){
+                    String applePrice = calculateAppleVat(sponTotal.getPrice());
+                    int resultPrice = Long.valueOf(currencyService.calculateCurrency(applePrice, sponTotal.getCurrency(), sponTotal.getSpon_date())).intValue();
+                    if (resultPrice == 0) {
+                        throw new Exception("Currency Error");
+                    }
+                    int tax = Long.valueOf(Math.round((double) resultPrice * 1 / 11)).intValue();
+                    int sendPrice = resultPrice - tax;
+                    totalTemp = totalTemp + sendPrice;
+                } else if (sponTotal.getPlatform().equals("Android")){
+                    String googlePrice = calculateGoogleVat(sponTotal.getPrice());
+                    int resultPrice = Long.valueOf(currencyService.calculateCurrency(googlePrice, sponTotal.getCurrency(), sponTotal.getSpon_date())).intValue();
+                    if (resultPrice == 0) {
+                        throw new Exception("Currency Error");
+                    }
+                    int tax = Long.valueOf(Math.round((double) resultPrice * 5 / 100)).intValue();
+                    int sendPrice = resultPrice - tax;
+                    totalTemp = totalTemp + sendPrice;
+                }
             }
             int totalSpon = Long.valueOf(totalTemp).intValue();
             modelAndView.addObject("total_spon", totalSpon);

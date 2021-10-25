@@ -56,7 +56,7 @@
         select *
         from user
         WHERE sns = #{sns}
-          AND reg_date <![CDATA[=]]> #{date}
+          AND Date(reg_date) <![CDATA[=]]> #{date}
     </select>
     <update id="updateUserFcmToken">
         update user

@@ -80,7 +80,7 @@
                                                   style="line-height: 150%; font-size: large"
                                                   placeholder="알림 내용을 입력하세요." maxlength="80" onkeyup="checkLength()"
                                         ></textarea>
-                                        <span style="color:#aaa;" id="counter">(0 / 80)</span>
+                                        <span style="color:#aaa;float:right" id="counter">(0 / 80)</span>
                                     </div>
                                     <div class="col-md-12 mt-4 mb-3 justify-content-around d-flex">
                                         <button type="button" class="btn btn-outline-primary"
@@ -153,7 +153,7 @@
         let sendTo = $('input[name="send-to"]:checked').val();
         let message = 'Push 알림을 전송합니다.\n\n알림 제목 : ' + title + '\n알림 내용 : ' + content + '\n전송 대상 : ';
         if (sendTo === 'user') {
-            message = message + '유저';
+            message = message + '전체';
         } else if (sendTo === 'artist') {
             message = message + '아티스트';
         }
