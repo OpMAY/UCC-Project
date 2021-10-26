@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,21 @@ public class ASVerification {
         post.setHeader("Accept-Charset", "utf-8");
         post.setEntity(entity);
         return post;
+    }
+
+    private HttpPut getPut(String url){
+        HttpPut put = new HttpPut(url);
+        put.setHeader("Accept", "application/json");
+        put.setHeader("Content-Type", "application/json");
+        put.setHeader("Accept-Charset", "utf-8");
+        return put;
+    }
+
+    public HttpResponse replyToConsumptionRequest(long originalTransactionalId) throws IOException {
+        String url = "https://api.storekit.itunes.apple.com/inApps/v1/transactions/consumption/" + originalTransactionalId;
+        HttpPut put = getPut(url);
+        HttpClient client = HttpClientBuilder.create().build();
+        return client.execute(put);
     }
 
     private HttpResponse getAppleStoreVerification(AppleVerifyRequest request) throws IOException {

@@ -8,6 +8,7 @@ import com.restapi.Restfull.API.Server.response.*;
 import com.restapi.Restfull.API.Server.utility.ASVerification;
 import com.restapi.Restfull.API.Server.utility.URLConverter;
 import lombok.extern.log4j.Log4j2;
+import org.apache.http.HttpResponse;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -416,6 +417,26 @@ public class MainService {
                     }
                 } else {
                     throw new Exception("No Spon Matching receipt_id");
+                }
+            } else if (response.getNotification_type().equals(AppleNotificationType.CONSUMPTION_REQUEST)) {
+                try {
+                    HttpResponse consumptionResponse = ASVerification.getInstance().replyToConsumptionRequest(response.getOriginal_transaction_id());
+                    int statusCode = consumptionResponse.getStatusLine().getStatusCode();
+                    switch (statusCode) {
+                        case 202:
+                            log.info("Status Code 200 : The App Store server received the consumption information.");
+                            break;
+                        case 400:
+                            throw new BusinessException(new Exception("Bad Request"));
+                        case 401:
+                            throw new BusinessException(new Exception("Unauthorized"));
+                        case 404:
+                            throw new BusinessException(new Exception("Not Found"));
+                        case 500:
+                            throw new BusinessException(new Exception("Apple Server Error. Try Again Later"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.APPLE_NOTIFICATION_SUCCESS), HttpStatus.OK);
