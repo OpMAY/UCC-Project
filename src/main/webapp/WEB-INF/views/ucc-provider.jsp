@@ -27,7 +27,7 @@
     </style>
 </head>
 <body style="background: black;">
-    <div style="background: url('/assets/images/ucc/ucc-provider-background-svg1.png'); background-repeat: repeat-y; width: 100%; background-size: contain; max-width: 2560px; margin: auto;">
+    <div id="background-repeat">
     <main class="position-relative">
         <img id="background-top" src="/assets/images/ucc/ucc-provider-background-top.png" style="position: absolute; top: 0; width: 100%; z-index: 0;">
         <div class="container">
