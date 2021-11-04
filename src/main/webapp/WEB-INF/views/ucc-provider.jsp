@@ -50,7 +50,7 @@
                                         <div class="row m-2">
                                             <div class="row p-2" style="border: solid 1px rgba(0,0,0,0.3); border-radius: 5px; cursor: pointer" onclick="copyToClipboard(this)">
                                                 <div class="col-9 font-family-aggro-m">
-                                                    <span>https://mvsolutions.co.kr/ucc.do</span>
+                                                    <span>https://mvsolutions.co.kr/ucc-artist.do</span>
                                                 </div>
                                                 <div class="col-3 font-family-aggro-b" style="border-left: solid 1px rgba(0,0,0,0.3);">
                                                     <span style="color: red;">URL 복사</span>
