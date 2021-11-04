@@ -145,7 +145,6 @@
                                                          style="height: 100%; object-fit: contain; cursor: pointer">
                                                 </div>
                                                 <script>
-
                                                     $("#loudsourcing-make-img").change(function () {
                                                         if (this.files && this.files[0]) {
                                                             const reader = new FileReader;

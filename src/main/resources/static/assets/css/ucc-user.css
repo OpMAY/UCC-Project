@@ -1,0 +1,393 @@
+@font-face {
+    font-family: bm-dohyeon;
+    src: url("/assets/fonts/BMDOHYEON_ttf.ttf");
+}
+@font-face {
+    font-family: black-han-sans;
+    src: url("/assets/fonts/BlackHanSans-Regular.ttf");
+}
+@font-face {
+    font-family: aggro-b;
+    src: url("/assets/fonts/SB 어그로 B.ttf");
+}
+@font-face {
+    font-family: aggro-l;
+    src: url("/assets/fonts/SB 어그로 L.ttf");
+}
+@font-face {
+    font-family: aggro-m;
+    src: url("/assets/fonts/SB 어그로 M.ttf");
+}
+main span, main div span, section span, section div span {
+    font-family: black-han-sans;
+    color: black;
+}
+div.font-family-bm span , span.font-family-bm {
+    font-family: bm-dohyeon;
+}
+div.font-family-aggro-b span, span.font-family-aggro-b {
+    font-family: aggro-b !important;
+}
+div.font-family-aggro-l span, span.font-family-aggro-l {
+    font-family: aggro-l;
+}
+div.font-family-aggro-m span, span.font-family-aggro-m {
+    font-family: aggro-m;
+}
+
+footer a.privacy {
+    background: -webkit-linear-gradient(0deg, #88E6F5, #875FE9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+a:hover {
+    text-decoration: none;
+}
+
+span, strong, a, b, div {
+    word-break: keep-all;
+}
+
+span.font-white, div.font-white span  {
+    color: white !important;
+}
+span.font-black, div.font-black span  {
+    color: black !important;
+}
+.font-grey {
+    color: #6A6A6A;
+}
+
+.font-size-10 {
+    font-size: 10px;
+}
+.font-size-17 {
+    font-size: 17px;
+}
+.font-size-20 {
+    font-size: 20px;
+}
+.font-size-24 {
+    font-size: 24px;
+}
+.font-size-30 {
+    font-size: 30px;
+}
+.font-size-32 {
+    font-size: 32px;
+}
+.font-size-36 {
+    font-size: 36px;
+}
+.font-size-40 {
+    font-size: 40px;
+}
+.font-size-42 {
+    font-size: 42px;
+}
+.font-size-48 {
+    font-size: 48px;
+}
+.font-size-54 {
+    font-size: 54px;
+}
+.font-size-56 {
+    font-size: 56px;
+}
+.font-size-64 {
+    font-size: 64px;
+}
+.font-size-80 {
+    font-size: 80px;
+}
+
+@-webkit-keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:40%;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+.carousel-item-video {
+    object-fit: cover;
+    width: 99%;
+    border:solid 5px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.25);
+    background: black;
+}
+
+img.logo-fixed {
+    content:url("/assets/images/ucc/top-left-logo-white.png");
+}
+img.logo-fixed.dark-logo {
+    content:url("/assets/images/ucc/top-left-logo-black.png");
+}
+img.logo-fixed2 {
+    content:url("/assets/images/ucc/icon_share.svg");
+}
+img.logo-fixed2.dark-logo {
+    content:url("/assets/images/ucc/icon_share_black.svg");
+}
+
+.owl-nav {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 40%;
+    left:-10%;
+    width: 120%;
+}
+.owl-carousel button.owl-dot {
+    background: black !important;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+.owl-carousel button.owl-dot.active {
+    background: red !important;
+}
+
+@media (min-width: 360px){
+    .event-red-arrow {
+        transform: rotate(90deg);
+    }
+
+    #section5 .container-fluid {
+        overflow: hidden;
+    }
+    #section5 .container-fluid>.row:last-child {
+        width: 140% !important;
+        position: relative;
+        left: -20%;
+    }
+    .owl-carousel.artists .owl-item:not(.center) img {
+        opacity: 0.3;
+        margin: auto;
+    }
+
+    .blink-image1 {
+        -webkit-animation: blink normal 4500ms infinite ease-in-out;
+        width: 50px; position: absolute; left: 20%; top: 0;
+    }
+    .blink-image2 {
+        -webkit-animation: blink normal 5100ms infinite ease-in-out;
+        width: 120px; position: absolute; left: 8%; top: 15%;
+    }
+    .blink-image3 {
+        -webkit-animation: blink normal 4800ms infinite ease-in-out;
+        width: 160px; position: absolute; left: -10%; top: 45%;
+    }
+    .blink-image4 {
+        -webkit-animation: blink normal 5300ms infinite ease-in-out;
+        width: 200px; position: absolute; left: 3%; bottom: -5%;
+    }
+    .blink-image5 {
+        -webkit-animation: blink normal 4700ms infinite ease-in-out;
+        width: 100px; position: absolute; right:5%; top: 0;
+    }
+    .blink-image6 {
+        -webkit-animation: blink normal 5900ms infinite ease-in-out;
+        width: 60px; position: absolute; right:16%; top: 21%;
+    }
+    .blink-image7 {
+        -webkit-animation: blink normal 4200ms infinite ease-in-out;
+        width: 200px; position: absolute; right:0; top: 40%;
+    }
+    .blink-image8 {
+        -webkit-animation: blink normal 4800ms infinite ease-in-out;
+        width: 160px; position: absolute; right:-5%; bottom: 0;
+    }
+    iframe {
+        width: 400px;
+        height: 225px;
+    }
+    .logo-fixed {
+        height: 24px;
+    }
+    .logo-fixed2 {
+        width: 15px;
+    }
+    #section9 .download-btn {
+        width: 60%;
+    }
+    #info-box {
+        left: 50%;
+        bottom: 18%;
+        transform: translate(-50%, 0);
+        background: black;
+        z-index: 1;
+    }
+    .owl-dots {
+        margin-top: 5rem;
+        display: flex;
+        justify-content: center;
+        gap: 3%;
+    }
+
+    footer .logo {
+        width: 50px;
+    }
+    footer .media1 {
+        width: 25px;
+    }
+    footer .media2 {
+        width: 20px;
+    }
+}
+
+@media (min-width: 1200px){
+    .event-red-arrow {
+        transform: translate(0, -65%);
+    }
+    .owl-carousel.artists .owl-item:not(.center) img {
+        width: 80%;
+        height: 60%;
+        opacity: 0.3;
+        margin: auto;
+    }
+    #section5 .container-fluid .row:last-child {
+        width: 100% !important;
+    }
+    #info-box {
+        left: 14%;
+        bottom: 27%;
+        background: black;
+        z-index: 1;
+    }
+
+    .blink-image1 {
+        -webkit-animation: blink normal 4500ms infinite ease-in-out;
+        width: 160px; position: absolute; left: 28%; top: 0;
+    }
+    .blink-image2 {
+        -webkit-animation: blink normal 5100ms infinite ease-in-out;
+        width: 220px; position: absolute; left: 17%; top: 13%;
+    }
+    .blink-image3 {
+        -webkit-animation: blink normal 4800ms infinite ease-in-out;
+        width: 240px; position: absolute; left: 25%; top: 44%;
+    }
+    .blink-image4 {
+        -webkit-animation: blink normal 5300ms infinite ease-in-out;
+        width: 360px; position: absolute; left: 3%; top: 52%;
+    }
+    .blink-image5 {
+        -webkit-animation: blink normal 4700ms infinite ease-in-out;
+        width: 220px; position: absolute; right:16%; top: -2%;
+    }
+    .blink-image6 {
+        -webkit-animation: blink normal 5900ms infinite ease-in-out;
+        width: 160px; position: absolute; right:28%; top: 21%;
+    }
+    .blink-image7 {
+        -webkit-animation: blink normal 4200ms infinite ease-in-out;
+        width: 360px; position: absolute; right:5%; top: 32%;
+    }
+    .blink-image8 {
+        -webkit-animation: blink normal 4800ms infinite ease-in-out;
+        width: 240px; position: absolute; right:25%; top: 66%;
+    }
+    iframe {
+        width: 500px;
+        height: 281px;
+    }
+    .logo-fixed {
+        height: 41px;
+    }
+    .logo-fixed2 {
+        width: 25px;
+    }
+    #section9 .download-btn {
+        width: 100%;
+    }
+    .owl-dots {
+        margin-top: 8rem;
+        display: flex;
+        justify-content: center;
+        gap: 3%;
+    }
+
+    footer .logo {
+        width: 92px;
+    }
+    footer .media1 {
+        width: 40px;
+    }
+    footer .media2 {
+        width: 32px;
+    }
+}
+
+@media(max-width: 768px){
+
+    .font-size-sm-8 {
+        font-size: 8px;
+    }
+    .font-size-sm-10 {
+        font-size: 10px;
+    }
+    .font-size-sm-12 {
+        font-size: 12px;
+    }
+    .font-size-sm-14 {
+        font-size: 14px;
+    }
+    .font-size-sm-16 {
+        font-size: 16px;
+    }
+    .font-size-sm-17 {
+        font-size: 17px;
+    }
+    .font-size-sm-20 {
+        font-size: 20px;
+    }
+    .font-size-sm-22 {
+        font-size: 22px;
+    }
+    .font-size-sm-24 {
+        font-size: 24px;
+    }
+    .font-size-sm-30 {
+        font-size: 30px;
+    }
+    .font-size-sm-32 {
+        font-size: 32px;
+    }
+    .font-size-sm-36 {
+        font-size: 36px;
+    }
+    .font-size-sm-40 {
+        font-size: 40px;
+    }
+}
+
+.owl-carousel.artists .owl-item.center img {
+    width: 100%;
+    height: 100%;
+}
+.owl-carousel.artists .owl-stage {
+    display: flex;
+    align-items: end;
+}
+.owl-carousel.artists .owl-item .desc {
+    display: none;
+}
+.owl-carousel.artists .owl-item.active.center img:hover + .desc,
+.owl-carousel.artists .owl-item.active.center .desc:hover {
+    display: flex;
+    background: rgba(0,0,0,0.5);
+}
+
+.nav-item .nav-link {
+    padding: 0;
+}
+.nav-item .active img {
+    border: solid red;
+    border-radius: 50%;
+}
