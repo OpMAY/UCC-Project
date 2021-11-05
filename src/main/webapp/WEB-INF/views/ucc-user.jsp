@@ -15,9 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/ucc-user.css">
-    <title>[UCC] temp title</title>
-<!--    <link rel="icon" href="../../../assets/images/ucc/favicon.ico">-->
-<!--    <link rel="apple-touch-icon" href="../../../assets/images/ucc/favicon.ico"/>-->
+    <title>장르 불문 아티스트를 위한 놀이터 UCC</title>
+    <link rel="icon" href="/assets/images/ucc/ucc_favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/ucc/ucc_favicon.png"/>
     <link rel="stylesheet" href="/assets/css/owl.carousel.css">
 </head>
 <body>
