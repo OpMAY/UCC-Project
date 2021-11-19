@@ -16,9 +16,9 @@
           rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/ucc-user.css">
     <link rel="stylesheet" href="/assets/css/ucc-provider.css">
-    <title>[UCC] temp title</title>
-    <!--    <link rel="icon" href="../../../assets/images/ucc/favicon.ico">-->
-    <!--    <link rel="apple-touch-icon" href="../../../assets/images/ucc/favicon.ico"/>-->
+    <title>장르 불문 아티스트를 위한 놀이터 UCC</title>
+    <link rel="icon" href="/assets/images/ucc/ucc_favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/ucc/ucc_favicon.png"/>
     <link rel="stylesheet" href="/assets/css/owl.carousel.css">
     <style>
         main span, main div.span, section span, section div.span {
@@ -27,7 +27,7 @@
     </style>
 </head>
 <body style="background: black;">
-    <div style="background: url('/assets/images/ucc/ucc-provider-background-svg1.png'); background-repeat: repeat-y; width: 100%; background-size: contain; max-width: 2560px; margin: auto;">
+    <div id="background-repeat">
     <main class="position-relative">
         <img id="background-top" src="/assets/images/ucc/ucc-provider-background-top.png" style="position: absolute; top: 0; width: 100%; z-index: 0;">
         <div class="container">
@@ -50,7 +50,7 @@
                                         <div class="row m-2">
                                             <div class="row p-2" style="border: solid 1px rgba(0,0,0,0.3); border-radius: 5px; cursor: pointer" onclick="copyToClipboard(this)">
                                                 <div class="col-9 font-family-aggro-m">
-                                                    <span>https://mvsolutions.co.kr/ucc.do</span>
+                                                    <span>https://mvsolutions.co.kr/ucc-artist.do</span>
                                                 </div>
                                                 <div class="col-3 font-family-aggro-b" style="border-left: solid 1px rgba(0,0,0,0.3);">
                                                     <span style="color: red;">URL 복사</span>

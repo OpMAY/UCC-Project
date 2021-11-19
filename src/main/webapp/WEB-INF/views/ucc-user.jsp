@@ -15,9 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/ucc-user.css">
-    <title>[UCC] temp title</title>
-<!--    <link rel="icon" href="../../../assets/images/ucc/favicon.ico">-->
-<!--    <link rel="apple-touch-icon" href="../../../assets/images/ucc/favicon.ico"/>-->
+    <title>장르 불문 아티스트를 위한 놀이터 UCC</title>
+    <link rel="icon" href="/assets/images/ucc/ucc_favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/ucc/ucc_favicon.png"/>
     <link rel="stylesheet" href="/assets/css/owl.carousel.css">
 </head>
 <body>
@@ -76,7 +76,7 @@
     </div>
 </main>
 
-<section id="section1" style="overflow-x: hidden">
+<section id="section1" style="overflow-x: hidden; background-color: white;">
     <div class="container-fluid text-center p-lg-5 p-3">
         <div class="row flex-column font-size-40 font-size-sm-32 mt-lg-5 mt-3">
             <span>잃어버린</span>
@@ -135,7 +135,7 @@
         </div>
     </div>
 </section><!-- 이벤트 참여 방법 -->
-<section id="section3" class="p-lg-5 p-3" style="background-size: cover !important; background: url('/assets/images/ucc/backgroud-pictures.png') no-repeat center;">
+<section id="section3" class="p-lg-5 p-3" style="background-size: cover !important; background: white url('/assets/images/ucc/backgroud-pictures.png') no-repeat center;">
     <div class="container p-3 p-lg-5">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-family-aggro-b">
             <span class="font-size-40 font-size-sm-24">지금 바로&nbsp;</span>
@@ -155,7 +155,7 @@
         </div>
     </div>
 </section><!-- 보물찾기에 참여하세요 -->
-<section id="section4" >
+<section id="section4" style="background: white;" >
     <div class="container pt-lg-5 pt-3">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-size-40 font-size-sm-24 p-lg-5 p-3 m-3 font-family-aggro-b">
             <span style="color: red !important;">UCC 보물&nbsp;</span>
@@ -302,7 +302,7 @@
         </div>
     </div>
 </section><!-- 그동안 왜 몰랐지? -->
-<section id="section6" class="ucc-contents py-lg-5 py-3">
+<section id="section6" class="ucc-contents py-lg-5 py-3" style="background: white;">
     <div class="container py-lg-5 py-3">
         <div class="row flex-column text-center font-size-40 font-size-sm-24 font-family-aggro-b">
             <span>“이렇게 신선한 콘텐츠가 있었다니!”</span>
@@ -353,7 +353,7 @@
         </div>
     </div>
 </section><!-- 이렇게 신선한 콘텐츠가 있었다니 -->
-<section id="section7" class="p-lg-5 p-3" style="background-size: cover!important; background: url('/assets/images/ucc/backgroud-pictures-dark.png') center;">
+<section id="section7" class="p-lg-5 p-3" style="background-size: cover!important; background: white url('/assets/images/ucc/backgroud-pictures-dark.png') center;">
     <div class="container p-lg-5 p-3">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-family-aggro-b">
             <span class="font-size-40 font-size-sm-24 font-white">더 많은 보물은 &nbsp;</span>
@@ -373,7 +373,7 @@
         </div>
     </div>
 </section><!-- 더 많은 보물은 UCC에서 확인 할 수 있습니다 -->
-<section id="section8" class="p-lg-5 p-3">
+<section id="section8" class="p-lg-5 p-3" style="background-color: white;">
     <div class="container p-lg-5 p-3">
         <div class="row font-size-40 font-size-sm-16 justify-content-center text-center flex-column font-family-aggro-b">
             <span><span style="color: red">세상과 아티스트</span>를 연결하는 UCC는</span>
@@ -384,7 +384,7 @@
         </div>
     </div>
 </section><!-- 세상과 아티스트를 연결하는 UCC는 다양한 기업과 함께 -->
-<section id="section9" class="py-lg-5 py-3 last-section" style="background: #FAFAFA;">
+<section id="section9" class="py-lg-5 py-3 last-section" style="background: white;">
     <div class="container py-lg-5 py-3">
         <div class="row flex-column flex-column-reverse flex-lg-row justify-content-center align-items-center text-center">
             <div class="col-lg-6 col-12 my-4 mt-5">

@@ -26,6 +26,16 @@ body .container {
 }
 
 @media (min-width: 360px) {
+    #background-repeat {
+        width: 100%;
+        background-size: contain !important;
+        max-width: 2560px;
+        margin: auto;
+        background-image: url('/assets/images/ucc/ucc-provider-background-mobile.png') !important;
+        background-repeat: repeat-y !important;
+        background-color: white;
+    }
+
     #main-text {
         padding-top: 9%;
         padding-bottom: 2%;
@@ -125,6 +135,15 @@ body .container {
 }
 
 @media (min-width: 1024px){
+    #background-repeat {
+        width: 100%;
+        background-size: contain !important;
+        max-width: 2560px;
+        margin: auto;
+        background-image: url('/assets/images/ucc/ucc-provider-background-svg1.png') !important;
+        background-repeat: repeat-y !important;
+        background-color: white;
+    }
     #main-text {
         padding-top: 30%;
         /*padding-bottom: 2rem;*/

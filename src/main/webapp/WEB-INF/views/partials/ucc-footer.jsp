@@ -19,10 +19,10 @@
 <%--                </div>--%>
             </div>
             <div class="col-12 col-lg-3 d-flex flex-column justify-content-end">
-                <div class="row"><span class="font-size-48 font-size-sm-20"><strong>070-4906-1022</strong></span></div>
+                <div class="row"><span class="font-size-42 font-size-sm-20"><strong>070-4906-1022</strong></span></div>
                 <div class="row font-size-20 font-size-sm-10" style="gap: 3%">
-                    <span>월-금 10:00 - 22:00</span>
-                    <span>주말, 공휴일 10:00 - 18:00</span>
+                    <span>월-금 09:00 - 18:00</span>
+                    <span>주말, 공휴일 휴무</span>
                 </div>
             </div>
             <div class="col-12 col-lg-3 d-flex flex-column justify-content-between">
