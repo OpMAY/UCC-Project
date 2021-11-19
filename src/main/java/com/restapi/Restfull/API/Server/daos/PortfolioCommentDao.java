@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.daos;
 
+import com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingEntryMapper;
 import com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioCommentMapper;
 import com.restapi.Restfull.API.Server.models.PortfolioComment;
 import org.apache.ibatis.session.SqlSession;
@@ -16,9 +17,9 @@ public class PortfolioCommentDao {
             this.sqlSession = sqlSession;
     }
 
-    public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no) {
+    public List<PortfolioComment> getCommentListByPortfolioNoRefresh(int portfolio_no, PortfolioComment portfolioComment) {
         PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
-        return portfolioCommentMapper.getCommentListByPortfolioNo(portfolio_no);
+        return portfolioCommentMapper.getCommentListByPortfolioNoRefresh(portfolio_no, portfolioComment.getReg_date(), portfolioComment.getComment_no());
     }
 
     public List<PortfolioComment> getCommentListByUserNo(int user_no) {
@@ -46,4 +47,18 @@ public class PortfolioCommentDao {
         return portfolioCommentMapper.getCommentByCommentNo(comment_no);
     }
 
+    public List<PortfolioComment> getCommentNumberByPortfolioNo(int portfolio_no) {
+        PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
+        return portfolioCommentMapper.getCommentNumberByPortfolioNo(portfolio_no);
+    }
+
+    public List<PortfolioComment> getCommentListByPortfolioNo(int portfolio_no) {
+        PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
+        return portfolioCommentMapper.getCommentListByPortfolioNo(portfolio_no);
+    }
+
+    public void updateAllCommentUserInfo(int artist_no, String artist_name, String artist_profile_img){
+        PortfolioCommentMapper portfolioCommentMapper = sqlSession.getMapper(PortfolioCommentMapper.class);
+        portfolioCommentMapper.updateAllCommentUserInfo(artist_no, artist_name, artist_profile_img);
+    }
 }

@@ -3,5 +3,110 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingEntryMapper">
-
+    <select id="getEntryListByLoudSourcingNoSortFankokRefresh" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE loudsourcing_no = #{loudsourcing_no}
+          AND (fan_number <![CDATA[<]]> #{fan_number} OR (fan_number <![CDATA[=]]> #{fan_number} AND entry_no <![CDATA[<]]> #{entry_no}))
+        ORDER BY fan_number DESC, entry_no DESC
+        LIMIT 10
+    </select>
+    <select id="getEntryListByLoudSourcingNoSortRecentRefresh" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE loudsourcing_no = #{loudsourcing_no}
+          AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND entry_no <![CDATA[<]]> #{entry_no}))
+        ORDER BY reg_date DESC, entry_no DESC
+        LIMIT 10
+    </select>
+    <select id="getEntryListByLoudSourcingNoSortFankok" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE loudsourcing_no = #{loudsourcing_no}
+        ORDER BY fan_number DESC, entry_no DESC
+        LIMIT 10
+    </select>
+    <select id="getEntryListByLoudSourcingNoSortRecent" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE loudsourcing_no = #{loudsourcing_no}
+        ORDER BY reg_date DESC, entry_no DESC
+        LIMIT 10
+    </select>
+    <select id="getEntryListByArtistNo" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE artist_no = #{artist_no}
+    </select>
+    <select id="getEntryByEntryNo" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE entry_no = #{entry_no}
+    </select>
+    <select id="getEntryByArtistNOAndLoudSourcingNo" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE artist_no = #{artist_no}
+          AND loudsourcing_no = #{loudsourcing_no}
+    </select>
+    <insert id="insertEntry" useGeneratedKeys="true" keyProperty="entry_no">
+        insert into loudsourcingentry(loudsourcing_no, artist_no, file, content, reg_date, revise_date, agree,
+                                      thumbnail, artist_name, artist_profile_img, fan_number, video_length)
+        VALUES (#{loudsourcing_no}, #{artist_no}, #{file}, #{content}, #{reg_date}, #{revise_date}, #{agree},
+                #{thumbnail}, #{artist_name}, #{artist_profile_img}, #{fan_number}, #{video_length})
+    </insert>
+    <update id="updateEntry">
+        update loudsourcingentry
+        SET content=#{content},
+            revise_date=#{revise_date},
+            artist_name=#{artist_name},
+            artist_profile_img=#{artist_profile_img}
+        WHERE entry_no = #{entry_no}
+    </update>
+    <update id="updateEntryByVote">
+        update loudsourcingentry
+        SET vote_number=#{vote_number}
+        WHERE entry_no = #{entry_no}
+    </update>
+    <update id="updateEntryByVisit">
+        update loudsourcingentry
+        SET visit=#{visit}
+        WHERE entry_no = #{entry_no}
+    </update>
+    <update id="updateEntryByFankok">
+        update loudsourcingentry
+        SET fan_number=#{fan_number}
+        WHERE entry_no = #{entry_no}
+    </update>
+    <update id="updateEntryByComment">
+        update loudsourcingentry
+        SET comment_number=#{comment_number}
+        WHERE entry_no = #{entry_no}
+    </update>
+    <delete id="deleteEntry">
+        delete
+        from loudsourcingentry
+        WHERE entry_no = #{entry_no}
+    </delete>
+    <select id="getEntryListNum" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE loudsourcing_no = #{loudsourcing_no}
+    </select>
+    <select id="getEntryForCDN" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+    </select>
+    <select id="getEntryListByLoudSourcingNoAdminSortByVoteNumber" resultType="LoudSourcingEntry">
+        select *
+        from loudsourcingentry
+        WHERE loudsourcing_no = #{loudsourcing_no}
+        ORDER BY vote_number DESC
+    </select>
+    <update id="updateContentProfile">
+        update loudsourcingentry
+        SET artist_name=#{artist_name},
+            artist_profile_img=#{artist_profile_img}
+        WHERE artist_no = #{artist_no}
+    </update>
 </mapper>

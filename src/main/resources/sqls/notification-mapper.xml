@@ -3,5 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.NotificationMapper">
-
+    <select id="getNotification" resultType="Notification">
+        select * from notification WHERE user_no=#{user_no} ORDER BY reg_date DESC, notification_no DESC LIMIT 10
+    </select>
+    <select id="getNotificationRefresh" resultType="Notification">
+        select * from notification WHERE user_no=#{user_no} AND (reg_date <![CDATA[<]]> #{reg_date} OR (notification_no <![CDATA[<]]> #{notification_no} AND reg_date <![CDATA[=]]> #{reg_date})) ORDER BY reg_date DESC, notification_no DESC LIMIT 10
+    </select>
+    <select id="getNotificationByNotificationNo" resultType="Notification">
+        select * from notification WHERE notification_no=#{notification_no}
+    </select>
+    <insert id="insertNotification" useGeneratedKeys="true" keyProperty="notification_no">
+        insert into notification(user_no,  type, content, reg_date, next)
+        VALUES (#{user_no}, #{type}, #{content}, #{reg_date}, #{next} )
+    </insert>
+    <delete id="deleteNotification">
+        delete from notification WHERE notification_no=#{notification_no}
+    </delete>
 </mapper>

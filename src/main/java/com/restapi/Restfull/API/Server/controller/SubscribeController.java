@@ -1,5 +1,6 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.ResMessage;
@@ -51,13 +52,32 @@ public class SubscribeController {
         private int artist_no;
     }
 
-    @RequestMapping(value = "/api/fankok/delete", method = RequestMethod.POST)
-    public ResponseEntity DeleteFankok(@ModelAttribute ArtistRequest artistRequest){
+    @RequestMapping(value = "/api/fankok/delete/{sort}", method = RequestMethod.POST) // CHECK
+    public ResponseEntity DeleteFankok(@RequestBody String body, @PathVariable String sort) {
+        ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
         /** 구독 정보 확인 - 있으면 팬콕 취소, 없으면 BAD REQUEST ERROR**/
-        if(subscribeService.getSubscribeInfoByUserNoANDArtistNo(artistRequest.getUser_no(), artistRequest.getArtist_no()) != null) {
-            return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no());
-        }else{
+        if (subscribeService.getSubscribeInfoByUserNoANDArtistNo(artistRequest.getUser_no(), artistRequest.getArtist_no()) != null) {
+            return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no(), sort);
+        } else {
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResMessage.NOT_SUBSCRIBED_ARTIST), HttpStatus.OK);
         }
+    }
+
+    @RequestMapping(value = "/api/fankok/user/{user_no}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetUserFankokContents(@PathVariable("user_no") int user_no) {
+        return subscribeService.getSubscribeListByUserNo(user_no);
+    }
+
+    @RequestMapping(value = "/api/fankok/user/{user_no}/artists/{sort}/{last_index}", method = RequestMethod.GET)
+    // CHECK
+    public ResponseEntity GetUserFankokArtist(@PathVariable("user_no") int user_no,
+                                              @PathVariable("sort") String sort,
+                                              @PathVariable("last_index") int last_index) {
+        return subscribeService.getSubscribeArtistList(user_no, last_index, sort);
+    }
+
+    @RequestMapping(value = "/api/user/{user_no}/fankoklist", method = RequestMethod.GET)
+    public ResponseEntity GetSubscribedArtists(@PathVariable("user_no") int user_no) {
+        return subscribeService.getSubscribedArtists(user_no);
     }
 }

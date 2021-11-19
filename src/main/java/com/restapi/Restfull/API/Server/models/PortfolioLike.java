@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Data
 @Getter
 @Setter
@@ -15,5 +13,5 @@ public class PortfolioLike {
     private int like_no;
     private int portfolio_no;
     private int user_no;
-    private Date reg_date;
+    private String reg_date;
 }

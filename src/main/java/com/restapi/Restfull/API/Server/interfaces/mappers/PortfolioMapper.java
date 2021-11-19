@@ -9,7 +9,17 @@ public interface PortfolioMapper {
 
     Portfolio getPortfolioByPortfolioNo(int portfolio_no);
 
-    List<Portfolio> getPortfolioListByTypeVOD(String type);
+    List<Portfolio> getPortfolioListByTypeVODSortRecentRefresh(String type, String reg_date, int portfolio_no);
+
+    List<Portfolio> getPortfolioListByTypeVODSortTitleRefresh(String type, String title, int portfolio_no);
+
+    List<Portfolio> getPortfolioListByTypeVODSortFanNumberRefresh(String type, int fan_number, int portfolio_no);
+
+    List<Portfolio> getPortfolioListByTypeVODSortRecent(String type);
+
+    List<Portfolio> getPortfolioListByTypeVODSortTitle(String type);
+
+    List<Portfolio> getPortfolioListByTypeVODSortFanNumber(String type);
 
     void insertPortfolio(Portfolio portfolio);
 
@@ -17,7 +27,37 @@ public interface PortfolioMapper {
 
     void deletePortfolio(int portfolio_no);
 
-    void updatePortfolioByComment(int portfolio_no, int number);
+    void updatePortfolioByComment(Portfolio portfolio);
 
-    void updatePortfolioByLike(int portfolio_no, int number);
+    void updatePortfolioByLike(Portfolio portfolio);
+
+    void updatePortfolioByVisit(Portfolio portfolio);
+
+    void updatePortfolioByFankok(Portfolio portfolio);
+
+    List<Portfolio> getPortfolioListByRandom(List<Integer> artistList);
+
+    List<Portfolio> SearchPortfolioLimit(String query);
+
+    List<Portfolio> getPortfolioListByArtistNoLimit(int artist_no);
+
+    void insertFiles(Portfolio portfolio);
+
+    List<Portfolio> getPortfolioByTypeAdmin(int artist_no, String type);
+
+    List<Portfolio> getPortfolioListSortRecentRefresh(int artist_no, String revise_date, int portfolio_no);
+
+    List<Portfolio> getPortfolioListSortWordRefresh(int artist_no, String title, int portfolio_no);
+
+    List<Portfolio> getPortfolioListSortFanNumberRefresh(int artist_no, int fan_number, int portfolio_no);
+
+    List<Portfolio> getPortfolioListSortRecent(int artist_no);
+
+    List<Portfolio> getPortfolioListSortWord(int artist_no);
+
+    List<Portfolio> getPortfolioListSortFanNumber(int artist_no);
+
+    List<Portfolio> getPortfolioForCDN();
+
+    void updateContentProfile(int artist_no, String artist_name, String artist_profile_img);
 }

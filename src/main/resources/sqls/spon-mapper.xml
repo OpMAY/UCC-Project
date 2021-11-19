@@ -4,22 +4,156 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.SponMapper">
     <insert id="insertSpon" useGeneratedKeys="true" keyProperty="spon_no">
-        insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_unique, receipt_id, purchase_data, purchase_status)
-        VALUES (#{user_no}, #{artist_no}, now(), #{price}, #{status}, #{type}, #{board_no}, #{purchase_unique}, #{receipt_id}, #{purchase_data}, #{purchase_status})
+        insert into spon(user_no, artist_no, spon_date, price, status, type, board_no, purchase_token, receipt_id,
+                         purchase_status, verify_status, platform, product_id, currency, order_id)
+        VALUES (#{user_no}, #{artist_no}, #{spon_date}, #{price}, #{status}, #{type}, #{board_no}, #{purchase_token},
+                #{receipt_id}, #{purchase_status}, #{verify_status}, #{platform}, #{product_id}, #{currency},
+                #{order_id})
     </insert>
     <select id="getSponList" resultType="Spon">
-        select * from spon
+        select *
+        from spon
+        order by spon_date DESC
     </select>
     <select id="getSponListByArtistNo" resultType="Spon">
-        select * from spon WHERE artist_no=#{artist_no}
+        select *
+        from spon
+        WHERE artist_no = #{artist_no}
     </select>
     <select id="getSponListByUserNo" resultType="Spon">
-        select * from spon WHERE user_no=#{user_no}
+        select *
+        from spon
+        WHERE user_no = #{user_no}
     </select>
     <select id="getSponListByBoardNo" resultType="Spon">
-        select * from spon WHERE board_no=#{board_no}
+        select *
+        from spon
+        WHERE board_no = #{board_no}
     </select>
     <select id="getSponAfterSpon" resultType="Spon">
-        select * from spon WHERE user_no=#{user_no}, artist_no=#{artist_no}, spon_date=#{spon_date}
+        select *
+        from spon
+        WHERE user_no = #{user_no}
+          AND artist_no = #{artist_no}
+    </select>
+    <select id="getSponBySponNo" resultType="Spon">
+        select *
+        from spon
+        WHERE spon_no = #{spon_no}
+    </select>
+    <update id="updateSponByApply">
+        UPDATE spon
+        SET status= true,
+            apply_date=#{apply_date}
+        WHERE spon_no = #{spon_no}
+    </update>
+    <update id="updateSponBySend">
+        UPDATE spon
+        SET purchase_status= true,
+            send_date=#{send_date}
+        WHERE spon_no = #{spon_no}
+    </update>
+    <delete id="deleteSpon">
+        delete
+        from spon
+        WHERE spon_no = #{spon_no}
+    </delete>
+    <select id="getSponListStatusPurchase" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status NOT IN (0)
+        ORDER BY spon_date DESC
+    </select>
+    <select id="getSponListStatusApply" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = false
+          AND send_date IS NULL
+        ORDER BY spon_date DESC
+    </select>
+    <select id="getSponListStatusSend" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND send_date IS NULL
+        ORDER BY spon_date DESC
+    </select>
+    <select id="getSponListStatusComplete" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND send_date IS NOT NULL
+        ORDER BY spon_date DESC
+    </select>
+    <update id="updateSponByPurchaseUpdate">
+        update spon
+        SET verify_status=#{verify_status}
+        WHERE spon_no = #{spon_no}
+    </update>
+    <select id="isExistAppleReceipt" resultType="_boolean">
+        select EXISTS(select * from spon WHERE receipt_id = #{receipt_id}) as success;
+    </select>
+    <select id="getSponByReceiptIdForApple" resultType="Spon">
+        select *
+        from spon
+        WHERE receipt_id = #{receipt_id}
+    </select>
+    <select id="getSponByPurchaseToken" resultType="Spon">
+        select *
+        from spon
+        WHERE purchase_token = #{purchase_token}
+    </select>
+    <select id="getMonthlySponAmountForArtist" resultType="ArtistSponTotal">
+        select price, currency, platform, spon_date
+        from spon
+        WHERE YEAR(spon_date) = #{year}
+          AND MONTH(spon_date) = #{month}
+          AND verify_status = 0
+          AND STATUS = TRUE
+          AND artist_no = #{artist_no}
+    </select>
+    <select id="getPurchasedSponAmountForArtistAdmin" resultType="ArtistSponTotal">
+        select price, currency, platform, spon_date, send_date
+        from spon
+        WHERE verify_status = 0
+          AND STATUS = TRUE
+          AND purchase_status = TRUE
+          AND artist_no = #{artist_no}
+        ORDER BY send_date DESC
+    </select>
+    <select id="getSponListForIncomePlatform" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND DATE_FORMAT(spon_date, '%Y-%m') = DATE_FORMAT(now(), '%Y-%m')
+    </select>
+    <select id="getSponListForSendInDuration" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = false
+          AND spon_date <![CDATA[>=]]> #{start_date}
+          AND spon_date <![CDATA[<=]]> #{end_date}
+    </select>
+    <select id="getSponListForArtistSend" resultType="ArtistSponTotal">
+        select price, currency, spon_date
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND purchase_status = false
+          AND artist_no = #{artist_no}
+          AND spon_date <![CDATA[>=]]> #{start_date}
+          AND spon_date <![CDATA[<=]]> #{end_date}
+    </select>
+    <select id="getSponListForSendByArtistNo" resultType="Spon">
+        select *
+        from spon
+        WHERE verify_status = 0
+          AND status = true
+          AND purchase_status = false
+          AND artist_no = #{artist_no}
     </select>
 </mapper>

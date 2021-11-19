@@ -12,7 +12,7 @@ public class FileConfiguration implements WebMvcConfigurer {
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setDefaultEncoding("UTF-8"); // 파일 인코딩 설정
+        multipartResolver.setDefaultEncoding("euc-kr"); // 파일 인코딩 설정
         return multipartResolver;
     }
 }

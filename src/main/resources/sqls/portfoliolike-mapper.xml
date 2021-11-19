@@ -5,7 +5,7 @@
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioLikeMapper">
     <insert id="insertLike" useGeneratedKeys="true" keyProperty="like_no">
         insert into portfoliolike(portfolio_no, user_no, reg_date)
-        VALUES (#{portfolio_no}, #{user_no}, now())
+        VALUES (#{portfolio_no}, #{user_no}, #{reg_date})
     </insert>
     <delete id="deleteLike">
         delete from portfoliolike where portfolio_no=#{portfolio_no} AND user_no=#{user_no}

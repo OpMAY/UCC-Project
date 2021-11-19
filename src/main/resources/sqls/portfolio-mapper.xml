@@ -4,31 +4,200 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PortfolioMapper">
     <select id="getPortfolioListByArtistNo" resultType="Portfolio">
-        select * from portfolio where artist_no=#{artist_no}
+        select *
+        from portfolio
+        where artist_no = #{artist_no}
+        order by revise_date DESC
     </select>
     <select id="getPortfolioByPortfolioNo" resultType="Portfolio">
-        select * from portfolio where portfolio_no=#{portfolio_no}
+        select *
+        from portfolio
+        where portfolio_no = #{portfolio_no}
     </select>
-    <select id="getPortfolioListByTypeVOD" resultType="Portfolio">
-        select * from portfolio where type=#{type}
+    <select id="getPortfolioListByTypeVODSortRecentRefresh" resultType="Portfolio">
+        select *
+        from portfolio
+        where type = #{type}
+          AND (reg_date <![CDATA[<]]> #{reg_date} OR (reg_date <![CDATA[=]]> #{reg_date} AND portfolio_no <![CDATA[<]]> #{portfolio_no}))
+        order by reg_date DESC, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListByTypeVODSortTitleRefresh" resultType="Portfolio">
+        select *
+        from portfolio
+        where type = #{type}
+          AND (title <![CDATA[<]]> #{title} OR (title <![CDATA[=]]> #{title} AND portfolio_no <![CDATA[<]]> #{portfolio_no}))
+        order by title, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListByTypeVODSortFanNumberRefresh" resultType="Portfolio">
+        select *
+        from portfolio
+        where type = #{type}
+          AND (fan_number <![CDATA[<]]> #{fan_number} OR (fan_number <![CDATA[=]]> #{fan_number} AND portfolio_no <![CDATA[<]]> #{portfolio_no}))
+        order by fan_number DESC, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListByTypeVODSortRecent" resultType="Portfolio">
+        select *
+        from portfolio
+        where type = #{type}
+        order by reg_date DESC, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListByTypeVODSortTitle" resultType="Portfolio">
+        select *
+        from portfolio
+        where type = #{type}
+        order by title, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListByTypeVODSortFanNumber" resultType="Portfolio">
+        select *
+        from portfolio
+        where type = #{type}
+        order by fan_number DESC, portfolio_no DESC
+        LIMIT 10
     </select>
     <insert id="insertPortfolio" useGeneratedKeys="true" keyProperty="portfolio_no">
-        insert into portfolio(artist_no, title, type, file, content, reg_date, agree, thumbnail, artist_name, artist_profile_img)
-        VALUES (#{artist_no}, #{title}, #{type}, #{file}, #{content}, now(), #{agree}, #{thumbnail}, #{artist_name}, #{artist_profile_img})
+        insert into portfolio(artist_no, title, type, file, content, reg_date, revise_date, thumbnail, artist_name,
+                              artist_profile_img, fan_number, video_length)
+        VALUES (#{artist_no}, #{title}, #{type}, #{file}, #{content}, #{reg_date}, #{revise_date}, #{thumbnail},
+                #{artist_name}, #{artist_profile_img}, #{fan_number}, #{video_length})
     </insert>
     <delete id="deletePortfolio">
-        delete from portfolio where portfolio_no=#{portfolio_no}
+        delete
+        from portfolio
+        where portfolio_no = #{portfolio_no}
     </delete>
     <update id="updatePortfolio">
-        update portfolio SET title=#{title}, content=#{content}, revise_date=now()
-        WHERE portfolio_no=#{portfolio_no}
+        update portfolio
+        SET title=#{title},
+            content=#{content},
+            revise_date=#{revise_date},
+            artist_name=#{artist_name},
+            artist_profile_img=#{artist_profile_img},
+            file=#{file},
+            thumbnail=#{thumbnail},
+            video_length=#{video_length}
+        WHERE portfolio_no = #{portfolio_no}
     </update>
     <update id="updatePortfolioByComment">
-        update portfolio SET comment_number = comment_number + #{number}
-        WHERE portfolio_no=#{portfolio_no}
+        update portfolio
+        SET comment_number = #{comment_number}
+        WHERE portfolio_no = #{portfolio_no}
     </update>
     <update id="updatePortfolioByLike">
-        update portfolio SET like_number = like_number + #{number}
-        WHERE portfolio_no=#{portfolio_no}
+        update portfolio
+        SET like_number = #{like_number}
+        WHERE portfolio_no = #{portfolio_no}
+    </update>
+    <update id="updatePortfolioByVisit">
+        update portfolio
+        SET visit_number=#{visit_number}
+        WHERE portfolio_no = #{portfolio_no}
+    </update>
+    <update id="updatePortfolioByFankok">
+        update portfolio
+        SET fan_number=#{fan_number}
+        WHERE portfolio_no = #{portfolio_no}
+    </update>
+    <select id="getPortfolioListByRandom" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE type='vod'
+        <choose>
+            <when test="artistList.size() != 0">
+        AND artist_no NOT in
+                <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
+        order by RAND()
+        limit 5
+    </select>
+    <select id="SearchPortfolioLimit" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE title like #{query}
+           or artist_name like #{query}
+        LIMIT 15
+    </select>
+    <select id="getPortfolioListByArtistNoLimit" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE artist_no = #{artist_no}
+        order by reg_date DESC
+        limit 15
+    </select>
+    <update id="insertFiles">
+        update portfolio
+        SET file=#{file},
+            thumbnail=#{thumbnail}
+        WHERE portfolio_no = #{portfolio_no}
+    </update>
+    <select id="getPortfolioByTypeAdmin" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE artist_no = #{artist_no}
+          AND type = #{type}
+        ORDER BY revise_date DESC
+    </select>
+    <select id="getPortfolioListSortRecentRefresh" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE artist_no = #{artist_no}
+          AND (revise_date <![CDATA[<]]> #{revise_date} OR
+               (revise_date <![CDATA[=]]> #{revise_date} AND portfolio_no <![CDATA[<]]> #{portfolio_no}))
+        ORDER BY reg_date DESC, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListSortWordRefresh" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE artist_no = #{artist_no}
+          AND (title <![CDATA[>]]> #{title} OR (title <![CDATA[=]]> #{title} AND portfolio_no <![CDATA[<]]> #{portfolio_no}))
+        ORDER BY title, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListSortFanNumberRefresh" resultType="Portfolio">
+        select *
+        from portfolio
+        where artist_no = #{artist_no}
+          AND (fan_number <![CDATA[<]]> #{fan_number} OR (fan_number <![CDATA[=]]> #{fan_number} AND portfolio_no <![CDATA[<]]> #{portfolio_no}))
+        order by fan_number DESC, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListSortRecent" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE artist_no = #{artist_no}
+        ORDER BY reg_date DESC, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListSortWord" resultType="Portfolio">
+        select *
+        from portfolio
+        WHERE artist_no = #{artist_no}
+        ORDER BY title, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioListSortFanNumber" resultType="Portfolio">
+        select *
+        from portfolio
+        where artist_no = #{artist_no}
+        order by fan_number DESC, portfolio_no DESC
+        LIMIT 10
+    </select>
+    <select id="getPortfolioForCDN" resultType="Portfolio">
+        select *
+        from portfolio
+    </select>
+    <update id="updateContentProfile">
+        update portfolio
+        SET artist_name=#{artist_name},
+            artist_profile_img=#{artist_profile_img}
+        WHERE artist_no = #{artist_no}
     </update>
 </mapper>

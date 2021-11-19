@@ -1,16 +1,10 @@
 package com.restapi.Restfull.API.Server.models;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 @Data
-@Getter
-@Setter
-@ToString
 public class Artist {
     private int artist_no;
     private int user_no;
@@ -20,12 +14,18 @@ public class Artist {
     private String bank_owner;
     private String email;
     private String artist_phone;
-    private String fan_main_img;
+    private String main_img;
     private String artist_profile_img;
-    private Date reg_date;
+    private String reg_date;
     private int fan_number;
-    private int fan_visit_today;
-    private String fan_explain;
+    private int visit_today;
+    private String explain;
     private boolean artist_private;
     private String hashtag;
+    private String recent_act_date;
+    private boolean loudsourcing_push;
+    private String profile_blur_img;
+    private String main_blur_img;
+
+    private ArrayList<String> hashtag_list;
 }

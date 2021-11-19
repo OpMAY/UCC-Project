@@ -9,7 +9,6 @@
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
     <typeAliases>
-        <typeAlias alias="Test" type="main.models.Test"/>
         <typeAlias alias="User" type="main.models.User"/>
         <typeAlias alias="Artist" type="main.models.Artist"/>
         <typeAlias alias="RequestChange" type="main.models.RequestChange"/>
@@ -34,5 +33,7 @@
         <typeAlias alias="Spon" type="main.models.Spon"/>
         <typeAlias alias="Subscribe" type="main.models.Subscribe"/>
         <typeAlias alias="ArtistVisit" type="main.models.ArtistVisit"/>
+        <typeAlias alias="Penalty" type="main.models.Penalty"/>
+        <typeAlias alias="ArtistSponTotal" type="main.models.ArtistSponTotal"/>
     </typeAliases>
 </configuration>

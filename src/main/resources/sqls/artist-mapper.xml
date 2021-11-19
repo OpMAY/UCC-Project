@@ -4,23 +4,184 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.ArtistMapper">
     <select id="getAllArtists" resultType="Artist">
-        select * from artist
+        select *
+        from artist
+        ORDER BY reg_date DESC
     </select>
     <insert id="insertArtist" useGeneratedKeys="true" keyProperty="artist_no">
-        insert into artist(user_no, artist_name, bank_name, bank_account, bank_owner, email, artist_phone, fan_main_img, reg_date, fan_explain, artist_private, hashtag, artist_profile_img)
-        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{email}, #{artist_phone}, #{fan_main_img}, now(), #{fan_explain}, #{artist_private}, #{hashtag}, #{artist_profile_img})
+        insert into artist(user_no, artist_name, bank_name, bank_account, bank_owner, email, artist_phone, main_img,
+                           reg_date, `explain`, artist_private, hashtag, artist_profile_img, recent_act_date,
+                           loudsourcing_push)
+        VALUES (#{user_no}, #{artist_name}, #{bank_name}, #{bank_account}, #{bank_owner}, #{email}, #{artist_phone},
+                #{main_img}, #{reg_date}, #{explain}, #{artist_private}, #{hashtag}, #{artist_profile_img},
+                #{recent_act_date}, #{loudsourcing_push})
     </insert>
     <select id="getArtistByUserNo" resultType="Artist">
-        select * from artist where user_no=#{user_no}
+        select *
+        from artist
+        where user_no = #{user_no}
     </select>
     <select id="getArtistByArtistNo" resultType="Artist">
-        select * from artist where artist_no=#{artist_no}
+        select *
+        from artist
+        where artist_no = #{artist_no}
     </select>
     <update id="updateArtist">
-        update artist SET artist_name=#{artist_name}, bank_name=#{bank_name}, bank_account=#{bank_account}, bank_owner=#{bank_owner}, email=#{email}, artist_phone=#{artist_phone}, fan_main_img=#{fan_main_img}, fan_explain=#{fan_explain}, artist_private=#{artist_private}, hashtag=#{hashtag}, artist_profile_img=#{artist_profile_img}, fan_number=#{fan_number}, fan_visit_today=#{fan_visit_today}
-        WHERE artist_no=#{artist_no}
+        update artist
+        SET artist_name=#{artist_name},
+            bank_name=#{bank_name},
+            bank_account=#{bank_account},
+            bank_owner=#{bank_owner},
+            email=#{email},
+            artist_phone=#{artist_phone},
+            main_img=#{main_img},
+            `explain`=#{explain},
+            artist_private=#{artist_private},
+            hashtag=#{hashtag},
+            artist_profile_img=#{artist_profile_img},
+            fan_number=#{fan_number},
+            visit_today=#{visit_today},
+            recent_act_date=#{recent_act_date},
+            profile_blur_img=#{profile_blur_img},
+            main_blur_img=#{main_blur_img}
+        WHERE artist_no = #{artist_no}
     </update>
     <delete id="deleteArtist">
-        delete from artist WHERE artist_no=#{artist_no}
+        delete
+        from artist
+        WHERE artist_no = #{artist_no}
     </delete>
+    <select id="getArtistListByPopular" resultType="Artist">
+        select *
+        from artist
+        <choose>
+            <when test="artistList.size() != 0">
+                WHERE artist_no not in
+                <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
+        order by fan_number desc
+        limit 15
+    </select>
+    <select id="getNewArtistList" resultType="Artist">
+        select *
+        from artist
+        <choose>
+            <when test="artistList.size() != 0">
+                WHERE artist_no not in
+                <foreach collection="artistList" item="code" index="index" separator="," open="(" close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
+        order by reg_date desc
+        limit 15
+    </select>
+    <select id="searchArtist" resultType="Artist">
+        select *
+        from artist
+        where artist_name like #{search}
+           or hashtag like #{search}
+    </select>
+    <select id="searchArtistLimit" resultType="Artist">
+        select *
+        from artist
+        where artist_name like #{search}
+           or hashtag like #{search}
+        LIMIT 15
+    </select>
+    <select id="getAllArtistListSortByRecentRefresh" resultType="Artist">
+        select *
+        from artist
+        WHERE recent_act_date <![CDATA[<]]> #{recent_act_date}
+           OR (artist_no <![CDATA[<]]> #{artist_no}
+            AND recent_act_date <![CDATA[=]]> #{recent_act_date})
+        order by recent_act_date DESC, artist_no DESC
+        limit 12
+    </select>
+    <select id="getAllArtistListSortByNameRefresh" resultType="Artist">
+        select *
+        from artist
+        WHERE artist_name <![CDATA[>]]> #{artist_name}
+           OR (artist_no <![CDATA[<]]> #{artist_no}
+            AND artist_name <![CDATA[>]]> #{artist_name})
+        order by artist_name, artist_no DESC
+        limit 12
+    </select>
+    <select id="getAllArtistListSortByFanNumRefresh" resultType="Artist">
+        select *
+        from artist
+        WHERE fan_number <![CDATA[<]]> #{fan_number}
+           OR (artist_no <![CDATA[<]]> #{artist_no}
+            AND fan_number <![CDATA[=]]> #{fan_number})
+        order by fan_number DESC, artist_no DESC
+        limit 12
+    </select>
+    <select id="getAllArtistListSortByRecent" resultType="Artist">
+        select *
+        from artist
+        order by recent_act_date DESC, artist_no DESC
+        limit 12
+    </select>
+    <select id="getAllArtistListSortByName" resultType="Artist">
+        select *
+        from artist
+        order by artist_name, artist_no DESC
+        limit 12
+    </select>
+    <select id="getAllArtistListSortByFanNum" resultType="Artist">
+        select *
+        from artist
+        order by fan_number DESC, artist_no DESC
+        limit 12
+    </select>
+    <update id="updateArtistPush">
+        update artist
+        SET loudsourcing_push=#{loudsourcing_push}
+        WHERE artist_no = #{artist_no}
+    </update>
+    <select id="getSubscribedArtistListSortRecent" resultType="Artist" parameterType="ArrayList">
+        select * from artist WHERE artist_no in
+        <choose>
+            <when test="artist_list.size() != 0">
+                <foreach collection="artist_list" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+        ORDER BY recent_act_date DESC LIMIT 10
+    </select>
+    <select id="getSubscribedArtistListSortFankok" resultType="Artist" parameterType="ArrayList">
+        select * from artist WHERE artist_no in
+        <choose>
+            <when test="artist_list.size() != 0">
+                <foreach collection="artist_list" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+        ORDER BY fan_number DESC LIMIT 10
+    </select>
+    <select id="getSubscribedArtistListSortName" resultType="Artist" parameterType="ArrayList">
+        select * from artist WHERE artist_no in
+        <choose>
+            <when test="artist_list.size() != 0">
+                <foreach collection="artist_list" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+        ORDER BY artist_name LIMIT 10
+    </select>
+    <select id="getAllArtistForCDN" resultType="Artist">
+        select *
+        from artist
+    </select>
+    <select id="getArtistByArtistName" resultType="Artist">
+        select *
+        from artist
+        WHERE artist_name = #{artist_name}
+    </select>
 </mapper>

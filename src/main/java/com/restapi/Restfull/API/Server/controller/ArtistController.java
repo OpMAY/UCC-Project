@@ -1,27 +1,21 @@
 package com.restapi.Restfull.API.Server.controller;
 
+import com.google.gson.Gson;
 import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.models.*;
 import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
 import com.restapi.Restfull.API.Server.services.*;
-import com.restapi.Restfull.API.Server.utility.Time;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
 
 @Log4j2
 @RestController
@@ -30,16 +24,10 @@ public class ArtistController {
     private ArtistService artistService;
 
     @Autowired
-    private BoardService boardService;
-
-    @Autowired
-    private PortfolioService portfolioService;
-
-    @Autowired
     private SubscribeService subscribeService;
 
     @Autowired
-    private ArtistVisitService artistVisitService;
+    private SponService sponService;
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity BusinessException(Exception e) {
@@ -70,14 +58,103 @@ public class ArtistController {
         private int artist_no;
     }
 
-    @RequestMapping(value = "/api/artist", method = RequestMethod.POST)
-    public ResponseEntity GetArtist(@ModelAttribute ArtistRequest artistRequest) {
-        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no());
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:03
+     * 코드 설명 : 아티스트 팬페이지 화면에서 게시글을 제외한 모든 정보를 받아오는 URL
+     * 특이 사항 : 리로딩 X
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/artist", method = RequestMethod.POST) //CHECK
+    public ResponseEntity GetArtistWithoutBoard(@RequestBody String body) {
+        ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
+        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), -1);
     }
 
-    @RequestMapping(value = "/api/fankok", method = RequestMethod.POST)
-    public ResponseEntity Subscribe(@ModelAttribute ArtistRequest artistRequest) {
-        return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no());
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:04
+     * 코드 설명 : 아티스트 팬페이지 화면에 사용할 게시글 리스트를 받아오는 URL
+     * 특이 사항 : last_index 로 10개 씩 리로딩
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/artist/{last_index}", method = RequestMethod.POST) // CHECK
+    public ResponseEntity GetArtistBoard(@RequestBody String body, @PathVariable("last_index") int last_index) {
+        ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
+        return artistService.ArtistMain(artistRequest.getUser_no(), artistRequest.getArtist_no(), last_index);
     }
 
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:06
+     * 코드 설명 : 팬콕 / 팬콕 취소를 처리하는 URL
+     * 특이 사항 : 팬콕 여부를 서버에서 판단함
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/fankok", method = RequestMethod.POST) //CHECK
+    public ResponseEntity Subscribe(@RequestBody String body) {
+        ArtistRequest artistRequest = new Gson().fromJson(body, ArtistRequest.class);
+        return subscribeService.Fankok(artistRequest.getUser_no(), artistRequest.getArtist_no(), "");
+    }
+
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:07
+     * 코드 설명 : 최신 아티스트 목록을 받아오는 URL
+     * 특이 사항 : 제일 최근에 생성된 아티스트 최대 15명을 불러옴
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/artists/new", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetNewArtistList() {
+        return artistService.getNewArtists();
+    }
+
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:08
+     * 코드 설명 : 모든 아티스트 목록을 받아오는 URL
+     * 특이 사항 : 정렬 기준, last_index
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/artists/all/{sort}/{last_index}", method = RequestMethod.GET) //CHECK
+    public ResponseEntity GetAllArtistList(@PathVariable("sort") String sort,
+                                           @PathVariable("last_index") int last_index) {
+        return artistService.getAllArtists(last_index, sort);
+    }
+
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:08
+     * 코드 설명 : 아티스트를 검색하는 URL
+     * 특이 사항 : X
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/artists/search", method = RequestMethod.GET) //CHECK
+    public ResponseEntity SearchArtist(@RequestParam("query") String query) {
+        return artistService.SearchArtist(query);
+    }
+
+    /**
+     * 주석 생성 날짜 - 2021-07-29, 목, 14:21
+     * 코드 설명 : 아티스트가 정지 되었는지에 대한 여부 판단 및 정지 정보 받아오는 URL
+     * 특이 사항 : X
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/artist/ban/{artist_no}", method = RequestMethod.GET)
+    public ResponseEntity GetArtistBanInfo(@PathVariable("artist_no") int artist_no) {
+        return artistService.getArtistBanInfo(artist_no);
+    }
+
+    /**
+     * 주석 생성 날짜 - 2021-07-30, 금, 14:43
+     * 코드 설명 : 아티스트 크라우드 알림 설정 변경
+     * 특이 사항 : X
+     * 파일 업로드 여부 : X
+     **/
+    @RequestMapping(value = "/api/artist/set_push/loudsourcing/{artist_no}", method = RequestMethod.POST)
+    public ResponseEntity UpdateArtistPush(@PathVariable("artist_no") int artist_no) {
+        return artistService.updateArtistPush(artist_no);
+    }
+
+
+    @RequestMapping(value = "/api/artist/spon/amount/{artist_no}/{year}/{month}", method = RequestMethod.GET)
+    public ResponseEntity GetArtistSponAmount(@PathVariable("artist_no") int artist_no,
+                                              @PathVariable("year") String year,
+                                              @PathVariable("month") String month) {
+        return sponService.getArtistSponAmount(artist_no, year, month);
+    }
 }

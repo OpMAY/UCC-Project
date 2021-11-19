@@ -3,5 +3,27 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.NoticeMapper">
-
+    <select id="getNotice" resultType="Notice">
+        select * from notice ORDER BY revise_date DESC, notice_no DESC LIMIT 10
+    </select>
+    <select id="getNoticeRefresh" resultType="Notice">
+        select * from notice WHERE (revise_date <![CDATA[<]]> #{revise_date} OR (revise_date <![CDATA[=]]> #{revise_date} AND notice_no <![CDATA[<]]> #{notice_no})) ORDER BY revise_date DESC, notice_no DESC LIMIT 10
+    </select>
+    <select id="getNoticeByNoticeNo" resultType="Notice">
+        select * from notice WHERE notice_no=#{notice_no}
+    </select>
+    <insert id="insertNotice" useGeneratedKeys="true" keyProperty="notice_no">
+        insert into notice(title, content, reg_date, revise_date, img)
+        VALUES (#{title}, #{content}, #{reg_date}, #{revise_date}, #{img})
+    </insert>
+    <update id="updateNotice">
+        update notice SET title=#{title}, content=#{content}, revise_date=#{revise_date}, img=#{img}
+        WHERE notice_no=#{notice_no}
+    </update>
+    <delete id="deleteNotice">
+        delete from notice WHERE notice_no=#{notice_no}
+    </delete>
+    <select id="getNoticeForCDN" resultType="Notice">
+        select * from notice ORDER BY reg_date DESC
+    </select>
 </mapper>

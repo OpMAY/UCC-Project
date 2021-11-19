@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.PenaltyMapper">
+    <insert id="insertPenalty" keyProperty="penalty_no" useGeneratedKeys="true">
+        insert into penalty(user_no, artist_no, reg_date, penalty_start_date, penalty_end_date, penalty_days, penalty_reason)
+        VALUES (#{user_no}, #{artist_no}, #{reg_date}, #{penalty_start_date}, #{penalty_end_date}, #{penalty_days}, #{penalty_reason})
+    </insert>
+    <select id="getPenaltyListByUserNo" resultType="Penalty">
+        select * from penalty WHERE user_no=#{user_no} order by reg_date DESC
+    </select>
+    <select id="getPenaltyListByArtistNo" resultType="Penalty">
+        select * from penalty WHERE artist_no=#{artist_no} order by reg_date DESC
+    </select>
+    <select id="getPenaltyList" resultType="Penalty">
+        select * from penalty order by reg_date DESC
+    </select>
+    <delete id="deletePenalty">
+        delete from penalty WHERE penalty_no=#{penalty_no}
+    </delete>
+</mapper>

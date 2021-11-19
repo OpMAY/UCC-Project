@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Data
 @Getter
 @Setter
@@ -15,5 +13,5 @@ public class ArtistVisit {
     private int artist_visit_no;
     private int user_no;
     private int artist_no;
-    private Date visit_date;
+    private String visit_date;
 }

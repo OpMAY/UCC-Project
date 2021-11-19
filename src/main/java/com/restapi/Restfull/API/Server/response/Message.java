@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +32,7 @@ public class Message {
         Set set = map.keySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext()) {
-            boolean check = ((String) iterator.next()).equals(key) ? true : false;
+            boolean check = ((String) iterator.next()).equals(key);
             if (check) {
                 map.remove(key);
                 return true;
@@ -44,13 +43,7 @@ public class Message {
     }
 
     public Map<String, Object> getHashMap(String fn) throws JSONException {
-        Set set = map.keySet();
-        Iterator iterator = set.iterator();
-        String log_str = "\n" + fn + " has started business logic";
-        while (iterator.hasNext()) {
-            String key = iterator.next().toString();
-            log_str += "\nkey : " + key + ", data:" + map.get(key).toString();
-        }
+        String log_str = "Function : " + fn;
         log.info(log_str);
         return map;
     }
@@ -59,10 +52,6 @@ public class Message {
         Set set = map.keySet();
         Iterator iterator = set.iterator();
         String log_str = "Started";
-        while (iterator.hasNext()) {
-            String key = iterator.next().toString();
-            log_str += "\nkey : " + key + ", data:" + map.get(key).toString();
-        }
         log.info(log_str);
         return map;
     }

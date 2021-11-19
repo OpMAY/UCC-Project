@@ -1,17 +1,11 @@
 package com.restapi.Restfull.API.Server.interceptor;
 
-import com.restapi.Restfull.API.Server.exceptions.BusinessException;
-import com.restapi.Restfull.API.Server.response.DefaultRes;
-import com.restapi.Restfull.API.Server.response.ResMessage;
-import com.restapi.Restfull.API.Server.response.StatusCode;
+import com.restapi.Restfull.API.Server.exceptions.AuthException;
 import com.restapi.Restfull.API.Server.services.SecurityService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,22 +21,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     private SecurityService securityService;
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity BusinessException(Exception e) {
-        log.info("Business Exception Handler");
-        log.info("Please check your excludeList");
-        e.printStackTrace();
-        return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
-    }
-
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity NullPointerException(Exception e) {
-        log.info("NullPointer Exception Handler");
-        log.info("Please check your excludeList");
-        e.printStackTrace();
-        return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
-    }
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
@@ -52,12 +30,12 @@ public class AuthInterceptor implements HandlerInterceptor {
             if (securityService.validateToken(token)) {
                 return true;
             } else {
-                throw new BusinessException(new Exception());
+                throw new AuthException(new Exception());
             }
         } catch (NullPointerException e) {
-            throw new BusinessException(e);
+            throw new AuthException(e);
         } catch (Exception e) {
-            throw new BusinessException(e);
+            throw new AuthException(e);
         }
     }
 

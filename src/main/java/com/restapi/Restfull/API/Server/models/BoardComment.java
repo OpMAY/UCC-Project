@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Data
 @Getter
 @Setter
@@ -16,10 +14,12 @@ public class BoardComment {
     private int user_no;
     private int board_no;
     private String content;
-    private Date reg_date;
-    private Date revise_date;
+    private String reg_date;
+    private String revise_date;
     private boolean comment_private;
     private String type;
     private String commenter_name;
     private String profile_img;
+
+    private boolean is_sponned;
 }

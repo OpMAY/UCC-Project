@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Data
 @Getter
 @Setter
@@ -16,9 +14,10 @@ public class PortfolioComment {
     private int user_no;
     private int portfolio_no;
     private String content;
-    private Date reg_date;
-    private Date revise_date;
+    private String reg_date;
     private boolean comment_private;
     private String profile_img;
     private String commenter_name;
+
+    private boolean is_fankoked;
 }

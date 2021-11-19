@@ -2,14 +2,20 @@ package com.restapi.Restfull.API.Server.daos;
 
 import com.restapi.Restfull.API.Server.interfaces.mappers.ArtistMapper;
 import com.restapi.Restfull.API.Server.models.Artist;
+import com.restapi.Restfull.API.Server.response.DataListSortType;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ArtistDao {
     private SqlSession sqlSession;
+
+    @Autowired
+    private SqlSession ROSqlSession;
 
     public void setSession(SqlSession sqlSession) {
         if (this.sqlSession == null)
@@ -46,4 +52,75 @@ public class ArtistDao {
         artistMapper.deleteArtist(artist_no);
     }
 
+    public List<Artist> getArtistListByPopular(List<Integer> artistList) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getArtistListByPopular(artistList);
+    }
+
+    public List<Artist> getNewArtistList(List<Integer> artistList) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getNewArtistList(artistList);
+    }
+
+    public List<Artist> SearchArtist(String search) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        String sqlSearch = "%" + search + "%";
+        return artistMapper.searchArtist(sqlSearch);
+    }
+
+    public List<Artist> SearchArtistLimit(String search) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        String sqlSearch = "%" + search + "%";
+        return artistMapper.searchArtistLimit(sqlSearch);
+    }
+
+    public List<Artist> getAllArtistRefresh(int artist_no, String sort, Artist artist) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
+            return artistMapper.getAllArtistListSortByRecentRefresh(artist_no, artist.getRecent_act_date());
+        else if (sort.equals(DataListSortType.SORT_BY_WORD))
+            return artistMapper.getAllArtistListSortByNameRefresh(artist_no, artist.getArtist_name());
+        else
+            return artistMapper.getAllArtistListSortByFanNumRefresh(artist_no, artist.getFan_number());
+    }
+
+    public List<Artist> getAllArtistLimit(String sort){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        if (sort.equals(DataListSortType.SORT_BY_RECENT))
+            return artistMapper.getAllArtistListSortByRecent();
+        else if (sort.equals(DataListSortType.SORT_BY_WORD))
+            return artistMapper.getAllArtistListSortByName();
+        else
+            return artistMapper.getAllArtistListSortByFanNum();
+    }
+
+    public void updateArtistPush(int artist_no, boolean loudsourcing_push){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        artistMapper.updateArtistPush(artist_no, loudsourcing_push);
+    }
+
+    public List<Artist> getSubscribedArtistListSortRecent(ArrayList<Integer> artist_list){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getSubscribedArtistListSortRecent(artist_list);
+    }
+
+    public List<Artist> getSubscribedArtistListSortFankok(ArrayList<Integer> artist_list){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getSubscribedArtistListSortFankok(artist_list);
+    }
+
+    public List<Artist> getSubscribedArtistListSortName(ArrayList<Integer> artist_list){
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getSubscribedArtistListSortName(artist_list);
+    }
+
+    public List<Artist> getAllArtistForCDN(){
+        ArtistMapper artistMapper = ROSqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getAllArtistForCDN();
+    }
+
+    public Artist getArtistByArtistName(String artist_name) {
+        ArtistMapper artistMapper = sqlSession.getMapper(ArtistMapper.class);
+        return artistMapper.getArtistByArtistName(artist_name);
+    }
 }

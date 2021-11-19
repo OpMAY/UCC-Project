@@ -3,5 +3,69 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.LoudSourcingApplyMapper">
-
+    <select id="getLoudSourcingApplyByArtistNoAndLoudSourcingNo" resultType="LoudSourcingApply">
+        select *
+        from loudsourcingapply
+        WHERE artist_no = #{artist_no}
+          AND loudsourcing_no = #{loudsourcing_no}
+    </select>
+    <select id="getLoudSourcingApplyListByArtistNo" resultType="LoudSourcingApply">
+        select *
+        from loudsourcingapply
+        WHERE artist_no = #{artist_no}
+    </select>
+    <select id="getLoudSourcingApplyListByLoudSourcingNo" resultType="LoudSourcingApply">
+        select *
+        from loudsourcingapply
+        WHERE loudsourcing_no = #{loudsourcing_no}
+    </select>
+    <insert id="insertLoudSourcingApply" useGeneratedKeys="true" keyProperty="apply_no">
+        insert into loudsourcingapply(loudsourcing_no, artist_no, reg_date, entry)
+        VALUES (#{loudsourcing_no}, #{artist_no}, #{reg_date}, #{entry})
+    </insert>
+    <delete id="deleteLoudSourcingApply">
+        delete
+        from loudsourcingapply
+        WHERE artist_no = #{artist_no}
+          AND loudsourcing_no = #{loudsourcing_no}
+    </delete>
+    <update id="updateApply">
+        update loudsourcingapply
+        SET entry=#{entry}
+        WHERE apply_no = #{apply_no}
+    </update>
+    <select id="getEntryNum" resultType="LoudSourcingApply">
+        select *
+        from loudsourcingapply
+        WHERE loudsourcing_no = #{loudsourcing_no}
+          AND entry = true
+    </select>
+    <update id="updateApplyForJudge">
+        update loudsourcingapply
+        SET is_pre_selected=#{is_pre_selected}
+        WHERE apply_no = #{apply_no}
+    </update>
+    <update id="updateApplyForEnd">
+        update loudsourcingapply
+        SET is_selected=#{is_selected}
+        WHERE apply_no = #{apply_no}
+    </update>
+    <select id="getLoudSourcingApplyListByLoudSourcingNoPreSelected" resultType="LoudSourcingApply">
+        select *
+        from loudsourcingapply
+        WHERE is_pre_selected = true
+          AND loudsourcing_no = #{loudsourcing_no} AND entry = true
+    </select>
+    <select id="getLoudSourcingApplyListByLoudSourcingNoUnPreSelected" resultType="LoudSourcingApply">
+        select *
+        from loudsourcingapply
+        WHERE is_pre_selected = false
+          AND loudsourcing_no = #{loudsourcing_no} AND entry = true
+    </select>
+    <select id="getLoudSourcingApplyListByLoudSourcingNoSelected" resultType="LoudSourcingApply">
+        select *
+        from loudsourcingapply
+        WHERE is_selected = true
+          AND loudsourcing_no = #{loudsourcing_no} AND entry = true
+    </select>
 </mapper>

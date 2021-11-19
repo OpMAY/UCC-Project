@@ -3,5 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.restapi.Restfull.API.Server.interfaces.mappers.AdminMapper">
-
+    <select id="loginAdmin" resultType="Admin">
+        select * from admin WHERE id=#{id} AND pw=#{password}
+    </select>
+    <insert id="testEncode">
+        insert into admin(id, pw, reg_date) VALUES (#{decode}, #{decode}, now())
+    </insert>
 </mapper>

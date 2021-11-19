@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.util.Map;
 
 @Data
 @Getter
@@ -22,9 +22,12 @@ public class Inquiry {
     private String email;
     private boolean is_answered;
     private String answer_content;
-    private Date reg_date;
-    private Date answer_date;
+    private String reg_date;
+    private String answer_date;
     private String file;
-    private String report_content_type;
-    private int reported_content_type;
+
+    private String user_name;
+    private String reported_user_name;
+
+    private Map<String, Object> files;
 }

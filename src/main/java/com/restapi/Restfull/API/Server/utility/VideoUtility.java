@@ -1,11 +1,10 @@
 package com.restapi.Restfull.API.Server.utility;
 
+import com.coremedia.iso.IsoFile;
+import org.jcodec.api.JCodecException;
+
 import java.io.File;
 import java.io.IOException;
-
-import com.restapi.Restfull.API.Server.services.PortfolioService;
-import com.restapi.Restfull.API.Server.services.UserService;
-import org.jcodec.api.JCodecException;
 
 
 public class VideoUtility {
@@ -25,7 +24,7 @@ public class VideoUtility {
         VideoThread[] videoThread = new VideoThread[threadSize];
 
         for (int i = 0; i < videoThread.length; i++) {
-            videoThread[i] = new VideoThread(source, threadSize, i, plusSize, "E:/vodAppServer/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api");
+            videoThread[i] = new VideoThread(source, threadSize, i, plusSize, "/www/weart-page_com/www/api/temp");
             videoThread[i].start();
         }
 
@@ -40,4 +39,23 @@ public class VideoUtility {
             }
         }
     }
+
+    public String getDuration(File video_file) throws IOException {
+        IsoFile isoFile = new IsoFile(video_file.getCanonicalPath());
+        long lengthInSeconds =
+                isoFile.getMovieBox().getMovieHeaderBox().getDuration() /
+                        isoFile.getMovieBox().getMovieHeaderBox().getTimescale();
+        int minute = (int) (lengthInSeconds / 60);
+        int second = (int) (lengthInSeconds % 60);
+        StringBuilder duration = new StringBuilder();
+        duration.append(minute);
+        duration.append(":");
+        if (second < 10) {
+            duration.append("0");
+        }
+        duration.append(second);
+        isoFile.close();
+        return duration.toString();
+    }
+
 }
