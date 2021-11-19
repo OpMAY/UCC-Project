@@ -82,8 +82,11 @@
             <span>잃어버린</span>
             <span>아티스트를 찾아서</span>
         </div>
-        <div class="row flex-column p-lg-3 p-1 font-size-sm-12">
-            <span style="color: #FF004F;" class="font-family-aggro-b"><strong>2021.10.18(월) - 10.31(일)</strong></span>
+        <div class="row flex-column p-1 font-size-sm-12">
+            <span style="color: #FF004F;" class="font-family-aggro-b"><strong>2021.11.22(월) - 12.05(일)</strong></span>
+        </div>
+        <div class="row flex-column p-1 font-size-20 font-sm-14">
+            <span style="color: #FF004F;" class="font-family-aggro-b">당첨자 발표 : 2021.12.10</span>
         </div>
         <div class="row flex-column py-lg-3 py-1">
             <div class="row flex-column flex-lg-row justify-content-center">
@@ -109,7 +112,7 @@
             <div class="col-12 col-lg-4">
                 <div class="row flex-column flex-lg-row p-5 text-center justify-content-center align-items-center">
                     <span class="font-family-aggro-m">UCC가 선정한 아티스트를 찾아 콘텐츠에</span>
-                    <span class="font-family-aggro-m">응원의 한마디를 댓글로 남겨주시면</span>
+                    <span class="font-family-aggro-m">응원의 한마디와 인스타그램 아이디를<br class="d-block d-sm-none"> 댓글로 남겨주시면</span>
                     <span class="font-family-aggro-m">추첨을 통해 <span class="font-family-aggro-b" style="color: red;">핫한 상품</span>을 선물로 드립니다.</span>
                 </div>
             </div>
@@ -315,40 +318,40 @@
         <div class="row mt-5 position-relative" style="padding-left: 10%; padding-right: 10%;">
             <div class="owl-carousel owl-theme position-relative contents">
                 <div class="item">
-                    <video playsinline muted loop autoplay class="carousel-item-video"
-                    name="김태윤1" title="벌룬 아트 디자이너1" desc="풍선, 백호라는 이름으로 다시 태어나기까지1">
-                        <source src="/assets/video/main_video_sample.mp4" type="video/mp4">
+                    <video playsinline loop controls class="carousel-item-video"
+                    name="김태윤" title="벌룬 아트 디자이너" desc="오징어게임 진행요원 인형 만들기 ">
+                        <source src="/assets/video/main_video_1.mp4" type="video/mp4">
                         Sorry, your browser doesn't support embedded videos.
                     </video>
                 </div>
                 <div class="item">
-                    <video playsinline muted loop autoplay class="carousel-item-video"
-                    name="김태윤2" title="벌룬 아트 디자이너2" desc="풍선, 백호라는 이름으로 다시 태어나기까지2">
-                        <source src="/assets/video/main_video_sample.mp4" type="video/mp4">
+                    <video playsinline loop controls class="carousel-item-video"
+                    name="신아람" title="재즈 피아니스트" desc="Autumn Leaves">
+                        <source src="/assets/video/main_video_2.mp4" type="video/mp4">
                         Sorry, your browser doesn't support embedded videos.
                     </video>
                 </div>
                 <div class="item">
-                    <video playsinline muted loop autoplay class="carousel-item-video"
-                    name="김태윤3" title="벌룬 아트 디자이너3" desc="풍선, 백호라는 이름으로 다시 태어나기까지3">
-                        <source src="/assets/video/main_video_sample.mp4" type="video/mp4">
+                    <video playsinline loop controls class="carousel-item-video"
+                    name="김태윤" title="벌룬 아트 디자이너" desc="풍선으로 오래된 컨테이너 수리하기">
+                        <source src="/assets/video/main_video_3.mp4" type="video/mp4">
                         Sorry, your browser doesn't support embedded videos.
                     </video>
                 </div>
                 <div class="item">
-                    <video playsinline muted loop autoplay class="carousel-item-video"
-                    name="김태윤4" title="벌룬 아트 디자이너4" desc="풍선, 백호라는 이름으로 다시 태어나기까지4">
-                        <source src="/assets/video/main_video_sample.mp4" type="video/mp4">
+                    <video playsinline loop controls class="carousel-item-video"
+                    name="피난" title="밴드" desc="가두다">
+                        <source src="/assets/video/main_video_4.mp4" type="video/mp4">
                         Sorry, your browser doesn't support embedded videos.
                     </video>
                 </div>
             </div>
             <div id="info-box" class="font-white position-absolute text-center text-lg-left pt-lg-2 pt-1 pl-lg-3 pl-1 pr-lg-3 pr-2 pb-lg-4 pb-2">
-                <span id="name" class="font-size-40 font-size-sm-20 font-family-aggro-b d-block">김태윤</span>
-                <span id="title" class="font-family-aggro-b">벌룬 아트 디자이너</span>
+                <span id="name" class="font-size-40 font-size-sm-16 font-family-aggro-b d-block">김태윤</span>
+                <span id="title" class="font-family-aggro-b font-size-sm-12">벌룬 아트 디자이너</span>
             </div>
             <div class="position-absolute text-center w-100" style="left: 50%; bottom:5%; transform: translate(-50%, 0);">
-                <span class="font-size-32 font-size-sm-16" id="desc">풍선, 백호라는 이름으로 다시 태어나기까지</span>
+                <span class="font-size-32 font-size-sm-16" id="desc">오징어게임 진행요원 인형 만들기 </span>
             </div>
         </div>
     </div>
@@ -508,9 +511,9 @@
         center: true,
         autoplay: false,
         onTranslated: function(event) {
+            $('.owl-carousel.contents .owl-item .item').find('video').each((idx, item)=>{item.pause()});
             let idx = event.page.index;
-            console.log(idx);
-            let target = $('.owl-carousel.contents .item')[idx].querySelector('video');
+            let target = $('.owl-carousel.contents .owl-item:not(.cloned) .item')[idx].querySelector('video');
             let name= target.getAttribute('name');
             let title= target.getAttribute('title');
             let desc= target.getAttribute('desc');
@@ -557,7 +560,7 @@
        $('.owl-carousel.artists .owl-next').html('<img src="/assets/images/ucc/icon-arrow-right-white.svg">');
 
        /* 캐러셀 이동시 텍스트 변경해주기 */
-       $('.ucc-contents .owl-prev, .ucc-contents .owl-next').click(()=>{
+       /*$('.ucc-contents .owl-prev, .ucc-contents .owl-next').click(()=>{
            let target = $('.ucc-contents .owl-item.active video');
            let name = target.attr('name');
            let title = target.attr('title');
@@ -565,7 +568,7 @@
            $('#name').text(name);
            $('#title').text(title);
            $('#desc').text(desc);
-       });
+       });*/
 
 
         let width = window.innerWidth;
