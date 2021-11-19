@@ -2,6 +2,80 @@
 <!Doctype html>
 <html lang="en">
 <head>
+
+    <script type="text/javascript">
+        (function(e,t){var n=e.amplitude||{_q:[],_iq:{}};var r=t.createElement("script")
+        ;r.type="text/javascript"
+        ;r.integrity="sha384-tzcaaCH5+KXD4sGaDozev6oElQhsVfbJvdi3//c2YvbY02LrNlbpGdt3Wq4rWonS"
+        ;r.crossOrigin="anonymous";r.async=true
+        ;r.src="https://cdn.amplitude.com/libs/amplitude-8.5.0-min.gz.js"
+        ;r.onload=function(){if(!e.amplitude.runQueuedFunctions){
+            console.log("[Amplitude] Error: could not load SDK")}}
+        ;var i=t.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)
+        ;function s(e,t){e.prototype[t]=function(){
+            this._q.push([t].concat(Array.prototype.slice.call(arguments,0)));return this}}
+            var o=function(){this._q=[];return this}
+            ;var a=["add","append","clearAll","prepend","set","setOnce","unset","preInsert","postInsert","remove"]
+            ;for(var c=0;c<a.length;c++){s(o,a[c])}n.Identify=o;var u=function(){this._q=[]
+                ;return this}
+            ;var l=["setProductId","setQuantity","setPrice","setRevenueType","setEventProperties"]
+            ;for(var p=0;p<l.length;p++){s(u,l[p])}n.Revenue=u
+            ;var d=["init","logEvent","logRevenue","setUserId","setUserProperties","setOptOut","setVersionName","setDomain","setDeviceId","enableTracking","setGlobalUserProperties","identify","clearUserProperties","setGroup","logRevenueV2","regenerateDeviceId","groupIdentify","onInit","logEventWithTimestamp","logEventWithGroups","setSessionId","resetSessionId"]
+            ;function v(e){function t(t){e[t]=function(){
+                e._q.push([t].concat(Array.prototype.slice.call(arguments,0)))}}
+                for(var n=0;n<d.length;n++){t(d[n])}}v(n);n.getInstance=function(e){
+                e=(!e||e.length===0?"$default_instance":e).toLowerCase()
+                ;if(!Object.prototype.hasOwnProperty.call(n._iq,e)){n._iq[e]={_q:[]};v(n._iq[e])
+                }return n._iq[e]};e.amplitude=n})(window,document);
+
+        amplitude.getInstance().init("427bac641c699781882efcfe2f53be13");
+    </script>
+
+
+    <script>
+        /*Amplitude Page View*/
+        var event = 'page-views';
+
+        /*Amplitude Button Click*/
+        var ucc_active = 'ucc-active';  // ucc에서 활동하기
+        var ucc_shared = 'ucc-shared';  // Header 공유하기
+        var ucc_shared_clicked = 'ucc-shared-clicked';  // 복사하기 버튼 횟수
+        var google_download_clicked = 'google-download-clicked';  // Google Play Store
+        var ios_download_clicked = 'ios-download-clicked';  // ios App Store
+
+
+        /*Page View Event*/
+        amplitude.getInstance().logEvent(event);
+
+        /*Button Clicked*/
+        function run_ucc_active() {
+            amplitude.getInstance().logEvent(ucc_active);
+        }
+
+        function run_ucc_shared() {
+            amplitude.getInstance().logEvent(ucc_shared);
+        }
+
+        function run_ucc_shared_clicked() {
+            amplitude.getInstance().logEvent(ucc_shared_clicked);
+        }
+
+        function run_google_download_clicked() {
+            amplitude.getInstance().logEvent(google_download_clicked);
+            window.location.href='https://play.google.com/store/apps/details?id=com.weart.ucc';
+        }
+
+        function run_ios_download_clicked() {
+            amplitude.getInstance().logEvent(ios_download_clicked);
+            window.location.href='https://apps.apple.com/kr/app/ucc/id1580818238';
+        }
+
+
+    </script>
+
+
+
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,7 +109,8 @@
                 <div class="col-12 d-flex justify-content-between">
                     <img class="logo-gradient" src="/assets/images/ucc/ucc-provider-logo.png">
                     <div>
-                        <img class="logo-fixed2" data-toggle="modal" data-target="#shareModal" src="/assets/images/ucc/icon_share.svg" width="25px" style="cursor: pointer;"><!-- onclick modal open -->
+                        <img class="logo-fixed2" onclick="new function() {run_ucc_shared();}"
+                             data-toggle="modal" data-target="#shareModal" src="/assets/images/ucc/icon_share.svg" width="25px" style="cursor: pointer;"><!-- onclick modal open -->
                         <!-- 모달 -->
                         <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -140,8 +215,12 @@
                 </div>
                 <div class="col-12 col-lg-6 app-download-btns">
                     <div class="row justify-content-center">
-                        <img src="/assets/images/ucc/google-play-button.png" onclick="window.location.href='https://play.google.com/store/apps/details?id=com.weart.ucc';" style="cursor: pointer;">
-                        <img src="/assets/images/ucc/apple-store-button.png" onclick="window.location.href='https://apps.apple.com/kr/app/ucc/id1580818238';" style="cursor: pointer;">
+                        <img src="/assets/images/ucc/google-play-button.png" onclick="new function() {
+                            run_google_download_clicked();
+                        }" style="cursor: pointer;">
+                        <img src="/assets/images/ucc/apple-store-button.png" onclick="new function() {
+                            run_ios_download_clicked();
+                        }" style="cursor: pointer;">
                     </div>
                 </div>
             </div>
@@ -208,8 +287,12 @@
                 </div>
                 <div class="col-12 col-lg-6 app-download-btns">
                     <div class="row justify-content-center">
-                        <img src="/assets/images/ucc/google-play-button.png" onclick="window.location.href='https://play.google.com/store/apps/details?id=com.weart.ucc';" style="cursor: pointer;">
-                        <img src="/assets/images/ucc/apple-store-button.png" onclick="window.location.href='https://apps.apple.com/kr/app/ucc/id1580818238';" style="cursor: pointer;">
+                        <img src="/assets/images/ucc/google-play-button.png" onclick="new function() {
+                            run_google_download_clicked();
+                        }" style="cursor: pointer;">
+                        <img src="/assets/images/ucc/apple-store-button.png" onclick="new function() {
+                            run_ios_download_clicked();
+                        }" style="cursor: pointer;">
                     </div>
                 </div>
             </div>
@@ -382,6 +465,8 @@
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
 <script src="/assets/js/owl.carousel.js"></script>
+
+
 <script>
     $('.owl-carousel').owlCarousel({
         loop: true,
@@ -406,7 +491,6 @@
     });
 
     $(document).ready(()=>{ // 캐러셀 좌우 버튼
-
         window.addEventListener('resize', (event) => {
         });
     });
@@ -419,6 +503,7 @@
 
     function copyToClipboard(element) {
         let url = element.children[0].innerText;
+        run_ucc_shared_clicked();
         navigator.clipboard.writeText(url).then(function () {
             $('#shareText').text('복사되었습니다');
             setTimeout(() => {
@@ -586,6 +671,9 @@
         $('html, body').animate({
             scrollTop: dest
         }, 700, 'swing');
+
+    run_ucc_active(); // UCC에서 활동하기
+
     });
     $('a[href="#section4"]').click((e) => {
         e.preventDefault();
@@ -594,6 +682,9 @@
         $('html, body').animate({
             scrollTop: dest
         }, 700, 'swing');
+
+    run_ucc_active(); // UCC에서 활동하기
+
     });
 </script>
 </body>
