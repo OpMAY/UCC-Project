@@ -87,4 +87,5 @@ public class ResMessage {
     public static final String FCM_TOKEN_UPDATED = "FCM Token Updated";
     public static final String SPON_PLATFORM_ERROR = "Spon Platform Error";
     public static final String APPLE_NOTIFICATION_SUCCESS = "Apple Notification Success";
+    public static final String FILE_MAX_SIZE_EXCEED = "Max File Upload Size Exceeded";
 }

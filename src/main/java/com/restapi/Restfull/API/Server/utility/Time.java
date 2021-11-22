@@ -34,6 +34,12 @@ public class Time {
         return dateFormat.format(date);
     }
 
+    public static String TimeForFile() {
+        Date now = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HHmmss.SSS");
+        return dateFormat.format(now);
+    }
+
     public static String TimeFormatterDay(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);

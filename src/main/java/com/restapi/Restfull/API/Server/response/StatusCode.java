@@ -21,4 +21,5 @@ public class StatusCode {
     public static final int DELETED_USER = 2222;
     public static final int RETRY_RELOAD = 3330;
     public static final int DELETE_CONTENTS = 3333;
+    public static final int FILE_MAX_SIZE_EXCEED = 4444;
 }

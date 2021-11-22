@@ -10,23 +10,31 @@ import com.restapi.Restfull.API.Server.response.DefaultRes;
 import com.restapi.Restfull.API.Server.response.Message;
 import com.restapi.Restfull.API.Server.response.ResMessage;
 import com.restapi.Restfull.API.Server.response.StatusCode;
-import com.restapi.Restfull.API.Server.services.SecurityService;
 import com.restapi.Restfull.API.Server.services.CurrencyService;
+import com.restapi.Restfull.API.Server.services.SecurityService;
 import com.restapi.Restfull.API.Server.utility.ASVerification;
+import com.restapi.Restfull.API.Server.utility.FileConverter;
 import com.restapi.Restfull.API.Server.utility.GPVerification;
 import com.restapi.Restfull.API.Server.utility.Time;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.nio.file.Files;
 import java.sql.SQLException;
-import java.util.Base64;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Log4j2
@@ -128,13 +136,52 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/api/currency", method = RequestMethod.GET)
-    public ResponseEntity UpdateCurrency(@RequestParam("date") String date){
-        try{
+    public ResponseEntity UpdateCurrency(@RequestParam("date") String date) {
+        try {
             currencyService.saveCurrencyInfo(date);
             return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS), HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException(e);
         }
+    }
+
+    @RequestMapping(value = "/api/filetest", method = RequestMethod.POST)
+    public ResponseEntity FileUploadTest(@RequestParam("file") MultipartFile[] files) {
+        try {
+            FileConverter fileConverter = new FileConverter();
+            List<File> fileList = new ArrayList<>();
+            Map<String, MultipartFile> multipartFileMap = new HashMap<>();
+            for (int i = 0; i < files.length; i++) {
+                multipartFileMap.put("files-" + i, files[i]);
+            }
+            for (Map.Entry<String, MultipartFile> entry : multipartFileMap.entrySet()) {
+                MultipartFile multipartFile = entry.getValue();
+                log.info("originalName:" + multipartFile.getOriginalFilename());
+                log.info("size:" + multipartFile.getSize());
+                log.info("ContentType:" + multipartFile.getContentType());
+                File file = fileConverter.convert(multipartFile, "temp" + Time.TimeForFile() + multipartFile.getOriginalFilename());
+                log.info(file.getAbsolutePath());
+                fileList.add(file);
+            }
+            for (File file : fileList) {
+                Files.deleteIfExists(file.toPath());
+            }
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(e);
+        }
+    }
+
+    @Value("${ucc.fileupload.limit}")
+    private long limitSize;
+
+    @RequestMapping(value = "/api/check/filesize", method = RequestMethod.GET)
+    public ResponseEntity CheckFileSize(@RequestParam("size") long fileSize) {
+        if (fileSize > limitSize)
+            throw new MaxUploadSizeExceededException(limitSize);
+        else
+            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResMessage.TEST_SUCCESS), HttpStatus.OK);
     }
 }

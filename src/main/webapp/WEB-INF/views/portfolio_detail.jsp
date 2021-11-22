@@ -35,7 +35,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="/assets/css/demo_1/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="/assets/images/favicon.png"/>
+    <link rel="shortcut icon" href="/assets/images/ucc/ucc_favicon.png"/>
 </head>
 <body onload="setHeightValue()">
 <div class="main-wrapper">

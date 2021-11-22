@@ -3,13 +3,13 @@ package com.restapi.Restfull.API.Server.utility;
 public class Format {
     public static boolean CheckFileType(String str) {
         str = str.substring(str.lastIndexOf(".")).toLowerCase();
-        /** Image Extention*/
+        /** Image Extension*/
         if (str.contains("png") || str.contains("jpg") || str.contains("jpeg") || str.contains("svg") || str.contains("gif")) {
             return true;
-            /** Video Extention*/
+            /** Video Extension*/
         } else if (str.contains("mp4") || str.contains("avi") || str.contains("m4a") || str.contains("asx") || str.contains("mpeg") || str.contains("mpg")) {
             return true;
-            /** Document Extention*/
+            /** Document Extension*/
         } else return str.contains("docx") || str.contains("docs") || str.contains("hwp") || str.contains("pdf") || str.contains("txt");
     }
 
@@ -25,10 +25,10 @@ public class Format {
 
     public static boolean CheckFile(String str) {
         str = str.substring(str.lastIndexOf(".")).toLowerCase();
-        /** Image Extention*/
+        /** Image Extension*/
         if (str.contains("png") || str.contains("jpg") || str.contains("jpeg") || str.contains("svg")) {
             return true;
-            /** Document Extention*/
+            /** Document Extension*/
         } else return str.contains("docx") || str.contains("docs") || str.contains("hwp") || str.contains("pdf") || str.contains("txt") || str.contains("pptx") || str.contains("xlsx");
     }
 }

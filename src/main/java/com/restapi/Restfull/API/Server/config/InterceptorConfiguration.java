@@ -1,9 +1,6 @@
 package com.restapi.Restfull.API.Server.config;
 
-import com.restapi.Restfull.API.Server.interceptor.AdminLoginInterceptor;
-import com.restapi.Restfull.API.Server.interceptor.AdminPageInterceptor;
-import com.restapi.Restfull.API.Server.interceptor.AuthInterceptor;
-import com.restapi.Restfull.API.Server.interceptor.DirectoryInterceptor;
+import com.restapi.Restfull.API.Server.interceptor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -26,6 +23,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
     @Autowired
     AdminPageInterceptor adminPageInterceptor;
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> auth_excludeList = new ArrayList<String>();
@@ -39,6 +37,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         auth_excludeList.add("/api/auth");
         auth_excludeList.add("/api/login");
         auth_excludeList.add("/api/apple/notification");
+        auth_excludeList.add("/api/filetest");
 
         List<String> directory_excludeList = new ArrayList<>();
         List<String> admin_excludeList = new ArrayList<>();
@@ -50,6 +49,6 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(authInterceptor).addPathPatterns("/api/**").excludePathPatterns(auth_excludeList);
         registry.addInterceptor(directoryInterceptor).addPathPatterns("/**").excludePathPatterns(directory_excludeList);
         registry.addInterceptor(adminLoginInterceptor).addPathPatterns("/admin/**").excludePathPatterns(admin_excludeList);
-        registry.addInterceptor(adminPageInterceptor).addPathPatterns("/**");
+//        registry.addInterceptor(adminPageInterceptor).addPathPatterns("/**");
     }
 }

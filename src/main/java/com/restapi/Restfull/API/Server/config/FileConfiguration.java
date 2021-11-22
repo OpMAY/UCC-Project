@@ -13,6 +13,8 @@ public class FileConfiguration implements WebMvcConfigurer {
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setDefaultEncoding("euc-kr"); // 파일 인코딩 설정
+        multipartResolver.setMaxUploadSize(1200 * 1024 * 1024);
+        multipartResolver.setMaxUploadSizePerFile(1024 * 1024 * 1024);
         return multipartResolver;
     }
 }

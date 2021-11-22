@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 
 @ControllerAdvice
@@ -18,5 +19,12 @@ public class FileExceptionController {
         e.printStackTrace();
         log.info(e.getMessage());
         return new ResponseEntity(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResMessage.INTERNAL_SERVER_ERROR, e.getLocalizedMessage()), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity handleException(MaxUploadSizeExceededException e) {
+        e.printStackTrace();
+        log.info(e.getMessage());
+        return new ResponseEntity(DefaultRes.res(StatusCode.FILE_MAX_SIZE_EXCEED, ResMessage.FILE_MAX_SIZE_EXCEED), HttpStatus.OK);
     }
 }
