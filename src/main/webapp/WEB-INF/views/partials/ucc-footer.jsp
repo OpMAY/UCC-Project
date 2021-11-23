@@ -12,7 +12,6 @@
     var instagram_clicked = 'instagram-clicked';
     var youtube_clicked = 'youtube-clicked';
 
-
     function run_google_download_clicked() {
         amplitude.getInstance().logEvent(google_download_clicked);
         window.location.href='https://play.google.com/store/apps/details?id=com.weart.ucc';
