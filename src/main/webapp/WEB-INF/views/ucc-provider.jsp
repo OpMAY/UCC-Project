@@ -5,82 +5,8 @@
 <html lang="en">
 
 <head>
-    <script type="text/javascript">
-        (function (e, t) {
-            var n = e.amplitude || {_q: [], _iq: {}};
-            var r = t.createElement("script")
-            ;r.type = "text/javascript"
-            ;r.integrity = "sha384-tzcaaCH5+KXD4sGaDozev6oElQhsVfbJvdi3//c2YvbY02LrNlbpGdt3Wq4rWonS"
-            ;r.crossOrigin = "anonymous";
-            r.async = true
-            ;r.src = "https://cdn.amplitude.com/libs/amplitude-8.5.0-min.gz.js"
-            ;r.onload = function () {
-                if (!e.amplitude.runQueuedFunctions) {
-                    console.log("[Amplitude] Error: could not load SDK")
-                }
-            }
-            ;var i = t.getElementsByTagName("script")[0];
-            i.parentNode.insertBefore(r, i)
-            ;
 
-            function s(e, t) {
-                e.prototype[t] = function () {
-                    this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
-                    return this
-                }
-            }
-
-            var o = function () {
-                    this._q = [];
-                    return this
-                }
-            ;var a = ["add", "append", "clearAll", "prepend", "set", "setOnce", "unset", "preInsert", "postInsert", "remove"]
-            ;
-            for (var c = 0; c < a.length; c++) {
-                s(o, a[c])
-            }
-            n.Identify = o;
-            var u = function () {
-                    this._q = []
-                    ;
-                    return this
-                }
-            ;var l = ["setProductId", "setQuantity", "setPrice", "setRevenueType", "setEventProperties"]
-            ;
-            for (var p = 0; p < l.length; p++) {
-                s(u, l[p])
-            }
-            n.Revenue = u
-            ;var d = ["init", "logEvent", "logRevenue", "setUserId", "setUserProperties", "setOptOut", "setVersionName", "setDomain", "setDeviceId", "enableTracking", "setGlobalUserProperties", "identify", "clearUserProperties", "setGroup", "logRevenueV2", "regenerateDeviceId", "groupIdentify", "onInit", "logEventWithTimestamp", "logEventWithGroups", "setSessionId", "resetSessionId"]
-            ;
-
-            function v(e) {
-                function t(t) {
-                    e[t] = function () {
-                        e._q.push([t].concat(Array.prototype.slice.call(arguments, 0)))
-                    }
-                }
-
-                for (var n = 0; n < d.length; n++) {
-                    t(d[n])
-                }
-            }
-
-            v(n);
-            n.getInstance = function (e) {
-                e = (!e || e.length === 0 ? "$default_instance" : e).toLowerCase()
-                ;
-                if (!Object.prototype.hasOwnProperty.call(n._iq, e)) {
-                    n._iq[e] = {_q: []};
-                    v(n._iq[e])
-                }
-                return n._iq[e]
-            };
-            e.amplitude = n
-        })(window, document);
-
-        amplitude.getInstance().init("427bac641c699781882efcfe2f53be13");
-    </script>
+    <script src="/js/amplitude_setting.js" ></script>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -500,14 +426,14 @@
 <%--funnel--%>
 <script>
     /*Sample*/
-   /* var element = document.querySelector('[data-amp]');
-    element.addEventListener('click', function (evt) {
-        alert('ucc-shared');
-        var type = this.getAttribute('data-amp');
-        console.log('type : '+type);
-        amplitude.getInstance().logEvent(type);
-        console.log('evt : '+evt);
-    });*/
+    /* var element = document.querySelector('[data-amp]');
+     element.addEventListener('click', function (evt) {
+         alert('ucc-shared');
+         var type = this.getAttribute('data-amp');
+         console.log('type : '+type);
+         amplitude.getInstance().logEvent(type);
+         console.log('evt : '+evt);
+     });*/
 
     var funnel_count = 10;
 
@@ -572,27 +498,27 @@
 
 <%--Amplitude Button Clicked--%>
 <script>
-     function run_ucc_active() {
-         amplitude.getInstance().logEvent('ucc-active');
-     }
+    function run_ucc_active() {
+        amplitude.getInstance().logEvent('ucc-active');
+    }
 
-     function run_ucc_shared() {
-         amplitude.getInstance().logEvent('ucc-shared');
-     }
+    function run_ucc_shared() {
+        amplitude.getInstance().logEvent('ucc-shared');
+    }
 
-     function run_ucc_shared_clicked() {
-         amplitude.getInstance().logEvent('ucc-shared-clicked');
-     }
+    function run_ucc_shared_clicked() {
+        amplitude.getInstance().logEvent('ucc-shared-clicked');
+    }
 
-     function run_google_download_clicked() {
-         amplitude.getInstance().logEvent('google-download-clicked');
-         window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
-     }
+    function run_google_download_clicked() {
+        amplitude.getInstance().logEvent('google-download-clicked');
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
+    }
 
-     function run_ios_download_clicked() {
-         amplitude.getInstance().logEvent('ios-download-clicked');
-         window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
-     }
+    function run_ios_download_clicked() {
+        amplitude.getInstance().logEvent('ios-download-clicked');
+        window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
+    }
 </script>
 
 <%--Amplitude Acquisition Unique Visit--%>
@@ -634,7 +560,7 @@
         "channel": ac_name
     };
 
-            amplitude.getInstance().logEvent(event, eventProperties);
+    amplitude.getInstance().logEvent(event, eventProperties);
 </script>
 
 <%--Amplitude Acquisition Page Views--%>
@@ -717,10 +643,9 @@
         }
     });
 
-    $(document).ready(() = > { // 캐러셀 좌우 버튼
-        window.addEventListener('resize', (event) = > {}
-    )
-    ;
+    $(document).ready(() => { // 캐러셀 좌우 버튼
+        window.addEventListener('resize', (event) => {}
+        )
     })
     ;
 
@@ -733,13 +658,12 @@
         run_ucc_shared_clicked();
         navigator.clipboard.writeText(url).then(function () {
             $('#shareText').text('복사되었습니다');
-            setTimeout(() = > {
-                $('#shareText'
-        ).
-            text('공유하기');
-        },
-            800
-        )
+            setTimeout(() => {
+                    $('#shareText'
+                    ).text('공유하기');
+                },
+                800
+            )
             ;
         }, function () {
             alert('복사 권한이 없습니다.')
@@ -767,11 +691,10 @@
     let width = window.innerWidth;
 
     changeFontColor(width);
-    window.addEventListener('resize', (event) = > {
+    window.addEventListener('resize', (event) => {
         width = window.innerWidth;
-    changeFontColor(width);
-    })
-    ;
+        changeFontColor(width);
+    });
 
     function changeFontColor(width) {
         if (width < 1396) {
@@ -861,83 +784,67 @@
 
     /* image slid start */
     const scrollElements = document.querySelectorAll(".slide-img");
-    const elementInView = (el, dividend = 1) =
-    >
-    {
-        const elementTop = el.getBoundingClientRect().top;
+    const elementInView = (el, dividend = 1) => {
+            const elementTop = el.getBoundingClientRect().top;
 
-        return (
-            elementTop <=
-            (window.innerHeight || document.documentElement.clientHeight) / dividend
-        );
-    }
-    ;
-    const elementOutofView = (el) =
-    >
-    {
-        const elementTop = el.getBoundingClientRect().top;
-
-        return (
-            elementTop > (window.innerHeight || document.documentElement.clientHeight)
-        );
-    }
-    ;
-    const displayScrollElement = (element) =
-    >
-    {
-        element.classList.add("scrolled");
-    }
-    ;
-
-    const hideScrollElement = (element) =
-    >
-    {
-        element.classList.remove("scrolled");
-    }
-    ;
-    const handleScrollAnimation = () =
-    >
-    {
-        scrollElements.forEach((el) = > {
-            if(elementInView(el, 1.25)
-    )
-        {
-            displayScrollElement(el);
+            return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
         }
-    else
-        if (elementOutofView(el)) {
-            hideScrollElement(el)
-        }
-    })
-    }
     ;
-    window.addEventListener("scroll", () = > {
+    const elementOutofView = (el) => {
+            const elementTop = el.getBoundingClientRect().top;
+
+            return (
+                elementTop > (window.innerHeight || document.documentElement.clientHeight)
+            );
+        }
+    ;
+    const displayScrollElement = (element) => {
+            element.classList.add("scrolled");
+        }
+    ;
+
+    const hideScrollElement = (element) => {
+            element.classList.remove("scrolled");
+        }
+    ;
+    const handleScrollAnimation = () => {
+            scrollElements.forEach((el) => {
+                if (elementInView(el, 1.25)
+                ) {
+                    displayScrollElement(el);
+                } else if (elementOutofView(el)) {
+                    hideScrollElement(el)
+                }
+            })
+        }
+    ;
+    window.addEventListener("scroll", () => {
         handleScrollAnimation();
     })
     ;
     /* image slid end */
 
-    $('a[href="#section2"]').click((e) = > {
+    $('a[href="#section2"]').click((e) => {
         e.preventDefault();
-    let dest = $('#section2').offset().top - window.innerHeight / 3;
+        let dest = $('#section2').offset().top - window.innerHeight / 3;
 
-    $('html, body').animate({
-        scrollTop: dest
-    }, 700, 'swing');
+        $('html, body').animate({
+            scrollTop: dest
+        }, 700, 'swing');
 
-    run_ucc_active(); // UCC에서 활동하기
+        run_ucc_active(); // UCC에서 활동하기
 
     })
     ;
-    $('a[href="#section4"]').click((e) = > {
+    $('a[href="#section4"]').click((e) => {
         e.preventDefault();
-    let dest = $('#section4').offset().top - window.innerHeight / 3;
+        let dest = $('#section4').offset().top - window.innerHeight / 3;
 
-    $('html, body').animate({
-        scrollTop: dest
-    }, 700, 'swing');
+        $('html, body').animate({
+            scrollTop: dest
+        }, 700, 'swing');
 
-    run_ucc_active(); // UCC에서 활동하기
+        run_ucc_active(); // UCC에서 활동하기
 
     })
     ;
