@@ -1,80 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
 <!Doctype html>
 <html lang="en">
+
 <head>
 
-    <script type="text/javascript">
-        (function(e,t){var n=e.amplitude||{_q:[],_iq:{}};var r=t.createElement("script")
-        ;r.type="text/javascript"
-        ;r.integrity="sha384-tzcaaCH5+KXD4sGaDozev6oElQhsVfbJvdi3//c2YvbY02LrNlbpGdt3Wq4rWonS"
-        ;r.crossOrigin="anonymous";r.async=true
-        ;r.src="https://cdn.amplitude.com/libs/amplitude-8.5.0-min.gz.js"
-        ;r.onload=function(){if(!e.amplitude.runQueuedFunctions){
-            console.log("[Amplitude] Error: could not load SDK")}}
-        ;var i=t.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)
-        ;function s(e,t){e.prototype[t]=function(){
-            this._q.push([t].concat(Array.prototype.slice.call(arguments,0)));return this}}
-            var o=function(){this._q=[];return this}
-            ;var a=["add","append","clearAll","prepend","set","setOnce","unset","preInsert","postInsert","remove"]
-            ;for(var c=0;c<a.length;c++){s(o,a[c])}n.Identify=o;var u=function(){this._q=[]
-                ;return this}
-            ;var l=["setProductId","setQuantity","setPrice","setRevenueType","setEventProperties"]
-            ;for(var p=0;p<l.length;p++){s(u,l[p])}n.Revenue=u
-            ;var d=["init","logEvent","logRevenue","setUserId","setUserProperties","setOptOut","setVersionName","setDomain","setDeviceId","enableTracking","setGlobalUserProperties","identify","clearUserProperties","setGroup","logRevenueV2","regenerateDeviceId","groupIdentify","onInit","logEventWithTimestamp","logEventWithGroups","setSessionId","resetSessionId"]
-            ;function v(e){function t(t){e[t]=function(){
-                e._q.push([t].concat(Array.prototype.slice.call(arguments,0)))}}
-                for(var n=0;n<d.length;n++){t(d[n])}}v(n);n.getInstance=function(e){
-                e=(!e||e.length===0?"$default_instance":e).toLowerCase()
-                ;if(!Object.prototype.hasOwnProperty.call(n._iq,e)){n._iq[e]={_q:[]};v(n._iq[e])
-                }return n._iq[e]};e.amplitude=n})(window,document);
-
-        amplitude.getInstance().init("427bac641c699781882efcfe2f53be13");
-    </script>
-
-
-    <script>
-        /*Amplitude Page View*/
-        var event = 'page-views';
-
-        /*Amplitude Button Click*/
-        var ucc_active = 'ucc-active';  // ucc에서 활동하기
-        var ucc_shared = 'ucc-shared';  // Header 공유하기
-        var ucc_shared_clicked = 'ucc-shared-clicked';  // 복사하기 버튼 횟수
-        var google_download_clicked = 'google-download-clicked';  // Google Play Store
-        var ios_download_clicked = 'ios-download-clicked';  // ios App Store
-
-
-        /*Page View Event*/
-        amplitude.getInstance().logEvent(event);
-
-        /*Button Clicked*/
-        function run_ucc_active() {
-            amplitude.getInstance().logEvent(ucc_active);
-        }
-
-        function run_ucc_shared() {
-            amplitude.getInstance().logEvent(ucc_shared);
-        }
-
-        function run_ucc_shared_clicked() {
-            amplitude.getInstance().logEvent(ucc_shared_clicked);
-        }
-
-        function run_google_download_clicked() {
-            amplitude.getInstance().logEvent(google_download_clicked);
-            window.location.href='https://play.google.com/store/apps/details?id=com.weart.ucc';
-        }
-
-        function run_ios_download_clicked() {
-            amplitude.getInstance().logEvent(ios_download_clicked);
-            window.location.href='https://apps.apple.com/kr/app/ucc/id1580818238';
-        }
-
-
-    </script>
-
-
-
+    <script src="/js/amplitude_setting.js" ></script>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -100,34 +32,41 @@
         }
     </style>
 </head>
-<body style="background: black;">
-    <div id="background-repeat">
+<body id="scroll-height" style="background: black;">
+<div id="background-repeat">
     <main class="position-relative">
-        <img id="background-top" src="/assets/images/ucc/ucc-provider-background-top.png" style="position: absolute; top: 0; width: 100%; z-index: 0;">
+        <img id="background-top" src="/assets/images/ucc/ucc-provider-background-top.png"
+             style="position: absolute; top: 0; width: 100%; z-index: 0;">
         <div class="container">
             <div class="row py-4">
                 <div class="col-12 d-flex justify-content-between">
                     <img class="logo-gradient" src="/assets/images/ucc/ucc-provider-logo.png">
                     <div>
                         <img class="logo-fixed2" onclick="new function() {run_ucc_shared();}"
-                             data-toggle="modal" data-target="#shareModal" src="/assets/images/ucc/icon_share.svg" width="25px" style="cursor: pointer;"><!-- onclick modal open -->
+                             data-toggle="modal" data-target="#shareModal" src="/assets/images/ucc/icon_share.svg"
+                             width="25px" style="cursor: pointer;"><!-- onclick modal open -->
                         <!-- 모달 -->
-                        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content" style="border-radius: 0;">
                                     <div class="row text-center flex-column align-items-center position-relative p-3">
-                                        <button type="button" class="close position-absolute" data-dismiss="modal" aria-label="Close" style="right: 40px; top: 20px;">
+                                        <button type="button" class="close position-absolute" data-dismiss="modal"
+                                                aria-label="Close" style="right: 40px; top: 20px;">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                         <div class="row font-size-20 font-family-aggro-b m-2">
                                             <span id="shareText">공유하기</span>
                                         </div>
                                         <div class="row m-2">
-                                            <div class="row p-2" style="border: solid 1px rgba(0,0,0,0.3); border-radius: 5px; cursor: pointer" onclick="copyToClipboard(this)">
+                                            <div class="row p-2"
+                                                 style="border: solid 1px rgba(0,0,0,0.3); border-radius: 5px; cursor: pointer"
+                                                 onclick="copyToClipboard(this)">
                                                 <div class="col-9 font-family-aggro-m">
                                                     <span>https://mvsolutions.co.kr/ucc-artist.do</span>
                                                 </div>
-                                                <div class="col-3 font-family-aggro-b" style="border-left: solid 1px rgba(0,0,0,0.3);">
+                                                <div class="col-3 font-family-aggro-b"
+                                                     style="border-left: solid 1px rgba(0,0,0,0.3);">
                                                     <span style="color: red;">URL 복사</span>
                                                 </div>
                                             </div>
@@ -151,7 +90,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div id="funnel1" class="col-12">
                     <a href="#section2" class="provider-btn-top btn px-lg-5" style="background: white;">
                         <span class="font-black font-size-24 font-size-sm-8 font-family-aggro-b">UCC에서 활동하기</span>
                     </a>
@@ -165,12 +104,13 @@
                 <div id="line-1" class="col-3 text-side-line-white"></div>
             </div>
             <div class="row">
-                <div id="text-1-2" class="col-12 font-white font-size-24 font-size-sm-12 flex-column d-flex flex-column py-2">
+                <div id="text-1-2"
+                     class="col-12 font-white font-size-24 font-size-sm-12 flex-column d-flex flex-column py-2">
                     <span>좋아서 시작한 아티스트 활동이지만</span>
                     <span>현실의 벽은 높기만 합니다.</span>
                 </div>
             </div>
-            <div class="row my-3">
+            <div id="funnel2" class="row my-3">
                 <div class="col-12 d-flex flex-column flex-xl-row justify-content-between align-items-center square-three-images">
                     <img src="/assets/images/ucc/artist-pain-1.png">
                     <img src="/assets/images/ucc/artist-pain-2.png">
@@ -189,20 +129,23 @@
                 <div id="line-2" class="col-4 text-side-line-white"></div>
             </div>
             <div class="row">
-                <div id="text-2-2" class="col-12 d-flex flex-column font-size-24 font-size-sm-12 font-white flex-column py-3">
+                <div id="text-2-2"
+                     class="col-12 d-flex flex-column font-size-24 font-size-sm-12 font-white flex-column py-3">
                     <span>아티스트와 세상을 연결하고 수익 창출을 통해</span>
                     <span>작품 활동을 즐기는 놀이터 같은 공간을 마련했습니다.</span>
                 </div>
             </div>
-            <div class="row justify-content-lg-start justify-content-center position-relative" style="margin-top: 5%; margin-bottom:15%;">
-                <img src="/assets/images/ucc/ucc-provider-mobile-screen-sample.png" class="artist-mobile-screen" style="object-fit: contain;">
+            <div class="row justify-content-lg-start justify-content-center position-relative"
+                 style="margin-top: 5%; margin-bottom:15%;">
+                <img id="funnel3" src="/assets/images/ucc/ucc-provider-mobile-screen-sample.png"
+                     class="artist-mobile-screen" style="object-fit: contain;">
                 <img src="/assets/images/ucc/artists-circles.png" class="artists-circles" style="position: absolute;">
             </div>
         </div>
     </section>
 
     <section id="section2" style="background: #F0EDFF;" class="py-lg-5 py-4 position-relative">
-        <img src="/assets/images/ucc/ucc-palette-logo.png" class="logo-middle">
+        <img id="funnel4" src="/assets/images/ucc/ucc-palette-logo.png" class="logo-middle">
         <div class="container">
             <div class="row flex-column flex-lg-row align-items-center">
                 <div class="col-12 col-lg-6 mb-2 mb-lg-0">
@@ -246,28 +189,38 @@
     </section>
     <section>
         <div class="container-fluid p-0 pt-4 pb-5">
-            <div class="d-flex py-lg-5 py-4 justify-content-lg-center justify-content-between twin-mobile-screens">
+            <div id="funnel5"
+                 class="d-flex py-lg-5 py-4 justify-content-lg-center justify-content-between twin-mobile-screens">
                 <div class="d-flex flex-column ">
-                    <div id="text-4-1" class="font-black d-flex justify-content-center flex-column text-center" style="z-index: 1;">
+                    <div id="text-4-1" class="font-black d-flex justify-content-center flex-column text-center"
+                         style="z-index: 1;">
                         <span class="font-size-32 font-size-sm-16 pb-3">아티스트 후원</span>
-                        <span class="font-size-16 font-size-sm-10 mb-lg-5 mb-4 px-1">아티스트를 응원하는 팬들의 후원으로<br class="d-none d-md-none d-lg-none d-xl-block"> 작품 활동을 이어나가 보세요!</span>
+                        <span class="font-size-16 font-size-sm-10 mb-lg-5 mb-4 px-1">아티스트를 응원하는 팬들의 후원으로<br
+                                class="d-none d-md-none d-lg-none d-xl-block"> 작품 활동을 이어나가 보세요!</span>
                     </div>
-                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-1.png" style="width: 100%; object-fit: contain; opacity: 0;">
+                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-1.png"
+                         style="width: 100%; object-fit: contain; opacity: 0;">
                 </div>
                 <div class="d-flex">
-                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-2.png" style="width: 100%; object-fit: contain; opacity: 0; object-fit: contain; object-position: top">
+                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-2.png"
+                         style="width: 100%; object-fit: contain; opacity: 0; object-fit: contain; object-position: top">
                 </div>
             </div>
-            <div class="d-flex py-lg-5 py-4 justify-content-lg-center justify-content-between twin-mobile-screens">
+            <div id="funnel6"
+                 class="d-flex py-lg-5 py-4 justify-content-lg-center justify-content-between twin-mobile-screens">
                 <div class="d-flex">
-                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-3.png" style="width: 100%; object-fit: contain; opacity: 0; object-fit: contain; object-position: top">
+                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-3.png"
+                         style="width: 100%; object-fit: contain; opacity: 0; object-fit: contain; object-position: top">
                 </div>
                 <div class="d-flex flex-column">
-                    <div id="text-4-2" class="d-flex justify-content-center flex-column text-center font-black" style="z-index: 1;">
+                    <div id="text-4-2" class="d-flex justify-content-center flex-column text-center font-black"
+                         style="z-index: 1;">
                         <span class="font-size-32 font-size-sm-16 pb-3">콘테스트/협찬&광고</span>
-                        <span class="font-size-16 font-size-sm-10 mb-lg-5 mb-4 px-3">다양한 브랜드와 작품 협업을 통해<br class="d-none d-md-none d-lg-none d-xl-block">  수익을 창출해 보세요!</span>
+                        <span class="font-size-16 font-size-sm-10 mb-lg-5 mb-4 px-3">다양한 브랜드와 작품 협업을 통해<br
+                                class="d-none d-md-none d-lg-none d-xl-block">  수익을 창출해 보세요!</span>
                     </div>
-                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-4.png" style="width: 100%; object-fit: contain; opacity: 0;">
+                    <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-4.png"
+                         style="width: 100%; object-fit: contain; opacity: 0;">
                 </div>
             </div>
         </div>
@@ -290,7 +243,8 @@
                         <img src="/assets/images/ucc/google-play-button.png" onclick="new function() {
                             run_google_download_clicked();
                         }" style="cursor: pointer;">
-                        <img src="/assets/images/ucc/apple-store-button.png" onclick="new function() {
+                        <img data-amplitude="run_ios_download_clicked" src="/assets/images/ucc/apple-store-button.png"
+                             onclick="new function() {
                             run_ios_download_clicked();
                         }" style="cursor: pointer;">
                     </div>
@@ -299,7 +253,7 @@
         </div>
     </section>
     <section id="section5">
-        <div class="container pt-lg-5">
+        <div id="funnel7" class="container pt-lg-5">
             <div class="row pt-5 mr-0 p-0">
                 <div id="text-5-1" class="col-7 font-white font-size-40 font-size-sm-16 flex-column d-flex">
                     <span>다양한 방법으로</span>
@@ -313,7 +267,8 @@
                     <span>다양한 방법으로 작품 활동이 가능합니다!</span>
                 </div>
             </div>
-            <div id="three-circles" class="row justify-content-lg-between flex-lg-row flex-column align-items-center justify-content-center m-0 pt-lg-5 pt-3 pb-5 circle-three-images">
+            <div id="three-circles"
+                 class="row justify-content-lg-between flex-lg-row flex-column align-items-center justify-content-center m-0 pt-lg-5 pt-3 pb-5 circle-three-images">
                 <div class="row flex-column align-items-center m-0">
                     <img src="/assets/images/ucc/provider-content-icon-1.png">
                     <span class="font-black mt-3 font-size-24 font-size-sm-12">비디오</span>
@@ -331,7 +286,7 @@
     </section>
 
     <section id="section6">
-        <div class="container pt-lg-5">
+        <div id="funnel8" class="container pt-lg-5">
             <div class="row pt-lg-5 mr-0">
                 <div id="text-6-1" class="col-7 font-white font-size-40 font-size-sm-16 flex-column d-flex">
                     <span>예술을 사랑한다면 누구나</span>
@@ -354,9 +309,10 @@
         </div>
     </section>
     <section id="section7">
-        <div class="container pt-4">
+        <div id="funnel9" class="container pt-4">
             <div class="row pt-lg-5 pt-0 mr-0">
-                <div id="text-7-1" class="col-7 col-md-9 col-lg-7 font-black font-size-40 font-size-sm-16 flex-column d-flex">
+                <div id="text-7-1"
+                     class="col-7 col-md-9 col-lg-7 font-black font-size-40 font-size-sm-16 flex-column d-flex">
                     <span>이미 다양한 아티스트가</span>
                     <span>UCC에서 활동하고 있습니다</span>
                 </div>
@@ -365,7 +321,7 @@
             <div class="row">
                 <div id="text-7-2" class="col-12 d-flex font-size-24 font-size-sm-12 font-black flex-column py-3">
                     <span>아티스트의 열정과 재능을 누구보다 사랑하는</span>
-                    <span>UCC 피플들과 소통하며 작품 활동을 이어나가 보세요!</span>
+                    <span id="funnel10">UCC 피플들과 소통하며 작품 활동을 이어나가 보세요!</span>
                 </div>
             </div>
             <div class="row">
@@ -457,7 +413,7 @@
     </section>
 
     <jsp:include page="partials/ucc-footer.jsp"/>
-    </div>
+</div>
 <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
         crossorigin="anonymous"></script>
@@ -465,6 +421,203 @@
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
 <script src="/assets/js/owl.carousel.js"></script>
+
+
+<%--funnel--%>
+<script>
+    /*Sample*/
+    /* var element = document.querySelector('[data-amp]');
+     element.addEventListener('click', function (evt) {
+         alert('ucc-shared');
+         var type = this.getAttribute('data-amp');
+         console.log('type : '+type);
+         amplitude.getInstance().logEvent(type);
+         console.log('evt : '+evt);
+     });*/
+
+    var funnel_count = 10;
+
+    var funnel_checked = new Array(funnel_count).fill(false);
+
+    var lastScrollTop = 0;
+
+    var getElementHeight = function (funnel_name) {
+        var funnel_element = document.getElementById(funnel_name);
+        var funnel_clientRect = funnel_element.getBoundingClientRect();
+        var funnel_value = funnel_clientRect.top;
+        return funnel_value;
+    };
+
+    document.addEventListener('scroll', function () {
+        var st = window.pageYOffset || document.documentElement.scrollTop;
+        if (st > lastScrollTop) {
+            if (getElementHeight('funnel1') < 0 && funnel_checked[0] == false) {
+                funnel_checked[0] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-1', time_eventProperties);
+            } else if (getElementHeight('funnel2') < 0 && funnel_checked[1] == false) {
+                funnel_checked[1] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-2', time_eventProperties);
+            } else if (getElementHeight('funnel3') < 0 && funnel_checked[2] == false) {
+                funnel_checked[2] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-3', time_eventProperties);
+            } else if (getElementHeight('funnel4') < 0 && funnel_checked[3] == false) {
+                funnel_checked[3] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-4', time_eventProperties);
+            } else if (getElementHeight('funnel5') < 0 && funnel_checked[4] == false) {
+                funnel_checked[4] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-5', time_eventProperties);
+            } else if (getElementHeight('funnel6') < 0 && funnel_checked[5] == false) {
+                funnel_checked[5] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-6', time_eventProperties);
+            } else if (getElementHeight('funnel7') < 0 && funnel_checked[6] == false) {
+                funnel_checked[6] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-7', time_eventProperties);
+            } else if (getElementHeight('funnel8') < 0 && funnel_checked[7] == false) {
+                funnel_checked[7] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-8', time_eventProperties);
+            } else if (getElementHeight('funnel9') < 0 && funnel_checked[8] == false) {
+                funnel_checked[8] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-9', time_eventProperties);
+            } else if (getElementHeight('funnel10') < 0 && funnel_checked[9] == false) {
+                funnel_checked[9] = true;
+                amplitude.getInstance().logEvent('fn-page-scroll-10', time_eventProperties);
+            }
+
+        } else {
+            /*업 스크롤 부분*/
+        }
+        lastScrollTop = st <= 0 ? 0 : st;
+    }, false);
+</script>
+
+
+<%--Page View--%>
+<script>
+    amplitude.getInstance().logEvent('page-views');
+</script>
+
+<%--Amplitude Button Clicked--%>
+<script>
+    function run_ucc_active() {
+        amplitude.getInstance().logEvent('ucc-active');
+    }
+
+    function run_ucc_shared() {
+        amplitude.getInstance().logEvent('ucc-shared');
+    }
+
+    function run_ucc_shared_clicked() {
+        amplitude.getInstance().logEvent('ucc-shared-clicked');
+    }
+
+    function run_google_download_clicked() {
+        amplitude.getInstance().logEvent('google-download-clicked');
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
+    }
+
+    function run_ios_download_clicked() {
+        amplitude.getInstance().logEvent('ios-download-clicked');
+        window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
+    }
+</script>
+
+<%--Amplitude Acquisition Unique Visit--%>
+<script language="javascript" type="text/javascript">
+    var url = document.referrer;
+    var ac_name;
+    var event = "acquisition-from-channel";
+    var eventProperties;
+
+    if (url.indexOf("naver") > 0) {
+        ac_name = "naver";
+    } else if (url.indexOf("daum") > 0) {
+        ac_name = "daum";
+    } else if (url.indexOf("google") > 0) {
+        ac_name = "google";
+    } else if (url.indexOf("tistory") > 0) {
+        ac_name = "tistory";
+    } else if (url.indexOf("bing") > 0) {
+        ac_name = "bing";
+    } else if (url.indexOf("yahoo") > 0) {
+        ac_name = "yahoo";
+    } else if (url.indexOf("facebook") > 0) {
+        ac_name = "facebook";
+    } else if (url.indexOf("insta") > 0) {
+        ac_name = "instagram";
+    } else if (url.indexOf("nate") > 0) {
+        ac_name = "nate";
+    } else if (url.indexOf("youtube") > 0) {
+        ac_name = "youtube";
+    } else if (url.indexOf("KAKAO") > 0) {
+        ac_name = "kakao";
+    } else if (url.indexOf("tiktok") > 0) {
+        ac_name = "tiktok";
+    } else {
+        ac_name = "etc";
+    }
+
+    eventProperties = {
+        "channel": ac_name
+    };
+
+    amplitude.getInstance().logEvent(event, eventProperties);
+</script>
+
+<%--Amplitude Acquisition Page Views--%>
+<script language="javascript" type="text/javascript">
+    var url = document.referrer;
+
+    if (url.indexOf("naver") > 0) {
+        amplitude.getInstance().logEvent('ac-naver');
+    } else if (url.indexOf("daum") > 0) {
+        amplitude.getInstance().logEvent('ac-daum');
+    } else if (url.indexOf("google") > 0) {
+        amplitude.getInstance().logEvent('ac-google');
+    } else if (url.indexOf("tistory") > 0) {
+        amplitude.getInstance().logEvent('ac-tistory');
+    } else if (url.indexOf("bing") > 0) {
+        amplitude.getInstance().logEvent('ac-bing');
+    } else if (url.indexOf("yahoo") > 0) {
+        amplitude.getInstance().logEvent('ac-yahoo');
+    } else if (url.indexOf("facebook") > 0) {
+        amplitude.getInstance().logEvent('ac-facebook');
+    } else if (url.indexOf("insta") > 0) {
+        amplitude.getInstance().logEvent('ac-instagram');
+    } else if (url.indexOf("nate") > 0) {
+        amplitude.getInstance().logEvent('ac-nate');
+    } else if (url.indexOf("youtube") > 0) {
+        amplitude.getInstance().logEvent('ac-youtube');
+    } else if (url.indexOf("KAKAO") > 0) {
+        amplitude.getInstance().logEvent('kakao');
+    } else if (url.indexOf("tiktok") > 0) {
+        amplitude.getInstance().logEvent('tiktok');
+    } else {
+        amplitude.getInstance().logEvent('etc');
+    }
+</script>
+
+<%--Acquisition Time--%>
+<script>
+    var now = new Date();
+    var time = now.getHours();
+    var ac_time;
+
+    if (time == 24) {
+        ac_time = 0 + " ~ " + 1;
+    } else {
+        ac_time = time + " ~ " + (time + 1);
+    }
+
+    var time_event = "acquisition-time";
+    var time_eventProperties;
+
+    time_eventProperties = {
+        "time": ac_time
+    };
+
+    amplitude.getInstance().logEvent(time_event, time_eventProperties);
+
+</script>
 
 
 <script>
@@ -477,25 +630,24 @@
         dots: false,
         autoplayTimeout: 2000,
         autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items:3
+        responsive: {
+            0: {
+                items: 3
             },
-            768:{
-                items:5
+            768: {
+                items: 5
             },
-            1200:{
-                items:7
+            1200: {
+                items: 7
             }
         }
     });
 
-    $(document).ready(()=>{ // 캐러셀 좌우 버튼
-        window.addEventListener('resize', (event) => {
-        });
-    });
-
-
+    $(document).ready(() => { // 캐러셀 좌우 버튼
+        window.addEventListener('resize', (event) => {}
+        )
+    })
+    ;
 
 
     $(window).scroll(function () {
@@ -507,8 +659,12 @@
         navigator.clipboard.writeText(url).then(function () {
             $('#shareText').text('복사되었습니다');
             setTimeout(() => {
-                $('#shareText').text('공유하기');
-            }, 800);
+                    $('#shareText'
+                    ).text('공유하기');
+                },
+                800
+            )
+            ;
         }, function () {
             alert('복사 권한이 없습니다.')
         });
@@ -573,7 +729,7 @@
             text_4_1.addClass('font-black');
         }
 
-        if ((width < 1604 && width > 1200) || (width<954 && width > 768) || (width<616 && width > 438)) {
+        if ((width < 1604 && width > 1200) || (width < 954 && width > 768) || (width < 616 && width > 438)) {
             text_4_2.addClass('font-white');
             text_4_2.removeClass('font-black');
         } else {
@@ -629,39 +785,43 @@
     /* image slid start */
     const scrollElements = document.querySelectorAll(".slide-img");
     const elementInView = (el, dividend = 1) => {
-        const elementTop = el.getBoundingClientRect().top;
+            const elementTop = el.getBoundingClientRect().top;
 
-        return (
-            elementTop <=
-            (window.innerHeight || document.documentElement.clientHeight) / dividend
-        );
-    };
+            return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
+        }
+    ;
     const elementOutofView = (el) => {
-        const elementTop = el.getBoundingClientRect().top;
+            const elementTop = el.getBoundingClientRect().top;
 
-        return (
-            elementTop > (window.innerHeight || document.documentElement.clientHeight)
-        );
-    };
+            return (
+                elementTop > (window.innerHeight || document.documentElement.clientHeight)
+            );
+        }
+    ;
     const displayScrollElement = (element) => {
-        element.classList.add("scrolled");
-    };
+            element.classList.add("scrolled");
+        }
+    ;
 
     const hideScrollElement = (element) => {
-        element.classList.remove("scrolled");
-    };
+            element.classList.remove("scrolled");
+        }
+    ;
     const handleScrollAnimation = () => {
-        scrollElements.forEach((el) => {
-            if (elementInView(el, 1.25)) {
-                displayScrollElement(el);
-            } else if (elementOutofView(el)) {
-                hideScrollElement(el)
-            }
-        })
-    };
+            scrollElements.forEach((el) => {
+                if (elementInView(el, 1.25)
+                ) {
+                    displayScrollElement(el);
+                } else if (elementOutofView(el)) {
+                    hideScrollElement(el)
+                }
+            })
+        }
+    ;
     window.addEventListener("scroll", () => {
         handleScrollAnimation();
-    });
+    })
+    ;
     /* image slid end */
 
     $('a[href="#section2"]').click((e) => {
@@ -672,9 +832,10 @@
             scrollTop: dest
         }, 700, 'swing');
 
-    run_ucc_active(); // UCC에서 활동하기
+        run_ucc_active(); // UCC에서 활동하기
 
-    });
+    })
+    ;
     $('a[href="#section4"]').click((e) => {
         e.preventDefault();
         let dest = $('#section4').offset().top - window.innerHeight / 3;
@@ -683,9 +844,10 @@
             scrollTop: dest
         }, 700, 'swing');
 
-    run_ucc_active(); // UCC에서 활동하기
+        run_ucc_active(); // UCC에서 활동하기
 
-    });
+    })
+    ;
 </script>
 </body>
 </html>

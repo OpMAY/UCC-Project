@@ -2,6 +2,9 @@
 <!Doctype html>
 <html lang="en">
 <head>
+
+    <script src="/js/amplitude_setting.js" ></script>
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,7 +25,7 @@
 </head>
 <body>
 
-<main style="height: 100vh;">
+<main id="funnel1" style="height: 100vh;">
     <img class="logo-fixed" src="/assets/images/ucc/top-left-logo-white.png" height="41px" style="top:20px; left:20px; position: fixed; z-index: 100;">
     <div>
         <img class="logo-fixed2" data-toggle="modal" data-target="#shareModal" src="/assets/images/ucc/icon_share.svg" width="25px" style="cursor: pointer; top:20px; right:20px; position: fixed; z-index: 100;"><!-- onclick modal open -->
@@ -96,7 +99,7 @@
             <span class="font-family-aggro-m">UCC에서 전문성과 진정성이 담긴</span>
             <span class="font-family-aggro-m"><span style="color: red" class="font-family-aggro-b">보물 같은 아티스트</span>의 콘텐츠를 확인해 보세요!</span>
         </div>
-        <div class="row justify-content-center py-5 my-3 position-relative">
+        <div id="funnel2" class="row justify-content-center py-5 my-3 position-relative">
             <img class="blink-image1" src="/assets/images/ucc/artist-circle-1.png">
             <img class="blink-image2" src="/assets/images/ucc/artist-circle-2.png">
             <img class="blink-image3" src="/assets/images/ucc/artist-circle-3.png">
@@ -118,14 +121,14 @@
             </div>
         </div>
         <div class="row flex-column flex-lg-row justify-content-center align-items-center">
-            <img src="/assets/images/ucc/prize1st.png" style="max-width: 258px; width: 100%" class="m-3">
+            <img id="funnel3" src="/assets/images/ucc/prize1st.png" style="max-width: 258px; width: 100%" class="m-3">
             <img src="/assets/images/ucc/prize2nd.png" style="max-width: 258px; width: 100%" class="m-3">
             <img src="/assets/images/ucc/prize3rd.png" style="max-width: 258px; width: 100%" class="m-3">
         </div>
     </div>
 </section><!-- 잃어버린 아티스트를 찾아서 -->
 <section id="section2" style="background: black;">
-    <div class="container py-5 position-relative">
+    <div id="funnel4" class="container py-5 position-relative">
         <img class="position-absolute" style="top: 0; left: 50%; transform: translate(-50%, -50%); max-width: 375px; width: 60%" src="/assets/images/ucc/event-join-text.png">
         <div class="row flex-column flex-xl-row justify-content-center align-items-center py-5">
             <img class="m-3" src="/assets/images/ucc/event-process-1.png" style="width: 180px;">
@@ -139,18 +142,18 @@
     </div>
 </section><!-- 이벤트 참여 방법 -->
 <section id="section3" class="p-lg-5 p-3" style="background-size: cover !important; background: white url('/assets/images/ucc/backgroud-pictures.png') no-repeat center;">
-    <div class="container p-3 p-lg-5">
+    <div id="funnel5" class="container p-3 p-lg-5">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-family-aggro-b">
             <span class="font-size-40 font-size-sm-24">지금 바로&nbsp;</span>
             <span class="font-size-40 font-size-sm-24">보물 찾기에 참여하세요!</span>
         </div>
         <div class="row justify-content-center">
-            <a href="https://play.google.com/store/apps/details?id=com.weart.ucc" class="col-6 pr-0">
+            <a href="javascript:run_google_download_clicked();" class="col-6 pr-0">
                 <div class="row justify-content-end mr-1">
                     <img src="/assets/images/ucc/google-play-button.png" width="60%" style="max-width: 220px; float: right;">
                 </div>
             </a>
-            <a href="https://apps.apple.com/kr/app/ucc/id1580818238" class="col-6 pl-0">
+            <a href="javascript:run_ios_download_clicked();" class="col-6 pl-0">
                 <div class="row ml-1">
                     <img src="/assets/images/ucc/apple-store-button.png" width="60%" style="max-width: 220px; float: left;">
                 </div>
@@ -159,7 +162,7 @@
     </div>
 </section><!-- 보물찾기에 참여하세요 -->
 <section id="section4" style="background: white;" >
-    <div class="container pt-lg-5 pt-3">
+    <div id="funnel6" class="container pt-lg-5 pt-3">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-size-40 font-size-sm-24 p-lg-5 p-3 m-3 font-family-aggro-b">
             <span style="color: red !important;">UCC 보물&nbsp;</span>
             <span>이렇게 찾아보는 건 어떨까요?</span>
@@ -190,7 +193,7 @@
     </div>
 </section><!-- UCC 보물 이렇게 찾아보는건 -->
 <section id="section5" style="background: black;">
-    <div class="container pt-lg-5 pt-3">
+    <div id="funnel7" class="container pt-lg-5 pt-3">
         <div class="row font-size-40 font-size-sm-24 flex-column font-white text-center pt-4 font-white font-family-aggro-b">
             <span>“그동안 왜 몰랐지?”</span>
             <span>나만 알고 싶은 <span style="color: red !important;">UCC 아티스트</span></span>
@@ -305,8 +308,10 @@
         </div>
     </div>
 </section><!-- 그동안 왜 몰랐지? -->
+
+
 <section id="section6" class="ucc-contents py-lg-5 py-3" style="background: white;">
-    <div class="container py-lg-5 py-3">
+    <div id="funnel8" class="container py-lg-5 py-3">
         <div class="row flex-column text-center font-size-40 font-size-sm-24 font-family-aggro-b">
             <span>“이렇게 신선한 콘텐츠가 있었다니!”</span>
             <span>나만 보고 싶은 <span style="color:red;">UCC 콘텐츠</span></span>
@@ -357,18 +362,18 @@
     </div>
 </section><!-- 이렇게 신선한 콘텐츠가 있었다니 -->
 <section id="section7" class="p-lg-5 p-3" style="background-size: cover!important; background: white url('/assets/images/ucc/backgroud-pictures-dark.png') center;">
-    <div class="container p-lg-5 p-3">
+    <div id="funnel9" class="container p-lg-5 p-3">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-family-aggro-b">
             <span class="font-size-40 font-size-sm-24 font-white">더 많은 보물은 &nbsp;</span>
             <span class="font-size-40 font-size-sm-24 font-white">UCC에서 확인할 수 있습니다!</span>
         </div>
         <div class="row justify-content-center">
-            <a href="https://play.google.com/store/apps/details?id=com.weart.ucc" class="col-6 pr-0">
+            <a href="javascript:run_google_download_clicked();" class="col-6 pr-0">
                 <div class="row justify-content-end mr-1">
                     <img src="/assets/images/ucc/google-play-button.png" width="60%" style="max-width: 220px; float: right;">
                 </div>
             </a>
-            <a href="https://apps.apple.com/kr/app/ucc/id1580818238" class="col-6 pl-0">
+            <a href="javascript:run_ios_download_clicked();" class="col-6 pl-0">
                 <div class="row ml-1">
                     <img src="/assets/images/ucc/apple-store-button.png" width="60%" style="max-width: 220px; float: left;">
                 </div>
@@ -377,7 +382,7 @@
     </div>
 </section><!-- 더 많은 보물은 UCC에서 확인 할 수 있습니다 -->
 <section id="section8" class="p-lg-5 p-3" style="background-color: white;">
-    <div class="container p-lg-5 p-3">
+    <div id="funnel10" class="container p-lg-5 p-3">
         <div class="row font-size-40 font-size-sm-16 justify-content-center text-center flex-column font-family-aggro-b">
             <span><span style="color: red">세상과 아티스트</span>를 연결하는 UCC는</span>
             <span>다양한 기업과 함께하고 있습니다</span>
@@ -388,7 +393,7 @@
     </div>
 </section><!-- 세상과 아티스트를 연결하는 UCC는 다양한 기업과 함께 -->
 <section id="section9" class="py-lg-5 py-3 last-section" style="background: white;">
-    <div class="container py-lg-5 py-3">
+    <div id="funnel11" class="container py-lg-5 py-3">
         <div class="row flex-column flex-column-reverse flex-lg-row justify-content-center align-items-center text-center">
             <div class="col-lg-6 col-12 my-4 mt-5">
                 <div class="row justify-content-center">
@@ -484,14 +489,13 @@
                     <span>UCC가 만들어 나갑니다</span>
                 </div>
                 <div class="row justify-content-center justify-content-lg-start my-3">
-                    <img class="download-btn left m-1" src="/assets/images/ucc/google-play-button.png" onclick="window.location.href='https://play.google.com/store/apps/details?id=com.weart.ucc';" style="max-width: 220px; cursor: pointer;">
-                    <img class="download-btn right m-1" src="/assets/images/ucc/apple-store-button.png" onclick="window.location.href='https://apps.apple.com/kr/app/ucc/id1580818238';" style="max-width: 220px; cursor: pointer;">
+                    <img class="download-btn left m-1" src="/assets/images/ucc/google-play-button.png" onclick="run_google_download_clicked();" style="max-width: 220px; cursor: pointer;">
+                    <img class="download-btn right m-1" src="/assets/images/ucc/apple-store-button.png" onclick="run_ios_download_clicked()" style="max-width: 220px; cursor: pointer;">
                 </div>
             </div>
         </div>
     </div>
 </section><!-- 유튜브 영상 -->
-
 
 <jsp:include page="partials/ucc-footer.jsp"/>
 
@@ -503,6 +507,172 @@
         crossorigin="anonymous"></script>
 <script src="/assets/js/owl.carousel.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    amplitude.getInstance().logEvent('user-page-views');
+</script>
+
+<%--Amplitude Button Clicked--%>
+<script>
+    function run_ucc_active() {
+        amplitude.getInstance().logEvent('user-ucc-active');
+    }
+
+    function run_ucc_shared() {
+        amplitude.getInstance().logEvent('user-ucc-shared');
+    }
+
+    function run_ucc_shared_clicked() {
+        amplitude.getInstance().logEvent('user-ucc-shared-clicked');
+    }
+
+    function run_right_slide_clicked() {
+        amplitude.getInstance().logEvent('user-ucc-artist-right-slide-clicked');
+    }
+
+    function run_left_slide_clicked() {
+        amplitude.getInstance().logEvent('user-ucc-artist-left-slide-clicked');
+    }
+
+    function run_google_download_clicked() {
+        amplitude.getInstance().logEvent('user-google-download-clicked');
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
+    }
+
+    function run_ios_download_clicked() {
+        amplitude.getInstance().logEvent('user-ios-download-clicked');
+        window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
+    }
+
+    function run_contents_right_slide_clicked() {
+        amplitude.getInstance().logEvent('user-ucc-contents-right-slide-clicked');
+    }
+
+    function run_contents_left_slide_clicked() {
+        amplitude.getInstance().logEvent('user-ucc-contents-left-slide-clicked');
+    }
+</script>
+
+<script language="javascript" type="text/javascript">
+    var url = document.referrer;
+    var ac_name;
+    var event = "acquisition-user-from-channel";
+    var eventProperties;
+
+    if (url.indexOf("naver") > 0) {
+        ac_name = "naver";
+    } else if (url.indexOf("daum") > 0) {
+        ac_name = "daum";
+    } else if (url.indexOf("google") > 0) {
+        ac_name = "google";
+    } else if (url.indexOf("tistory") > 0) {
+        ac_name = "tistory";
+    } else if (url.indexOf("bing") > 0) {
+        ac_name = "bing";
+    } else if (url.indexOf("yahoo") > 0) {
+        ac_name = "yahoo";
+    } else if (url.indexOf("facebook") > 0) {
+        ac_name = "facebook";
+    } else if (url.indexOf("insta") > 0) {
+        ac_name = "instagram";
+    } else if (url.indexOf("nate") > 0) {
+        ac_name = "nate";
+    } else if (url.indexOf("youtube") > 0) {
+        ac_name = "youtube";
+    } else if (url.indexOf("KAKAO") > 0) {
+        ac_name = "kakao";
+    } else if (url.indexOf("tiktok") > 0) {
+        ac_name = "tiktok";
+    } else {
+        ac_name = "etc";
+    }
+
+    eventProperties = {
+        "channel": ac_name
+    };
+
+    amplitude.getInstance().logEvent(event, eventProperties);
+</script>
+
+<script>
+    var now = new Date();
+    var time = now.getHours();
+    var ac_time;
+
+    if (time == 24) {
+        ac_time = 0 + " ~ " + 1;
+    } else {
+        ac_time = time + " ~ " + (time + 1);
+    }
+
+    var time_event = "acquisition-user-time";
+    var time_eventProperties;
+
+    time_eventProperties = {
+        "time": ac_time
+    };
+
+    amplitude.getInstance().logEvent(time_event, time_eventProperties);
+
+</script>
+
+<script>
+    var funnel_count = 11;
+    var funnel_checked = new Array(funnel_count).fill(false);
+    var lastScrollTop = 0;
+
+    var getElementHeight = function (funnel_name) {
+        var funnel_element = document.getElementById(funnel_name);
+        var funnel_clientRect = funnel_element.getBoundingClientRect();
+        var funnel_value = funnel_clientRect.top;
+        return funnel_value;
+    };
+
+    document.addEventListener('scroll', function () {
+        var st = window.pageYOffset || document.documentElement.scrollTop;
+        if (st > lastScrollTop) {
+            if (getElementHeight('funnel1') < 0 && funnel_checked[0] == false) {
+                funnel_checked[0] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-1', time_eventProperties);
+            } else if (getElementHeight('funnel2') < 0 && funnel_checked[1] == false) {
+                funnel_checked[1] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-2', time_eventProperties);
+            } else if (getElementHeight('funnel3') < 0 && funnel_checked[2] == false) {
+                funnel_checked[2] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-3', time_eventProperties);
+            } else if (getElementHeight('funnel4') < 0 && funnel_checked[3] == false) {
+                funnel_checked[3] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-4', time_eventProperties);
+            } else if (getElementHeight('funnel5') < 0 && funnel_checked[4] == false) {
+                funnel_checked[4] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-5', time_eventProperties);
+            } else if (getElementHeight('funnel6') < 0 && funnel_checked[5] == false) {
+                funnel_checked[5] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-6', time_eventProperties);
+            } else if (getElementHeight('funnel7') < 0 && funnel_checked[6] == false) {
+                funnel_checked[6] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-7', time_eventProperties);
+            } else if (getElementHeight('funnel8') < 0 && funnel_checked[7] == false) {
+                funnel_checked[7] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-8', time_eventProperties);
+            } else if (getElementHeight('funnel9') < 0 && funnel_checked[8] == false) {
+                funnel_checked[8] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-9', time_eventProperties);
+            } else if (getElementHeight('funnel10') < 0 && funnel_checked[9] == false) {
+                funnel_checked[9] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-10', time_eventProperties);
+            } else if (getElementHeight('funnel11') < 0 && funnel_checked[10] == false) {
+                funnel_checked[10] = true;
+                amplitude.getInstance().logEvent('fn-user-page-scroll-11', time_eventProperties);
+            }
+
+        } else {
+            /*업 스크롤 부분*/
+        }
+        lastScrollTop = st <= 0 ? 0 : st;
+    }, false);
+</script>
+
 <script>
     $('.owl-carousel.contents').owlCarousel({
         loop:true,
@@ -554,10 +724,10 @@
     });
     let ytb_bottom=0, video_played=false;
     $(document).ready(()=>{ // 캐러셀 좌우 버튼
-       $('.owl-carousel.contents .owl-prev').html('<img src="/assets/images/ucc/icon-arrow-left.svg">');
-       $('.owl-carousel.contents .owl-next').html('<img src="/assets/images/ucc/icon-arrow-right.svg">');
-       $('.owl-carousel.artists .owl-prev').html('<img src="/assets/images/ucc/icon-arrow-left-white.svg">');
-       $('.owl-carousel.artists .owl-next').html('<img src="/assets/images/ucc/icon-arrow-right-white.svg">');
+       $('.owl-carousel.contents .owl-prev').html('<img src="/assets/images/ucc/icon-arrow-left.svg" onclick="new function() {run_contents_left_slide_clicked();}">');
+       $('.owl-carousel.contents .owl-next').html('<img src="/assets/images/ucc/icon-arrow-right.svg" onclick="new function() {run_contents_right_slide_clicked();}">');
+       $('.owl-carousel.artists .owl-prev').html('<img src="/assets/images/ucc/icon-arrow-left-white.svg" onclick="new function() {run_left_slide_clicked();}">');
+       $('.owl-carousel.artists .owl-next').html('<img src="/assets/images/ucc/icon-arrow-right-white.svg" onclick="new function() {run_right_slide_clicked();}">');
 
        /* 캐러셀 이동시 텍스트 변경해주기 */
        /*$('.ucc-contents .owl-prev, .ucc-contents .owl-next').click(()=>{
@@ -632,7 +802,7 @@
     $('a[href^="#section1"]').click((e) => {
         e.preventDefault();
         let dest = $('#section1').offset().top;
-
+        run_ucc_active();
         $('html, body').animate({
             scrollTop: dest
         }, 700, 'swing');
@@ -682,6 +852,7 @@
         let url = element.children[0].innerText;
         navigator.clipboard.writeText(url).then(function () {
             $('#shareText').text('복사되었습니다');
+            run_ucc_shared();
             setTimeout(() => {
                 $('#shareText').text('공유하기');
             }, 800);
