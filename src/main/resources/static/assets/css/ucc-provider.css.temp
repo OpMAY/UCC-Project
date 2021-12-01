@@ -1,0 +1,228 @@
+body .container {
+    padding-left: 50px !important;
+    padding-right: 50px !important;
+}
+
+.custom-overlay:hover, .artist .item img:hover + .custom-overlay {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    left:0;
+    top:0;
+    padding: 15px;
+}
+
+.text-side-line-white {
+    border-bottom: white solid 5px; margin-bottom: 15px;
+}
+.text-side-line-black {
+    border-bottom: black solid 5px; margin-bottom: 15px;
+}
+
+@media (min-width: 360px) {
+    #background-repeat {
+        width: 100%;
+        background-size: contain !important;
+        max-width: 2560px;
+        margin: auto;
+        background-image: url('/assets/images/ucc/ucc-provider-background-mobile.png') !important;
+        background-repeat: repeat-y !important;
+        background-color: white;
+    }
+
+    #main-text {
+        padding-top: 9%;
+        padding-bottom: 2%;
+    }
+
+    #background-top {
+        content: url("/assets/images/ucc/ucc-provider-background-top-mobile.png");
+    }
+
+    .logo-gradient {
+        width: 42px;
+        object-fit: contain;
+        padding-top: 8px;
+    }
+
+    .provider-btn-top {
+        margin-top: 6%;
+        margin-bottom: 19%;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .provider-btn {
+        margin-top: 2%;
+        margin-bottom: 28%;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .provider-btn-top span, .provider-btn span {
+        line-height: 27px;
+    }
+
+    .square-three-images img {
+        width: 50%;
+    }
+
+    .square-three-images img:nth-child(2) {
+        margin: 30px;
+    }
+
+    .circle-three-images img {
+        width: 150px;
+    }
+
+    .circle-three-images > div:nth-child(2) {
+        margin-top: 50px !important;
+        margin-bottom: 50px !important;
+    }
+
+    .artist-mobile-screen {
+        width: 50%;
+        z-index: 5;
+    }
+
+    .artists-circles {
+        left: -18%;
+        top: 10%;
+        width: 150%;
+        z-index: 4;
+    }
+
+    .logo-middle {
+        left: 10%;
+        width: 59px;
+    }
+
+    .app-download-btns img {
+        width: 25%;
+        max-width: 220px;
+    }
+
+    .app-download-btns > div {
+        gap: 2%;
+    }
+
+    .twin-mobile-screens {
+        gap: 20%;
+    }
+}
+@media (min-width: 576px) {
+    .provider-btn-top {
+        padding-top: 10px;
+        padding-bottom: 6px;
+    }
+    .provider-btn {
+        padding-top: 10px;
+        padding-bottom: 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    .text-side-line-black, .text-side-line-white {
+        margin-bottom: 8px;
+        border-width: 2px;
+    }
+}
+
+@media (min-width: 1024px){
+    #background-repeat {
+        width: 100%;
+        background-size: contain !important;
+        max-width: 2560px;
+        margin: auto;
+        background-image: url('/assets/images/ucc/ucc-provider-background-svg1.png') !important;
+        background-repeat: repeat-y !important;
+        background-color: white;
+    }
+    #main-text {
+        padding-top: 30%;
+        /*padding-bottom: 2rem;*/
+        padding-bottom: 2rem;
+    }
+    #background-top {
+        content:url("/assets/images/ucc/ucc-provider-background-top.png");
+    }
+    .logo-gradient {
+        width: 78px;
+    }
+    .provider-btn-top {
+        margin-top: 15%; margin-bottom: 25%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .provider-btn {
+        margin-top: 5%; margin-bottom: 10%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .provider-btn-top span, .provider-btn span {
+        line-height: 0;
+    }
+    .square-three-images img {
+        width: 30%;
+    }
+    .square-three-images img:nth-child(2) {
+        margin: 30px;
+    }
+    .circle-three-images > div:nth-child(2) {
+        margin: 0 !important;
+    }
+    .artist-mobile-screen {
+        width: 30%;
+    }
+    .artists-circles {
+        right: -55%; top: -10%; width: 115%; left: auto;
+    }
+    .logo-middle {
+        left: 10%;
+        width: 118px;
+    }
+    .app-download-btns img {
+        width: 60%;
+        max-width: 220px;
+    }
+    .app-download-btns > div {
+        gap: 5%;
+    }
+    .twin-mobile-screens {
+        gap: 10%;
+        width: 40%;
+        margin: auto;
+    }
+    .circle-three-images img {
+        width: 180px;
+    }
+}
+
+.logo-middle {
+    position: absolute;
+    transform: translate(0, -100%);
+}
+
+
+@keyframes slide-in-up {
+    0% {
+        -webkit-transform: translateY(400px);
+        transform: translateY(400px);
+        opacity: 0.3;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.scrolled {
+    animation: slide-in-up 0.4s ease-in-out both;
+}

@@ -86,10 +86,10 @@
             <span>아티스트를 찾아서</span>
         </div>
         <div class="row flex-column p-1 font-size-sm-12">
-            <span style="color: #FF004F;" class="font-family-aggro-b"><strong>2021.11.22(월) - 12.05(일)</strong></span>
+            <span style="color: #FF004F;" class="font-family-aggro-b"><strong>2021.11.22(월) - 12.12(일)</strong></span>
         </div>
         <div class="row flex-column p-1 font-size-20 font-sm-14">
-            <span style="color: #FF004F;" class="font-family-aggro-b">당첨자 발표 : 2021.12.10</span>
+            <span style="color: #FF004F;" class="font-family-aggro-b">당첨자 발표 : 2021.12.17(금)</span>
         </div>
         <div class="row flex-column py-lg-3 py-1">
             <div class="row flex-column flex-lg-row justify-content-center">
