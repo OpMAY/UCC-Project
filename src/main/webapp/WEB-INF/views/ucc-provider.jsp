@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!Doctype html>
 <html lang="en">
 <head>
@@ -13,16 +15,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/css/ucc-provider.css">
+    <link rel="stylesheet" href="/assets/css/ucc-provider.css">
     <title>장르 불문 아티스트를 위한 놀이터 UCC</title>
-    <link rel="icon" href="../../assets/images/ucc/ucc_favicon.png">
-    <link rel="apple-touch-icon" href="../../assets/images/ucc/ucc_favicon.png"/>
-    <link rel="stylesheet" href="../../assets/css/owl.carousel.css">
+    <link rel="icon" href="/assets/images/ucc/ucc_favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/ucc/ucc_favicon.png"/>
+    <link rel="stylesheet" href="/assets/css/owl.carousel.css">
 </head>
 <body>
 <header style="height: 66px; position:fixed; top:0; width: 100%; z-index: 100;">
     <div class="d-flex justify-content-between h-100 align-items-center" style="padding: 0 1.875rem;">
-        <img src="../../assets/images/ucc/top-left-logo-white.png" class="logo-fixed" height="50%" style="transform: translate(0, 5%)"/>
+        <img src="/assets/images/ucc/top-left-logo-white.png" class="logo-fixed" height="50%" style="transform: translate(0, 5%)"/>
         <div class="h-100 d-flex align-items-center">
             <button class="fixed-ctr-button">
                 <span class="font-family-aggro-b font-size-14 font-size-sm-8">UCC 시작하기</span>
@@ -33,18 +35,18 @@
 <main>
     <section id="section1" style="position: relative; width: 100%; height: 100vh;" class="d-flex justify-content-center align-items-end pb-150-50">
         <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
-            <source src="../../resources/video/main_video_sample.mp4" type="video/mp4">
+            <source src="/assets/video/main_video_sample.mp4" type="video/mp4">
             Sorry, your browser doesn't support embedded videos.
         </video>
         <div class="d-flex justify-content-center text-center">
-            <span class="font-white font-family-aggro-b font-size-56 font-size-sm-24">아티스트가 수익 걱정 없이<br>활동할 수 있는 무대 <img src="../../assets/images/ucc/ucc-main-logo-linear.svg" class="section1-logo"></span>
+            <span class="font-white font-family-aggro-b font-size-56 font-size-sm-24">아티스트가 수익 걱정 없이<br>활동할 수 있는 무대 <img src="/assets/images/ucc/ucc-main-logo-linear.svg" class="section1-logo"></span>
         </div>
         <a href="#section2" style="position: absolute; bottom: 0; left: 50%;" class="mb-23-10">
-            <img src="../../resources/images/icon_arrow_bottom.svg" style="transform: translate(-50%, 0)">
+            <img src="/assets/images/ucc/icon_arrow_bottom.svg" style="transform: translate(-50%, 0)">
         </a>
     </section>
 
-    <section id="section2" class="d-flex flex-column justify-content-center align-items-center text-center pt-150-50 pb-200-100" style="background: url('../../assets/images/ucc/section2-bg.png'); background-size: cover;">
+    <section id="section2" class="d-flex flex-column justify-content-center align-items-center text-center pt-150-50 pb-200-100" style="background: url('/assets/images/ucc/section2-bg.png'); background-size: cover;">
         <div>
             <span class="font-size-48 font-size-sm-24 font-family-aggro-b font-white">장르 제한 NO!<br>‘누구에게나’ 열려있는 기회!</span>
         </div>
@@ -55,9 +57,9 @@
             <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC에서 활동하기</span>
         </button>
         <div class="mt-10-27 d-flex align-items-end justify-content-center img-container" style="transform: translate(4%, 0);">
-            <img class="img1" src="../../assets/images/ucc/section2-img1.png" style="position: relative; z-index: 1;">
-            <img class="img2" src="../../assets/images/ucc/section2-img2.png" style="position: relative; z-index: 3;">
-            <img class="img3" src="../../assets/images/ucc/section2-img3.png" style="position: relative; z-index: 1;">
+            <img class="img1" src="/assets/images/ucc/section2-img1.png" style="position: relative; z-index: 1;">
+            <img class="img2" src="/assets/images/ucc/section2-img2.png" style="position: relative; z-index: 3;">
+            <img class="img3" src="/assets/images/ucc/section2-img3.png" style="position: relative; z-index: 1;">
         </div>
     </section>
 
@@ -89,11 +91,11 @@
             <div class="font-size-24 font-size-sm-12 font-grey line-height-1_5-1"><span>비디오는 물론, 이미지, 에디트 등<br>다양한 방법으로 창작 활동이 가능합니다.</span></div>
             <div class="row mx-0 d-none d-md-flex" style="margin-top: 100px;">
                 <div class="col-6 d-flex flex-column justify-content-center align-items-end cont1">
-                    <div class="fade-in-img img1"><img src="../../assets/images/ucc/provider-scroll-slide-1.png" alt=""></div>
-                    <div class="fade-in-img img3"><img src="../../assets/images/ucc/provider-scroll-slide-3.png" alt=""></div>
+                    <div class="fade-in-img img1"><img src="/assets/images/ucc/provider-scroll-slide-1.png" alt=""></div>
+                    <div class="fade-in-img img3"><img src="/assets/images/ucc/provider-scroll-slide-3.png" alt=""></div>
                 </div>
                 <div class="col-6 d-flex justify-content-start align-items-center cont2">
-                    <div class="fade-in-img img2"><img src="../../assets/images/ucc/provider-scroll-slide-2.png" alt=""></div>
+                    <div class="fade-in-img img2"><img src="/assets/images/ucc/provider-scroll-slide-2.png" alt=""></div>
                 </div>
             </div>
             <style>
@@ -119,13 +121,13 @@
             <div class="d-md-none d-block" style="margin-top: 10%;">
                 <div class="owl-carousel owl-theme">
                     <div class="item img1">
-                        <img src="../../assets/images/ucc/provider-scroll-slide-1.png" alt="" style="display: block">
+                        <img src="/assets/images/ucc/provider-scroll-slide-1.png" alt="" style="display: block">
                     </div>
                     <div class="item img2">
-                        <img src="../../assets/images/ucc/provider-scroll-slide-2.png" alt="" style="display: block">
+                        <img src="/assets/images/ucc/provider-scroll-slide-2.png" alt="" style="display: block">
                     </div>
                     <div class="item img3">
-                        <img src="../../assets/images/ucc/provider-scroll-slide-3.png" alt="" style="display: block">
+                        <img src="/assets/images/ucc/provider-scroll-slide-3.png" alt="" style="display: block">
                     </div>
                 </div>
             </div>
@@ -150,23 +152,23 @@
     <div class="scroll-snap">
         <section id="section6" class="d-flex justify-content-center align-items-center">
             <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
-                <source src="../../assets/video/diamonds2.mp4" type="video/mp4">
+                <source src="/assets/video/diamonds2.mp4" type="video/mp4">
                 Sorry, your browser doesn't support embedded videos.
             </video>
             <div class="d-flex">
-                <img src="../../assets/images/ucc/section6.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
-                <img src="../../assets/images/ucc/section6-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
+                <img src="/assets/images/ucc/section6.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
+                <img src="/assets/images/ucc/section6-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
             </div>
         </section>
 
         <section id="section7" class="d-flex justify-content-center align-items-center">
             <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
-                <source src="../../assets/video/diamonds.mp4" type="video/mp4">
+                <source src="/assets/video/diamonds.mp4" type="video/mp4">
                 Sorry, your browser doesn't support embedded videos.
             </video>
             <div class="d-flex">
-                <img src="../../assets/images/ucc/section7.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
-                <img src="../../assets/images/ucc/section7-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
+                <img src="/assets/images/ucc/section7.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
+                <img src="/assets/images/ucc/section7-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
             </div>
         </section>
     </div>
@@ -183,59 +185,12 @@
         </div>
 
         <div class="img-container" style="flex: 6;">
-            <img src="../../assets/images/ucc/section8-img.png" alt="" width="100%">
+            <img src="/assets/images/ucc/section8-img.png" alt="" width="100%">
         </div>
     </section>
 </main>
 
-
-<footer style="background: #020101;">
-    <div class="container-fluid p-5">
-        <div class="row font-white">
-            <div class="col-12 col-lg-6">
-                <div class="row pb-lg-5 pb-3">
-                    <img src="../../assets/images/ucc/footer-logo.svg" class="logo">
-                </div>
-                <div class="row font-size-20 font-size-sm-10 pb-3" style="gap: 5%">
-                    <span>대표자 이성진</span>
-                    <span>위아트 주식회사</span>
-                    <span>사업자 등록 번호 714-86-02038</span>
-                </div>
-                <div class="row font-size-20 font-size-sm-10 pb-3"><span>세종특별자치시 나성동 758 노블비즈니스타운 1동 718호</span></div>
-                <div class="row font-size-20 font-size-sm-10 pb-3"><span>pageofweart@gmail.com</span></div>
-                <!--                <div class="row font-size-sm-10" style="gap: 5%">--%>
-                <%--                    <a href="#" style="color: white;">서비스 이용약관</a>--%>
-                <%--                    <a href="#" class="privacy"><strong>개인정보 처리방침</strong></a>--%>
-                <%--                </div>-->
-            </div>
-            <div class="col-12 col-lg-3 d-flex flex-column justify-content-end">
-                <div class="row"><span class="font-size-42 font-size-sm-20"><strong>070-4906-1022</strong></span></div>
-                <div class="row font-size-20 font-size-sm-10" style="gap: 3%">
-                    <span>월-금 09:00 - 18:00</span>
-                    <span>주말, 공휴일 휴무</span>
-                </div>
-            </div>
-            <div class="col-12 col-lg-3 d-flex flex-column justify-content-between">
-                <div class="row justify-content-start justify-content-md-end mt-3 align-items-center" style="gap: 5%; margin-right: 5px;">
-                    <a href="javascript:run_youtube_download_clicked();">
-                        <img class="media1" src="../../assets/images/ucc/footer-youtube.svg"></a>
-                    <a href="javascript:run_instagram_download_clicked();">
-                        <img class="media2" src="../../assets/images/ucc/footer-instagram.svg"></a>
-                </div>
-                <div class="row justify-content-start justify-content-md-end mt-3">
-                    <div class="col-4 p-0">
-                        <a href="javascript:run_google_download_clicked();">
-                            <img src="../../assets/images/ucc/google-play-button.png" width="100%"></a>
-                    </div>
-                    <div class="col-4 p-0">
-                        <a href="javascript:run_ios_download_clicked();">
-                            <img src="../../assets/images/ucc/apple-store-button.png" width="100%"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+<jsp:include page="partials/ucc-footer.jsp"/>
 
 <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
@@ -243,8 +198,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
-<script src="../../assets/js/owl.carousel.js"></script>
-<script src="../../assets/js/mousewheel.js"></script>
+<script src="/assets/js/owl.carousel.js"></script>
+<script src="/assets/js/mousewheel.js"></script>
 
 <script>
     $('.owl-carousel').owlCarousel({

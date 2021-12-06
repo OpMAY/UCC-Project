@@ -1,26 +1,26 @@
 @font-face {
     font-family: bm-dohyeon;
-    src: url("../../assets/fonts/BMDOHYEON_ttf.ttf");
+    src: url("/assets/fonts/BMDOHYEON_ttf.ttf");
 }
 
 @font-face {
     font-family: black-han-sans;
-    src: url("../../assets/fonts/BlackHanSans-Regular.ttf");
+    src: url("/assets/fonts/BlackHanSans-Regular.ttf");
 }
 
 @font-face {
     font-family: aggro-b;
-    src: url("../../assets/fonts/SB 어그로 B.ttf");
+    src: url("/assets/fonts/SB 어그로 B.ttf");
 }
 
 @font-face {
     font-family: aggro-l;
-    src: url("../../assets/fonts/SB 어그로 L.ttf");
+    src: url("/assets/fonts/SB 어그로 L.ttf");
 }
 
 @font-face {
     font-family: aggro-m;
-    src: url("../../assets/fonts/SB 어그로 M.ttf");
+    src: url("/assets/fonts/SB 어그로 M.ttf");
 }
 
 body, html {
@@ -151,7 +151,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     padding: 4px 20px;
 }
 .horizontal-loop {
-    background: url('../../assets/images/ucc/section5-rolling.png') repeat-x;
+    background: url('/assets/images/ucc/section5-rolling.png') repeat-x;
     height: 681px;
     width: 2858px;
     overflow:hidden;
@@ -164,7 +164,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     padding-bottom: 16.5%;
     padding-left: 10.5%;
     padding-right: 10.5%;
-    background: black url('../../assets/images/ucc/section3.png');
+    background: black url('/assets/images/ucc/section3.png');
     background-size: cover;
 }
 .fade-in-img {
@@ -192,7 +192,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     top: 3%;
     left: -33%;
     content: "";
-    background: url("../../assets/images/ucc/scroll-slide-icon-1.png") no-repeat;
+    background: url("/assets/images/ucc/scroll-slide-icon-1.png") no-repeat;
     background-size: cover;
     width: 59%;
     height: 40%;
@@ -202,7 +202,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     top: -10%;
     left: 79%;
     content: "";
-    background: url("../../assets/images/ucc/scroll-slide-icon-2.png") no-repeat;
+    background: url("/assets/images/ucc/scroll-slide-icon-2.png") no-repeat;
     background-size: cover;
     width: 43%;
     height: 32.5%;
@@ -212,7 +212,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     top: 57%;
     left: 77%;
     content: "";
-    background: url("../../assets/images/ucc/scroll-slide-icon-3.png") no-repeat;
+    background: url("/assets/images/ucc/scroll-slide-icon-3.png") no-repeat;
     background-size: cover;
     width: 58.1%;
     height: 40.8%;
@@ -238,7 +238,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     .font-size-md-48 { font-size: 48px; }
 
     .horizontal-loop {
-        background: url('../../assets/images/ucc/section5-rolling.png') repeat-x;
+        background: url('/assets/images/ucc/section5-rolling.png') repeat-x;
         background-size: cover;
         height: 510px;
         width: 2143px;
@@ -352,7 +352,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     }
 
     .horizontal-loop {
-        background: url('../../assets/images/ucc/section5-rolling.png') repeat-x;
+        background: url('/assets/images/ucc/section5-rolling.png') repeat-x;
         background-size: cover;
         height: 270px;
         width: 1133px;
@@ -364,7 +364,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
         padding-bottom: 116%;
         padding-left: 14.5%;
         padding-right: 0;
-        background: black url('../../assets/images/ucc/section3-sm.png') bottom right;
+        background: black url('/assets/images/ucc/section3-sm.png') bottom right;
         background-size: cover;
     }
     #section2 .img1{
@@ -603,8 +603,8 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
 }
 
 img.logo-fixed {
-    content:url("/resources/images/top-left-logo-white.png");
+    content:url("/assets/images/ucc/top-left-logo-white.png");
 }
 img.logo-fixed.dark-logo {
-    content:url("/resources/images/top-left-logo-black.png");
+    content:url("/assets/images/ucc/top-left-logo-black.png");
 }
