@@ -1,4 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!Doctype html>
 <html lang="en">
 <head>
@@ -14,246 +13,229 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/ucc-provider.css">
+    <link rel="stylesheet" href="../../assets/css/ucc-provider.css">
     <title>장르 불문 아티스트를 위한 놀이터 UCC</title>
-    <link rel="icon" href="/assets/images/ucc/ucc_favicon.png">
-    <link rel="apple-touch-icon" href="/assets/images/ucc/ucc_favicon.png"/>
-    <link rel="stylesheet" href="/assets/css/owl.carousel.css">
-    <style>
-        main span, main div.span, section span, section div.span {
-            font-family: aggro-m !important;
-        }
-        .font-7f, div.font-7f span {
-            color: #7f7f7f;
-        }
-    </style>
+    <link rel="icon" href="../../assets/images/ucc/ucc_favicon.png">
+    <link rel="apple-touch-icon" href="../../assets/images/ucc/ucc_favicon.png"/>
+    <link rel="stylesheet" href="../../assets/css/owl.carousel.css">
 </head>
-<body style="min-width: 1024px; position: relative;">
-<header style="background: #0E0E10; height: 4.2rem; position:fixed; top:0; width: 100%; z-index: 100;">
+<body>
+<header style="height: 66px; position:fixed; top:0; width: 100%; z-index: 100;">
     <div class="d-flex justify-content-between h-100 align-items-center" style="padding: 0 1.875rem;">
-        <img src="/assets/images/ucc/top-left-logo-white.png" height="50%" style="transform: translate(0, 5%)"/>
-        <div class="h-100 d-flex align-items-center" style="margin-top: 20px">
-            <div class="h-100">
-                <a href="https://play.google.com/store/apps/details?id=com.weart.ucc"><img src="/assets/images/ucc/google-play-button.png" height="70%"/></a>
-            </div>
-            <div class="h-100">
-                <a href="https://apps.apple.com/kr/app/ucc/id1580818238"><img src="/assets/images/ucc/apple-store-button.png" height="70%"/></a>
-            </div>
+        <img src="../../assets/images/ucc/top-left-logo-white.png" class="logo-fixed" height="50%" style="transform: translate(0, 5%)"/>
+        <div class="h-100 d-flex align-items-center">
+            <button class="fixed-ctr-button">
+                <span class="font-family-aggro-b font-size-14 font-size-sm-8">UCC 시작하기</span>
+            </button>
         </div>
     </div>
 </header>
-<main style="height: calc(100vh - 4.2rem); margin-top: 4.2rem;" class="d-flex justify-content-center align-items-end w-100">
-    <video playsinline muted loop autoplay style="width: 100%; height: 100vh; object-fit: cover; position: absolute; z-index: -1;">
-        <source src="/assets/video/ucc_user_main_video_small.m4v" type="video/mp4">
-        Sorry, your browser doesn't support embedded videos.
-    </video>
-    <div class="font-white font-family-aggro-b font-size-lg-56 font-size-48 d-flex flex-column align-items-center text-center">
-        <span>
-            아티스트가 수익 걱정 없이<br>활동할 수 있는 무대 <img src="/assets/images/ucc/ucc-main-logo-linear.svg"/>
-        </span>
-        <div>
-            <a href="#section1"><img src="/assets/images/ucc/icon_arrow_bottom.svg"></a>
+<main>
+    <section id="section1" style="position: relative; width: 100%; height: 100vh;" class="d-flex justify-content-center align-items-end pb-150-50">
+        <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
+            <source src="../../resources/video/main_video_sample.mp4" type="video/mp4">
+            Sorry, your browser doesn't support embedded videos.
+        </video>
+        <div class="d-flex justify-content-center text-center">
+            <span class="font-white font-family-aggro-b font-size-56 font-size-sm-24">아티스트가 수익 걱정 없이<br>활동할 수 있는 무대 <img src="../../assets/images/ucc/ucc-main-logo-linear.svg" class="section1-logo"></span>
         </div>
-    </div>
-</main>
-<section id="section1" style="overflow-x: hidden; padding-top: 5rem;">
-    <div class="custom-container position-relative">
-        <div class="d-flex flex-column h-100 content">
-            <div class="d-flex font-family-aggro-b font-size-40 font-size-lg-48">
-                <span>장르 제한 NO!<br>열정과 재능 “ONLY”</span>
-            </div>
-            <div class="d-flex font-family-aggro-m font-size-16 font-size-lg-24 font-7f py-2">
-                <span>뮤지션부터 벌룬 아트 디자이너까지 UCC에는<br>
-                다양한 분야의 열정을 지닌 아티스트가 활동 중입니다.</span>
-            </div>
-            <div style="margin-top: 6rem;" class="d-flex">
-                <a href="#section6" style="text-decoration: none; z-index: 10;">
-                    <div style="background: #816bff; border-radius: 5px; padding: 20px 32px;">
-                        <span style="color: white;" class="font-family-aggro-b">UCC에서 활동하기</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="image-box">
-            <img id="screen1" src="/assets/images/ucc/mobile-screene-tilt.png">
-            <img id="artist-circle1" src="/assets/images/ucc/provider-artist-circle-x1-1.png">
-            <img id="artist-circle2" src="/assets/images/ucc/provider-artist-circle-x1-2.png">
-            <img id="artist-circle3" src="/assets/images/ucc/provider-artist-circle-x1-3.png">
-            <img id="artist-circle4" src="/assets/images/ucc/provider-artist-circle-x1-4.png">
-            <img id="artist-circle5" src="/assets/images/ucc/provider-artist-circle-x1-5.png">
-            <img id="artist-circle6" src="/assets/images/ucc/provider-artist-circle-x1-6.png">
-            <img id="artist-circle7" src="/assets/images/ucc/provider-artist-circle-x1-7.png">
-        </div>
-    </div>
-</section>
-<section id="section2" style="background: black; padding-top: 6rem; padding-bottom: 5rem; overflow: hidden">
-    <div class="d-flex flex-column align-items-center">
-        <div class="text-center">
-            <span class="font-size-lg-40 font-size-32 font-family-aggro-b font-white">아티스트의 넘치는 열정,<br>그러나 부족했던 창작 활동의 무대</span>
-        </div>
-        <div class="text-center" style="padding-top: 1rem; padding-bottom: 3rem;">
-            <span class="font-size-lg-24 font-size-16 font-7f">좋아서 시작한 예술 창작 활동이지만<br>현실의 벽은 높기만 합니다. </span>
-        </div>
-        <div class="squares">
-            <img class="py-4" src="/assets/images/ucc/artist-pain-1.png">
-            <img class="py-4" src="/assets/images/ucc/artist-pain-2.png">
-            <img class="py-4" src="/assets/images/ucc/artist-pain-3.png">
-        </div>
-    </div>
-</section>
-<section id="section3" style="padding-top: 5rem; padding-bottom: 5rem;">
-    <div class="d-flex flex-column align-items-center">
-        <div class="text-center">
-            <span class="font-size-lg-40 font-size-32 font-family-aggro-b">다양한 수익 창출 기회가<br>열려있는 UCC 무대</span>
-        </div>
-        <div class="text-center" style="padding-top: 1rem; padding-bottom: 3rem;">
-            <span class="font-size-lg-24 font-size-16 font-7f">예술 창작 활동을 응원하는 팬들의 후원,<br>가치를 볼 줄 아는 브랜드들과 협업을 확인해 보세요.</span>
-        </div>
-        <div class="d-flex screens-4">
-            <div class="d-flex flex-column align-items-center text-center">
-                <span class="font-size-32 font-size-lg-32">아티스트 후원</span>
-                <span class="font-size-16 font-7f" style="padding-top: 1rem; padding-bottom: 3rem;">아티스트를 응원하는 팬들의 후원으로 <br>작품 활동을 이어나가 보세요! </span>
-                <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-1.png" style="width: 349px; object-fit: contain; opacity: 0; margin-right: 45px;">
-            </div>
-            <div class="d-flex justify-content-center align-items-start">
-                <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-2.png" style="width: 349px; object-fit: contain; opacity: 0; margin-left: 45px;">
-            </div>
-        </div>
-        <div class="d-flex screens-4">
-            <div class="d-flex justify-content-center align-items-start">
-                <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-3.png" style="width: 349px; object-fit: contain; opacity: 0; margin-right: 45px;">
-            </div>
-            <div class="d-flex flex-column align-items-center text-center">
-                <span class="font-size-32 font-size-lg-32">콘테스트/협찬&광고</span>
-                <span class="font-size-16 font-7f" style="padding-top: 1rem; padding-bottom: 3rem;">다양한 브랜드와 작품 협업을 통해<br>수익을 창출해 보세요!</span>
-                <img class="slide-img" src="/assets/images/ucc/ucc-provider-mobile-screen-sample-4.png" style="width: 349px; object-fit: contain; opacity: 0; margin-left: 45px;">
-            </div>
-        </div>
-        <div style="padding-bottom: 3rem; padding-top: 4rem;">
-            <a href="#section6" style="text-decoration: none;">
-                <div style="background: #816bff; border-radius: 5px; padding: 20px 32px;">
-                    <span style="color: white;" class="font-family-aggro-b">UCC에서 활동하기</span>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-<section id="section4" style="background: black; padding-bottom: 6rem; padding-top: 6rem; overflow: hidden">
-    <div class="d-flex flex-column align-items-center text-center">
-        <span class="font-white font-size-lg-40 font-size-32 font-family-aggro-b">나의 예술을 표현하는 데<br>제한이 없어요!</span>
-        <span class="font-size-lg-24 font-size-16 font-7f" style="padding-top: 1rem; padding-bottom: 2rem;">비디오는 물론, 이미지, 에디트 등<br>다양한 방법으로 작품 활동이 가능합니다.</span>
-        <div class="slide-scroll-lg" style="margin-top: 4rem; margin-bottom: 3rem;">
-            <div class="d-flex flex-column" style="margin-right: 39px;">
-                <div class="scroll-slide-1 fade-out-img" style="margin-bottom: 50px; opacity: 0;"><img src="/assets/images/ucc/provider-scroll-slide-1.png"></div>
-                <div class="scroll-slide-3 fade-out-img" style="margin-top: 50px; opacity: 0;"><img src="/assets/images/ucc/provider-scroll-slide-3.png"></div>
-            </div>
-            <div class="d-flex align-items-center" style="margin-left: 39px;">
-                <div class="scroll-slide-2 fade-out-img" style="opacity: 0;"><img src="/assets/images/ucc/provider-scroll-slide-2.png"></div>
-            </div>
-        </div>
-        <div class="slide-scroll">
-            <div class="scroll-slide-1"><img src="/assets/images/ucc/provider-scroll-slide-1.png"></div>
-            <div class="scroll-slide-2"><img src="/assets/images/ucc/provider-scroll-slide-2.png"></div>
-            <div class="scroll-slide-3"><img src="/assets/images/ucc/provider-scroll-slide-3.png"></div>
-        </div>
-    </div>
-</section>
-<section id="section5" style="overflow: hidden">
-    <div class="d-flex flex-column text-center align-items-center">
-        <span class="font-size-lg-40 font-size-32 font-family-aggro-b">창작 활동을 사랑한다면<br>더 이상 망설이지 마세요!</span>
-        <span class="font-size-lg-24 font-size-16 font-7f" style="padding: 1rem 0;">UCC는 예술을 사랑하는 사람들이 모여 소통하고<br>공감하며 더 나은 예술 문화를 만들어 나갑니다.</span>
-        <div class="squares" style="margin-top: 2rem;">
-            <img src="/assets/images/ucc/provider-content-square-1.png" style="padding: 2.8rem 0;">
-            <img src="/assets/images/ucc/provider-content-square-2.png" style="padding: 2.8rem 0;">
-            <img src="/assets/images/ucc/provider-content-square-3.png" style="padding: 2.8rem 0;">
-        </div>
-    </div>
-</section>
-<section id="section6" style="background: black; padding-top: 6rem; overflow: hidden;">
-    <div class="d-flex flex-column align-items-center text-center">
-        <span class="font-white font-family-aggro-b font-size-lg-40 font-size-32">UCC와 예술을 사랑하는 사람들이<br>당신의 창작 활동을 기다립니다</span>
-        <div style="margin-top: 3rem; margin-bottom: 6rem;">
-            <a href="https://play.google.com/store/apps/details?id=com.weart.ucc" style="margin: 0 10px; display: inline-block; width: 231px;"><img src="/assets/images/ucc/google-play-button.png" width="100%"/></a>
-            <a href="https://apps.apple.com/kr/app/ucc/id1580818238" style="margin: 0 10px; display: inline-block; width: 231px;"><img src="/assets/images/ucc/apple-store-button.png" width="100%"/></a>
-        </div>
-        <div class="d-flex artists">
-            <div class="owl-carousel">
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-1.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">박성헌</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">연극배우</span>
-                        <span class="font-size-16 font-size-sm-10">불타는 열정을 가지고 연기하는 배우가 되겠습니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-2.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">김태윤</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">벌룬 아트 디자이너</span>
-                        <span class="font-size-16 font-size-sm-10">풍선으로 한계가 없다는 것을 보여드리겠습니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-3.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">윤진원</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">모델</span>
-                        <span class="font-size-16 font-size-sm-10">브랜드 'COKIE'의 최욱일 디자이너와 콜라보레이션한 모델 윤진원입니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-4.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">김요한</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">가수</span>
-                        <span class="font-size-16 font-size-sm-10">잔잔한 청년 버스커 김요한입니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-5.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">신아람</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">재즈 피아니스트</span>
-                        <span class="font-size-16 font-size-sm-10">저를 솔직하게 예술에 담아내는 그 날까지 연주하겠습니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-6.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">길기현</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">웨이뮤직 대표</span>
-                        <span class="font-size-16 font-size-sm-10">웨이뮤직 및 비르투오소 소속 독일 유학파 작곡가, 피아니스트 길기현입니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-7.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">영락</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">가수</span>
-                        <span class="font-size-16 font-size-sm-10">영원히 즐겁게 노래하는 가수가 되겠습니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-8.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">육민재</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">프로듀서</span>
-                        <span class="font-size-16 font-size-sm-10">위로와 공감을 주는 프로듀서가 되겠습니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-9.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">윤정인</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">배우</span>
-                        <span class="font-size-16 font-size-sm-10">배우 지망생 윤정인입니다.</span>
-                    </div>
-                </div>
-                <div class="item font-grey position-relative"><img src="/assets/images/ucc/artist-10.png">
-                    <div class="custom-overlay font-white d-none">
-                        <span class="font-size-24 font-size-sm-12 mb-1 mb-lg-1 font-family-aggro-b">피난</span>
-                        <span class="font-size-20 font-size-sm-12 mb-3 mg-lg-2">밴드</span>
-                        <span class="font-size-16 font-size-sm-10">불안한 청춘을 노래하는 밴드 피난입니다.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        <a href="#section2" style="position: absolute; bottom: 0; left: 50%;" class="mb-23-10">
+            <img src="../../resources/images/icon_arrow_bottom.svg" style="transform: translate(-50%, 0)">
+        </a>
+    </section>
 
-<jsp:include page="partials/ucc-footer.jsp"/>
+    <section id="section2" class="d-flex flex-column justify-content-center align-items-center text-center pt-150-50 pb-200-100" style="background: url('../../assets/images/ucc/section2-bg.png'); background-size: cover;">
+        <div>
+            <span class="font-size-48 font-size-sm-24 font-family-aggro-b font-white">장르 제한 NO!<br>‘누구에게나’ 열려있는 기회!</span>
+        </div>
+        <div class="mb-44-27 line-height-1_5-1">
+            <span class="font-size-24 font-size-sm-12 font-grey">뮤지션부터 벌룬 아트 디자이너까지<br>UCC 무대는 누구에게나 수익 창출 기회가 열려 있습니다.</span>
+        </div>
+        <button id="ctr-button" class="ctr-button">
+            <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC에서 활동하기</span>
+        </button>
+        <div class="mt-10-27 d-flex align-items-end justify-content-center img-container" style="transform: translate(4%, 0);">
+            <img class="img1" src="../../assets/images/ucc/section2-img1.png" style="position: relative; z-index: 1;">
+            <img class="img2" src="../../assets/images/ucc/section2-img2.png" style="position: relative; z-index: 3;">
+            <img class="img3" src="../../assets/images/ucc/section2-img3.png" style="position: relative; z-index: 1;">
+        </div>
+    </section>
+
+    <section id="section3" class="d-flex flex-column" style="position:relative; overflow: hidden;">
+        <div style="z-index: 2;">
+            <span class="font-family-aggro-b font-size-64 font-size-md-48 font-size-sm-20 font-white"><span class="font-family-aggro-b" style="color: #836eff;">장르 불문</span> 아티스트를 위한<br>놀이터 UCC</span>
+        </div>
+        <div class="line-height-1_5-1 mb-30-20" style="z-index: 2;">
+            <span class="font-grey font-size-24 font-size-sm-12">아티스트와 세상을 연결하고 자유로운 방식의 소통을 통해<br>창작 활동을 즐기는 놀이터 같은 공간을 마련했습니다.</span>
+        </div>
+        <div>
+            <button class="ctr-button">
+                <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC 시작하기</span>
+            </button>
+        </div>
+        <img src="/assets/images/ucc/section3-screen1.png" class="img1 d-none d-md-inline-block" alt="" style="position: absolute; right: 11%; bottom: 6%; width: 39%; z-index: 0;">
+        <img src="/assets/images/ucc/section3-screen2.png" class="img2 d-none d-md-inline-block" alt="" style="position: absolute; right: -25%; bottom: -8%; width: 43%;">
+        <img src="/assets/images/ucc/section3-screen3.png" class="img3 d-none d-md-inline-block" alt="" style="position: absolute; right: -17%; bottom: 65%; width: 30%;">
+
+        <img src="/assets/images/ucc/section3-screen1-sm.png" class="img4 d-md-none d-inline-block" alt="" style="position: absolute; right: 20%; bottom: 6%; width: 73%">
+        <img src="/assets/images/ucc/section3-screen2-sm.png" class="img5 d-md-none d-inline-block" alt="" style="position: absolute; right: -28%; bottom: 2%; width: 65%;">
+        <img src="/assets/images/ucc/section3-screen3-sm.png" class="img6 d-md-none d-inline-block" alt="" style="position: absolute; right: -37%; bottom: 32%; width: 80%;">
+    </section>
+
+    <section id="section4" class="bg-0d py-150-50">
+         <!-- web -->
+        <div class="d-flex flex-column text-center">
+            <div class="font-size-40 font-size-sm-20 font-family-aggro-b font-white"><span>나의 예술을 표현하는 데<br>제한이 없어요!</span></div>
+            <div class="font-size-24 font-size-sm-12 font-grey line-height-1_5-1"><span>비디오는 물론, 이미지, 에디트 등<br>다양한 방법으로 창작 활동이 가능합니다.</span></div>
+            <div class="row mx-0 d-none d-md-flex" style="margin-top: 100px;">
+                <div class="col-6 d-flex flex-column justify-content-center align-items-end cont1">
+                    <div class="fade-in-img img1"><img src="../../assets/images/ucc/provider-scroll-slide-1.png" alt=""></div>
+                    <div class="fade-in-img img3"><img src="../../assets/images/ucc/provider-scroll-slide-3.png" alt=""></div>
+                </div>
+                <div class="col-6 d-flex justify-content-start align-items-center cont2">
+                    <div class="fade-in-img img2"><img src="../../assets/images/ucc/provider-scroll-slide-2.png" alt=""></div>
+                </div>
+            </div>
+            <style>
+                .owl-dot {
+                    background: white !important;
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    margin: 6.25% 5px 0;
+                }
+                .owl-dot.active {
+                    background: #816BFF !important;
+                }
+                .owl-carousel .item {
+                    position: relative;
+                    width: 40%;
+                    margin: auto;
+                }
+                .owl-stage-outer {
+                    overflow: unset !important;
+                }
+            </style>
+            <div class="d-md-none d-block" style="margin-top: 10%;">
+                <div class="owl-carousel owl-theme">
+                    <div class="item img1">
+                        <img src="../../assets/images/ucc/provider-scroll-slide-1.png" alt="" style="display: block">
+                    </div>
+                    <div class="item img2">
+                        <img src="../../assets/images/ucc/provider-scroll-slide-2.png" alt="" style="display: block">
+                    </div>
+                    <div class="item img3">
+                        <img src="../../assets/images/ucc/provider-scroll-slide-3.png" alt="" style="display: block">
+                    </div>
+                </div>
+            </div>
+        </div>
+         <!-- mobile -->
+    </section>
+
+    <section id="section5" class="d-flex flex-column align-items-center text-center py-150-50">
+        <div>
+            <span class="font-size-40 font-size-sm-20 font-family-aggro-b">이미 다양한 아티스트가<br>자유롭게 활동하고 있습니다 </span>
+        </div>
+        <div class="line-height-1_5-1">
+            <span class="font-size-24 font-size-sm-12 font-grey">UCC 아티스트들은 팬들과 진심으로 소통하고<br>다양한 방법으로 수익을 창출하고 있습니다.</span>
+        </div>
+        <div class="fade-in-img horizontal-loop mb-100-50 mt-70-35">
+        </div>
+        <button class="ctr-button">
+            <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC에서 활동하기</span>
+        </button>
+    </section>
+
+    <div class="scroll-snap">
+        <section id="section6" class="d-flex justify-content-center align-items-center">
+            <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
+                <source src="../../assets/video/diamonds2.mp4" type="video/mp4">
+                Sorry, your browser doesn't support embedded videos.
+            </video>
+            <div class="d-flex">
+                <img src="../../assets/images/ucc/section6.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
+                <img src="../../assets/images/ucc/section6-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
+            </div>
+        </section>
+
+        <section id="section7" class="d-flex justify-content-center align-items-center">
+            <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
+                <source src="../../assets/video/diamonds.mp4" type="video/mp4">
+                Sorry, your browser doesn't support embedded videos.
+            </video>
+            <div class="d-flex">
+                <img src="../../assets/images/ucc/section7.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
+                <img src="../../assets/images/ucc/section7-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
+            </div>
+        </section>
+    </div>
+    <section id="section8" class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-150-50 pb-150-30 px-225-70">
+        <div class="d-flex flex-column text-center text-md-left mb-0-30" style="flex:4;">
+            <div class="mb-30-20">
+                <span class="font-family-aggro-b font-size-40 font-size-sm-20">UCC와 팬들이<br>당신의 창작 활동을 기다립니다</span>
+            </div>
+            <div>
+                <button class="ctr-button">
+                    <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC 시작하기</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="img-container" style="flex: 6;">
+            <img src="../../assets/images/ucc/section8-img.png" alt="" width="100%">
+        </div>
+    </section>
+</main>
+
+
+<footer style="background: #020101;">
+    <div class="container-fluid p-5">
+        <div class="row font-white">
+            <div class="col-12 col-lg-6">
+                <div class="row pb-lg-5 pb-3">
+                    <img src="../../assets/images/ucc/footer-logo.svg" class="logo">
+                </div>
+                <div class="row font-size-20 font-size-sm-10 pb-3" style="gap: 5%">
+                    <span>대표자 이성진</span>
+                    <span>위아트 주식회사</span>
+                    <span>사업자 등록 번호 714-86-02038</span>
+                </div>
+                <div class="row font-size-20 font-size-sm-10 pb-3"><span>세종특별자치시 나성동 758 노블비즈니스타운 1동 718호</span></div>
+                <div class="row font-size-20 font-size-sm-10 pb-3"><span>pageofweart@gmail.com</span></div>
+                <!--                <div class="row font-size-sm-10" style="gap: 5%">--%>
+                <%--                    <a href="#" style="color: white;">서비스 이용약관</a>--%>
+                <%--                    <a href="#" class="privacy"><strong>개인정보 처리방침</strong></a>--%>
+                <%--                </div>-->
+            </div>
+            <div class="col-12 col-lg-3 d-flex flex-column justify-content-end">
+                <div class="row"><span class="font-size-42 font-size-sm-20"><strong>070-4906-1022</strong></span></div>
+                <div class="row font-size-20 font-size-sm-10" style="gap: 3%">
+                    <span>월-금 09:00 - 18:00</span>
+                    <span>주말, 공휴일 휴무</span>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3 d-flex flex-column justify-content-between">
+                <div class="row justify-content-start justify-content-md-end mt-3 align-items-center" style="gap: 5%; margin-right: 5px;">
+                    <a href="javascript:run_youtube_download_clicked();">
+                        <img class="media1" src="../../assets/images/ucc/footer-youtube.svg"></a>
+                    <a href="javascript:run_instagram_download_clicked();">
+                        <img class="media2" src="../../assets/images/ucc/footer-instagram.svg"></a>
+                </div>
+                <div class="row justify-content-start justify-content-md-end mt-3">
+                    <div class="col-4 p-0">
+                        <a href="javascript:run_google_download_clicked();">
+                            <img src="../../assets/images/ucc/google-play-button.png" width="100%"></a>
+                    </div>
+                    <div class="col-4 p-0">
+                        <a href="javascript:run_ios_download_clicked();">
+                            <img src="../../assets/images/ucc/apple-store-button.png" width="100%"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
@@ -261,27 +243,24 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
-<script src="/assets/js/owl.carousel.js"></script>
-
+<script src="../../assets/js/owl.carousel.js"></script>
+<script src="../../assets/js/mousewheel.js"></script>
 
 <script>
     $('.owl-carousel').owlCarousel({
-        loop: true,
-        margin: 30,
+        loop: false,
+        // margin: 300,
         nav: false,
         // autoplay: true,
         autoplay: false,
-        dots: false,
-        autoplayTimeout: 2000,
-        autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items:4
-            },
-            1030:{
-                items:7
+        dots: true,
+        // autoplayTimeout: 2000,
+        // autoplayHoverPause: true,
+        responsive: {
+            0: {
+                items: 1
             }
-        }
+        },
     });
 
 
@@ -321,25 +300,13 @@
     window.addEventListener("scroll", () => {
         handleScrollAnimation();
         handleScrollAnimation2();
+        handleScrollSection2();
+        handleScrollSection3();
     });
     /* image slide end */
 
     /* image fade in start */
-    const scrollElements2 = document.querySelectorAll(".fade-out-img");
-    const elementInView2 = (el, dividend = 1) => {
-        const elementTop = el.getBoundingClientRect().top;
-        return (
-            elementTop <=
-            (window.innerHeight || document.documentElement.clientHeight) / dividend
-        );
-    };
-    const elementOutofView2 = (el) => {
-        const elementTop = el.getBoundingClientRect().top;
-
-        return (
-            elementTop > (window.innerHeight || document.documentElement.clientHeight)
-        );
-    };
+    const scrollElements2 = document.querySelectorAll(".fade-in-img");
     const displayScrollElement2 = (element) => {
         element.classList.add("scrolled2");
         element.style.opacity = 1;
@@ -349,35 +316,265 @@
         element.classList.remove("scrolled2");
         element.style.opacity = 0;
     };
+
+    let flag = false;
     const handleScrollAnimation2 = () => {
         scrollElements2.forEach((el) => {
-            if (elementInView2(el, 1.25)) {
-                displayScrollElement2(el);
-            } else if (elementOutofView2(el)) {
+            if (elementInView(el, 1.25)) {
+                if (el.classList.contains('horizontal-loop')) {
+                    if (flag) return;
+                    flag = true;
+
+                    displayScrollElement2(el);
+                    if (el.classList.contains("scrolled2")) {
+                        setTimeout(()=>{
+                            el.classList.remove("scrolled2");
+                        }, 2000);
+                    }
+                }
+                else {
+                    displayScrollElement2(el);
+                }
+            } else if (elementOutofView(el)) {
                 hideScrollElement2(el)
+                if (el.classList.contains('horizontal-loop')) flag=false;
             }
         })
     };
     /* image fade in end */
 
+    /* image slide up start */
+    const section2_img1 = document.querySelector("#section2 .img1");
+    const section2_img2 = document.querySelector("#section2 .img3");
+    const section2_img3 = document.querySelector("#section2 .img2");
+    const displayScrollSection2 = (element, className) => {
+        element.classList.add(className);
+    };
+
+    const hideScrollSection2 = (element, className) => {
+        element.classList.remove(className);
+    };
+
+    const handleScrollSection2 = () => {
+        displayAndHide(section2_img1, 'slide-up');
+        displayAndHide(section2_img2, 'slide-up2');
+        displayAndHide(section2_img3, 'slide-down');
+    };
+
+    const displayAndHide = (el, className) => {
+        if (elementInView(el, 1.25)) {
+            displayScrollSection2(el, className);
+        } else if (elementOutofView(el)) {
+            hideScrollSection2(el, className);
+        }
+    };
+    /* image fade in end */
+
+    /* section3 screen slide in Start */
+    const section3_img1 = document.querySelector("#section3 .img1");
+    const section3_img2 = document.querySelector("#section3 .img2");
+    const section3_img3 = document.querySelector("#section3 .img3");
+    const section3_img4 = document.querySelector("#section3 .img4");
+    const section3_img5 = document.querySelector("#section3 .img5");
+    const section3_img6 = document.querySelector("#section3 .img6");
+    const handleScrollSection3 = () => {
+        displayAndHide(section3_img1, 'screen-slide1');
+        displayAndHide(section3_img2, 'screen-slide2');
+        displayAndHide(section3_img3, 'screen-slide3');
+        displayAndHide(section3_img4, 'screen-slide1-sm');
+        displayAndHide(section3_img5, 'screen-slide2-sm');
+        displayAndHide(section3_img6, 'screen-slide3-sm');
+    };
+    /* section3 screen slide in Start */
+
     /* click and move */
-    $('a[href="#section1"]').click((e) => {
-        console.log("trigg");
+    $('a[href="#section2"]').click((e) => {
         e.preventDefault();
-        let dest = $('#section1').offset().top;
+        let dest = $('#section2').offset().top;
 
         $('html, body').animate({
             scrollTop: dest
         }, 700, 'swing');
     });
-    $('a[href="#section6"]').click((e) => {
-        console.log("trigg");
-        e.preventDefault();
-        let dest = $('#section6').offset().top;
 
-        $('html, body').animate({
-            scrollTop: dest
-        }, 700, 'swing');
+    // section 5에있을때 아래로 휠하다가 section 6에 걸리면 .scroll-snap 을 top으로 잡아주기
+    // section 6에있을때 위로 휠하면 위 section 으로 이동 : ok
+    // section 6에있을때 아래로 휠하면 아래로 터치스타트 터치엔드 : OK
+    // section 7에있을때 위로 휠하면 위로 터치스타트 터치엔드 : OK
+    // section 7에있을때 아래로 휠하면 아래 section 으로 이동 : ok
+    // section 8에있을때 위로 휠하다가 section 7에 걸리면 .scroll-snap 을 top으로 잡아주기
+    const scroll_container = $('.scroll-snap');
+    let wait = false;
+    let touch_start_pos = 0;
+    let touch_end_pos = 0;
+    /* section5 에서 터치로 아래로 내릴때 section6이 보이면 맞춰주기 */
+    $('#section5').on('touchstart', (e)=>{
+        touch_start_pos = $(document).scrollTop();
+    })
+    .on('touchend', (e)=>{
+        console.log(e);
+        const current_top_pos = $(document).scrollTop();
+        touch_end_pos = current_top_pos;
+        const scroll_snap_top_pos = $('.scroll-snap').offset().top;
+        const scroll_snap_y_legnth = $('.scroll-snap').height();
+        if (!wait && touch_start_pos < touch_end_pos) { // 아래로 스크롤
+            // console.log('section 5 down');
+            if (scroll_snap_top_pos - current_top_pos <= scroll_snap_y_legnth) {
+                e.preventDefault();
+                wait = true;
+                $('html, body').animate({
+                    scrollTop: scroll_snap_top_pos
+                }, 500, 'swing');
+                setTimeout(()=>{ wait = false; }, 500);
+            }
+
+        }
+    });
+    /* section5 에서 터치로 아래로 내릴때 section6이 보이면 맞춰주기 */
+    $('#section8').on('touchstart', (e)=>{
+        touch_start_pos = $(document).scrollTop();
+    })
+        .on('touchend', (e)=>{
+            console.log(e);
+            const current_top_pos = $(document).scrollTop();
+            touch_end_pos = current_top_pos;
+            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
+            const scroll_snap_y_legnth = $('.scroll-snap').height();
+            if (!wait && touch_start_pos > touch_end_pos) { // 아래로 스크롤
+                // console.log('section 8 up');
+                if (current_top_pos - scroll_snap_top_pos <= scroll_snap_y_legnth) {
+                    e.preventDefault();
+                    wait = true;
+                    $('html, body').animate({
+                        scrollTop: scroll_snap_top_pos
+                    }, 500, 'swing');
+                    setTimeout(()=>{ wait = false; }, 500);
+                }
+            }
+        });
+
+    setMousewheel({id: 'section5', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
+            const current_top_pos = $(document).scrollTop();
+            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
+            const scroll_snap_y_legnth = $('.scroll-snap').height();
+            if (delta > 0 && !wait) { // 아래로 스크롤
+                // console.log('section 5 down');
+                if (scroll_snap_top_pos - current_top_pos <= scroll_snap_y_legnth / 1.3) {
+                    e.preventDefault();
+                    wait = true;
+                    $('html, body').animate({
+                        scrollTop: scroll_snap_top_pos
+                    }, 500, 'swing');
+                    setTimeout(()=>{ wait = false; }, 500);
+                }
+
+            }
+        }});
+    setMousewheel({id: 'section6', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
+            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
+            const valid = $(document).scrollTop() + 10 >= scroll_snap_top_pos; // 오차보정값 10
+            const scroll_snap_y_legnth = $('.scroll-snap').height();
+
+            if (delta > 0 && !wait && valid) { // 아래로 스크롤
+                e.preventDefault();
+                // console.log('section 6 down');
+                wait = true;
+                scroll_container.animate({
+                    scrollTop: scroll_snap_y_legnth
+                }, 500, 'swing');
+                setTimeout(()=>{ wait = false; }, 500);
+            }
+            else if (!wait && delta < 0) { // 위로 스크롤
+                // console.log('section 6 up');
+            }
+        }});
+    setMousewheel({id: 'section7', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
+            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
+            const valid = $(document).scrollTop() + 10 >= scroll_snap_top_pos; // 오차보정값
+
+            if (delta > 0) { // 아래로 스크롤
+                // console.log('section 7 down');
+            }
+            else if (!wait && delta < 0) { // 위로 스크롤
+                e.preventDefault();
+                // console.log('section 7 up');
+                wait = true;
+                scroll_container.animate({
+                    scrollTop: 0
+                }, 500, 'swing');
+                setTimeout(()=>{ wait = false; }, 500);
+            }
+        }});
+    setMousewheel({id: 'section8', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
+            const current_top_pos = $(document).scrollTop();
+            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
+            const scroll_snap_y_legnth = $('.scroll-snap').height();
+            if (delta < 0 && !wait) { // 위 스크롤
+                // console.log('section 8 up');
+                if (current_top_pos - scroll_snap_top_pos <= scroll_snap_y_legnth / 1.3) {
+                    e.preventDefault();
+                    wait = true;
+                    $('html, body').animate({
+                        scrollTop: scroll_snap_top_pos
+                    }, 500, 'swing');
+                    setTimeout(()=>{ wait = false; }, 500);
+                }
+
+            }
+        }});
+
+
+    /* 다운로드버튼 for iPhone, Android */
+    function getMobileOperatingSystem() {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        // Windows Phone must come first because its UA also contains "Android"
+        if (/windows phone/i.test(userAgent)) {
+            return "Windows Phone";
+        }
+        if (/android/i.test(userAgent)) {
+            return "Android";
+        }
+        // iOS detection from: http://stackoverflow.com/a/9039885/177710
+        if (/iPad|iPhone|iPod|Mac/.test(userAgent) && !window.MSStream) {
+            return "iOS";
+        }
+        return "unknown";
+    }
+    switch (getMobileOperatingSystem()) {
+        case 'iOS':
+            // 애플스토어 다운로드
+            console.log('iOS');
+            $('.fixed-ctr-button, .ctr-button').click(()=>{
+                window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
+            });
+            break;
+        case 'Android':
+        case 'Windows Phone':
+        default:
+            // 안드로이드 다운로드
+            console.log('android');
+            $('.fixed-ctr-button, .ctr-button').click(()=>{
+               window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
+            });
+            break;
+    }
+
+    /* section 5, 8에서는 로고 검은색으로 변경 */
+    $(window).scroll(function () {
+        let height = $(document).scrollTop() + 20 + $('.logo-fixed').height();
+        let section_ypos = [];
+        let sections = $('section');
+        sections.map((idx, section)=>{
+            section_ypos.push(section.offsetTop);
+        });
+        if (
+            (section_ypos[4] < height && height < section_ypos[5]) ||
+            (section_ypos[7] < height)
+        ) {
+            $('.logo-fixed').addClass('dark-logo');
+        } else {
+            $('.logo-fixed').removeClass('dark-logo');
+        }
     });
 </script>
 </body>
