@@ -43,7 +43,7 @@
         <div class="row font-white">
             <div class="col-12 col-lg-6">
                 <div class="row pb-lg-5 pb-3">
-                    <img src="/assets/images/ucc/footer-logo.svg" class="logo">
+                    <img src="/assets/images/ucc/top-left-logo-white.png" class="logo">
                 </div>
                 <div class="row font-size-20 font-size-sm-10 pb-3" style="gap: 5%">
                     <span>대표자 이성진</span>

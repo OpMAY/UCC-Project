@@ -3171,7 +3171,6 @@ public class AdminService {
         try {
             searchDao.setSession(sqlSession);
             adminDao.setSession(sqlSession);
-            Admin admin = adminDao.loginAdmin("root", "root");
             List<Search> originalSearchList = searchDao.getKeywords();
             List<String> originalKeywordList = new ArrayList<>();
             for (Search search : originalSearchList) {
@@ -3191,7 +3190,7 @@ public class AdminService {
                 if (!originalKeywordList.contains(keyWord)) {
                     log.info("New Keyword Inserted : " + keyWord);
                     Search search = new Search();
-                    search.setAdmin_no(admin.getAdmin_no());
+                    search.setAdmin_no(1);
                     search.setReg_date(Time.TimeFormatHMS());
                     search.setWord(keyWord);
                     searchDao.insertKeyword(search);

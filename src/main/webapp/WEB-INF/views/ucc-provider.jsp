@@ -33,13 +33,14 @@
     </div>
 </header>
 <main>
-    <section id="section1" style="position: relative; width: 100%; height: 100vh;" class="d-flex justify-content-center align-items-end pb-150-50">
-        <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
-            <source src="/assets/video/main_video_sample.mp4" type="video/mp4">
+    <section id="section1" style="position: relative; width: 100%;" class="d-flex justify-content-center align-items-end pb-150-50">
+        <video playsinline loop muted autoplay preload="auto" style="position: absolute; width: 100%; top:0; left:0; object-fit: cover; z-index: -1;">
+            <source src="/assets/video/ucc_user_main_video_small.m4v" type="video/mp4">
             Sorry, your browser doesn't support embedded videos.
         </video>
         <div class="d-flex justify-content-center text-center">
-            <span class="font-white font-family-aggro-b font-size-56 font-size-sm-24">아티스트가 수익 걱정 없이<br>활동할 수 있는 무대 <img src="/assets/images/ucc/ucc-main-logo-linear.svg" class="section1-logo"></span>
+<%--            <span class="font-white font-family-aggro-b font-size-56 font-size-sm-24">아티스트가 수익 걱정 없이<br>활동할 수 있는 무대 <img src="/assets/images/ucc/ucc-main-logo-linear.svg" class="section1-logo"></span>--%>
+            <span class="font-white font-family-aggro-b font-size-56 font-size-sm-24">아티스트가 수익 걱정 없이<br>활동할 수 있는 무대 <span class="font-family-aggro-b" style="background: linear-gradient(to bottom, #91f4f2 20%, #719EFC 55%, #8e54e6 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">UCC</span></span>
         </div>
         <a href="#section2" style="position: absolute; bottom: 0; left: 50%;" class="mb-23-10">
             <img src="/assets/images/ucc/icon_arrow_bottom.svg" style="transform: translate(-50%, 0)">
@@ -65,7 +66,7 @@
 
     <section id="section3" class="d-flex flex-column" style="position:relative; overflow: hidden;">
         <div style="z-index: 2;">
-            <span class="font-family-aggro-b font-size-64 font-size-md-48 font-size-sm-20 font-white"><span class="font-family-aggro-b" style="color: #836eff;">장르 불문</span> 아티스트를 위한<br>놀이터 UCC</span>
+            <span class="font-family-aggro-b font-size-64 font-size-md-48 font-size-sm-20 font-white"><span class="font-family-aggro-b" style="background: linear-gradient(to bottom, #836EFF, rgba(129,107,255,0.49)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">장르 불문</span> 아티스트를 위한<br>놀이터 UCC</span>
         </div>
         <div class="line-height-1_5-1 mb-30-20" style="z-index: 2;">
             <span class="font-grey font-size-24 font-size-sm-12">아티스트와 세상을 연결하고 자유로운 방식의 소통을 통해<br>창작 활동을 즐기는 놀이터 같은 공간을 마련했습니다.</span>
@@ -85,7 +86,7 @@
     </section>
 
     <section id="section4" class="bg-0d py-150-50">
-         <!-- web -->
+        <!-- web -->
         <div class="d-flex flex-column text-center">
             <div class="font-size-40 font-size-sm-20 font-family-aggro-b font-white"><span>나의 예술을 표현하는 데<br>제한이 없어요!</span></div>
             <div class="font-size-24 font-size-sm-12 font-grey line-height-1_5-1"><span>비디오는 물론, 이미지, 에디트 등<br>다양한 방법으로 창작 활동이 가능합니다.</span></div>
@@ -132,7 +133,7 @@
                 </div>
             </div>
         </div>
-         <!-- mobile -->
+        <!-- mobile -->
     </section>
 
     <section id="section5" class="d-flex flex-column align-items-center text-center py-150-50">
@@ -149,29 +150,28 @@
         </button>
     </section>
 
-    <div class="scroll-snap">
-        <section id="section6" class="d-flex justify-content-center align-items-center">
-            <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
-                <source src="/assets/video/diamonds2.mp4" type="video/mp4">
-                Sorry, your browser doesn't support embedded videos.
-            </video>
-            <div class="d-flex">
-                <img src="/assets/images/ucc/section6.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
-                <img src="/assets/images/ucc/section6-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
-            </div>
-        </section>
+    <section id="section6" class="d-flex justify-content-center align-items-center">
+        <video playsinline loop muted autoplay preload="auto" style="position: absolute; width: 100%; top:0; left:0; object-fit: cover; z-index: -1;">
+            <source src="/assets/video/diamonds2.mp4" type="video/mp4">
+            Sorry, your browser doesn't support embedded videos.
+        </video>
+        <div class="d-flex">
+            <img src="/assets/images/ucc/section6.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
+            <img src="/assets/images/ucc/section6-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
+        </div>
+    </section>
 
-        <section id="section7" class="d-flex justify-content-center align-items-center">
-            <video playsinline loop muted autoplay style="position: absolute; width: 100%; height: 100vh; top:0; left:0; object-fit: cover; z-index: -1;">
-                <source src="/assets/video/diamonds.mp4" type="video/mp4">
-                Sorry, your browser doesn't support embedded videos.
-            </video>
-            <div class="d-flex">
-                <img src="/assets/images/ucc/section7.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
-                <img src="/assets/images/ucc/section7-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
-            </div>
-        </section>
-    </div>
+    <section id="section7" class="d-flex justify-content-center align-items-center">
+        <video playsinline loop muted autoplay preload="auto" style="position: absolute; width: 100%; top:0; left:0; object-fit: cover; z-index: -1;">
+            <source src="/assets/video/diamonds.mp4" type="video/mp4">
+            Sorry, your browser doesn't support embedded videos.
+        </video>
+        <div class="d-flex">
+            <img src="/assets/images/ucc/section7.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
+            <img src="/assets/images/ucc/section7-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
+        </div>
+    </section>
+
     <section id="section8" class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-150-50 pb-150-30 px-225-70">
         <div class="d-flex flex-column text-center text-md-left mb-0-30" style="flex:4;">
             <div class="mb-30-20">
@@ -202,6 +202,13 @@
 <script src="/assets/js/mousewheel.js"></script>
 
 <script>
+    function setScreenSize() { // 모바일 상하단 메뉴바 크기 고려하여 100vh로 조정
+        let vh = window.innerHeight * 0.01;
+        console.log(window.innerHeight * 0.01);
+        document.documentElement.style.setProperty('--vh', `\${vh}px`);
+    }
+    setScreenSize();
+
     $('.owl-carousel').owlCarousel({
         loop: false,
         // margin: 300,
@@ -352,131 +359,106 @@
         }, 700, 'swing');
     });
 
-    // section 5에있을때 아래로 휠하다가 section 6에 걸리면 .scroll-snap 을 top으로 잡아주기
-    // section 6에있을때 위로 휠하면 위 section 으로 이동 : ok
-    // section 6에있을때 아래로 휠하면 아래로 터치스타트 터치엔드 : OK
-    // section 7에있을때 위로 휠하면 위로 터치스타트 터치엔드 : OK
-    // section 7에있을때 아래로 휠하면 아래 section 으로 이동 : ok
-    // section 8에있을때 위로 휠하다가 section 7에 걸리면 .scroll-snap 을 top으로 잡아주기
-    const scroll_container = $('.scroll-snap');
-    let wait = false;
+    // section 6~7 drag and stop motions
     let touch_start_pos = 0;
     let touch_end_pos = 0;
-    /* section5 에서 터치로 아래로 내릴때 section6이 보이면 맞춰주기 */
-    $('#section5').on('touchstart', (e)=>{
-        touch_start_pos = $(document).scrollTop();
+    let visit_section6=false;
+    let visit_section7=false;
+    const duration = 500;
+    $(window).mousewheel(function (e, delta) {
+        const section6_length = $('#section6').height();
+        const section6_top_pos = Math.round($('#section6').offset().top);
+        const section7_top_pos = Math.round($('#section7').offset().top);
+        const section8_top_pos = Math.round($('#section8').offset().top);
+        const current_top_pos = Math.round($(document).scrollTop());
+
+        if (current_top_pos < section6_top_pos && current_top_pos > section6_top_pos - section6_length) { // section 5.5~6
+            visit_section6 = false;
+            visit_section7 = false;
+            console.log('section ~6');
+            if (delta < 0 && !visit_section6) { // 아래스크롤
+                visit_section6 = true;
+                $('html, body').stop().animate({
+                    scrollTop: section6_top_pos
+                }, duration);
+            }
+        }
+        else if (current_top_pos >= section6_top_pos && current_top_pos < section7_top_pos) { // section 6~7
+            console.log('section 6~7');
+            visit_section7 = false;
+            if (delta < 0 && visit_section6) { // 아래스크롤, section 7 진입
+                console.log("HERE?")
+                $('html, body').stop().animate({
+                    scrollTop: section7_top_pos
+                }, duration);
+            }
+        }
+        else if (current_top_pos >= section7_top_pos && current_top_pos < section8_top_pos) { // section 7~8
+            console.log('section 7~8');
+            visit_section6 = false;
+            if (delta > 0 && !visit_section7) { // 위스크롤, section 7 진입
+                console.log(1);
+                visit_section7 = true;
+                $('html, body').stop().animate({
+                    scrollTop: section7_top_pos
+                }, duration);
+            } else if (delta > 0 && visit_section7) { // 위스크롤, section 6 진입
+                console.log(2);
+                visit_section6 = true;
+                $('html, body').stop().animate({
+                    scrollTop: section6_top_pos
+                }, duration);
+            }
+        }
+        else if (current_top_pos >= section8_top_pos) { // section 8~
+            visit_section6 = false;
+            visit_section7 = false;
+            console.log('section 8~');
+        }
+
     })
-    .on('touchend', (e)=>{
-        console.log(e);
-        const current_top_pos = $(document).scrollTop();
+    .on('touchstart', ()=>{
+        touch_start_pos = $(document).scrollTop();
+        if (event?.cancelable) event?.preventDefault();
+    })
+    .on('touchend', ()=>{
+        if (event?.cancelable) event?.preventDefault();
+        event.stopPropagation();
+        // section 5에서 터치로 내릴때 section 6 진입
+        const section6_length = $('#section6').height();
+        const section6_top_pos = Math.round($('#section6').offset().top);
+        const section7_top_pos = Math.round($('#section7').offset().top);
+        const section8_top_pos = Math.round($('#section8').offset().top);
+        const current_top_pos = Math.round($(document).scrollTop());
         touch_end_pos = current_top_pos;
-        const scroll_snap_top_pos = $('.scroll-snap').offset().top;
-        const scroll_snap_y_legnth = $('.scroll-snap').height();
-        if (!wait && touch_start_pos < touch_end_pos) { // 아래로 스크롤
-            // console.log('section 5 down');
-            if (scroll_snap_top_pos - current_top_pos <= scroll_snap_y_legnth) {
-                e.preventDefault();
-                wait = true;
-                $('html, body').animate({
-                    scrollTop: scroll_snap_top_pos
-                }, 500, 'swing');
-                setTimeout(()=>{ wait = false; }, 500);
+
+        if (touch_start_pos < touch_end_pos) { // 아래로 스크롤
+            if (current_top_pos < section6_top_pos && section6_top_pos - current_top_pos <= section6_length) { // section5~6
+                $('html, body').stop().animate({
+                    scrollTop: section6_top_pos
+                }, duration, 'swing');
+            }
+            else if (current_top_pos >= section6_top_pos && current_top_pos < section7_top_pos) { // section6~7
+                $('html, body').stop().animate({
+                    scrollTop: section7_top_pos
+                }, duration, 'swing');
             }
 
         }
+        else if (touch_start_pos > touch_end_pos) { // 위로 스크롤
+            if (current_top_pos >= section7_top_pos && current_top_pos < section8_top_pos) { // section7~8
+                $('html, body').stop().animate({
+                    scrollTop: section6_top_pos
+                }, duration, 'swing');
+            }
+            else if (current_top_pos >= section6_top_pos && current_top_pos < section7_top_pos) { // section6~7
+                $('html, body').stop().animate({
+                    scrollTop: section6_top_pos
+                }, duration, 'swing');
+            }
+        }
+
     });
-    /* section5 에서 터치로 아래로 내릴때 section6이 보이면 맞춰주기 */
-    $('#section8').on('touchstart', (e)=>{
-        touch_start_pos = $(document).scrollTop();
-    })
-        .on('touchend', (e)=>{
-            console.log(e);
-            const current_top_pos = $(document).scrollTop();
-            touch_end_pos = current_top_pos;
-            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
-            const scroll_snap_y_legnth = $('.scroll-snap').height();
-            if (!wait && touch_start_pos > touch_end_pos) { // 아래로 스크롤
-                // console.log('section 8 up');
-                if (current_top_pos - scroll_snap_top_pos <= scroll_snap_y_legnth) {
-                    e.preventDefault();
-                    wait = true;
-                    $('html, body').animate({
-                        scrollTop: scroll_snap_top_pos
-                    }, 500, 'swing');
-                    setTimeout(()=>{ wait = false; }, 500);
-                }
-            }
-        });
-
-    setMousewheel({id: 'section5', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
-            const current_top_pos = $(document).scrollTop();
-            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
-            const scroll_snap_y_legnth = $('.scroll-snap').height();
-            if (delta > 0 && !wait) { // 아래로 스크롤
-                // console.log('section 5 down');
-                if (scroll_snap_top_pos - current_top_pos <= scroll_snap_y_legnth / 1.3) {
-                    e.preventDefault();
-                    wait = true;
-                    $('html, body').animate({
-                        scrollTop: scroll_snap_top_pos
-                    }, 500, 'swing');
-                    setTimeout(()=>{ wait = false; }, 500);
-                }
-
-            }
-        }});
-    setMousewheel({id: 'section6', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
-            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
-            const valid = $(document).scrollTop() + 10 >= scroll_snap_top_pos; // 오차보정값 10
-            const scroll_snap_y_legnth = $('.scroll-snap').height();
-
-            if (delta > 0 && !wait && valid) { // 아래로 스크롤
-                e.preventDefault();
-                // console.log('section 6 down');
-                wait = true;
-                scroll_container.animate({
-                    scrollTop: scroll_snap_y_legnth
-                }, 500, 'swing');
-                setTimeout(()=>{ wait = false; }, 500);
-            }
-            else if (!wait && delta < 0) { // 위로 스크롤
-                // console.log('section 6 up');
-            }
-        }});
-    setMousewheel({id: 'section7', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
-            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
-            const valid = $(document).scrollTop() + 10 >= scroll_snap_top_pos; // 오차보정값
-
-            if (delta > 0) { // 아래로 스크롤
-                // console.log('section 7 down');
-            }
-            else if (!wait && delta < 0) { // 위로 스크롤
-                e.preventDefault();
-                // console.log('section 7 up');
-                wait = true;
-                scroll_container.animate({
-                    scrollTop: 0
-                }, 500, 'swing');
-                setTimeout(()=>{ wait = false; }, 500);
-            }
-        }});
-    setMousewheel({id: 'section8', isClass: false, prevent: false, onMouseWheel: (e, delta) => {
-            const current_top_pos = $(document).scrollTop();
-            const scroll_snap_top_pos = $('.scroll-snap').offset().top;
-            const scroll_snap_y_legnth = $('.scroll-snap').height();
-            if (delta < 0 && !wait) { // 위 스크롤
-                // console.log('section 8 up');
-                if (current_top_pos - scroll_snap_top_pos <= scroll_snap_y_legnth / 1.3) {
-                    e.preventDefault();
-                    wait = true;
-                    $('html, body').animate({
-                        scrollTop: scroll_snap_top_pos
-                    }, 500, 'swing');
-                    setTimeout(()=>{ wait = false; }, 500);
-                }
-
-            }
-        }});
 
 
     /* 다운로드버튼 for iPhone, Android */

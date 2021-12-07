@@ -13,7 +13,7 @@ public class AdminPageInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String URL = request.getRequestURL().toString();
-        if (!URL.contains(".map")) {
+        if (!URL.contains(".map") && !URL.contains("assets") && !URL.contains("js")) {
             log.info("Request URL : " + URL);
         }
         if (URL.startsWith("http://") && !URL.contains("localhost:8080")) {
