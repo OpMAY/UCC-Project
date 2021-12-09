@@ -24,7 +24,6 @@
 }
 
 body, html {
-    overflow-x: hidden;
     word-break: keep-all;
 }
 
@@ -61,14 +60,6 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
 
 .bg-0d {
     background: #0d0d0d;
-}
-
-#section6, #section7 {
-    width: 100%;
-    height: calc(var(--vh, 1vh) * 100);
-    position:relative;
-    background: rgba(0,0,0,0.85);
-    /*scroll-snap-align: start;*/
 }
 
 /* WEB Start */
@@ -148,9 +139,7 @@ span.font-grey, div.font-grey span { color: #7F7F7F !important; }
     overflow:hidden;
     animation: horizontal-loop 15s linear infinite;
 }
-#section3 {/*
-    padding-top: 282px;
-    padding-bottom: 282px;*/
+#section3 {
     padding-top: 16.5%;
     padding-bottom: 16.5%;
     padding-left: 10.5%;
@@ -525,7 +514,7 @@ footer .logo {
 :root {
     --vh: 1vh;
 }
-#section1, #section1 video, #section6 video, #section7 video  {
+#section1, #section1 video {
     height: calc(var(--vh, 1vh) * 100);
 }
 @keyframes section3-img1 {
@@ -609,4 +598,26 @@ img.logo-fixed {
 }
 img.logo-fixed.dark-logo {
     content:url("/assets/images/ucc/top-left-logo-black.png");
+}
+
+
+.wrapper {
+    width: 100%;
+    height: auto;
+}
+.wrapper img {
+    opacity: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: opacity 1s;
+    width: 100%;
+    object-fit: contain;
+}
+img.active {
+    opacity: 1;
+    transition: opacity 1s;
+}
+section {
+    overflow-x: hidden;
 }

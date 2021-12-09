@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/assets/css/owl.carousel.css">
 </head>
 <body>
-<header style="height: 66px; position:fixed; top:0; width: 100%; z-index: 100;">
+<header style="height: 66px; position:fixed; top:0; width: 100%; z-index: 100; overflow-x: hidden;">
     <div class="d-flex justify-content-between h-100 align-items-center" style="padding: 0 1.875rem;">
         <img src="/assets/images/ucc/top-left-logo-white.png" class="logo-fixed" height="50%" style="transform: translate(0, 5%)"/>
         <div class="h-100 d-flex align-items-center">
@@ -85,7 +85,7 @@
         <img src="/assets/images/ucc/section3-screen3-sm.png" class="img6 d-md-none d-inline-block" alt="" style="position: absolute; right: -37%; bottom: 32%; width: 80%;">
     </section>
 
-    <section id="section4" class="bg-0d py-150-50">
+    <section id="section4" class="bg-0d py-150-50" style="overflow:hidden;">
         <!-- web -->
         <div class="d-flex flex-column text-center">
             <div class="font-size-40 font-size-sm-20 font-family-aggro-b font-white"><span>나의 예술을 표현하는 데<br>제한이 없어요!</span></div>
@@ -136,7 +136,7 @@
         <!-- mobile -->
     </section>
 
-    <section id="section5" class="d-flex flex-column align-items-center text-center py-150-50">
+    <section id="section5" class="d-flex flex-column align-items-center text-center py-150-50" style="overflow-x: hidden;">
         <div>
             <span class="font-size-40 font-size-sm-20 font-family-aggro-b">이미 다양한 아티스트가<br>자유롭게 활동하고 있습니다 </span>
         </div>
@@ -150,27 +150,24 @@
         </button>
     </section>
 
-    <section id="section6" class="d-flex justify-content-center align-items-center">
-        <video playsinline loop muted autoplay preload="auto" style="position: absolute; width: 100%; top:0; left:0; object-fit: cover; z-index: -1;">
-            <source src="/assets/video/diamonds2.mp4" type="video/mp4">
-            Sorry, your browser doesn't support embedded videos.
-        </video>
-        <div class="d-flex">
-            <img src="/assets/images/ucc/section6.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
-            <img src="/assets/images/ucc/section6-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
+    <%-- section6 --%>
+    <div id="wrapper" class="wrapper" style="position: relative;">
+        <div style="position: sticky; top: 0; width: 100%; height: 100vh;">
+            <div style="position: relative; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85);">
+                <video playsinline loop muted autoplay preload="auto" style="position: absolute; width: 100%; height: 100%; top:0; left:0; object-fit: cover; z-index: -1;">
+                    <source src="/assets/video/diamonds2.mp4" type="video/mp4">
+                    Sorry, your browser doesn't support embedded videos.
+                </video>
+                <div style="position: relative; height: 100%;">
+                    <img class="img-fluid img-1 d-none d-md-inline-block" src="/assets/images/ucc/section6.png" alt="" style="height: 100vh;">
+                    <img class="img-fluid img-1 d-md-none d-inline-block" src="/assets/images/ucc/section6-sm.png" alt="" style="width: 100%; height: 100%; align-self: center;">
+                    <img class="img-fluid img-2 d-none d-md-inline-block" src="/assets/images/ucc/section7.png" alt="" style="height: 100vh;">
+                    <img class="img-fluid img-2 d-md-none d-inline-block" src="/assets/images/ucc/section7-sm.png" alt="" style="width: 100%; height: 100%; align-self: center;">
+                </div>
+            </div>
         </div>
-    </section>
-
-    <section id="section7" class="d-flex justify-content-center align-items-center">
-        <video playsinline loop muted autoplay preload="auto" style="position: absolute; width: 100%; top:0; left:0; object-fit: cover; z-index: -1;">
-            <source src="/assets/video/diamonds.mp4" type="video/mp4">
-            Sorry, your browser doesn't support embedded videos.
-        </video>
-        <div class="d-flex">
-            <img src="/assets/images/ucc/section7.png" alt="" style="height: 100vh;" class="d-none d-md-inline-block">
-            <img src="/assets/images/ucc/section7-sm.png" alt="" style="width: 100%; max-height: 90vh; align-self: center;" class="d-md-none d-inline-block">
-        </div>
-    </section>
+        <div id="overlay" style="height: 2000px; width: 100%;"></div>
+    </div>
 
     <section id="section8" class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-150-50 pb-150-30 px-225-70">
         <div class="d-flex flex-column text-center text-md-left mb-0-30" style="flex:4;">
@@ -202,12 +199,25 @@
 <script src="/assets/js/mousewheel.js"></script>
 
 <script>
+    function isWebEnv() {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/Mobile|Phone|Pad/i.test(userAgent)) {
+            return false;
+        }
+        return true;
+    }
     function setScreenSize() { // 모바일 상하단 메뉴바 크기 고려하여 100vh로 조정
         let vh = window.innerHeight * 0.01;
         console.log(window.innerHeight * 0.01);
         document.documentElement.style.setProperty('--vh', `\${vh}px`);
     }
     setScreenSize();
+    if (isWebEnv()) { // 웹환경에서만 (모바일 X) 리사이즈시 section1 100vh 유지
+        window.addEventListener('resize', function(event) {
+            setScreenSize();
+        });
+    }
+
 
     $('.owl-carousel').owlCarousel({
         loop: false,
@@ -359,108 +369,6 @@
         }, 700, 'swing');
     });
 
-    // section 6~7 drag and stop motions
-    let touch_start_pos = 0;
-    let touch_end_pos = 0;
-    let visit_section6=false;
-    let visit_section7=false;
-    const duration = 500;
-    $(window).mousewheel(function (e, delta) {
-        const section6_length = $('#section6').height();
-        const section6_top_pos = Math.round($('#section6').offset().top);
-        const section7_top_pos = Math.round($('#section7').offset().top);
-        const section8_top_pos = Math.round($('#section8').offset().top);
-        const current_top_pos = Math.round($(document).scrollTop());
-
-        if (current_top_pos < section6_top_pos && current_top_pos > section6_top_pos - section6_length) { // section 5.5~6
-            visit_section6 = false;
-            visit_section7 = false;
-            console.log('section ~6');
-            if (delta < 0 && !visit_section6) { // 아래스크롤
-                visit_section6 = true;
-                $('html, body').stop().animate({
-                    scrollTop: section6_top_pos
-                }, duration);
-            }
-        }
-        else if (current_top_pos >= section6_top_pos && current_top_pos < section7_top_pos) { // section 6~7
-            console.log('section 6~7');
-            visit_section7 = false;
-            if (delta < 0 && visit_section6) { // 아래스크롤, section 7 진입
-                console.log("HERE?")
-                $('html, body').stop().animate({
-                    scrollTop: section7_top_pos
-                }, duration);
-            }
-        }
-        else if (current_top_pos >= section7_top_pos && current_top_pos < section8_top_pos) { // section 7~8
-            console.log('section 7~8');
-            visit_section6 = false;
-            if (delta > 0 && !visit_section7) { // 위스크롤, section 7 진입
-                console.log(1);
-                visit_section7 = true;
-                $('html, body').stop().animate({
-                    scrollTop: section7_top_pos
-                }, duration);
-            } else if (delta > 0 && visit_section7) { // 위스크롤, section 6 진입
-                console.log(2);
-                visit_section6 = true;
-                $('html, body').stop().animate({
-                    scrollTop: section6_top_pos
-                }, duration);
-            }
-        }
-        else if (current_top_pos >= section8_top_pos) { // section 8~
-            visit_section6 = false;
-            visit_section7 = false;
-            console.log('section 8~');
-        }
-
-    })
-    .on('touchstart', ()=>{
-        touch_start_pos = $(document).scrollTop();
-        if (event?.cancelable) event?.preventDefault();
-    })
-    .on('touchend', ()=>{
-        if (event?.cancelable) event?.preventDefault();
-        event.stopPropagation();
-        // section 5에서 터치로 내릴때 section 6 진입
-        const section6_length = $('#section6').height();
-        const section6_top_pos = Math.round($('#section6').offset().top);
-        const section7_top_pos = Math.round($('#section7').offset().top);
-        const section8_top_pos = Math.round($('#section8').offset().top);
-        const current_top_pos = Math.round($(document).scrollTop());
-        touch_end_pos = current_top_pos;
-
-        if (touch_start_pos < touch_end_pos) { // 아래로 스크롤
-            if (current_top_pos < section6_top_pos && section6_top_pos - current_top_pos <= section6_length) { // section5~6
-                $('html, body').stop().animate({
-                    scrollTop: section6_top_pos
-                }, duration, 'swing');
-            }
-            else if (current_top_pos >= section6_top_pos && current_top_pos < section7_top_pos) { // section6~7
-                $('html, body').stop().animate({
-                    scrollTop: section7_top_pos
-                }, duration, 'swing');
-            }
-
-        }
-        else if (touch_start_pos > touch_end_pos) { // 위로 스크롤
-            if (current_top_pos >= section7_top_pos && current_top_pos < section8_top_pos) { // section7~8
-                $('html, body').stop().animate({
-                    scrollTop: section6_top_pos
-                }, duration, 'swing');
-            }
-            else if (current_top_pos >= section6_top_pos && current_top_pos < section7_top_pos) { // section6~7
-                $('html, body').stop().animate({
-                    scrollTop: section6_top_pos
-                }, duration, 'swing');
-            }
-        }
-
-    });
-
-
     /* 다운로드버튼 for iPhone, Android */
     function getMobileOperatingSystem() {
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -512,6 +420,21 @@
         } else {
             $('.logo-fixed').removeClass('dark-logo');
         }
+    });
+
+    /* wrapper */
+    $(function () {
+        var offsetTop = $('#wrapper').offset().top;
+        $(window).scroll(function () {
+            var window = $(this).scrollTop();
+            if (window > offsetTop + $('#wrapper').height() / 3) {
+                $('#wrapper .img-1').removeClass('active');
+                $('#wrapper .img-2').addClass('active');
+            } else {
+                $('#wrapper .img-1').addClass('active');
+                $('#wrapper .img-2').removeClass('active');
+            }
+        })
     });
 </script>
 </body>
