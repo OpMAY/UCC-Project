@@ -317,7 +317,7 @@
         ac_time = time + " ~ " + (time + 1);
     }
 
-    var time_event = "acquisition-user-time";
+    var time_event = "acquisition-artist-time";
     var time_eventProperties = {
         "time": ac_time
     };
