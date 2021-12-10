@@ -30,7 +30,7 @@
         <img src="/assets/images/ucc/top-left-logo-white.png" class="logo-fixed" height="50%"
              style="transform: translate(0, 5%)"/>
         <div class="h-100 d-flex align-items-center">
-            <button class="fixed-ctr-button" value="header-start">
+            <button id="header-start" class="fixed-ctr-button" value="header-start">
                 <span class="font-family-aggro-b font-size-14 font-size-sm-8">UCC 시작하기</span>
             </button>
         </div>
@@ -64,7 +64,7 @@
         <div class="mb-44-27 line-height-1_5-1">
             <span class="font-size-24 font-size-sm-12 font-grey">뮤지션부터 벌룬 아트 디자이너까지<br>UCC 무대는 누구에게나 수익 창출 기회가 열려 있습니다.</span>
         </div>
-        <button id="ctr-button" class="ctr-button" value="header-active">
+        <button id="header-active" class="ctr-button" value="header-active">
             <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC에서 활동하기</span>
         </button>
         <div class="mt-10-27 d-flex align-items-end justify-content-center img-container"
@@ -87,7 +87,7 @@
             <span class="font-grey font-size-24 font-size-sm-12">아티스트와 세상을 연결하고 자유로운 방식의 소통을 통해<br>창작 활동을 즐기는 놀이터 같은 공간을 마련했습니다.</span>
         </div>
         <div>
-            <button class="ctr-button" value="medium-start">
+            <button id="medium-start" class="ctr-button" value="medium-start">
                 <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC 시작하기</span>
             </button>
         </div>
@@ -176,7 +176,7 @@
         </div>
         <div class="fade-in-img horizontal-loop mb-100-50 mt-70-35">
         </div>
-        <button class="ctr-button" value="bottom-active">
+        <button id="bottom-active" class="ctr-button" value="bottom-active">
             <span id="artist-funnel8" class="font-family-aggro-b font-size-16 font-size-sm-8">UCC에서 활동하기</span>
         </button>
     </section>
@@ -214,7 +214,7 @@
                 <span class="font-family-aggro-b font-size-40 font-size-sm-20">UCC와 팬들이<br>당신의 창작 활동을 기다립니다</span>
             </div>
             <div>
-                <button class="ctr-button" value="bottom-start">
+                <button id="bottom-start" class="ctr-button" value="bottom-start">
                     <span class="font-family-aggro-b font-size-16 font-size-sm-8">UCC 시작하기</span>
                 </button>
             </div>
@@ -302,6 +302,9 @@
         amplitude.getInstance().logEvent('btn-artist-ucc-device', startDeviceType);
     }
 
+    function run_ucc_btn_scroll() {
+        amplitude.getInstance().logEvent('btn-artist-ucc-scroll');
+    }
 
     /*유입 시간*/
     var now = new Date();
@@ -549,6 +552,7 @@
 
     /* click and move */
     $('a[href="#section2"]').click((e) => {
+        run_ucc_btn_scroll();
         e.preventDefault();
         let dest = $('#section2').offset().top;
 
@@ -578,30 +582,71 @@
         case 'iOS':
             // 애플스토어 다운로드
             console.log('iOS');
-            $('.fixed-ctr-button').click(() => {
+            $('#header-start').click(() => {
                 run_ucc_btn_device('ios-download-clicked');
-                run_ucc_btn_start($('.fixed-ctr-button').val());
+                run_ucc_btn_start($('#header-start').val());
                 window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
             });
-            $('.ctr-button').click(() => {
+            $('#medium-start').click(() => {
                 run_ucc_btn_device('ios-download-clicked');
-                run_ucc_btn_start($('.ctr-button').val());
+                run_ucc_btn_start($('#medium-start').val());
                 window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
             });
+            $('#bottom-start').click(() => {
+                run_ucc_btn_device('ios-download-clicked');
+                run_ucc_btn_start($('#bottom-start').val());
+                window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
+            });
+
+            $('#header-active').click(() => {
+                run_ucc_btn_device('ios-download-clicked');
+                run_ucc_btn_start($('#header-active').val());
+                window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
+            });
+
+            $('#bottom-active').click(() => {
+                run_ucc_btn_device('ios-download-clicked');
+                run_ucc_btn_start($('#bottom-active').val());
+                window.location.href = 'https://apps.apple.com/kr/app/ucc/id1580818238';
+            });
+
             break;
         case 'Android':
         case 'Windows Phone':
         default:
             // 안드로이드 다운로드
             console.log('android');
-            $('.fixed-ctr-button').click(() => {
+
+            $('#header-start').click(() => {
                 run_ucc_btn_device('google-download-clicked');
-                run_ucc_btn_start($('.fixed-ctr-button').val());
+                run_ucc_btn_start($('#header-start').val());
+                console.log($('#header-start').val());
                 window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
             });
-            $('.ctr-button').click(() => {
+
+            $('#medium-start').click(() => {
                 run_ucc_btn_device('google-download-clicked');
-                run_ucc_btn_start($('.ctr-button').val());
+                run_ucc_btn_start($('#medium-start').val());
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
+
+            });
+            $('#bottom-start').click(() => {
+                run_ucc_btn_device('google-download-clicked');
+                run_ucc_btn_start($('#bottom-start').val());
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
+
+            });
+
+            $('#header-active').click(() => {
+                run_ucc_btn_device('google-download-clicked');
+                run_ucc_btn_start($('#header-active').val());
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
+
+            });
+
+            $('#bottom-active').click(() => {
+                run_ucc_btn_device('google-download-clicked');
+                run_ucc_btn_start($('#bottom-active').val());
                 window.location.href = 'https://play.google.com/store/apps/details?id=com.weart.ucc';
             });
             break;
