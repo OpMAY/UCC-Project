@@ -117,7 +117,7 @@
     </div>
 </section><!-- 우승자 상금 안내 -->
 <section id="section1_5" style="background: black;">
-    <div class="container py-5 position-relative" style="text-align: center;">
+    <div id="funnel3" class="container py-5 position-relative" style="text-align: center;">
         <img class="position-absolute" style="top: 0; left: 50%; transform: translate(-50%, -50%); max-width: 375px; width: 60%" src="/assets/images/ucc/prize-money-text.png">
         <img src="/assets/images/ucc/prize-main-text.png" style="width: 90%;" class="my-3 my-lg-5">
         <div class="row flex-column flex-xl-row justify-content-center align-items-center py-5">
@@ -142,7 +142,7 @@
     </div>
 </section><!-- 이벤트 참여 방법 -->
 <section id="section3" class="p-lg-5 p-3" style="background-size: cover!important; background: white url('/assets/images/ucc/backgroud-pictures-dark.png') center;">
-    <div class="container p-lg-5 p-3">
+    <div id="funnel5" class="container p-lg-5 p-3">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-family-aggro-b">
             <span class="font-size-40 font-size-sm-24 font-white">당신이 바로 UCC 주인공입니다</span>
         </div>
