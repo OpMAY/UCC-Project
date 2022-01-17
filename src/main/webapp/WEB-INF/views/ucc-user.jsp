@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/ucc-user.css">
+    <link rel="stylesheet" href="/assets/css/ucc-user.css?vc=1">
     <title>장르 불문 아티스트를 위한 놀이터 UCC</title>
     <link rel="icon" href="/assets/images/ucc/ucc_favicon.png">
     <link rel="apple-touch-icon" href="/assets/images/ucc/ucc_favicon.png"/>
@@ -112,7 +112,7 @@
             <img class="blink-image7" src="/assets/images/ucc/artist-circle-7.png">
             <img class="blink-image8" src="/assets/images/ucc/artist-circle-8.png">
 
-            <img src="/assets/images/ucc/vod-example-mobile-screen.png" style="max-width: 328px; width: 60%;  z-index: 5;">
+            <img src="/assets/images/ucc/vod-example-mobile-screen.png?vc=1" style="max-width: 328px; width: 60%;  z-index: 5;">
         </div>
     </div>
 </section><!-- 우승자 상금 안내 -->
@@ -121,9 +121,9 @@
         <img class="position-absolute" style="top: 0; left: 50%; transform: translate(-50%, -50%); max-width: 375px; width: 60%" src="/assets/images/ucc/prize-money-text.png">
         <img src="/assets/images/ucc/prize-main-text.png" style="width: 90%;" class="my-3 my-lg-5">
         <div class="row flex-column flex-xl-row justify-content-center align-items-center py-5">
-            <img src="/assets/images/ucc/prize1st.png" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
-            <img src="/assets/images/ucc/prize2nd.png" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
-            <img src="/assets/images/ucc/prize3rd.png" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
+            <img src="/assets/images/ucc/prize1st.png?vc=1" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
+            <img src="/assets/images/ucc/prize2nd.png?vc=1" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
+            <img src="/assets/images/ucc/prize3rd.png?vc=1" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
         </div>
     </div>
 </section><!-- 이벤트 참여 방법 -->
@@ -131,13 +131,13 @@
     <div id="funnel4" class="container py-5 position-relative">
         <img class="position-absolute" style="top: 0; left: 50%; transform: translate(-50%, -50%); max-width: 375px; width: 60%" src="/assets/images/ucc/event-join-text.png">
         <div class="row flex-column flex-xl-row justify-content-center align-items-center py-5">
-            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-1.png">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-1.png?vc=1">
             <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
-            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-2.png">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-2.png?vc=1">
             <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
-            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-3.png">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-3.png?vc=1">
             <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
-            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-4.png">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-4.png?vc=1">
         </div>
     </div>
 </section><!-- 이벤트 참여 방법 -->
@@ -167,13 +167,13 @@
         </div>
         <div class="row flex-column flex-xl-row align-items-center text-center pt-3">
             <div class="col-lg-4 col-12">
-                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-1.png" style="max-width: 300px; width: 80%">
+                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-1.png?vc=1" style="max-width: 300px; width: 80%">
             </div>
             <div class="col-lg-4 col-12">
-                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-2.png" style="max-width: 300px; width: 80%">
+                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-2.png?vc=1" style="max-width: 300px; width: 80%">
             </div>
             <div class="col-lg-4 col-12">
-                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-3.png" style="max-width: 300px; width: 80%">
+                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-3.png?vc=1" style="max-width: 300px; width: 80%">
             </div>
         </div>
     </div>
