@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/ucc-user.css">
+    <link rel="stylesheet" href="/assets/css/ucc-user.css?vc=1">
     <title>장르 불문 아티스트를 위한 놀이터 UCC</title>
     <link rel="icon" href="/assets/images/ucc/ucc_favicon.png">
     <link rel="apple-touch-icon" href="/assets/images/ucc/ucc_favicon.png"/>
@@ -57,7 +57,7 @@
 
     </div>
     <video playsinline muted loop autoplay style="width: 100%; height: 100vh; object-fit: cover; position: absolute; z-index: -1;">
-        <source src="/assets/video/ucc_user_main_video_small.m4v" type="video/mp4">
+        <source src="/assets/video/ucc_user_main_video_small.mp4" type="video/mp4">
         Sorry, your browser doesn't support embedded videos.
     </video>
 
@@ -65,12 +65,12 @@
         <div class="row text-center">
             <div class="col-12 p-3">
                 <div class="row flex-column flex-lg-row justify-content-center">
-                    <span class="font-size-80 font-size-sm-40 font-white font-italic font-family-bm" style="color: red !important;">UCC&nbsp;</span>
-                    <span class="font-size-80 font-size-sm-40 font-white font-italic font-family-bm">보물 찾기 시-작!</span>
+                    <span class="font-size-80 font-size-sm-32 font-white font-italic font-family-bm" style="color: red !important;">BEST OF UCC 아티스트</span>
+                    <span class="font-size-80 font-size-sm-32 font-white font-italic font-family-bm">주인공은 누구?</span>
                 </div>
             </div>
-            <div class="col-12 p-5">
-                <span class="font-size-24 font-size-sm-16 font-white font-family-bm">댓글만 달아도 에어팟의 행운이?!</span>
+            <div class="col-12 p-2 p-lg-5">
+                <span class="font-size-24 font-size-sm-16 font-white font-family-bm">총 상금 100만원에 도전해보세요!</span>
             </div>
             <div class="col-12 p-3">
                 <a href="#section1"><img src="/assets/images/ucc/icon_arrow_bottom.svg"></a>
@@ -79,25 +79,28 @@
     </div>
 </main>
 
-<section id="section1" style="overflow-x: hidden; background-color: white;">
+<section id="section1" style="overflow: hidden; background-color: white;">
     <div class="container-fluid text-center p-lg-5 p-3">
-        <div class="row flex-column font-size-40 font-size-sm-32 mt-lg-5 mt-3">
-            <span>잃어버린</span>
-            <span>아티스트를 찾아서</span>
+        <div class="row flex-column font-size-40 font-size-sm-24 mt-lg-5 mt-3 mb-lg-3 mb-2">
+            <span style="line-height: 1;">준비된 아티스트 여러분,<br>이제 UCC 주인공이 되어 보세요!</span>
         </div>
-        <div class="row flex-column p-1 font-size-sm-12">
-            <span style="color: #FF004F;" class="font-family-aggro-b"><strong>2021.11.22(월) - 12.12(일)</strong></span>
+        <div class="row flex-column p-3">
+            <span class="font-family-aggro-b font-size-sm-12 font-size-16" style="line-height: 1.2;">
+                <span class="font-family-aggro-b" style="color: #FF0000;">나만의 개성이 담긴 콘텐츠</span>를 업로드해 주시면<br>
+                <span class="font-family-aggro-b" style="color: #FF0000;">총 상금 100만 원</span>의 행운이 찾아옵니다!
+            </span>
         </div>
-        <div class="row flex-column p-1 font-size-20 font-sm-14">
-            <span style="color: #FF004F;" class="font-family-aggro-b">당첨자 발표 : 2021.12.17(금)</span>
-        </div>
-        <div class="row flex-column py-lg-3 py-1">
-            <div class="row flex-column flex-lg-row justify-content-center">
-                <span class="font-family-aggro-m">그동안 자극적이고 선정적인</span>
-                <span class="font-family-aggro-m mb-lg-0 mb-3">콘텐츠에 지치시진 않으셨나요?</span>
+        <div class="row flex-column py-lg-3 py-2 align-items-center">
+            <div class="row flex-column">
+                <div class="row align-items-center mb-3">
+                    <span class="font-white font-size-16 font-size-sm-12" style="background: red; border-radius: 999px; padding: 5px 10px; margin-right: 10px; line-height: 1;">이벤트 기간</span>
+                    <span class="font-family-aggro-b font-size-16 font-size-sm-12" style="display: inline-block;">2022.01.17(월) - 02.06(일)</span>
+                </div>
+                <div class="row align-items-center">
+                    <span class="font-white font-size-16 font-size-sm-12" style="background: red; border-radius: 999px; padding: 5px 10px; margin-right: 10px; line-height: 1;">우승자 발표</span>
+                    <span class="font-family-aggro-b font-size-16 font-size-sm-12" style="display: inline-block; text-align: left; line-height: 1;">2022.02.16(수)<br>*우승자는 등록한 아티스트 연락처로 개별 연락</span>
+                </div>
             </div>
-            <span class="font-family-aggro-m">UCC에서 전문성과 진정성이 담긴</span>
-            <span class="font-family-aggro-m"><span style="color: red" class="font-family-aggro-b">보물 같은 아티스트</span>의 콘텐츠를 확인해 보세요!</span>
         </div>
         <div id="funnel2" class="row justify-content-center py-5 my-3 position-relative">
             <img class="blink-image1" src="/assets/images/ucc/artist-circle-1.png">
@@ -109,43 +112,39 @@
             <img class="blink-image7" src="/assets/images/ucc/artist-circle-7.png">
             <img class="blink-image8" src="/assets/images/ucc/artist-circle-8.png">
 
-            <img src="/assets/images/ucc/vod-example-mobile-screen.png" style="max-width: 328px; width: 60%;  z-index: 5;">
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-4">
-                <div class="row flex-column flex-lg-row p-5 text-center justify-content-center align-items-center">
-                    <span class="font-family-aggro-m">UCC가 선정한 아티스트를 찾아 콘텐츠에</span>
-                    <span class="font-family-aggro-m">응원의 한마디와 인스타그램 아이디를<br class="d-block d-sm-none"> 댓글로 남겨주시면</span>
-                    <span class="font-family-aggro-m">추첨을 통해 <span class="font-family-aggro-b" style="color: red;">핫한 상품</span>을 선물로 드립니다.</span>
-                </div>
-            </div>
-        </div>
-        <div class="row flex-column flex-lg-row justify-content-center align-items-center">
-            <img id="funnel3" src="/assets/images/ucc/prize1st.png" style="max-width: 258px; width: 100%" class="m-3">
-            <img src="/assets/images/ucc/prize2nd.png" style="max-width: 258px; width: 100%" class="m-3">
-            <img src="/assets/images/ucc/prize3rd.png" style="max-width: 258px; width: 100%" class="m-3">
+            <img src="/assets/images/ucc/vod-example-mobile-screen.png?vc=1" style="max-width: 328px; width: 60%;  z-index: 5;">
         </div>
     </div>
-</section><!-- 잃어버린 아티스트를 찾아서 -->
-<section id="section2" style="background: black;">
-    <div id="funnel4" class="container py-5 position-relative">
-        <img class="position-absolute" style="top: 0; left: 50%; transform: translate(-50%, -50%); max-width: 375px; width: 60%" src="/assets/images/ucc/event-join-text.png">
+</section><!-- 우승자 상금 안내 -->
+<section id="section1_5" style="background: black;">
+    <div id="funnel3" class="container py-5 position-relative" style="text-align: center;">
+        <img class="position-absolute" style="top: 0; left: 50%; transform: translate(-50%, -50%); max-width: 375px; width: 60%" src="/assets/images/ucc/prize-money-text.png">
+        <img src="/assets/images/ucc/prize-main-text.png" style="width: 90%;" class="my-3 my-lg-5">
         <div class="row flex-column flex-xl-row justify-content-center align-items-center py-5">
-            <img class="m-3" src="/assets/images/ucc/event-process-1.png" style="width: 180px;">
-            <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
-            <img class="m-3" src="/assets/images/ucc/event-process-2.png" style="width: 180px;">
-            <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
-            <img class="m-3" src="/assets/images/ucc/event-process-3.png" style="width: 180px;">
-            <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
-            <img class="m-3" src="/assets/images/ucc/event-process-4.png" style="width: 180px;">
+            <img src="/assets/images/ucc/prize1st.png?vc=1" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
+            <img src="/assets/images/ucc/prize2nd.png?vc=1" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
+            <img src="/assets/images/ucc/prize3rd.png?vc=1" style="margin: 0 65px;" class="my-4 my-lg-0 imgs-250-180">
         </div>
     </div>
 </section><!-- 이벤트 참여 방법 -->
-<section id="section3" class="p-lg-5 p-3" style="background-size: cover !important; background: white url('/assets/images/ucc/backgroud-pictures.png') no-repeat center;">
-    <div id="funnel5" class="container p-3 p-lg-5">
+<section id="section2">
+    <div id="funnel4" class="container py-5 position-relative">
+        <img class="position-absolute" style="top: 0; left: 50%; transform: translate(-50%, -50%); max-width: 375px; width: 60%" src="/assets/images/ucc/event-join-text.png">
+        <div class="row flex-column flex-xl-row justify-content-center align-items-center py-5">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-1.png?vc=1">
+            <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-2.png?vc=1">
+            <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-3.png?vc=1">
+            <img class="event-red-arrow m-3" src="/assets/images/ucc/icon-right-red-arrow.svg">
+            <img class="m-3 imgs-180-150" src="/assets/images/ucc/event-process-4.png?vc=1">
+        </div>
+    </div>
+</section><!-- 이벤트 참여 방법 -->
+<section id="section3" class="p-lg-5 p-3" style="background-size: cover!important; background: white url('/assets/images/ucc/backgroud-pictures-dark.png') center;">
+    <div id="funnel5" class="container p-lg-5 p-3">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-family-aggro-b">
-            <span class="font-size-40 font-size-sm-24">지금 바로&nbsp;</span>
-            <span class="font-size-40 font-size-sm-24">보물 찾기에 참여하세요!</span>
+            <span class="font-size-40 font-size-sm-24 font-white">당신이 바로 UCC 주인공입니다</span>
         </div>
         <div class="row justify-content-center">
             <a href="javascript:run_google_download_clicked();" class="col-6 pr-0">
@@ -160,34 +159,21 @@
             </a>
         </div>
     </div>
-</section><!-- 보물찾기에 참여하세요 -->
+</section><!-- 당신이 바로 UCC 주인공입니다 -->
 <section id="section4" style="background: white;" >
-    <div id="funnel6" class="container pt-lg-5 pt-3">
+    <div id="funnel6" class="container pt-lg-3 pt-1">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-size-40 font-size-sm-24 p-lg-5 p-3 m-3 font-family-aggro-b">
-            <span style="color: red !important;">UCC 보물&nbsp;</span>
-            <span>이렇게 찾아보는 건 어떨까요?</span>
+            <span>작품 유형에 제한 없이<br>UCC 주인공이 될 수 있어요!</span>
         </div>
-        <div class="row flex-column flex-xl-row align-items-center">
+        <div class="row flex-column flex-xl-row align-items-center text-center pt-3">
             <div class="col-lg-4 col-12">
-                <div class="row flex-column align-items-center text-center font-family-aggro-b pb-5 pb-xl-0">
-                    <span>지금 가장 빛나는 재능을 가진</span>
-                    <span><span style="color: red">아티스트</span>를 만나보세요!</span>
-                    <img class="mt-2" src="/assets/images/ucc/mobile-screen-sample-1.png" style="max-width: 300px; width: 80%">
-                </div>
+                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-1.png?vc=1" style="max-width: 300px; width: 80%">
             </div>
             <div class="col-lg-4 col-12">
-                <div class="row flex-column align-items-center text-center font-family-aggro-b pb-5 pb-xl-0">
-                    <span>아티스트의 진정성이 담긴</span>
-                    <span><span style="color: red">콘텐츠</span>를 즐겨보세요!</span>
-                    <img class="mt-2" src="/assets/images/ucc/mobile-screen-sample-2.png" style="max-width: 300px; width: 80%">
-                </div>
+                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-2.png?vc=1" style="max-width: 300px; width: 80%">
             </div>
             <div class="col-lg-4 col-12">
-                <div class="row flex-column align-items-center text-center font-family-aggro-b">
-                    <span>아티스트의 팬이 되었다면</span>
-                    <span><span style="color: red">소통</span>을 통해 유대감을 쌓아보세요!</span>
-                    <img class="mt-2" src="/assets/images/ucc/mobile-screen-sample-3.png" style="max-width: 300px; width: 80%">
-                </div>
+                <img class="mt-5 mt-lg-0" src="/assets/images/ucc/mobile-screen-sample-3.png?vc=1" style="max-width: 300px; width: 80%">
             </div>
         </div>
     </div>
@@ -195,12 +181,10 @@
 <section id="section5" style="background: black;">
     <div id="funnel7" class="container pt-lg-5 pt-3">
         <div class="row font-size-40 font-size-sm-24 flex-column font-white text-center pt-4 font-white font-family-aggro-b">
-            <span>“그동안 왜 몰랐지?”</span>
-            <span>나만 알고 싶은 <span style="color: red !important;">UCC 아티스트</span></span>
+            <span>이미 다양한 아티스트가<br>UCC에서 활동하고 있습니다</span>
         </div>
         <div class="row flex-column flex-lg-row font-white justify-content-center font-family-aggro-m my-3 pb-5 text-center">
-            <span>장르에 제한이 없는&nbsp;</span>
-            <span>다양한 분야 아티스트들을 만나보세요!</span>
+            <span>서로 다른 분야 아티스트들과<br>소통하고 교감하며 시너지 효과를 내어보세요!</span>
         </div>
         <div class="row mt-5">
             <div class="owl-carousel owl-theme position-relative artists">
@@ -313,19 +297,38 @@
 <section id="section6" class="ucc-contents py-lg-5 py-3" style="background: white;">
     <div id="funnel8" class="container py-lg-5 py-3">
         <div class="row flex-column text-center font-size-40 font-size-sm-24 font-family-aggro-b">
-            <span>“이렇게 신선한 콘텐츠가 있었다니!”</span>
-            <span>나만 보고 싶은 <span style="color:red;">UCC 콘텐츠</span></span>
+            <span>UCC에서 활동하고 있는<br>아티스트의 콘텐츠가 궁금하다면?</span>
         </div>
         <div class="row flex-column flex-lg-row font-family-aggro-m justify-content-center text-center pb-lg-4 pb-2 pt-2 pt-lg-2">
-            <span>지금 이 순간에도&nbsp;</span>
-            <span>새로운 콘텐츠가 업로드되고 있어요!</span>
+            <span>지금 이 순간에도 다양한 아티스트가<br>UCC 주인공이 되고 있어요!</span>
         </div>
         <div class="row mt-5 position-relative" style="padding-left: 10%; padding-right: 10%;">
             <div class="owl-carousel owl-theme position-relative contents">
                 <div class="item">
                     <video playsinline loop controls class="carousel-item-video"
+                           name="김한별" title="싱어송라이터" desc="Spotlight">
+                        <source src="/assets/video/main_video_6.mp4" type="video/mp4">
+                        Sorry, your browser doesn't support embedded videos.
+                    </video>
+                </div>
+                <div class="item">
+                    <video playsinline loop controls class="carousel-item-video"
+                           name="준킴" title="기타리스트" desc="위로">
+                        <source src="/assets/video/main_video_7.mp4" type="video/mp4">
+                        Sorry, your browser doesn't support embedded videos.
+                    </video>
+                </div>
+                <div class="item">
+                    <video playsinline loop controls class="carousel-item-video"
                     name="김태윤" title="벌룬 아트 디자이너" desc="오징어게임 진행요원 인형 만들기 ">
                         <source src="/assets/video/main_video_1.mp4" type="video/mp4">
+                        Sorry, your browser doesn't support embedded videos.
+                    </video>
+                </div>
+                <div class="item">
+                    <video playsinline loop controls class="carousel-item-video"
+                           name="김한별" title="싱어송라이터" desc="My angel">
+                        <source src="/assets/video/main_video_5.mp4" type="video/mp4">
                         Sorry, your browser doesn't support embedded videos.
                     </video>
                 </div>
@@ -352,11 +355,11 @@
                 </div>
             </div>
             <div id="info-box" class="font-white position-absolute text-center text-lg-left pt-lg-2 pt-1 pl-lg-3 pl-1 pr-lg-3 pr-2 pb-lg-4 pb-2">
-                <span id="name" class="font-size-40 font-size-sm-16 font-family-aggro-b d-block">김태윤</span>
-                <span id="title" class="font-family-aggro-b font-size-sm-12">벌룬 아트 디자이너</span>
+                <span id="name" class="font-size-40 font-size-sm-16 font-family-aggro-b d-block">김한별</span>
+                <span id="title" class="font-family-aggro-b font-size-sm-12">싱어송라이터</span>
             </div>
             <div class="position-absolute text-center w-100" style="left: 50%; bottom:5%; transform: translate(-50%, 0);">
-                <span class="font-size-32 font-size-sm-16" id="desc">오징어게임 진행요원 인형 만들기 </span>
+                <span class="font-size-32 font-size-sm-16" id="desc">Spotlight</span>
             </div>
         </div>
     </div>
@@ -364,8 +367,7 @@
 <section id="section7" class="p-lg-5 p-3" style="background-size: cover!important; background: white url('/assets/images/ucc/backgroud-pictures-dark.png') center;">
     <div id="funnel9" class="container p-lg-5 p-3">
         <div class="row justify-content-center flex-column flex-lg-row text-center font-family-aggro-b">
-            <span class="font-size-40 font-size-sm-24 font-white">더 많은 보물은 &nbsp;</span>
-            <span class="font-size-40 font-size-sm-24 font-white">UCC에서 확인할 수 있습니다!</span>
+            <span class="font-size-40 font-size-sm-24 font-white">UCC가 당신이 주인공이 되길 기다립니다</span>
         </div>
         <div class="row justify-content-center">
             <a href="javascript:run_google_download_clicked();" class="col-6 pr-0">
@@ -392,7 +394,7 @@
         </div>
     </div>
 </section><!-- 세상과 아티스트를 연결하는 UCC는 다양한 기업과 함께 -->
-<section id="section9" class="py-lg-5 py-3 last-section" style="background: white;">
+<section id="section9" class="py-lg-5 py-3 last-section" style="background: white; overflow-x: hidden;">
     <div id="funnel11" class="container py-lg-5 py-3">
         <div class="row flex-column flex-column-reverse flex-lg-row justify-content-center align-items-center text-center">
             <div class="col-lg-6 col-12 my-4 mt-5">
@@ -781,8 +783,9 @@
             });
             if (height < ypos[0] ||
                 (ypos[1] < height && height < ypos[2]) ||
-                (ypos[4] < height && height < ypos[5]) ||
-                (ypos[6] < height && height < ypos[7])
+                (ypos[3] < height && height < ypos[4]) ||
+                (ypos[5] < height && height < ypos[6]) ||
+                (ypos[7] < height && height < ypos[8])
             ) {
                 $('main .logo-fixed, main .logo-fixed2').removeClass('dark-logo');
             } else {
@@ -798,6 +801,15 @@
         });
     });
 
+    function addSourceToVideo(element, src) {
+        var source = document.createElement('source');
+        source.src = src;
+        source.type = 'video/mp4';
+        element.appendChild(source);
+    }
+    if (window.screen.availWidth <= 480) {
+        document.querySelector('main video').setAttribute('src', '/assets/video/ucc_user_main_video_small_mobile.mp4');
+    }
 
     $('a[href^="#section1"]').click((e) => {
         e.preventDefault();
