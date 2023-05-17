@@ -10,10 +10,10 @@
 	</parent>
 	<packaging>war</packaging>
 	<groupId>com.restapi</groupId>
-	<artifactId>Restfull-API-Server</artifactId>
+	<artifactId>UCC Project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Restfull-API-Server</name>
-	<description>Demo project for Spring Boot</description>
+	<name>UCC Project</name>
+	<description>UCC Project By OpMAY</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<log4j-version>1.2.17</log4j-version> <!--Logger Version-->
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-parent</artifactId>
-			<version>2.4.0</version>
+			<version>2.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>

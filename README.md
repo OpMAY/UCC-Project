@@ -1,39 +1,32 @@
-#Project Setting
-##First Gitignore Checking
-1. .gitignore의 파일에 각자 알맞게 세팅 되어있는지 확인한다.
-2. 기타 불필요한 세팅 파일(.idea,.iml etc...)이 있는지 확인하고 .gitignore에 적어준다.
-##Second Application.properties
-application.properties 파일을 만들어 아래 경로에 삽입 시켜주고 Contents에 대한 부분을 적어준다.
-###Path
-src/main/resources/application.properties
-###Contents
-uploadPath=C:/Users/zlzld/OneDrive/Desktop/projects/server_test/Restfull-API-Server/target/Restfull-API-Server-0.0.1-SNAPSHOT/WEB-INF/api
-deployPath=/www/phonething_gabia_io/www/api
-cdnPath=api/
-spring.datasource.hikari.jdbc-url=jdbc:mysql://211.47.74.38/dbphonething?serverTimezone=UTC&allowMultiQueries=true
-spring.datasource.hikari.username=phonething
-spring.datasource.hikari.password=12345qwert
-spring.datasource.hikari.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.datasource.hikari.pool-name=apipool
-api.access_key=test;
+# UCC Project Backend
 
-server.servlet.encoding.charset=utf-8
-spring.mvc.view.prefix=/WEB-INF/views/
-spring.mvc.view.suffix=.jsp
-server.port=8080
+작업 기간 : 2021.06 ~ 2021.08
+서비스 기간 : 2021.09 ~ 2022.03
 
-spring.servlet.multipart.max-file-size=200MB
-spring.servlet.multipart.max-request-size=200MB
+[REST API 문서](https://pyrite-birch-ae4.notion.site/VOD-Rest-API-SERVER-c3e1edbaae20451c91aae6a4f1023afa
+)
 
-spring.datasource.local.jdbc-url=jdbc:mysql://127.0.0.1:8080/flowtest?serverTimezone=UTC&allowMultiQueries=true
-spring.datasource.local.username=root
-spring.datasource.local.password=root
-spring.datasource.local.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.datasource.local.pool-name=apipool
+### 기술 스택
+<img src="https://img.shields.io/badge/Java-FA6831?style=flat"/>
+<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat&logo=SpringBoot&logoColor=white"/>
+<img src="https://img.shields.io/badge/JSP-1976D2?style=flat&logo=SpringBoot&logoColor=white"/>
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white"/>
+<img src="https://img.shields.io/badge/MyBatis-25D366?style=flat"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=black"/>
+<img src="https://img.shields.io/badge/JQuery-0769AD?style=flat&logo=JQuery&logoColor=White"/>
+<img src="https://img.shields.io/badge/BootStrap-7952B3?style=flat&logo=BootStrap&logoColor=black"/>
+<img src="https://img.shields.io/badge/Google Cloud-4285F4?style=flat&logo=GoogleCloud&logoColor=black"/>
 
-##Description
-uploadPath = 로컬의 서버 이미지가 업로드되는 패스
-deployPath = AWS CDN 서버 업로드 패스
-api.access_key = AWS Access Key
-spring.datasource.hikari.* = 서버의 데이터베이스 설정
-spring.datasource.local.* = 로컬의 데이터베이스 설정"# vodappserver" 
+## 라이브러리
+### OpenCV 
+- 동영상 썸네일 추출
+### FireBase
+- Notification System
+### Android / Apple Payment System
+- 구글 및 애플 결제 시스템 연동
+
+### 주요 기능
+- 여러 형태의 게시글 [동영상, 게시글] 및 댓글
+- 아티스트 전환
+- 크라우드 펀딩
+- 아티스트 후원
